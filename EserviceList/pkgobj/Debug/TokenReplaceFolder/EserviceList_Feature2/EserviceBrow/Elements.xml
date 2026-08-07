@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="EserviceBrow" List="113" Url="_catalogs/wp">
+    <File Path="EserviceBrow\EserviceBrow.webpart" Url="EserviceList_EserviceBrow.webpart" Type="GhostableInLibrary" >
+      <Property Name="Group" Value="Custom" />
+    </File>
+  </Module>
+</Elements>

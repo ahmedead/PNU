@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="EserviceBrow2UserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="EserviceBrow2\" Type="ElementManifest" />
+    <ProjectItemFile Source="EserviceBrow2.webpart" Target="EserviceBrow2\" Type="ElementFile" />
+    <ProjectItemFile Source="EserviceBrow2UserControl.ascx" Target="CONTROLTEMPLATES\EserviceList\EserviceBrow2\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="EserviceList.EserviceBrow2" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

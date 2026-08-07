@@ -1,0 +1,6 @@
+gacutil -i F:\BABWorkSpace\BAB.MobilySMS\BAB.MobilySMS\SQLFactory\References\
+gacutil -i F:\BABWorkSpace\BAB.MobilySMS\BAB.MobilySMS\SQLFactory\References\
+gacutil -i F:\BABWorkSpace\BAB.MobilySMS\BAB.MobilySMS\SQLFactory\References\
+gacutil -i F:\BABWorkSpace\BAB.MobilySMS\BAB.MobilySMS\SQLFactory\References\
+gacutil -i F:\BABWorkSpace\BAB.MobilySMS\BAB.MobilySMS\SQLFactory\References\
+gacutil -i F:\BABWorkSpace\BAB.MobilySMS\BAB.MobilySMS\SQLFactory\References\

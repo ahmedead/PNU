@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="SubmissionFormUserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="SubmissionForm\" Type="ElementManifest" />
+    <ProjectItemFile Source="SubmissionForm.webpart" Target="SubmissionForm\" Type="ElementFile" />
+    <ProjectItemFile Source="SubmissionFormUserControl.ascx" Target="CONTROLTEMPLATES\PNU.Jobs.webparts\SubmissionForm\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="PNU.Jobs.webparts.SubmissionForm" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

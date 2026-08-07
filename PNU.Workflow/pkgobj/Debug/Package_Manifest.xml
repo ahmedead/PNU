@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="933c1f82-9d4c-47ec-ae27-7a528442688a" SharePointProductVersion="19.0">
+  <ApplicationResourceFiles>
+    <App_GlobalResourceFile Location="PNU.Workflow\Resources\PNU-WF.resx" />
+    <App_GlobalResourceFile Location="PNU.Workflow\Resources\PNU-WF.en-US.resx" />
+    <App_GlobalResourceFile Location="PNU.Workflow\Resources\PNU-WF.ar-SA.resx" />
+  </ApplicationResourceFiles>
+  <Assemblies>
+    <Assembly Location="PNU.Workflow.dll" DeploymentTarget="GlobalAssemblyCache">
+      <SafeControls>
+        <SafeControl Assembly="PNU.Workflow, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7c9a0875b8f4acc" Namespace="PNU.Workflow.WebParts.RequestForm" TypeName="*" />
+        <SafeControl Assembly="PNU.Workflow, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7c9a0875b8f4acc" Namespace="PNU.Workflow.WebParts.RequestsListForm" TypeName="*" />
+        <SafeControl Assembly="PNU.Workflow, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7c9a0875b8f4acc" Namespace="PNU.Workflow.WebParts.RequestDetails" TypeName="*" />
+        <SafeControl Assembly="PNU.Workflow, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7c9a0875b8f4acc" Namespace="PNU.Workflow.WebParts.RequestsUserActions" TypeName="*" />
+      </SafeControls>
+    </Assembly>
+  </Assemblies>
+  <TemplateFiles>
+    <TemplateFile Location="CONTROLTEMPLATES\PNU.Workflow.WebParts\RequestForm\RequestFormUserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\PNU.Workflow.WebParts\RequestsListForm\RequestsListFormUserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\PNU.Workflow.WebParts\RequestDetails\RequestDetailsUserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\PNU.Workflow.WebParts\RequestsUserActions\RequestsUserActionsUserControl.ascx" />
+  </TemplateFiles>
+  <FeatureManifests>
+    <FeatureManifest Location="PNU.Workflow_PNU.Workflow WebParts\Feature.xml" />
+  </FeatureManifests>
+</Solution>

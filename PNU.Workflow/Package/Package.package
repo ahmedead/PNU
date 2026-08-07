@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="933c1f82-9d4c-47ec-ae27-7a528442688a" solutionId="933c1f82-9d4c-47ec-ae27-7a528442688a" resetWebServer="false" sharePointProductVersion="19.0" name="PNU.Workflow" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="2ee362a8-6645-4279-8d38-724d9df9136d" />
+  </features>
+</package>

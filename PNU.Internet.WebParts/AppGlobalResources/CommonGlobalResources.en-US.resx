@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="360VirtualTour" xml:space="preserve">
+    <value>360 Virtual Tour</value>
+  </data>
+  <data name="4ReasonsContent" xml:space="preserve">
+    <value>At Princess Nourah bint Abdulrahman University, leadership and excellence are not just ideals, they are choices reflected in every step we take, every path we pave, and every motive that drives us. Here’s why PNU is your gateway to the world:</value>
+  </data>
+  <data name="4ReasonsToChoosePNU" xml:space="preserve">
+    <value>Why Choose PNU?</value>
+  </data>
+  <data name="AboutCenter" xml:space="preserve">
+    <value>About the Centre</value>
+  </data>
+  <data name="AboutFaculty" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="AboutFaculty1" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="AboutMediaCenter" xml:space="preserve">
+    <value>About Media Center</value>
+  </data>
+  <data name="AboutMediaCenterContent" xml:space="preserve">
+    <value>Under the supervision of the General Directorate of Media, Communication and Knowledge Impact, the Media Center aims to bridge the communication gap between the university and its target audience, serving as the university's window to the community. The center engages the target audience in interacting with its communication messages using best practices, theories, and creative solutions to shape a future through knowledge impact. In addition, it plays a part in solidifying the university's position in spreading knowledge in the current creative economy era, striving to achieve a sustainable and impactful presence in the media sphere.</value>
+  </data>
+  <data name="AboutSection" xml:space="preserve">
+    <value>About the Department </value>
+  </data>
+  <data name="AcademicCredits" xml:space="preserve">
+    <value>Academic Credits</value>
+  </data>
+  <data name="AcademicPrograms" xml:space="preserve">
+    <value>Academic Programs</value>
+  </data>
+  <data name="Achievements" xml:space="preserve">
+    <value>Achievements</value>
+  </data>
+  <data name="AchievementsAndAwards" xml:space="preserve">
+    <value>Achievements And Awards</value>
+  </data>
+  <data name="AgencyMissions" xml:space="preserve">
+    <value>Key Responsibilities</value>
+  </data>
+  <data name="AllFacultiesAndInstitues" xml:space="preserve">
+    <value>AllFaculties And Institutes</value>
+  </data>
+  <data name="Alumni-dashboard" xml:space="preserve">
+    <value>Alumni Dashboard</value>
+  </data>
+  <data name="Alumni-dashboard-G" xml:space="preserve">
+    <value>الخريجات في سوق العمل</value>
+  </data>
+  <data name="Announcements" xml:space="preserve">
+    <value>Announcements</value>
+  </data>
+  <data name="Awards" xml:space="preserve">
+    <value>Awards</value>
+  </data>
+  <data name="CampusFacilities" xml:space="preserve">
+    <value>Campus Facilities</value>
+  </data>
+  <data name="CenterMissions" xml:space="preserve">
+    <value>Key Responsibilities</value>
+  </data>
+  <data name="CenterServices" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="coiledarrow" xml:space="preserve">
+    <value>/Style%20Library/NewStyle/UI5/images/left-coiled-arrow.png</value>
+  </data>
+  <data name="CollegeDepartments" xml:space="preserve">
+    <value>Departments Under College</value>
+  </data>
+  <data name="Colleges" xml:space="preserve">
+    <value>Colleges</value>
+  </data>
+  <data name="ContactInfo" xml:space="preserve">
+    <value>Contact Info</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="CountGoogle" xml:space="preserve">
+    <value>Google Scholar Articles</value>
+  </data>
+  <data name="CountORCID" xml:space="preserve">
+    <value>ORCID Articles</value>
+  </data>
+  <data name="CourseCode" xml:space="preserve">
+    <value>Course Code</value>
+  </data>
+  <data name="Courses" xml:space="preserve">
+    <value>Courses</value>
+  </data>
+  <data name="CoursesTime" xml:space="preserve">
+    <value>Courses Times</value>
+  </data>
+  <data name="CourseTitle" xml:space="preserve">
+    <value>Course Title</value>
+  </data>
+  <data name="CV" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="DayName" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="DeenSpeech" xml:space="preserve">
+    <value>Dean’s Message</value>
+  </data>
+  <data name="DepartmentMission" xml:space="preserve">
+    <value>Key Responsibilities</value>
+  </data>
+  <data name="DigitalMedia" xml:space="preserve">
+    <value>Digital Media</value>
+  </data>
+  <data name="DiplomaLink" xml:space="preserve">
+    <value>/en/RegAdm/HDIP/Pages/home.aspx</value>
+  </data>
+  <data name="DiplomaPrograms" xml:space="preserve">
+    <value>Diploma Programs</value>
+  </data>
+  <data name="DiplomaProgramsCount" xml:space="preserve">
+    <value>26</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email Address : </value>
+  </data>
+  <data name="employee-dashboard" xml:space="preserve">
+    <value>Employee Dashboard</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>To </value>
+  </data>
+  <data name="EServices" xml:space="preserve">
+    <value>Electronic and EServices Systems</value>
+  </data>
+  <data name="EServicesURL" xml:space="preserve">
+    <value>/en/Pages/Eservice.aspx</value>
+  </data>
+  <data name="ExtensionNo" xml:space="preserve">
+    <value>Extension Number  :</value>
+  </data>
+  <data name="Facilities" xml:space="preserve">
+    <value>Student-Centered Facilities</value>
+  </data>
+  <data name="Facilities1" xml:space="preserve">
+    <value>Cutting-Edge Technology</value>
+  </data>
+  <data name="FacultyMembers" xml:space="preserve">
+    <value>Faculty Members</value>
+  </data>
+  <data name="FacultyTitle" xml:space="preserve">
+    <value>College of</value>
+  </data>
+  <data name="FacultyTitle1" xml:space="preserve">
+    <value>College of</value>
+  </data>
+  <data name="FAQ" xml:space="preserve">
+    <value>FAQ</value>
+  </data>
+  <data name="FifthYear" xml:space="preserve">
+    <value>Fifth Year</value>
+  </data>
+  <data name="FirstYear" xml:space="preserve">
+    <value>First Year</value>
+  </data>
+  <data name="FirstYear-1" xml:space="preserve">
+    <value>السنة التأسيسية المستوى الأول</value>
+  </data>
+  <data name="FourthYear" xml:space="preserve">
+    <value>Fourth Year</value>
+  </data>
+  <data name="GoogleScholar" xml:space="preserve">
+    <value>Google Scholar</value>
+  </data>
+  <data name="GradutesLink" xml:space="preserve">
+    <value>Alumni Gate</value>
+  </data>
+  <data name="GuidelinesTitle" xml:space="preserve">
+    <value>Forms and Guides</value>
+  </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="IntroductoryTour" xml:space="preserve">
+    <value>Introductory Tour</value>
+  </data>
+  <data name="KnowMore" xml:space="preserve">
+    <value>Know More</value>
+  </data>
+  <data name="Lang" xml:space="preserve">
+    <value>/en/</value>
+  </data>
+  <data name="Lang1" xml:space="preserve">
+    <value>/en/</value>
+  </data>
+  <data name="LargestUniversity" xml:space="preserve">
+    <value>The World’s Largest Women’s University.</value>
+  </data>
+  <data name="LatestEvents" xml:space="preserve">
+    <value>Latest Events</value>
+  </data>
+  <data name="LatestNews" xml:space="preserve">
+    <value>Latest News</value>
+  </data>
+  <data name="Level1" xml:space="preserve">
+    <value>Level One</value>
+  </data>
+  <data name="Level10" xml:space="preserve">
+    <value>Level Ten</value>
+  </data>
+  <data name="Level11" xml:space="preserve">
+    <value>Level Eleven</value>
+  </data>
+  <data name="Level2" xml:space="preserve">
+    <value>Level Two</value>
+  </data>
+  <data name="Level3" xml:space="preserve">
+    <value>Level Three</value>
+  </data>
+  <data name="Level4" xml:space="preserve">
+    <value>Level Four</value>
+  </data>
+  <data name="Level5" xml:space="preserve">
+    <value>Level Five</value>
+  </data>
+  <data name="Level6" xml:space="preserve">
+    <value>Level Six</value>
+  </data>
+  <data name="Level7" xml:space="preserve">
+    <value>Level Seven</value>
+  </data>
+  <data name="Level8" xml:space="preserve">
+    <value>Level Eight</value>
+  </data>
+  <data name="Level9" xml:space="preserve">
+    <value>Level Nine</value>
+  </data>
+  <data name="LibraryHours" xml:space="preserve">
+    <value>Office hours</value>
+  </data>
+  <data name="LifeAtPNU" xml:space="preserve">
+    <value>Life at PNU</value>
+  </data>
+  <data name="LifeHereContent" xml:space="preserve">
+    <value>Life at Princess Nourah University is the story of the world’s largest women’s university, a place where tradition meets innovation, and where every detail is designed with students in mind. Our campus combines originality and modernity, offering state-of-the-art facilities, unique architecture, and services that ensure comfort and convenience for all.</value>
+  </data>
+  <data name="LifeHereContent1" xml:space="preserve">
+    <value>At PNU, students are given the space and support to grow, develop their skills, and discover their full potential. We foster an environment that inspires intellectual curiosity, encourages personal growth, and provides a truly holistic educational experience.</value>
+  </data>
+  <data name="LifeHereContent2" xml:space="preserve">
+    <value>To be at PNU is to belong to a vibrant community that celebrates excellence, embraces the future, and connects you to the world.</value>
+  </data>
+  <data name="LifeHereContent3" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>/Style Library/NewStyle/UI5/images/pnu-logo-en.svg</value>
+  </data>
+  <data name="LogoOnly" xml:space="preserve">
+    <value>/Style%20Library/DGA/public/images/pnu-logo-icon-only.svg</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="MainMissions" xml:space="preserve">
+    <value>Key Responsibilities</value>
+  </data>
+  <data name="minor" xml:space="preserve">
+    <value>minor</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NoCollegeRequirements" xml:space="preserve">
+    <value>There is no requirement for this Faculty</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>No Data Available</value>
+  </data>
+  <data name="NoProgramRequirements" xml:space="preserve">
+    <value>There is no requirement for this Program</value>
+  </data>
+  <data name="OurLoveredOnes" xml:space="preserve">
+    <value>Alumni Testimonials</value>
+  </data>
+  <data name="OurSections" xml:space="preserve">
+    <value>Our Departments</value>
+  </data>
+  <data name="patents-dashboard" xml:space="preserve">
+    <value>براءات الاختراع</value>
+  </data>
+  <data name="PNUinNumbers" xml:space="preserve">
+    <value>PNU in Numbers</value>
+  </data>
+  <data name="PostgraduateLink" xml:space="preserve">
+    <value>/en/RegAdm/PGD/Pages/home2.aspx</value>
+  </data>
+  <data name="PostgraduatePrograms" xml:space="preserve">
+    <value>Postgraduate Programs</value>
+  </data>
+  <data name="PostgraduateProgramsCount" xml:space="preserve">
+    <value>39</value>
+  </data>
+  <data name="prize" xml:space="preserve">
+    <value>الجوائز</value>
+  </data>
+  <data name="Rankings" xml:space="preserve">
+    <value>Rankings</value>
+  </data>
+  <data name="RegDepartments" xml:space="preserve">
+    <value>Academic Procedures</value>
+  </data>
+  <data name="Research-paper" xml:space="preserve">
+    <value>Research Dashboard</value>
+  </data>
+  <data name="SavedBefore" xml:space="preserve">
+    <value>This data has already been submitted before.</value>
+  </data>
+  <data name="SavedSuccessfully" xml:space="preserve">
+    <value>Your request has been saved successfully!</value>
+  </data>
+  <data name="ScientifDegree" xml:space="preserve">
+    <value>Scientif Degree</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SecondYear" xml:space="preserve">
+    <value>Second Year</value>
+  </data>
+  <data name="SecondYear-2" xml:space="preserve">
+    <value>السنة التأسيسية المستوى الثاني</value>
+  </data>
+  <data name="section" xml:space="preserve">
+    <value>section</value>
+  </data>
+  <data name="SectionTitle" xml:space="preserve">
+    <value>Department of </value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>--Select--</value>
+  </data>
+  <data name="SelectCollege" xml:space="preserve">
+    <value>--Select College--</value>
+  </data>
+  <data name="SelectSection" xml:space="preserve">
+    <value>--Select Section--</value>
+  </data>
+  <data name="SeventhYear" xml:space="preserve">
+    <value>Seventh Year</value>
+  </data>
+  <data name="SixthYear" xml:space="preserve">
+    <value>Sixth Year</value>
+  </data>
+  <data name="specialization" xml:space="preserve">
+    <value>specialization</value>
+  </data>
+  <data name="Sports" xml:space="preserve">
+    <value>Sports</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>From </value>
+  </data>
+  <data name="students-dashboard" xml:space="preserve">
+    <value>Students Dashboard</value>
+  </data>
+  <data name="StudyAtPNU" xml:space="preserve">
+    <value>Study at PNU</value>
+  </data>
+  <data name="SubjectSectionNo" xml:space="preserve">
+    <value>Subject Section No</value>
+  </data>
+  <data name="ThirdYear" xml:space="preserve">
+    <value>Third Year</value>
+  </data>
+  <data name="Tweets" xml:space="preserve">
+    <value>Blogs</value>
+  </data>
+  <data name="UndergraduateLink" xml:space="preserve">
+    <value>/en/RegAdm/RegBSC/Pages/home.aspx</value>
+  </data>
+  <data name="UndergraduatePrograms" xml:space="preserve">
+    <value>Undergraduate Programs</value>
+  </data>
+  <data name="UndergraduateProgramsCount" xml:space="preserve">
+    <value>82</value>
+  </data>
+  <data name="UniversityCalender" xml:space="preserve">
+    <value>University Calender</value>
+  </data>
+  <data name="UniversityCounsil" xml:space="preserve">
+    <value>University Counsil</value>
+  </data>
+  <data name="UniversityFacilityPageLayout" xml:space="preserve">
+    <value>Campus Facilities</value>
+  </data>
+  <data name="VibrantEnvironment" xml:space="preserve">
+    <value>A Vibrant Campus Life</value>
+  </data>
+  <data name="ViewMore" xml:space="preserve">
+    <value>View More</value>
+  </data>
+  <data name="ViewPrograms" xml:space="preserve">
+    <value>View Programs</value>
+  </data>
+</root>

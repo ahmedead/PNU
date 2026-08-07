@@ -1,0 +1,522 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="resComments" xml:space="preserve">
+    <value>CommentsEn</value>
+  </data>
+  <data name="res_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="res_Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="res_AddServiceCond" xml:space="preserve">
+    <value>Add Service Conditions</value>
+  </data>
+  <data name="res_AddServiceDoc" xml:space="preserve">
+    <value>Add Service Documents</value>
+  </data>
+  <data name="res_AddServiceSchedule" xml:space="preserve">
+    <value>Add Service Schedule</value>
+  </data>
+  <data name="res_Ads" xml:space="preserve">
+    <value>Advertisements</value>
+  </data>
+  <data name="res_AdsDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="res_AgreementTypes" xml:space="preserve">
+    <value>AgreementTypesEn</value>
+  </data>
+  <data name="res_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="res_AllServices" xml:space="preserve">
+    <value>All Services</value>
+  </data>
+  <data name="res_Beneficiaries" xml:space="preserve">
+    <value>BeneficiariesEn</value>
+  </data>
+  <data name="res_BeneficiriesTitle" xml:space="preserve">
+    <value>Service Beneficiaries :</value>
+  </data>
+  <data name="res_Brief" xml:space="preserve">
+    <value>Brief</value>
+  </data>
+  <data name="res_CenterServices" xml:space="preserve">
+    <value>Center services</value>
+  </data>
+  <data name="res_Classification" xml:space="preserve">
+    <value>University Ranking</value>
+  </data>
+  <data name="res_Conditions" xml:space="preserve">
+    <value>ConditionsEn</value>
+  </data>
+  <data name="res_ContinuingStd" xml:space="preserve">
+    <value>Continuing Students</value>
+  </data>
+  <data name="res_CourseDesc" xml:space="preserve">
+    <value>Course Description</value>
+  </data>
+  <data name="res_CurrentPositions" xml:space="preserve">
+    <value>Current positions</value>
+  </data>
+  <data name="res_Days" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="res_DaysField" xml:space="preserve">
+    <value>daysEn</value>
+  </data>
+  <data name="res_DeanshipAndDepartments" xml:space="preserve">
+    <value>Deanships and departments</value>
+  </data>
+  <data name="res_delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="res_Desc" xml:space="preserve">
+    <value>DescEn</value>
+  </data>
+  <data name="res_Details" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="res_DiplomaProgram" xml:space="preserve">
+    <value>Diploma Program</value>
+  </data>
+  <data name="res_Documents" xml:space="preserve">
+    <value>DocumentsEn</value>
+  </data>
+  <data name="res_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="res_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="res_EservicesGuide" xml:space="preserve">
+    <value>Electronic Services guide</value>
+  </data>
+  <data name="res_Exhibition" xml:space="preserve">
+    <value>Exhibition</value>
+  </data>
+  <data name="res_Faculties" xml:space="preserve">
+    <value>Faculties</value>
+  </data>
+  <data name="res_Faculty" xml:space="preserve">
+    <value>Faculty</value>
+  </data>
+  <data name="res_FailMsg" xml:space="preserve">
+    <value>Error in saving data see details error :</value>
+  </data>
+  <data name="res_Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="res_From" xml:space="preserve">
+    <value>From hour</value>
+  </data>
+  <data name="res_GraduatedStd" xml:space="preserve">
+    <value>Graduated Students</value>
+  </data>
+  <data name="res_HealthFaculties" xml:space="preserve">
+    <value>Colleges of Health science</value>
+  </data>
+  <data name="res_HumanitiesFaculties" xml:space="preserve">
+    <value>Colleges of Humanities</value>
+  </data>
+  <data name="res_InfoService" xml:space="preserve">
+    <value>Information about the Service</value>
+  </data>
+  <data name="res_Inistitues" xml:space="preserve">
+    <value>Institues</value>
+  </data>
+  <data name="res_International" xml:space="preserve">
+    <value>International</value>
+  </data>
+  <data name="res_InternationalPartner" xml:space="preserve">
+    <value>International Partners</value>
+  </data>
+  <data name="res_InternationPartners" xml:space="preserve">
+    <value>Internationl Partners</value>
+  </data>
+  <data name="res_IntroService" xml:space="preserve">
+    <value>Introduction to Service</value>
+  </data>
+  <data name="res_Invalidgooglescholarurl" xml:space="preserve">
+    <value>Invalid google scholer url</value>
+  </data>
+  <data name="res_lblAddButtonTitle" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="res_lblBeneficiery" xml:space="preserve">
+    <value>Beneficiaries</value>
+  </data>
+  <data name="res_lblCond" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="res_lblCondList" xml:space="preserve">
+    <value>Conditions</value>
+  </data>
+  <data name="res_lblDocTitle" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="res_lblIsActive" xml:space="preserve">
+    <value>Service Active</value>
+  </data>
+  <data name="res_lblIsHome" xml:space="preserve">
+    <value>Show In Home</value>
+  </data>
+  <data name="res_lblServiceCategory" xml:space="preserve">
+    <value>Service Category</value>
+  </data>
+  <data name="res_lblServiceDesc" xml:space="preserve">
+    <value>Service Description</value>
+  </data>
+  <data name="res_lblServiceOrder" xml:space="preserve">
+    <value>Service Order</value>
+  </data>
+  <data name="res_lblServiceTitle" xml:space="preserve">
+    <value>Service Title</value>
+  </data>
+  <data name="res_lblServiceUrl" xml:space="preserve">
+    <value>Service Url</value>
+  </data>
+  <data name="res_Local" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="res_LocalPartner" xml:space="preserve">
+    <value>Local Partners</value>
+  </data>
+  <data name="res_LocalPartners" xml:space="preserve">
+    <value>Local Partners</value>
+  </data>
+  <data name="res_MediaFiles" xml:space="preserve">
+    <value>Media files</value>
+  </data>
+  <data name="res_PagesList" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="res_MediaFileWeb" xml:space="preserve">
+    <value>/en/MediaCenter/</value>
+  </data>
+  <data name="res_MediaType" xml:space="preserve">
+    <value>MediaType</value>
+  </data>
+  <data name="res_MemberCoursesView" xml:space="preserve">
+    <value>CUSTAPP.MOBAPPL_INSTSCHD_EN_M</value>
+  </data>
+  <data name="res_MemberUpdateData" xml:space="preserve">
+    <value>Update Member Data</value>
+  </data>
+  <data name="res_Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="res_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="res_MostUsedServices" xml:space="preserve">
+    <value>The most used services :</value>
+  </data>
+  <data name="res_NewStd" xml:space="preserve">
+    <value>New Students</value>
+  </data>
+  <data name="res_NoValue" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="res_OfficeHours" xml:space="preserve">
+    <value>Office Hours</value>
+  </data>
+  <data name="res_ORCID" xml:space="preserve">
+    <value>الأوركيد</value>
+  </data>
+  <data name="res_OtherServices" xml:space="preserve">
+    <value>Other services</value>
+  </data>
+  <data name="res_Partner" xml:space="preserve">
+    <value>PartnerEn</value>
+  </data>
+  <data name="res_PartnerTypes" xml:space="preserve">
+    <value>TypesEn</value>
+  </data>
+  <data name="res_PnuEservices" xml:space="preserve">
+    <value>Pnu Services</value>
+  </data>
+  <data name="res_PnuPartner" xml:space="preserve">
+    <value>PnuPartnerEn</value>
+  </data>
+  <data name="res_PnuPartnerTitle" xml:space="preserve">
+    <value>Pnu Partners</value>
+  </data>
+  <data name="res_PnuServiceHomeCount" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="res_PnuServicePageSize" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="res_PostDate" xml:space="preserve">
+    <value>Post date</value>
+  </data>
+  <data name="res_PostDetails" xml:space="preserve">
+    <value>Post details</value>
+  </data>
+  <data name="res_Posts" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="res_RequiredField" xml:space="preserve">
+    <value>Required field</value>
+  </data>
+  <data name="res_Results" xml:space="preserve">
+    <value>View Results</value>
+  </data>
+  <data name="res_Resume" xml:space="preserve">
+    <value>Bio</value>
+  </data>
+  <data name="res_Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="res_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="res_SccuessMsg" xml:space="preserve">
+    <value>Data saved successfully</value>
+  </data>
+  <data name="res_Schedule" xml:space="preserve">
+    <value>ScheduleEn</value>
+  </data>
+  <data name="res_ScholarId" xml:space="preserve">
+    <value>Google Scolar ID</value>
+  </data>
+  <data name="res_ScientificFaculties" xml:space="preserve">
+    <value>Colleges of Science</value>
+  </data>
+  <data name="res_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="res_SearchService" xml:space="preserve">
+    <value>Search for the desired services</value>
+  </data>
+  <data name="res_SearchServiceplaceholder" xml:space="preserve">
+    <value>بحث عن الخدمات</value>
+  </data>
+  <data name="res_Select" xml:space="preserve">
+    <value>--Select--</value>
+  </data>
+  <data name="res_Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="res_ServiceApply" xml:space="preserve">
+    <value>Apply to Service</value>
+  </data>
+  <data name="res_ServiceBasicInfo" xml:space="preserve">
+    <value>Basic Information</value>
+  </data>
+  <data name="res_ServiceCategories" xml:space="preserve">
+    <value>ServicesCategoriesEn</value>
+  </data>
+  <data name="res_ServiceConditions" xml:space="preserve">
+    <value>Service Conditions</value>
+  </data>
+  <data name="res_ServiceDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="res_ServiceDay" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="res_ServiceDetails" xml:space="preserve">
+    <value>Service details</value>
+  </data>
+  <data name="res_ServiceDocuments" xml:space="preserve">
+    <value>Service Documents</value>
+  </data>
+  <data name="res_ServiceImage" xml:space="preserve">
+    <value>Service Image</value>
+  </data>
+  <data name="res_ServiceProcedure" xml:space="preserve">
+    <value>Procedure</value>
+  </data>
+  <data name="res_ServiceSchedule" xml:space="preserve">
+    <value>Schedule to apply the service</value>
+  </data>
+  <data name="res_ServiceSort" xml:space="preserve">
+    <value>Service Sort</value>
+  </data>
+  <data name="res_ServiceStatus" xml:space="preserve">
+    <value>Service Status</value>
+  </data>
+  <data name="res_Sort" xml:space="preserve">
+    <value>Sorting</value>
+  </data>
+  <data name="res_Staff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="res_StaffServices" xml:space="preserve">
+    <value>Staff Services</value>
+  </data>
+  <data name="res_StartService" xml:space="preserve">
+    <value>Start Service</value>
+  </data>
+  <data name="res_Students" xml:space="preserve">
+    <value>Students</value>
+  </data>
+  <data name="res_StudentsServices" xml:space="preserve">
+    <value>Students Services</value>
+  </data>
+  <data name="res_Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="res_Thurthday" xml:space="preserve">
+    <value>Thurthday</value>
+  </data>
+  <data name="res_Title" xml:space="preserve">
+    <value>TitleEn</value>
+  </data>
+  <data name="res_To" xml:space="preserve">
+    <value>To hour</value>
+  </data>
+  <data name="res_TrainServices" xml:space="preserve">
+    <value>خدمات القطار والمحطة الخاصة</value>
+  </data>
+  <data name="res_Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="res_Unauthorized" xml:space="preserve">
+    <value>you are not authorized</value>
+  </data>
+  <data name="res_Visitors" xml:space="preserve">
+    <value>Visitors</value>
+  </data>
+  <data name="res_VisitorsServices" xml:space="preserve">
+    <value>Visitors Services</value>
+  </data>
+  <data name="res_wednsday" xml:space="preserve">
+    <value>Wednsday</value>
+  </data>
+  <data name="res_Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="res_wipeAll" xml:space="preserve">
+    <value>Wipe All</value>
+  </data>
+  <data name="res_YesValue" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="res_View" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="res_InvalidEmailFormat" xml:space="preserve">
+    <value>Invalid Email Address</value>
+  </data>
+</root>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="Attachment-WPUserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="Attachment-WP\" Type="ElementManifest" />
+    <ProjectItemFile Source="Attachment-WP.webpart" Target="Attachment-WP\" Type="ElementFile" />
+    <ProjectItemFile Source="Attachment-WPUserControl.ascx" Target="CONTROLTEMPLATES\PNU_SP.webparts\Attachment-WP\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="PNU_SP.webparts.Attachment_WP" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

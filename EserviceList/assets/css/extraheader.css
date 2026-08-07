@@ -1,0 +1,421 @@
+.ms-cui-section[id="Ribbon.PublishTab.Publishing-LargeMedium-1"] {
+    display: none !important;
+}
+
+.resize {
+    display: inline-block;
+    color: white;
+    font-size: 0.8em;
+    margin: auto 2%;
+}
+
+    .resize div {
+        display: inline-block;
+        color: white;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+    }
+
+.reg {
+    border-right: 1px solid white;
+    padding-right: 15px;
+}
+
+.grayscales {
+    -webkit-filter: grayscale(200%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(200%);
+}
+
+.ms-webpart-cell-vertical, .ms-webpart-chrome-vertical {
+    display: block !important;
+}
+
+.News-img img {
+    width: 100%
+}
+
+.cell-margin {
+    margin: 0 !important;
+}
+
+.ms-fullWidth {
+    width: 100%;
+}
+
+.gry-all {
+    font-size: 0.9em;
+    display: inline-block;
+}
+
+#searchInputBox .ms-webpart-chrome.ms-webpart-chrome-fullWidth {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid #2fdcca;
+    border-radius: 0.3rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.fixedSizeImge {
+    height: 145px;
+    width: auto;
+    max-width: 100%
+}
+
+@media only screen and (max-width: 769px) {
+    .ms-fullWidth {
+        
+    }
+
+    .fixedSizeImge {
+        height: auto;
+        width: 100%;
+    }
+}
+
+.ms-srch-siteSearchResults {
+    float: none !important;
+    padding: 20px
+}
+
+.ms-srch-item-deepLinks li:first-child, .ms-srch-ellipsis {
+    margin-left: 20px;
+    background: #eee;
+    padding: 5px;
+    font-size: 0.9em;
+}
+
+@media only screen and (max-width: 600px) {
+    .events img {
+        max-height: initial;
+    }
+
+    .ms-srch-hover-outerContainer {
+        visibility: hidden !important;
+    }
+}
+
+.events img {
+    max-height: 183px;
+}
+
+.ms-calloutLink:link, a.ms-calloutLink:visited, .ms-calloutLinkDisabled, .ms-commandLink, .ms-commandLink:visited, .ms-secondaryCommandLink, .ms-secondaryCommandLink:visited {
+    font-family: cairo !important;
+    /*background: #2fdcca !important;*/
+    text-align: center !important;
+    padding: 0px !important;
+}
+
+.ms-srch-result #PagingSelf a {
+    color: #024d4c !important
+}
+
+.ms-srch-item {
+    width: 70%;
+}
+
+.ms-soften, .ms-soften:link, a.ms-soften:visited, .ms-soften:hover, .ms-soften:active {
+    font-size: 0.9em !important
+}
+
+.ms-srch-item-title {
+    width: 100vw !important;
+}
+
+.news-div b {
+    overflow: hidden;
+    height: 70px;
+}
+
+.fixedSizeImge-inner {
+    height: 290px;
+    width: auto;
+    max-width: 100%;
+}
+
+.btn-light:not(:disabled):not(.disabled):active {
+    background-color: #e5e5e5;
+}
+
+.btn-light {
+    background-color: #e5e5e5 !important;
+}
+
+.event-main-Div b {
+    padding: 5px 0px;
+}
+
+.addeventatc {
+    z-index: 1 !important;
+}
+
+.tooltip-inner {
+    font-family: CairoRegular, sans-serif !important;
+}
+
+.addtocalendar var {
+    display: none;
+}
+
+.addtocalendar {
+    position: relative;
+    display: inline-block;
+    background: transparent !important;
+}
+
+.atcb-link {
+    display: block;
+    outline: none !important;
+    cursor: pointer;
+}
+
+    .atcb-link:focus ~ ul,
+    .atcb-link:active ~ ul,
+    .atcb-list:hover {
+        visibility: visible;
+    }
+
+.atcb-list {
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 170px;
+    z-index: 900;
+    background: #fff;
+    border: #cecece solid 1px;
+}
+
+.atcb-list,
+.atcb-item {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+}
+
+.atcb-item {
+    float: none;
+    text-align: left;
+    text-decoration: none;
+}
+
+.atcb-item-link {
+    text-decoration: none;
+    outline: none;
+    display: block;
+}
+
+.atcb-item.hover,
+.atcb-item:hover {
+    position: relative;
+    z-index: 900;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+}
+
+.resp-sharing-button {
+    padding: 0.2em 0.45em !important;
+    font-size: 13px !important;
+}
+
+.resp-sharing-button {
+    bottom: 1px;
+    position: relative;
+}
+
+.resp-sharing-button__link {
+    margin: 0.2em !important;
+}
+
+.ms-srch-sb > input {
+    width: 80% !important;
+}
+
+.ms-srch-item {
+    width: 100% !important;
+}
+
+.ms-srch-hover-outerContainer {
+    position: absolute;
+    z-index: 1001;
+    margin-right: 0px;
+    left: 203px !important;
+    min-width: 420px !important;
+}
+
+.ms-srch-item-deepLinks li:first-child,
+.ms-srch-ellipsis {
+    margin-left: 20px;
+    background: #eee;
+    padding: 0.6em;
+    font-size: 0.9em !important;
+}
+
+.ms-srch-item-path {
+    display: block !important;
+}
+
+.ms-calloutLink:link,
+a.ms-calloutLink:visited,
+.ms-calloutLinkDisabled,
+.ms-commandLink,
+.ms-commandLink:visited,
+.ms-secondaryCommandLink,
+.ms-secondaryCommandLink:visited {
+    font-family: cairo !important;
+    text-align: center !important;
+    padding: 19px !important;
+}
+
+.ms-srch-result #Paging a {
+    text-decoration: none;
+    padding: 0px !important;
+    margin: 5px !important;
+}
+
+input[type="password"]:hover,
+input[type="text"]:hover,
+input[type="file"]:hover,
+textarea:hover,
+.sp-peoplepicker-topLevel:hover,
+.ms-inputBox:hover {
+    border-color: #92c0e0;
+    font-family: CairoRegular, sans-serif;
+}
+
+h3.ms-srch-ellipsis {
+    background: transparent;
+    border-bottom: 1px solid #ececec;
+    font-size: 1.3em !important;
+    padding-bottom: 11px;
+}
+
+@media only screen and (max-width: 769px) {
+    .college-headline h3 {
+        font-size: 1em;
+        margin: 0px;
+    }
+}
+
+.ms-srch-sbLarge > input {
+    width: 80% !important;
+}
+
+#publishedPagesTable_wrapper, #UnpublishedPagesTable_wrapper {
+    width: 100%;
+}
+
+select {
+    padding: 0 .375rem !important;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.jconfirm .jconfirm-box div.jconfirm-content-pane .jconfirm-content {
+    overflow: hidden;
+}
+
+.pnu-danger-btn {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    border-radius: 0px;
+    box-shadow: #acacac 5px 5px 5px;
+    font-family: CairoBold, sans-serif;
+    font-size: 12px;
+    padding: 7px 10px;
+}
+
+.pnu-green-btn {
+    color: #fff !important;
+    background-color: #2fdcca !important;
+    border-color: #2fdcca !important;
+    border-radius: 0px;
+    box-shadow: #acacac 5px 5px 5px;
+    font-family: CairoBold, sans-serif;
+    font-size: 12px;
+    padding: 7px 10px;
+}
+
+.dataTable {
+    width: 100% !important;
+}
+
+input.btn-disabled {
+    background-color: #eee !important;
+    color: black !important;
+    border: 0;
+    cursor: not-allowed !important;
+}
+
+    input.btn-disabled:hover {
+        box-shadow: #acacac 5px 5px 5px;
+    }
+
+button.btn-disabled {
+    background-color: #eee !important;
+    color: black !important;
+    border: 0;
+    cursor: not-allowed !important;
+}
+
+    button.btn-disabled:hover {
+        box-shadow: #acacac 5px 5px 5px;
+    }
+
+.right-menu .panel-group a {
+    height: 100%;
+    margin: 1px;
+    display: block;
+    padding: 7px 10px 8px 0;
+}
+
+.panel-body table td {
+    padding: 0 !important
+}
+
+.col-md-4.nav-item.wht-hover a {
+    display: block;
+}
+
+body {
+    overflow: auto !important;
+    overflow-x: hidden !important;
+}
+
+#s4-workspace {
+    overflow: visible !important;
+}
+
+.ms-srch-hover-action .ms-calloutLink {
+    display: none;
+}
+
+.ms-srch-item-previewContainer {
+    display: none !important
+}
+
+.ms-srch-item-summaryPreview {
+    width: 50%
+}
+
+.ms-srch-item-deepLinks {
+    height: auto;
+    display: block;
+    clear: both;
+}
+
+header.fixed {
+    width: 100%;
+}
+
+.green-color {
+    color: #2fdcca;
+}
+
+.panel-body tr {
+    height: 40px;
+    line-height: 39px;
+}

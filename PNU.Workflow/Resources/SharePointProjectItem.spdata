@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.Module" DefaultFile="Elements.xml" SupportedTrustLevels="All" SupportedDeploymentScopes="Web, Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="Resources\" Type="ElementManifest" />
+    <ProjectItemFile Source="PNU-WF.resx" Target="PNU.Workflow\Resources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="PNU-WF.en-US.resx" Target="PNU.Workflow\Resources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="PNU-WF.ar-SA.resx" Target="PNU.Workflow\Resources\" Type="AppGlobalResource" />
+  </Files>
+</ProjectItem>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="81890aba-50b3-45f8-81e4-53dd8f30e8f2" Scope="Site" Title="EserviceList Feature2">
+  <ElementManifests>
+    <ElementManifest Location="EserviceBrow\Elements.xml" />
+    <ElementFile Location="EserviceBrow\EserviceBrow.webpart" />
+    <ElementManifest Location="EserviceBrow2\Elements.xml" />
+    <ElementFile Location="EserviceBrow2\EserviceBrow2.webpart" />
+    <ElementManifest Location="ServiceDetails\Elements.xml" />
+    <ElementFile Location="ServiceDetails\ServiceDetails.webpart" />
+    <ElementManifest Location="ServiceSearch\Elements.xml" />
+    <ElementFile Location="ServiceSearch\ServiceSearch.webpart" />
+    <ElementManifest Location="SearchList\Elements.xml" />
+    <ElementFile Location="SearchList\SearchList.webpart" />
+  </ElementManifests>
+</Feature>

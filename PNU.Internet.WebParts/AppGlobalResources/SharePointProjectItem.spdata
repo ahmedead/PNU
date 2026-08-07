@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.Module" DefaultFile="Elements.xml" SupportedTrustLevels="All" SupportedDeploymentScopes="Web, Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="AppGlobalResources\" Type="ElementManifest" />
+    <ProjectItemFile Source="CommonGlobalResources.en-US.resx" Target="PNU.Internet.WebParts\AppGlobalResources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="CommonGlobalResources.resx" Target="PNU.Internet.WebParts\AppGlobalResources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="PNUres.resx" Target="PNU.Internet.WebParts\AppGlobalResources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="PNUres.en-US.resx" Target="PNU.Internet.WebParts\AppGlobalResources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="PNUres.ar-SA.resx" Target="PNU.Internet.WebParts\AppGlobalResources\" Type="AppGlobalResource" />
+    <ProjectItemFile Source="Messages.resx" Target="AppGlobalResources\" Type="ElementFile" />
+  </Files>
+</ProjectItem>

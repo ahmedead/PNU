@@ -1,0 +1,129 @@
+﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{123799E6-CDF7-460B-ACDD-7DD632325FA9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PNU.Jobs</RootNamespace>
+    <AssemblyName>PNU.Jobs</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetOfficeVersion>19.0</TargetOfficeVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <MinimumOfficeToolsVersion>14.1</MinimumOfficeToolsVersion>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SharePoint.Publishing, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Publishing.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\EmailUtility.cs" />
+    <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\LookUp.cs" />
+    <Compile Include="Dtos\JobDto.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="webparts\JobDetails\JobDetails.cs" />
+    <Compile Include="webparts\JobDetails\JobDetailsUserControl.ascx.cs">
+      <DependentUpon>JobDetailsUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="webparts\JobDetails\JobDetailsUserControl.ascx.designer.cs">
+      <DependentUpon>JobDetailsUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="webparts\JobsList\JobsList.cs" />
+    <Compile Include="webparts\JobsList\JobsListUserControl.ascx.cs">
+      <DependentUpon>JobsListUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="webparts\JobsList\JobsListUserControl.ascx.designer.cs">
+      <DependentUpon>JobsListUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="webparts\SubmissionForm\SubmissionForm.cs" />
+    <Compile Include="webparts\SubmissionForm\SubmissionFormUserControl.ascx.cs">
+      <DependentUpon>SubmissionFormUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="webparts\SubmissionForm\SubmissionFormUserControl.ascx.designer.cs">
+      <DependentUpon>SubmissionFormUserControl.ascx.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+    <None Include="Package\Package.package">
+      <PackageId>{c3d0c552-675a-413d-bcfe-d65348c80494}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+    <None Include="webparts\JobDetails\JobDetails.webpart" />
+    <None Include="webparts\JobDetails\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{a9a04a16-0f83-4a46-bfd9-d39bcb39b82f}</SharePointProjectItemId>
+    </None>
+    <None Include="webparts\JobsList\JobsList.webpart" />
+    <None Include="webparts\JobsList\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{a21c7acd-b1fc-40b8-9092-fc157499d2e0}</SharePointProjectItemId>
+    </None>
+    <None Include="webparts\SubmissionForm\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{eb010789-4eff-4eb0-bb71-f1dfdf692bdd}</SharePointProjectItemId>
+    </None>
+    <None Include="webparts\SubmissionForm\SubmissionForm.webpart" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="webparts\JobDetails\Elements.xml" />
+    <Content Include="webparts\JobDetails\JobDetailsUserControl.ascx" />
+    <Content Include="webparts\JobsList\Elements.xml" />
+    <Content Include="webparts\JobsList\JobsListUserControl.ascx" />
+    <Content Include="webparts\SubmissionForm\Elements.xml" />
+    <Content Include="webparts\SubmissionForm\SubmissionFormUserControl.ascx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>

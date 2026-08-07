@@ -1,0 +1,102 @@
+﻿using Microsoft.SharePoint;
+using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.RegAdm
+{
+    public partial class ucStatistics : UserControl
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                SPListItemCollection coll;
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+                    {
+                        using (SPWeb Currentweb = site.OpenWeb())
+                        {
+                            SPList listAbout = Currentweb.Lists.TryGetList("About");
+                            coll = listAbout.GetItems();
+                        }
+                    }
+
+                    if (coll != null && coll.Count > 0)
+                    {
+                        using (SPSite site = new SPSite(SPContext.Current.Site.ID))
+                        {
+                            using (SPWeb web = site.OpenWeb("Admin"))
+                            {
+                                SPList list = web.Lists.TryGetList("Statistics");
+
+
+                                SPQuery query = new SPQuery();
+                                query.Query = $@"<Where>
+                                  <Or>
+                                     <Eq>
+                                        <FieldRef Name='SMRPRLE_DEGC_CODE' />
+                                        <Value Type='Text'>{coll[0]["SMRPRLE_DEGC_CODE"].ToString()}</Value>
+                                     </Eq>
+                                     <Or>
+                                        <Eq>
+                                           <FieldRef Name='Title' />
+                                           <Value Type='Text'>الكليات والمعاهد</Value>
+                                        </Eq>
+                                        <Eq>
+                                           <FieldRef Name='Title' />
+                                           <Value Type='Text'>قسم</Value>
+                                        </Eq>
+                                     </Or>
+                                  </Or>
+                               </Where>
+                               <OrderBy>
+                                  <FieldRef Name='ItemOrder' Ascending='True' />
+                               </OrderBy>";
+                                SPListItemCollection collNew = list.GetItems(query);
+                                if (collNew != null && collNew.Count > 0)
+                                {
+                                    List<lstStatistics> _AllData = SPFactory.MapListItemsToClass<lstStatistics>(collNew);
+                                    if (_AllData != null)
+                                    {
+                                        rptStatistics.DataSource = _AllData;
+                                        rptStatistics.DataBind();
+                                    }
+                                }
+
+
+
+
+                            }
+                        }
+                    }
+
+                });
+
+            }
+
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),this.Page.Title, ex.Message);
+            }
+            
+        }
+    
+    }
+
+    public class lstStatistics
+    {
+        public string Title { get; set; }
+        public string TitleEn { get; set; }
+        public string Count { get; set; }
+        public string ItemOrder { get; set; }
+        public string Visibility { get; set; }
+        public string ClassName { get; set; }
+        public string SMRPRLE_DEGC_CODE { get; set; }
+        public string ID { get; set; }
+    }
+}

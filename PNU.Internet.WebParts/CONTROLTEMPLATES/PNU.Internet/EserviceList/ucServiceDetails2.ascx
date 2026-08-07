@@ -1,0 +1,663 @@
+﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
+<%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
+<%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
+<%@ Register Tagprefix="asp" Namespace="System.Web.UI" Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
+<%@ Import Namespace="Microsoft.SharePoint" %> 
+<%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucServiceDetails22.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList.ucServiceDetails2" %>
+
+
+<%@ Import Namespace="PNU.Internet.WebParts" %>
+
+
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/arstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/NoraCustom.css" />
+
+<link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/pnu-defult.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/jqueryConfirm.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/breadcrumb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/assets/css/extraheader.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_layouts/15/services-catalog/services-catalog.css" />
+
+
+    <link rel="icon" href="https://pnu.edu.sa/_layouts/15/PNU_Theme/ar-sa/imgs/fav.png" />
+
+    <script src="../../../../_layouts/15/services-catalog/assets/js/jquery-3.5.0.min.js"></script>
+   <script src="../../../../_layouts/15/services-catalog/assets/js/popper.js"></script>
+
+    <script src="../../../../_layouts/15/services-catalog/assets/js/bootstrap.min.js"></script>
+    <script src="../../../../_layouts/15/services-catalog/assets/js/counter.js"></script>
+
+    <script src="../../../../_layouts/15/services-catalog/assets/js/datatables.min.js"></script>
+    <%--<script src="../../../../_layouts/15/services-catalog/assets/js/moment-with-locales.min.js"></script>
+    <script src="../../../../_layouts/15/services-catalog/assets/js/moment-hijri.js"></script>--%>
+    <script src="../../../../_layouts/15/services-catalog/assets/js/jqueryConfirm.min.js"></script>
+
+    <script src="../../../../_layouts/15/services-catalog/assets/js/blank.js"></script>
+
+    <script src="../../../../_layouts/15/services-catalog/assets/js/Notify.js"></script>
+
+
+    <script src="../../../../_layouts/15/services-catalog/assets/js/swiper.min.js"></script>
+    <script src="../../../../_layouts/15/services-catalog/assets/js/pnu.js"></script>
+    <script src="../../../../_layouts/15/services-catalog/assets/js/extraheader.js"></script>
+<style>
+
+.container {
+        max-width:1140px
+    }
+    .main-btnD {
+        border: 1px solid #999999;
+        background-color: #cccccc;
+        color: #666666;
+        border-radius: 1rem;
+        pointer-events:none;
+        
+       
+    }
+     .main-btnD:hover {
+        border: 1px solid #999999;
+        background-color: black;
+        cursor:none!important;
+        color: #666666;
+        border-radius: 1rem;
+        pointer-events:none;
+       
+    }
+
+</style>
+
+<style>
+
+
+.btnSeach  {
+    color: #fff !important;
+    font-size: 1.25rem !important;
+}
+
+.col-auto {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none
+}
+
+
+
+span.mx-2 {
+    
+    color: #024d4c;
+    direction: rtl;
+}
+
+span {
+    
+    /* color: #fff; */
+    direction: rtl;
+}
+.rounded-pill {
+    border-radius: 2rem !important;
+}
+
+.card.card-sm.m-0.p-0.border-0.shadow-app {
+    border-radius: 2rem;
+}
+p.lead , .txtInSearch , .btn{
+  
+  color: #024d4c;
+  direction: rtl;
+}
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem
+}
+p {
+    margin-top: 0;
+    margin-bottom: 1rem
+}
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300
+}
+
+    .RepFlex
+    {
+         display:flex;
+         flex-direction:row;
+         flex-wrap:wrap;
+    }
+    .btnSeach, input[type=button]
+    {
+        background-color:#024D4C!important;
+        border-radius:2rem!important;
+        border-color:#28a745!important;
+        box-shadow:none!important;
+        padding: 0.5rem 1rem!important;
+        font-size: 1.25rem!important;
+        line-height: 1.5!important;
+        cursor:pointer;
+    }
+    #Search, input[type=button]
+    {
+         background-color:#024D4C!important;
+        border-radius:2rem!important;
+        border-color:#28a745!important;
+        box-shadow:none!important;
+        padding: 0.5rem 1rem!important;
+        font-size: 1.25rem!important;
+        line-height: 1.5!important;
+    }
+   .txtInSearch
+    {
+        padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+    float:right;
+    border:none!important;
+    }
+  
+    @media (max-width: 800px) {
+  .RepFlex {
+    flex-direction: column;
+  }
+  
+}
+
+
+section.breadcrumb {
+    display: none;
+}
+  
+  
+  .breadcrumb {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: .75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #e9ecef;
+    border-radius: .25rem
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    display: inline-block;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    color: #6c757d;
+    content: "/"
+}
+
+.breadcrumb-item+.breadcrumb-item:hover::before {
+    text-decoration: underline
+}
+
+.breadcrumb-item+.breadcrumb-item:hover::before {
+    text-decoration: none
+}
+
+.breadcrumb-item.active {
+    color: #6c757d
+}
+
+.pagination {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding-right: 0;
+    list-style: none;
+    border-radius: .25rem
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-right: -1px;
+    line-height: 1.25;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6
+}
+
+.page-link:hover {
+    color: #0056b3;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6
+}
+
+.page-link:focus {
+    z-index: 2;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25)
+}
+
+.page-link:not(:disabled):not(.disabled) {
+    cursor: pointer
+}
+
+.page-item:first-child .page-link {
+    margin-right: 0;
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem
+}
+
+.page-item:last-child .page-link {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6
+}
+
+.pagination-lg .page-link {
+    padding: .75rem 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.5
+}
+
+.pagination-lg .page-item:first-child .page-link {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem
+}
+
+.pagination-lg .page-item:last-child .page-link {
+    border-top-left-radius: .3rem;
+    border-bottom-left-radius: .3rem
+}
+
+.pagination-sm .page-link {
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5
+}
+
+.pagination-sm .page-item:first-child .page-link {
+    border-top-right-radius: .2rem;
+    border-bottom-right-radius: .2rem
+}
+
+.pagination-sm .page-item:last-child .page-link {
+    border-top-left-radius: .2rem;
+    border-bottom-left-radius: .2rem
+}
+
+.badge {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem
+}
+
+.badge:empty {
+    display: none
+}
+
+.btn .badge {
+    position: relative;
+    top: -1px
+}
+
+.badge-pill {
+    padding-left: .6em;
+    padding-right: .6em;
+    border-radius: 10rem
+}
+
+.badge-primary {
+    color: #fff;
+    background-color: #007bff
+}
+
+.btn-group-lg>.btn,.btn-lg {
+    padding: .5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: .3rem
+}
+
+.col-lg-4 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33.333333%;
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%
+    }
+
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem ;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    width: 100%;
+}
+
+
+.btn:focus,.btn:hover {
+    text-decoration: none
+}
+
+.btn.focus,.btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25)
+}
+
+.btn.disabled,.btn:disabled {
+    opacity: .65
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer
+}
+
+.btn:not(:disabled):not(.disabled).active,.btn:not(:disabled):not(.disabled):active {
+    background-image: none
+}
+
+a.btn.disabled,fieldset:disabled a.btn {
+    pointer-events: none
+}
+
+
+
+.btn-primary.focus,.btn-primary:focus {
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.5)
+}
+
+.btn-primary.disabled,.btn-primary:disabled {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,.btn-primary:not(:disabled):not(.disabled):active,.show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus,.btn-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.5)
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d
+}
+
+.btn-secondary:hover {
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62
+}
+
+.btn-secondary.focus,.btn-secondary:focus {
+    box-shadow: 0 0 0 .2rem rgba(108,117,125,.5)
+}
+
+.btn-secondary.disabled,.btn-secondary:disabled {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active,.btn-secondary:not(:disabled):not(.disabled):active,.show>.btn-secondary.dropdown-toggle {
+    color: #fff;
+    background-color: #545b62;
+    border-color: #4e555b
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active:focus,.btn-secondary:not(:disabled):not(.disabled):active:focus,.show>.btn-secondary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(108,117,125,.5)
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745
+}
+
+.btn-success:hover {
+    color: #fff;
+    background-color: #218838;
+    border-color: #1e7e34
+}
+
+.btn-success.focus,.btn-success:focus {
+    box-shadow: 0 0 0 .2rem rgba(40,167,69,.5)
+}
+
+.btn-success.disabled,.btn-success:disabled {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745
+}
+
+
+</style>
+
+
+
+<asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder>
+
+
+<%--<asp:Repeater ID="masterRepeater" runat="server">
+    <ItemTemplate>--%>
+
+<div class="services-catalog ">
+        <div class="jumbotron text-left">
+            <div class="container mb-5">
+                <div class="my-5">
+                    <h1 class="display-4 pt-4 font-weight-bolder pb-4">
+                        <asp:Label runat="server" ID="lblname" ></asp:Label>
+                        <asp:Label runat="server" ID="lblquerys"></asp:Label>
+
+                    </h1>
+                    
+
+                    <p class="lead ">
+
+
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<%= SPFactory.GetDynamicURL("Pages/Eservice.aspx") %>"><asp:Literal runat="server" Text="<%$ Resources: PNUres, EServices %>" /> </a></li>
+                            <li class="breadcrumb-item active font-weight-bolder" aria-current="page">
+                                <asp:Label runat="server" ID="LabelBC" ></asp:Label>
+                                
+                            </li>
+                        </ol>
+                    </nav>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="container  my-5 py-5 ">
+            <div class="bg-title m-3 mb-5">
+                <h5> 
+                    <asp:Label runat="server" ID="LblSerTitle" ></asp:Label>
+
+                </h5>
+            </div>
+            <div class="row justify-content-between">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 mb-5">
+                    <p class="text-justify">
+                        <asp:Label runat="server" ID="lblDesc"></asp:Label>
+                    </p>
+                    <i class="fas fa-external-link-alt"></i>
+                     <a id="hreLevelAgr" class="mx-1" runat="server">
+                         
+                         <asp:Literal runat="server" Text="<%$ Resources: PNUres, ServiceQuality %>" />
+                        
+
+                     </a>
+
+
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 mb-5">
+                    <a id="hreStart" style="color:white;" class="btn btn-lg btn-block p-3 main-btn" runat="server">
+                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, StartService %>" />
+                    </a>
+                </div>
+                <div class="row mt-3 ">
+                    <div class="col-12">
+                        <div class="card card-sm m-0 p-4 py-5  border-0 rounded-pill shadow-app  card-info mb-5">
+                            <div class="row  text-center">
+                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 mb-lg-0 mb-5">
+                                    <h5 class="font-weight-bolder">
+                                        <i class="fas fa-users mx-1"></i>
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, DP_TargetGroup %>" />
+                                    </h5>
+                                    <asp:Label CssClass="mb-0" ID="lbltarget" runat="server"></asp:Label>
+                                </div>
+                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 mb-lg-0 mb-5">
+                                    <h5 class="font-weight-bolder">
+                                        <i class="fas fa-users-cog  mx-1"></i>
+                                        
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, ResponsibleParty %>" />
+                                    </h5>
+                                    <asp:Label runat="server" CssClass="mb-0" ID="lblResPar"></asp:Label>
+                                </div>
+                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 mb-lg-0 mb-5">
+                                    <h5 class="font-weight-bolder">
+                                        <i class="fas fa-clock mx-1"></i>
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, ExecutionTime %>" />
+                                    </h5>
+                                    <asp:Label runat="server" ID="lblDur" CssClass="mb-0"></asp:Label>
+                                </div>
+                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 mb-0">
+                                    <h5 class="font-weight-bolder">
+                                        <i class="fas fa-file-signature  mx-1"></i>
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, Channels %>" />
+                                    </h5>
+                                    <asp:Label ID="lblChan" runat="server" CssClass="mb-0"></asp:Label>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card card-sm m-0 p-4 py-5  border-0 rounded-pill shadow-app  card-info mb-5 ">
+                            <h5 class=" text-left mb-4 mx-2">
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, DocumentAndData %>" />
+                            </h5>
+                            <p id="preq1" runat="server" class="my-2 mx-2">
+                                <i class="far fa-circle mx-2"></i>
+                                <asp:Label runat="server" CssClass="my-2 mx-2" ID="LblReq1"></asp:Label>
+                            </p>
+                            <p id="preq2" runat="server" class="my-2 mx-2">
+                                <i class="far fa-circle mx-2"></i>
+                                <asp:Label runat="server" CssClass="my-2 mx-2" ID="LblReq2"></asp:Label>     
+                            </p>
+                            <p id="preq3" runat="server" class="my-2 mx-2">
+                                <i class="far fa-circle mx-2"></i>
+                                <asp:Label runat="server" CssClass="my-2 mx-2" ID="LblReq3"></asp:Label>   
+                            </p>
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card card-sm m-0 p-4 py-4  border-0 rounded-pill shadow-app  card-info mb-5 d-flex flex-column">
+                            <img  class="w-25 mt-3 mb-3" src="/Style Library/assets/imgs/guide.svg" title="">
+
+                            <h5 class="text-left mb-2 mx-2">
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, guideManual %>" />
+                            </h5>
+                            <p id="UserManP" runat="server" class="my-2 mx-2">
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, guide %>" />
+                            </p>
+                            <div class="service-btn-wrapper mt-3">
+                                <a id="hrefUManual" style="color:white;" class="btn btn-md btn-block py-2 main-btn" runat="server">
+                                     <asp:Literal runat="server" Text="<%$ Resources: PNUres, guideDownload %>" />
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card card-sm m-0 p-4 py-4  border-0 rounded-pill shadow-app  card-info mb-5 ">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex">
+                                    <img class="mt-3 mb-3" src="/Style Library/assets/imgs/terms-and-conditions.svg" width="50" title="">
+                                    <div class="align-self-center">
+    
+                                        <h5 class="text-left mb-2 mx-2">
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, terms-and-conditions %>" />
+                                        </h5>
+                                        <p class="mt-2 mx-2 mb-0">
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, terms-and-conditions-click %>" />
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                    <button target="_blank" class="btn btn-md  py-2 px-4 main-btn" style="height: fit-content;" onclick="window.open('/ar/SECURITYCYBER/Pages/Privacy-Policy.aspx');">
+                                        
+                                        <asp:Literal runat="server" Text="<%$ Resources: PNUres, download %>" />
+
+                                    </button>
+
+                                
+                            </div>
+
+                        </div>
+                    </div>
+				</div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <%--</ItemTemplate>
+</asp:Repeater>--%>
+
+   

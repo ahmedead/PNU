@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="WorkFlowRequestersList" OnQuickLaunch="TRUE" TemplateType="100" Url="Lists/WorkFlowRequestersList" Description="My List Instance">
+	  <Data>
+		  <Rows>
+			  <Row>
+				  <Field Name="ID">1</Field>
+				  <Field Name="Title">كلية الهندسة</Field>
+				  <Field Name="TitleEn">Engineering</Field>
+				  <Field Name="GroupName">EngineeringGP</Field>
+				  <Field Name="IsEnabled">True</Field>
+				  
+			  </Row>
+			  <Row>
+				  <Field Name="ID">2</Field>
+				  <Field Name="Title">كلية الطب</Field>
+				  <Field Name="TitleEn">Medicine</Field>
+				  <Field Name="GroupName">MedicineGP</Field>
+				  <Field Name="IsEnabled">True</Field>
+
+			  </Row>
+			  <Row>
+				  <Field Name="ID">3</Field>
+				  <Field Name="Title">كلية التربية</Field>
+				  <Field Name="TitleEn">Education</Field>
+				  <Field Name="GroupName">EducationGP</Field>
+				  <Field Name="IsEnabled">True</Field>
+
+			  </Row>
+		  </Rows>
+	  </Data>
+	  
+  </ListInstance>
+</Elements>

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="c3d0c552-675a-413d-bcfe-d65348c80494" SharePointProductVersion="19.0">
+  <Assemblies>
+    <Assembly Location="PNU.Jobs.dll" DeploymentTarget="GlobalAssemblyCache" />
+  </Assemblies>
+</Solution>

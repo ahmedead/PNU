@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="34428920-5020-450e-99c4-4e386a3ef593" Scope="Site" Title="PNU.Workflow WebParts">
+  <ElementManifests>
+    <ElementManifest Location="RequestForm\Elements.xml" />
+    <ElementFile Location="RequestForm\RequestForm.webpart" />
+    <ElementManifest Location="RequestsListForm\Elements.xml" />
+    <ElementFile Location="RequestsListForm\RequestsListForm.webpart" />
+    <ElementManifest Location="RequestDetails\Elements.xml" />
+    <ElementFile Location="RequestDetails\RequestDetails.webpart" />
+    <ElementManifest Location="RequestsUserActions\Elements.xml" />
+    <ElementFile Location="RequestsUserActions\RequestsUserActions.webpart" />
+    <ElementManifest Location="Resources\Elements.xml" />
+  </ElementManifests>
+</Feature>

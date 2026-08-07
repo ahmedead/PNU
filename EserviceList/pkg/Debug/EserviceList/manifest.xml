@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="16bc46f6-598b-494d-87b2-d7f47432e03b" SharePointProductVersion="19.0">
+  <Assemblies>
+    <Assembly Location="EserviceList.dll" DeploymentTarget="GlobalAssemblyCache">
+      <SafeControls>
+        <SafeControl Assembly="EserviceList, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7abd535f11cceb57" Namespace="EserviceList.EserviceBrow" TypeName="*" />
+        <SafeControl Assembly="EserviceList, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7abd535f11cceb57" Namespace="EserviceList.EserviceBrow2" TypeName="*" />
+        <SafeControl Assembly="EserviceList, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7abd535f11cceb57" Namespace="EserviceList.ServiceDetails" TypeName="*" />
+        <SafeControl Assembly="EserviceList, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7abd535f11cceb57" Namespace="EserviceList.ServiceSearch" TypeName="*" />
+        <SafeControl Assembly="EserviceList, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7abd535f11cceb57" Namespace="EserviceList.SearchList" TypeName="*" />
+      </SafeControls>
+    </Assembly>
+  </Assemblies>
+  <TemplateFiles>
+    <TemplateFile Location="CONTROLTEMPLATES\EserviceList\EserviceBrow\EserviceBrowUserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\EserviceList\EserviceBrow2\EserviceBrow2UserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\EserviceList\ServiceDetails\ServiceDetailsUserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\EserviceList\ServiceSearch\ServiceSearchUserControl.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\EserviceList\SearchList\SearchListUserControl.ascx" />
+  </TemplateFiles>
+  <FeatureManifests>
+    <FeatureManifest Location="EserviceList_Feature2\Feature.xml" />
+  </FeatureManifests>
+</Solution>

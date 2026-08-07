@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="RequestsListForm" List="113" Url="_catalogs/wp">
+    <File Path="RequestsListForm\RequestsListForm.webpart" Url="PNU.Workflow_RequestsListForm.webpart" Type="GhostableInLibrary" >
+      <Property Name="Group" Value="PNU" />
+    </File>
+  </Module>
+</Elements>

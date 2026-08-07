@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="faa5ae08-f317-4a32-80eb-f3a59e468763" solutionId="faa5ae08-f317-4a32-80eb-f3a59e468763" resetWebServer="false" sharePointProductVersion="19.0" name="PNU.Internet.WebParts" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <assemblies>
+    <projectOutputAssembly location="Portal.Main.Helper.dll" deploymentTarget="WebApplication" projectPath="..\Portal.Main.Helper\Portal.Main.Helper.csproj" />
+    <projectOutputAssembly location="Portal.Main.WebApp.dll" deploymentTarget="WebApplication" projectPath="..\Portal.Main.WebApp\Portal.Main.WebApp.csproj" />
+    <projectOutputAssembly location="SharedSQL.dll" deploymentTarget="WebApplication" projectPath="..\SharedSQL\SharedSQL.csproj" />
+    <customAssembly location="HtmlAgilityPack.dll" deploymentTarget="WebApplication" sourcePath="bin\Debug\HtmlAgilityPack.dll" />
+    <customAssembly location="Oracle.ManagedDataAccess.dll" deploymentTarget="WebApplication" sourcePath="DLL\Oracle.ManagedDataAccess.dll" />
+    <customAssembly location="System.Net.Http.Formatting.dll" deploymentTarget="WebApplication" sourcePath="DLL\System.Net.Http.Formatting.dll" />
+    <customAssembly location="Microsoft.Practices.EnterpriseLibrary.Common.dll" deploymentTarget="WebApplication" sourcePath="DLL\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
+    <customAssembly location="Microsoft.Practices.EnterpriseLibrary.Data.dll" deploymentTarget="WebApplication" sourcePath="DLL\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
+    <customAssembly location="Microsoft.Practices.ServiceLocation.dll" deploymentTarget="WebApplication" sourcePath="DLL\Microsoft.Practices.ServiceLocation.dll" />
+    <customAssembly location="Microsoft.Practices.Unity.dll" deploymentTarget="WebApplication" sourcePath="DLL\Microsoft.Practices.Unity.dll" />
+    <customAssembly location="Microsoft.Practices.Unity.Interception.dll" deploymentTarget="WebApplication" sourcePath="DLL\Microsoft.Practices.Unity.Interception.dll" />
+    <customAssembly location="Magick.NET-Q8-AnyCPU.dll" deploymentTarget="WebApplication" sourcePath="bin\Debug\Magick.NET-Q8-AnyCPU.dll" />
+    <customAssembly location="Magick.NET.Core.dll" deploymentTarget="WebApplication" sourcePath="bin\Debug\Magick.NET.Core.dll" />
+    <customAssembly location="Magick.Native-Q8-x64.dll" deploymentTarget="WebApplication" sourcePath="bin\Debug\Magick.Native-Q8-x64.dll" />
+    <projectOutputAssembly location="PNU.Internet.SearchIndex.dll" deploymentTarget="WebApplication" projectPath="..\PNU.Internet.SearchIndex\PNU.Internet.SearchIndex.csproj" />
+  </assemblies>
+  <features>
+    <featureReference itemId="16926112-b0b7-4641-b4f2-349b8958f023" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="b323cffd-b016-4324-bad0-76f9281c9430" />
+    <projectItemReference itemId="f48cf83f-d2f2-4a41-b140-5467bcdfc209" />
+    <projectItemReference itemId="ac66fef0-d408-4ba8-9ec6-405babd7f8d7" />
+  </projectItems>
+</package>

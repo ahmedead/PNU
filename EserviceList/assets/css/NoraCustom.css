@@ -1,0 +1,39 @@
+/*div#suiteBarTop {
+    display: none;
+}*/
+/*.o365cs-nav-leftAlign {
+    display: none !important;
+}
+
+div#s4-ribbonrow {
+    display: none;
+}*/
+
+#s4-titlerow {
+    display: none !important;
+}
+
+#sideNavBox {
+    display: none;
+}
+
+#contentBox {
+    margin: 0px;
+}
+
+#contentRow {
+    padding-top: 0px;
+}
+
+#ms-cui-ribbonTopBars {
+    display: none !important;
+}
+
+/*#s4-workspace {
+    overflow: auto !important;
+    overflow-x: hidden !important;
+}*/
+
+.ms-signInLink {
+    display: none !important;
+}

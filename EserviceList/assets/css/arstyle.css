@@ -1,0 +1,50 @@
+footer .footer1 form input::placeholder,
+footer .footer1 form input {
+  color: #fff !important;
+}
+footer .footer1 form textarea::placeholder,
+footer .footer1 form textarea {
+  color: #fff !important;
+}
+
+footer .footer1 ul {
+  line-height: 2rem;
+}
+footer .footer1 ul li i {
+  margin-left: 6px;
+}
+
+.card.collegeBg {
+  border-radius: 0px;
+  box-shadow: 0px;
+}
+.collegeBg {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.collegeBg .collegeName {
+  background: rgba(23, 55, 57, 0.75);
+  padding: 5%;
+  color: #fff;
+  text-align: center;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: height 1s;
+}
+
+.collegeBg .collegeName:hover {
+  height: 250px;
+  transition: height 1s;
+  opacity: 1;
+}
+
+.newdetails .News-img img {
+  width: 100%;
+}

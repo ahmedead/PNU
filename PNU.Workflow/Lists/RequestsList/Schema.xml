@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<List xmlns:ows="Microsoft SharePoint" Title="RequestsList" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/RequestsList" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+  <MetaData>
+    
+    <Fields>
+      
+    <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" DisplayName="$Resources:core,Title;" Required="TRUE" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="Title" MaxLength="255" />
+	<Field Name="ApprovalGroupName" ID="{71deae2a-9625-415c-b7da-713c4ff0f45e}" DisplayName="ApprovalGroupName" Type="Text" />
+		<Field Name="RequestStatus" ID="{ab780ebb-f975-4351-9237-e2f4545a5d37}" DisplayName="RequestStatus" Type="Choice">
+			<CHOICES>
+				<CHOICE>Pending</CHOICE>
+				<CHOICE>Approved</CHOICE>
+				<CHOICE>Rejected</CHOICE>
+				<CHOICE>Returned</CHOICE>
+			</CHOICES>
+			<Default>In Processing</Default>
+		</Field>
+		<Field Name="MainCategory" ID="{fe47fa36-1529-4df8-8863-008f1062ca8d}" DisplayName="MainCategory" Type="Choice">
+			<CHOICES>
+				<CHOICE>الحرم الجامعي</CHOICE>
+				<CHOICE>الاخبار الرئيسية</CHOICE>
+				
+				
+			</CHOICES>
+		</Field>
+	 <Field Name="FacultyName" ID="{2aa80f81-499f-4ce2-b9eb-9dff979d01a4}" DisplayName="FacultyName" Type="Text" />
+	<Field Name="MediaContent" ID="{ffa55e81-8ce8-42c7-914c-902bb1c0eace}" DisplayName="MediaContent" Type="Note" />
+	<Field Name="Summary" ID="{9f5e9677-9d4c-49dd-a3c1-fc3d2e9f6dd8}" DisplayName="Summary" Type="Note" />
+		<Field Name="MediaTypes" ID="{0596a6f8-5580-47f6-8ae0-cc6b5c236f2c}" DisplayName="MediaTypes" Type="Choice">
+			<CHOICES>
+				<CHOICE>صورة</CHOICE>
+				<CHOICE>فيديو</CHOICE>
+				<CHOICE>قصة</CHOICE>
+			</CHOICES>
+		</Field>
+	<Field Name="MediaDate" ID="{9746eb53-bef8-46eb-a05c-2d7c7830938a}" DisplayName="MediaDate" Type="DateTime" />
+	<Field Name="UserComments" ID="{6204eabd-f7cd-4245-9e89-e04d5b772a1c}" DisplayName="UserComments" Type="Note" />
+	</Fields>
+    <Views>
+      
+      
+    <View BaseViewID="0" Type="HTML" MobileView="TRUE" TabularView="FALSE">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          
+        <FieldRef Name="LinkTitleNoMenu"></FieldRef></ViewFields>
+        <Query>
+          <OrderBy>
+            
+          <FieldRef Name="Modified" Ascending="FALSE"></FieldRef></OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="AddNewAnnouncement" Location="Resource(wss,addnewitem)" />
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_ONET_HOME)" />
+        </ParameterBindings>
+      </View><View BaseViewID="1" Type="HTML" WebPartZoneID="Main" DisplayName="$Resources:core,objectiv_schema_mwsidcamlidC24;" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" SetupPath="pages\viewpage.aspx" ImageUrl="/_layouts/15/images/generic.png?rev=23" Url="AllItems.aspx">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <JSLink>clienttemplates.js</JSLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          
+        <FieldRef Name="LinkTitle"></FieldRef>
+		  <FieldRef Name="ApprovalGroupName" />
+		  <FieldRef Name="RequestStatus" />
+		  <FieldRef Name="MainCategory" />
+		  <FieldRef Name="FacultyName" />
+		  <FieldRef Name="MediaContent" />
+		  <FieldRef Name="Summary" />
+		  <FieldRef Name="MediaTypes" />
+		  <FieldRef Name="MediaDate" />
+		  <FieldRef Name="UserComments" />
+		  </ViewFields>
+        <Query>
+          <OrderBy>
+            
+          <FieldRef Name="ID"></FieldRef></OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_DEFAULT)" />
+        </ParameterBindings>
+      </View></Views>
+    <Forms>
+      <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="EditForm" Url="EditForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="NewForm" Url="NewForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+    </Forms>
+  </MetaData>
+</List>

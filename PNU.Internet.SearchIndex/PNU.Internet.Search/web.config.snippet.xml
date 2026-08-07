@@ -1,0 +1,28 @@
+<!--
+    Add this <connectionStrings> section to:
+        C:\inetpub\wwwroot\wss\VirtualDirectories\<port>\web.config
+    on EVERY web front-end server.
+
+    The application pool identity must have these rights on the
+    PNU_SearchIndex database:
+        - db_datareader
+        - db_datawriter
+        - GRANT EXECUTE ON SCHEMA::dbo
+-->
+
+<connectionStrings>
+    <add name="PNU_SearchIndex"
+         connectionString="Server=YOUR_SQL_SERVER\YOUR_INSTANCE;
+                           Database=PNU_SearchIndex;
+                           Integrated Security=true;
+                           Application Name=PNU.Internet.Search"
+         providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+<!--
+    OPTIONAL: encrypt the section with aspnet_regiis once everything works:
+
+        cd C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+        aspnet_regiis -pef "connectionStrings"
+            "C:\inetpub\wwwroot\wss\VirtualDirectories\80"
+-->

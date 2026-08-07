@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/"
+         Id="BEA3DBA2-1819-4158-906C-F1A87192D722"
+         Title="PNU Custom Search Infrastructure"
+         Description="Provisions /SearchIndexing/ subsite + 7 config lists,
+                      installs the nightly crawl timer job, and wires
+                      SearchListEventReceiver onto every existing list."
+         Version="1.0.0.0"
+         Scope="WebApplication"
+         ReceiverAssembly="$SharePoint.Project.AssemblyFullName$"
+         ReceiverClass="PNU.Internet.Search.Features.PNUSearchInfrastructureEventReceiver">
+    <ElementManifests>
+    </ElementManifests>
+</Feature>

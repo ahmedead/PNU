@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="d6553bf1-a8ca-4aa4-bca0-6b621d77bf55" solutionId="d6553bf1-a8ca-4aa4-bca0-6b621d77bf55" resetWebServer="true" sharePointProductVersion="19.0" name="Pnu.Internet.CustomTimerJobs" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <assemblies>
+    <customAssembly location="Oracle.ManagedDataAccess.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="bin\Debug\Oracle.ManagedDataAccess.dll" />
+  </assemblies>
+  <features>
+    <featureReference itemId="815b0c4e-d26d-4a77-abf2-46159280e1f9" />
+    <featureReference itemId="05887d40-6c7f-472b-8652-7d0b07b4a4f7" />
+    <featureReference itemId="40ac19bf-15dd-4123-a71e-4c23864e2bb4" />
+    <featureReference itemId="2a2b6134-8aab-400e-8a53-9dd5eb13ac34" />
+    <featureReference itemId="53ae3d8c-1492-4b87-80a1-c8e1efedc48b" />
+  </features>
+</package>

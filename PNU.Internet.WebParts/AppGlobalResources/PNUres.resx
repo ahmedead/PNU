@@ -1,0 +1,852 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutCenter" xml:space="preserve">
+    <value>عن المركز</value>
+  </data>
+  <data name="AboutFaculty" xml:space="preserve">
+    <value>نظرة عامة</value>
+  </data>
+  <data name="AboutProgram" xml:space="preserve">
+    <value>عن البرنامج الأكاديمي </value>
+  </data>
+  <data name="AboutSection" xml:space="preserve">
+    <value>عن القسم </value>
+  </data>
+  <data name="AcademicCredits" xml:space="preserve">
+    <value>اعتماداتنا الأكاديمية</value>
+  </data>
+  <data name="AcademicDegree" xml:space="preserve">
+    <value>الدرجة العلمية التي يمنحها البرنامج .</value>
+  </data>
+  <data name="AcademicPrograms" xml:space="preserve">
+    <value>البرامج الأكاديمية للقسم</value>
+  </data>
+  <data name="AcademicProgramsCollege" xml:space="preserve">
+    <value>البرامج الأكاديمية للكلية</value>
+  </data>
+  <data name="AgencyMissions" xml:space="preserve">
+    <value>مهام الوكالة</value>
+  </data>
+  <data name="AICalender" xml:space="preserve">
+    <value>التقويم</value>
+  </data>
+  <data name="AIContactUS" xml:space="preserve">
+    <value>اتصل بنا</value>
+  </data>
+  <data name="AIMembers" xml:space="preserve">
+    <value>أعضاء المركز</value>
+  </data>
+  <data name="AIRecentNews" xml:space="preserve">
+    <value>أخبار المركز</value>
+  </data>
+  <data name="AllAdvsLink" xml:space="preserve">
+    <value>عرض جميع الإعلانات</value>
+  </data>
+  <data name="AllFacultiesAndInstitues" xml:space="preserve">
+    <value>الكليات والمعاهد</value>
+  </data>
+  <data name="AllSystems" xml:space="preserve">
+    <value>جميع الأنظمة</value>
+  </data>
+  <data name="Alumni-dashboard" xml:space="preserve">
+    <value>إحصائيات الخريجات</value>
+  </data>
+  <data name="Alumni-dashboard-G" xml:space="preserve">
+    <value>الخريجات في سوق العمل</value>
+  </data>
+  <data name="Announcements" xml:space="preserve">
+    <value>الاعلانات</value>
+  </data>
+  <data name="AnnouncementsNo" xml:space="preserve">
+    <value>عدد الإعلانات :</value>
+  </data>
+  <data name="AnnualReports" xml:space="preserve">
+    <value>التقارير السنوية</value>
+  </data>
+  <data name="AssistantProfessors" xml:space="preserve">
+    <value>الأساتذة المساعدون</value>
+  </data>
+  <data name="AssociateProfessors" xml:space="preserve">
+    <value>الأساتذة المشاركون</value>
+  </data>
+  <data name="btnSend" xml:space="preserve">
+    <value>ارسال</value>
+  </data>
+  <data name="BuildingNumber" xml:space="preserve">
+    <value>رقم المبنى: 170</value>
+  </data>
+  <data name="CareerOpportunities" xml:space="preserve">
+    <value>مجالات العمل</value>
+  </data>
+  <data name="CentreLocation" xml:space="preserve">
+    <value>موقع المركز:</value>
+  </data>
+  <data name="Channels" xml:space="preserve">
+    <value>قنوات تقديم الخدمة</value>
+  </data>
+  <data name="Classification" xml:space="preserve">
+    <value>التصنيف:</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>مسح الكل</value>
+  </data>
+  <data name="coiledarrow" xml:space="preserve">
+    <value>/Style%20Library/NewStyle/UI5/images/coiled-arrow.png</value>
+  </data>
+  <data name="COLLEGE" xml:space="preserve">
+    <value>الكلية</value>
+  </data>
+  <data name="CollegeDepartments" xml:space="preserve">
+    <value>الوحدات الإدارية التابعة للكلية</value>
+  </data>
+  <data name="CollegeRequisites" xml:space="preserve">
+    <value>متطلبات الكلية الاختيارية</value>
+  </data>
+  <data name="Colleges" xml:space="preserve">
+    <value>الكليات</value>
+  </data>
+  <data name="ContactInfo" xml:space="preserve">
+    <value>معلومات التواصل</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>تواصل معنا</value>
+  </data>
+  <data name="CountGoogle" xml:space="preserve">
+    <value>عدد أبحاث جوجل :</value>
+  </data>
+  <data name="CountORCID" xml:space="preserve">
+    <value>مقالات أوركيد</value>
+  </data>
+  <data name="CourseCode" xml:space="preserve">
+    <value>رمز المقرر</value>
+  </data>
+  <data name="Courses" xml:space="preserve">
+    <value>المواد الدراسية</value>
+  </data>
+  <data name="CourseSEQ" xml:space="preserve">
+    <value>الشعبة</value>
+  </data>
+  <data name="CoursesTable" xml:space="preserve">
+    <value>جدول المقررات</value>
+  </data>
+  <data name="CoursesTime" xml:space="preserve">
+    <value>مواعيد المقرر</value>
+  </data>
+  <data name="CourseTitle" xml:space="preserve">
+    <value>اسم المقرر</value>
+  </data>
+  <data name="COURSE_TITLE" xml:space="preserve">
+    <value>اسم المقرر</value>
+  </data>
+  <data name="CREDIT" xml:space="preserve">
+    <value>عدد الوحدات المطلوبة</value>
+  </data>
+  <data name="CSCollege" xml:space="preserve">
+    <value>كلية علوم الحاسب والمعلومات</value>
+  </data>
+  <data name="CV" xml:space="preserve">
+    <value>السيرة الذاتية</value>
+  </data>
+  <data name="DayName" xml:space="preserve">
+    <value>اليوم</value>
+  </data>
+  <data name="DeanshipDepartments" xml:space="preserve">
+    <value>الإدارات التابعة للعمادة</value>
+  </data>
+  <data name="DeanshipMission" xml:space="preserve">
+    <value>مهام &lt;br&gt; العمادة</value>
+  </data>
+  <data name="DeenSpeech" xml:space="preserve">
+    <value>كلمة عميد/ة الكلية</value>
+  </data>
+  <data name="DepartmentMission" xml:space="preserve">
+    <value>مهام &lt;br&gt; الإدارة</value>
+  </data>
+  <data name="DocumentAndData" xml:space="preserve">
+    <value>المستندات / البيانات المطلوبة</value>
+  </data>
+  <data name="download" xml:space="preserve">
+    <value>تحميل</value>
+  </data>
+  <data name="DP_TargetGroup" xml:space="preserve">
+    <value>الفئة المستهدفة</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>البريد الإلكتروني :</value>
+  </data>
+  <data name="employee-dashboard" xml:space="preserve">
+    <value>إحصائيات الموظفين</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>إلى الساعة</value>
+  </data>
+  <data name="EServices" xml:space="preserve">
+    <value>الأنظمة و الخدمات الإلكترونية</value>
+  </data>
+  <data name="EServicesURL" xml:space="preserve">
+    <value>/ar/Pages/Eservice.aspx</value>
+  </data>
+  <data name="ExecutionTime" xml:space="preserve">
+    <value>وقت تنفيذ الخدمة</value>
+  </data>
+  <data name="ExtensionNo" xml:space="preserve">
+    <value>رقم التحويلة :</value>
+  </data>
+  <data name="FacultyMembers" xml:space="preserve">
+    <value>أعضاء هيئة التدريس</value>
+  </data>
+  <data name="FacultyMemberSearch" xml:space="preserve">
+    <value>أعضاء هيئة التدريس</value>
+  </data>
+  <data name="FacultyTitle" xml:space="preserve">
+    <value>كلية</value>
+  </data>
+  <data name="FAQ" xml:space="preserve">
+    <value>الأسئلة الشائعة</value>
+  </data>
+  <data name="FifthYear" xml:space="preserve">
+    <value>السنة الخامسة</value>
+  </data>
+  <data name="FirstYear" xml:space="preserve">
+    <value>السنة الأولي</value>
+  </data>
+  <data name="Floor" xml:space="preserve">
+    <value>الدور: الثاني</value>
+  </data>
+  <data name="FourthYear" xml:space="preserve">
+    <value>السنة الرابعة</value>
+  </data>
+  <data name="GoogleScholar" xml:space="preserve">
+    <value>المؤلفات والإهتمامات البحثية</value>
+  </data>
+  <data name="GraduationEmployements" xml:space="preserve">
+    <value>تقارير قياس نسب توظيف الخريجات</value>
+  </data>
+  <data name="GradutesLink" xml:space="preserve">
+    <value>بوابة الخريجات</value>
+  </data>
+  <data name="guide" xml:space="preserve">
+    <value>اضغط لتحميل دليل الاستخدام</value>
+  </data>
+  <data name="guideDownload" xml:space="preserve">
+    <value>تحميل دليل الاستخدام</value>
+  </data>
+  <data name="GuidelinesTitle" xml:space="preserve">
+    <value>الأدلة الإرشادية</value>
+  </data>
+  <data name="guideManual" xml:space="preserve">
+    <value>دليل الاستخدام</value>
+  </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="ImportantSystems" xml:space="preserve">
+    <value>أهم الأنظمة</value>
+  </data>
+  <data name="IntroductoryTour" xml:space="preserve">
+    <value>جولة تعريفية</value>
+  </data>
+  <data name="Lang" xml:space="preserve">
+    <value>/ar/</value>
+  </data>
+  <data name="LatestAdvs" xml:space="preserve">
+    <value>آخر الإعلانات</value>
+  </data>
+  <data name="LatestEvents" xml:space="preserve">
+    <value>أحدث الفعاليات</value>
+  </data>
+  <data name="LatestNews" xml:space="preserve">
+    <value>آخر الأخبار</value>
+  </data>
+  <data name="lblEmailAddress" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="lblFirstName" xml:space="preserve">
+    <value>الاسم الأول</value>
+  </data>
+  <data name="lblLanguage" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="lblLastName" xml:space="preserve">
+    <value>الاسم الأخير</value>
+  </data>
+  <data name="lblMessege" xml:space="preserve">
+    <value>رسالتك</value>
+  </data>
+  <data name="lblPhoneNumber" xml:space="preserve">
+    <value>رقم الجوال</value>
+  </data>
+  <data name="Lecturers" xml:space="preserve">
+    <value>المحاضرون</value>
+  </data>
+  <data name="Level1" xml:space="preserve">
+    <value>المستوى الأول</value>
+  </data>
+  <data name="Level2" xml:space="preserve">
+    <value>المستوى الثاني</value>
+  </data>
+  <data name="Level3" xml:space="preserve">
+    <value>المستوى الثالث</value>
+  </data>
+  <data name="Level4" xml:space="preserve">
+    <value>المستوى الرابع</value>
+  </data>
+  <data name="Level5" xml:space="preserve">
+    <value>المستوى الخامس</value>
+  </data>
+  <data name="Level6" xml:space="preserve">
+    <value>المستوى السادس</value>
+  </data>
+  <data name="Level7" xml:space="preserve">
+    <value>المستوى السابع</value>
+  </data>
+  <data name="Level8" xml:space="preserve">
+    <value>المستوى الثامن</value>
+  </data>
+  <data name="Level9" xml:space="preserve">
+    <value>المستوى التاسع</value>
+  </data>
+  <data name="Levels" xml:space="preserve">
+    <value>المستويات</value>
+  </data>
+  <data name="LibraryHours" xml:space="preserve">
+    <value>الساعات المكتبية</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>تسجيل دخول</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>/Style Library/NewStyle/UI5/images/pnu-logo-ar.svg</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="L_RatedAverage" xml:space="preserve">
+    <value>تم تقييم هذه الخدمة بمتوسط</value>
+  </data>
+  <data name="L_RateThis" xml:space="preserve">
+    <value>قيم هذه الخدمة</value>
+  </data>
+  <data name="L_Rating" xml:space="preserve">
+    <value>تقييم</value>
+  </data>
+  <data name="MainMissions" xml:space="preserve">
+    <value>المهام الرئيسية</value>
+  </data>
+  <data name="Major" xml:space="preserve">
+    <value>التخصص</value>
+  </data>
+  <data name="MediaCenter" xml:space="preserve">
+    <value>المركز الإعلامي</value>
+  </data>
+  <data name="minor" xml:space="preserve">
+    <value>التخصص الدقيق</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>الأخبار</value>
+  </data>
+  <data name="NewsArticles" xml:space="preserve">
+    <value>النشرات الدورية</value>
+  </data>
+  <data name="NoProgramRequirements" xml:space="preserve">
+    <value>لا توجد متطلبات لهذا البرنامج</value>
+  </data>
+  <data name="NoraNabtakertxtDepartment" xml:space="preserve">
+    <value>القسم / الإدارة</value>
+  </data>
+  <data name="NoraNabtakertxtWork" xml:space="preserve">
+    <value>جهة العمل / الكلية</value>
+  </data>
+  <data name="OpenDataTitle" xml:space="preserve">
+    <value>طلب بيانات مفتوحة</value>
+  </data>
+  <data name="openTitle" xml:space="preserve">
+    <value>عرض النشرة</value>
+  </data>
+  <data name="ORCID" xml:space="preserve">
+    <value>الأوركيد</value>
+  </data>
+  <data name="OurLoveredOnes" xml:space="preserve">
+    <value>أحبتنا</value>
+  </data>
+  <data name="OurSections" xml:space="preserve">
+    <value>أقسامنا</value>
+  </data>
+  <data name="OurValues" xml:space="preserve">
+    <value>القيم</value>
+  </data>
+  <data name="patents-dashboard" xml:space="preserve">
+    <value>براءات الاختراع</value>
+  </data>
+  <data name="PLANS_ELEC_P_Requirements" xml:space="preserve">
+    <value>متطلبات البرنامج الاختيارية</value>
+  </data>
+  <data name="PNUinNumbers" xml:space="preserve">
+    <value>الجامعة في أرقام</value>
+  </data>
+  <data name="pnu_events" xml:space="preserve">
+    <value>فعاليات PNU</value>
+  </data>
+  <data name="PNU_KSA" xml:space="preserve">
+    <value>جامعة الأميرة نورة</value>
+  </data>
+  <data name="pnu_live" xml:space="preserve">
+    <value>مباشر PNU</value>
+  </data>
+  <data name="PNU_TradeDepart" xml:space="preserve">
+    <value>تصميم وتطوير الإدارة العامة للتحول الرقمي</value>
+  </data>
+  <data name="PNU_TradeLastModified" xml:space="preserve">
+    <value>آخر تحديث للبوابة في 05 مايو 2024</value>
+  </data>
+  <data name="PNU_TradeMark" xml:space="preserve">
+    <value>جامعة الأميرة نورة بنت عبدالرحمن © 2024</value>
+  </data>
+  <data name="PreRequisite" xml:space="preserve">
+    <value>المتطلب السابق</value>
+  </data>
+  <data name="prize" xml:space="preserve">
+    <value>الجوائز</value>
+  </data>
+  <data name="Professors" xml:space="preserve">
+    <value>الأساتذة</value>
+  </data>
+  <data name="ProgDuration" xml:space="preserve">
+    <value>عدد السنوات</value>
+  </data>
+  <data name="ProgLanguage" xml:space="preserve">
+    <value>لغة التدريس</value>
+  </data>
+  <data name="ProgramDetails" xml:space="preserve">
+    <value>تفاصيل الدراسة</value>
+  </data>
+  <data name="ProgramNature" xml:space="preserve">
+    <value>الطبيعة الأكاديمية للتخصص</value>
+  </data>
+  <data name="ProgramRequisites" xml:space="preserve">
+    <value>متطلبات البرنامج الاختيارية</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>قراءة المزيد</value>
+  </data>
+  <data name="RegDepartments" xml:space="preserve">
+    <value>الإجراءات الأكاديمية</value>
+  </data>
+  <data name="Research-paper" xml:space="preserve">
+    <value>إحصائيات الأبحاث</value>
+  </data>
+  <data name="ResearchPaths" xml:space="preserve">
+    <value>المسارات البحثية</value>
+  </data>
+  <data name="ResponsibleParty" xml:space="preserve">
+    <value>الجهة المسؤولة</value>
+  </data>
+  <data name="res_AllEvents" xml:space="preserve">
+    <value>عرض جميع  الفعاليات</value>
+  </data>
+  <data name="res_AllNews" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="res_FileName" xml:space="preserve">
+    <value>اسم الملف</value>
+  </data>
+  <data name="res_LatestNews" xml:space="preserve">
+    <value>أحدث الأخبار</value>
+  </data>
+  <data name="res_MoreAllAdvsLink" xml:space="preserve">
+    <value>المزيد من الإعلانات</value>
+  </data>
+  <data name="res_MoreAllNews" xml:space="preserve">
+    <value>المزيد من الأخبار</value>
+  </data>
+  <data name="res_NewsAndEvents" xml:space="preserve">
+    <value>الأخبار والإعلانات</value>
+  </data>
+  <data name="res_ShowMore" xml:space="preserve">
+    <value>عرض المزيد</value>
+  </data>
+  <data name="ScientifDegree" xml:space="preserve">
+    <value>المرتبة العلمية</value>
+  </data>
+  <data name="SCRATTR_SUBJ_CODE" xml:space="preserve">
+    <value>رمزه</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="SearchByName" xml:space="preserve">
+    <value>بحث بالاسم</value>
+  </data>
+  <data name="SecondYear" xml:space="preserve">
+    <value>السنة الثانية</value>
+  </data>
+  <data name="section" xml:space="preserve">
+    <value>القسم</value>
+  </data>
+  <data name="SectionTitle" xml:space="preserve">
+    <value>قسم </value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>--اختر--</value>
+  </data>
+  <data name="SelectCollege" xml:space="preserve">
+    <value>-- اختر الكلية --</value>
+  </data>
+  <data name="SelectSection" xml:space="preserve">
+    <value>-- اختر القسم --</value>
+  </data>
+  <data name="ServiceQuality" xml:space="preserve">
+    <value>اتفاقية مستوى الخدمة</value>
+  </data>
+  <data name="SeventhYear" xml:space="preserve">
+    <value>السنة السابعة</value>
+  </data>
+  <data name="SixthYear" xml:space="preserve">
+    <value>السنة السادسة</value>
+  </data>
+  <data name="specialization" xml:space="preserve">
+    <value>التخصص العام</value>
+  </data>
+  <data name="Sports" xml:space="preserve">
+    <value>الشؤون الرياضية</value>
+  </data>
+  <data name="StartService" xml:space="preserve">
+    <value>إبدأ الخدمة</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>من الساعة</value>
+  </data>
+  <data name="StrategicPlan" xml:space="preserve">
+    <value>الأهداف الاستراتيجية لجامعة الأميرة نورة</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="students-dashboard" xml:space="preserve">
+    <value>إحصائيات الطالبات</value>
+  </data>
+  <data name="StudyPlan" xml:space="preserve">
+    <value>الخطة الدراسية والمقررات</value>
+  </data>
+  <data name="SubjectSectionNo" xml:space="preserve">
+    <value>رقم الشعبة</value>
+  </data>
+  <data name="Survey" xml:space="preserve">
+    <value>استبيان</value>
+  </data>
+  <data name="TeachingAssistants" xml:space="preserve">
+    <value>المعيدون</value>
+  </data>
+  <data name="terms-and-conditions" xml:space="preserve">
+    <value>الشروط والاحكام</value>
+  </data>
+  <data name="terms-and-conditions-click" xml:space="preserve">
+    <value>اضغط لتحميل الشروط والاحكام</value>
+  </data>
+  <data name="ThirdYear" xml:space="preserve">
+    <value>السنة الثالثة</value>
+  </data>
+  <data name="TrainStationNumber" xml:space="preserve">
+    <value>رقم محطة القطار: A 3</value>
+  </data>
+  <data name="Tweets" xml:space="preserve">
+    <value>التدوينات</value>
+  </data>
+  <data name="TweetsNo" xml:space="preserve">
+    <value>عدد التدوينات :</value>
+  </data>
+  <data name="txtName" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="txtOpenDataRequest" xml:space="preserve">
+    <value>طلب بيانات مفتوحة إضافية</value>
+  </data>
+  <data name="txtSuggest" xml:space="preserve">
+    <value>مقترحات</value>
+  </data>
+  <data name="UniversityCalender" xml:space="preserve">
+    <value>التقويم الجامعي</value>
+  </data>
+  <data name="UniversityCounsil" xml:space="preserve">
+    <value>مجلس الجامعة</value>
+  </data>
+  <data name="UniversityHistory" xml:space="preserve">
+    <value>تاريخ الجامعة</value>
+  </data>
+  <data name="UniversityRequisites" xml:space="preserve">
+    <value>متطلبات الجامعة</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>سنوات</value>
+  </data>
+  <data name="res_Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="res_EServices" xml:space="preserve">
+    <value>الخدمات الإلكترونية</value>
+  </data>
+  <data name="res_StartService" xml:space="preserve">
+    <value>بدء الخدمة</value>
+  </data>
+  <data name="res_SLA" xml:space="preserve">
+    <value>اتفاقية مستوى الخدمة</value>
+  </data>
+  <data name="res_Steps" xml:space="preserve">
+    <value>الخطوات</value>
+  </data>
+  <data name="res_ServiceRequirements" xml:space="preserve">
+    <value>متطلبات الخدمة</value>
+  </data>
+  <data name="res_RequiredDocuments" xml:space="preserve">
+    <value>المستندات المطلوبة</value>
+  </data>
+  <data name="res_TargetAudience" xml:space="preserve">
+    <value>الفئة المستهدفة</value>
+  </data>
+  <data name="res_ServiceDuration" xml:space="preserve">
+    <value>مدة الخدمة</value>
+  </data>
+  <data name="res_ServiceChannels" xml:space="preserve">
+    <value>قنوات الخدمة</value>
+  </data>
+  <data name="res_ServiceLanguage" xml:space="preserve">
+    <value>الخدمة متاحة باللغة</value>
+  </data>
+  <data name="res_ServiceCost" xml:space="preserve">
+    <value>تكلفة الخدمة</value>
+  </data>
+  <data name="res_FAQ" xml:space="preserve">
+    <value>الأسئلة الشائعة</value>
+  </data>
+  <data name="res_FAQPage" xml:space="preserve">
+    <value>صفحة الأسئلة الشائعة</value>
+  </data>
+  <data name="res_Telephone" xml:space="preserve">
+    <value>الهاتف</value>
+  </data>
+  <data name="res_Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="res_SharePage" xml:space="preserve">
+    <value>مشاركة الصفحة</value>
+  </data>
+  <data name="res_DownloadUserGuide" xml:space="preserve">
+    <value>تحميل دليل المستخدم</value>
+  </data>
+  <data name="res_NotAvailable" xml:space="preserve">
+    <value>لا يوجد</value>
+  </data>
+  <data name="res_LastModified" xml:space="preserve">
+    <value>تاريخ آخر تعديل: &lt;time datetime="{0}"&gt;{1} بتوقيت السعودية&lt;/time&gt;</value>
+  </data>
+  <data name="res_RateThisService" xml:space="preserve">
+    <value>قيم هذه الخدمة</value>
+  </data>
+  <data name="res_RatedAverage" xml:space="preserve">
+    <value>تم تقييم هذه الخدمة بمتوسط &lt;span class="fw-semibold"&gt;{0}&lt;/span&gt;</value>
+  </data>
+  <data name="res_RatingsCount" xml:space="preserve">
+    <value>{0} تقييم</value>
+  </data>
+  <data name="res_RatingTellUs" xml:space="preserve">
+    <value>أخبرنا عن رأيك في هذه الخدمة</value>
+  </data>
+  <data name="res_RatingPrivacyNote" xml:space="preserve">
+    <value>يرجى عدم تضمين معلومات شخصية أو مالية. سيتم إرسال تعليقك وتسجيله لغرض تحسين الخدمات.</value>
+  </data>
+  <data name="res_RatingHowRate" xml:space="preserve">
+    <value>كيف تقيم هذه الخدمة؟</value>
+  </data>
+  <data name="res_RatingScale" xml:space="preserve">
+    <value>قيم تجربتك من (1) ضعيف إلى (5) ممتاز</value>
+  </data>
+  <data name="res_RateWithStars" xml:space="preserve">
+    <value>قيم بـ {0} نجمه</value>
+  </data>
+  <data name="res_RatingCommentLabel" xml:space="preserve">
+    <value>اخبرنا عن تجربتك في هذه الخدمة</value>
+  </data>
+  <data name="res_RatingThankYou" xml:space="preserve">
+    <value>شكرًا لك، تم تسجيل تقييمك بنجاح.</value>
+  </data>
+  <data name="res_SurveyWasHelpful" xml:space="preserve">
+    <value>هل كانت هذه الصفحة مفيدة؟</value>
+  </data>
+  <data name="res_SurveyStats" xml:space="preserve">
+    <value>&lt;span class="fw-semibold"&gt;{0}%&lt;/span&gt; من المستخدمين قالوا نعم من &lt;span class="fw-semibold"&gt;{1}&lt;/span&gt; تعليقًا</value>
+  </data>
+  <data name="res_SurveyTellUsWhy" xml:space="preserve">
+    <value>من فضلك أخبرنا بالسبب</value>
+  </data>
+  <data name="res_SurveyMultiSelect" xml:space="preserve">
+    <value>يمكنك تحديد خيارات متعددة</value>
+  </data>
+  <data name="res_SurveyReasonRelevant" xml:space="preserve">
+    <value>المحتوى ذو صلة</value>
+  </data>
+  <data name="res_SurveyReasonWellWritten" xml:space="preserve">
+    <value>لقد كانت مكتوبة بشكل جيد</value>
+  </data>
+  <data name="res_SurveyReasonLayout" xml:space="preserve">
+    <value>جعل التخطيط من السهل القراءة</value>
+  </data>
+  <data name="res_SurveyReasonOther" xml:space="preserve">
+    <value>شيء آخر</value>
+  </data>
+  <data name="res_SurveyIAm" xml:space="preserve">
+    <value>انا</value>
+  </data>
+  <data name="res_SurveyThankYou" xml:space="preserve">
+    <value>شكرًا لك، تم إرسال ملاحظاتك بنجاح.</value>
+  </data>
+  <data name="res_Male" xml:space="preserve">
+    <value>ذكر</value>
+  </data>
+  <data name="res_Female" xml:space="preserve">
+    <value>أنثى</value>
+  </data>
+  <data name="res_PreferNotToSay" xml:space="preserve">
+    <value>أفضل عدم القول</value>
+  </data>
+  <data name="res_Comment" xml:space="preserve">
+    <value>تعليق</value>
+  </data>
+  <data name="res_Yes" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="res_No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="res_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="res_Submit" xml:space="preserve">
+    <value>إرسال</value>
+  </data>
+  <data name="SharePage" xml:space="preserve">
+    <value>مشاركة الصفحة</value>
+  </data>
+  <data name="CollegeOverviewPrefix" xml:space="preserve">
+    <value>نظرة عامة عن </value>
+  </data>
+</root>

@@ -1,0 +1,171 @@
+﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C332F1C-66FC-425C-A7D6-4D238A1128D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EserviceList</RootNamespace>
+    <AssemblyName>EserviceList</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetOfficeVersion>19.0</TargetOfficeVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <MinimumOfficeToolsVersion>14.1</MinimumOfficeToolsVersion>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EserviceBrow2\EserviceBrow2.cs" />
+    <Compile Include="EserviceBrow2\EserviceBrow2UserControl.ascx.cs">
+      <DependentUpon>EserviceBrow2UserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EserviceBrow2\EserviceBrow2UserControl.ascx.designer.cs">
+      <DependentUpon>EserviceBrow2UserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EserviceBrow\EserviceBrow.cs" />
+    <Compile Include="EserviceBrow\EserviceBrowUserControl.ascx.cs">
+      <DependentUpon>EserviceBrowUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EserviceBrow\EserviceBrowUserControl.ascx.designer.cs">
+      <DependentUpon>EserviceBrowUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchList\SearchList.cs" />
+    <Compile Include="SearchList\SearchListUserControl.ascx.cs">
+      <DependentUpon>SearchListUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SearchList\SearchListUserControl.ascx.designer.cs">
+      <DependentUpon>SearchListUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceDetails\ServiceDetails.cs" />
+    <Compile Include="ServiceDetails\ServiceDetailsUserControl.ascx.cs">
+      <DependentUpon>ServiceDetailsUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ServiceDetails\ServiceDetailsUserControl.ascx.designer.cs">
+      <DependentUpon>ServiceDetailsUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceSearch\ServiceSearch.cs" />
+    <Compile Include="ServiceSearch\ServiceSearchUserControl.ascx.cs">
+      <DependentUpon>ServiceSearchUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ServiceSearch\ServiceSearchUserControl.ascx.designer.cs">
+      <DependentUpon>ServiceSearchUserControl.ascx.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EserviceBrow2\EserviceBrow2.webpart" />
+    <None Include="EserviceBrow2\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{887c40eb-b0af-4afb-8774-b44d9d2ff3a0}</SharePointProjectItemId>
+    </None>
+    <None Include="EserviceBrow\EserviceBrow.webpart" />
+    <None Include="EserviceBrow\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{20be7bb9-679b-4438-8924-4c71c81559e3}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\Feature2\Feature2.feature">
+      <FeatureId>{300a5930-d058-4d85-a111-18a15d0a69fd}</FeatureId>
+    </None>
+    <None Include="key.snk" />
+    <None Include="Package\Package.package">
+      <PackageId>{16bc46f6-598b-494d-87b2-d7f47432e03b}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+    <None Include="SearchList\SearchList.webpart" />
+    <None Include="SearchList\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{953cb829-565b-47b8-bd21-dd792c012329}</SharePointProjectItemId>
+    </None>
+    <None Include="ServiceDetails\ServiceDetails.webpart" />
+    <None Include="ServiceDetails\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{dae54bba-4219-4527-9021-a30d7ddd1c1d}</SharePointProjectItemId>
+    </None>
+    <None Include="services-catalog\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{3bc9221e-096e-4859-aa4b-8d82d973d2a7}</SharePointProjectItemId>
+    </None>
+    <None Include="ServiceSearch\ServiceSearch.webpart" />
+    <None Include="ServiceSearch\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{fa8bb331-2efa-464b-ad9d-afbe7ca14e08}</SharePointProjectItemId>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="assets\css\arstyle.css" />
+    <Content Include="assets\css\bootstrap-gridARABIC.min.css" />
+    <Content Include="assets\css\bootstrapARABIC.min.css" />
+    <Content Include="assets\css\breadcrumb.css" />
+    <Content Include="assets\css\corev15.css" />
+    <Content Include="assets\css\extraheader.css" />
+    <Content Include="assets\css\font-awesome.css" />
+    <Content Include="assets\css\jquery.dataTables.min.css" />
+    <Content Include="assets\css\jqueryConfirm.min.css" />
+    <Content Include="assets\css\nhad-Style.css" />
+    <Content Include="assets\css\NoraCustom.css" />
+    <Content Include="assets\css\pagelayouts15.css" />
+    <Content Include="assets\css\pnu-defult.css" />
+    <Content Include="assets\css\Stylesheet1.css" />
+    <Content Include="assets\css\swiper.min.css" />
+    <Content Include="EserviceBrow2\Elements.xml" />
+    <Content Include="EserviceBrow2\EserviceBrow2UserControl.ascx" />
+    <Content Include="EserviceBrow\Elements.xml" />
+    <Content Include="EserviceBrow\EserviceBrowUserControl.ascx" />
+    <Content Include="Features\Feature2\Feature2.Template.xml">
+      <DependentUpon>Feature2.feature</DependentUpon>
+    </Content>
+    <Content Include="SearchList\Elements.xml" />
+    <Content Include="SearchList\SearchListUserControl.ascx" />
+    <Content Include="ServiceDetails\Elements.xml" />
+    <Content Include="ServiceDetails\ServiceDetailsUserControl.ascx" />
+    <Content Include="ServiceSearch\Elements.xml" />
+    <Content Include="ServiceSearch\ServiceSearchUserControl.ascx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>

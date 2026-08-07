@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="c3d0c552-675a-413d-bcfe-d65348c80494" solutionId="c3d0c552-675a-413d-bcfe-d65348c80494" resetWebServer="false" sharePointProductVersion="19.0" name="PNU.Jobs" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" />

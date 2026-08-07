@@ -1,0 +1,1074 @@
+a.btn-main.kamelMore {
+    float: left;
+    padding: 5px 10px;
+}
+
+button:focus {
+    outline: none;
+}
+
+.table {
+    margin-bottom: 0rem !important;
+}
+
+.menucollbut {
+    display: none;
+}
+
+.carousel {
+    margin-top: 0px !important;
+}
+
+.right-menu span {
+    padding: 0px 10px;
+}
+
+.right-menu .panel-group a {
+    display: flex !important;
+}
+.btn-fixed{
+  position: fixed;
+  left: -61px;
+  top: 75%;
+  transform: rotate(-90deg);
+  z-index: 9999;
+  box-shadow: none;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+
+
+
+/* ===========================   end of fixed btns   ============================ */
+/* ===========================   start of black nav   ============================ */
+
+.black-nav{
+  background-color: black;
+  padding: 5px 10px;
+}
+.black-nav a{
+  color: white;
+  font-size: 0.8em;
+}
+.black-nav .translation{
+  border-left: 1px solid white;
+  height: auto;
+  padding: 0px 10px; 
+      float: right;
+    margin: 0 10px;
+}
+.search-input{
+  width: auto;
+  height: 20px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin: 0px 10px;
+  background-color: white;
+}
+
+/* ===========================   end of black nav   ============================ */
+/* ===========================   start of fixed nav   ============================ --> */
+/*.fixed{
+  position: fixed;
+  top: 0px;
+  z-index: 99;
+  margin: 0px !important;
+}*/
+.white-nav{
+  padding: 10px 10px;
+  background-color: rgba(255, 255, 255, 1);
+}
+.main-logos img{
+  margin: 0px 5px;
+}
+.main-logos .pnu-logo{
+ width: 40%;
+}
+.main-logos .vision-logo{
+  width: 15%;
+ }
+ .green-links ul{
+   margin: 0px;
+ }
+ .green-links ul li {
+   display: inline-block;
+   margin: 0px 5px;
+ }
+    .green-links ul li a {
+        color: hsl(155, 64%, 19%);
+    }
+.green-links{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: left;
+}
+
+
+/* ===========================   end of white nav   ============================ */
+/* ===========================   start of mega menu    ============================ --> */
+
+/* adds some margin below the link sets  */
+.navbar .dropdown-menu div[class*="col"] {
+  margin-bottom:0rem;
+}
+.nav-item.wht-hover{
+  border-bottom: 1px dashed #cecece;
+}
+
+.navbar .dropdown-menu {
+ border:none;
+ background-color: rgba(255, 255, 255, 0.9);
+}
+.navbar-dark .navbar-nav .nav-link{
+color: black;
+}
+.dropdown-menu b{
+  border-bottom: 2px solid #acacac;
+  width: 100%;
+  display: block;
+  padding: 10px 0px;
+}
+.navbar-dark .navbar-nav .nav-link.dropdown-toggle, .nav-item .nav-link a{
+  color: white;
+}
+
+.wht{
+  color: white !important ; 
+}
+.navbar-dark .navbar-nav .nav-link.dropdown-toggle:hover, .wht:hover{
+  background-color: white !important;
+  opacity: 1 !important;
+  color: #024d4c !important;
+}
+
+.wht-hover:hover{
+  color: white !important;
+  background-color: rgba(23, 55, 57, 0.75);
+  transition:  0.5s ease;
+
+}
+.nav-item .dropdown li a {
+  color: white;
+  }
+
+  .navbar-collapse{
+    justify-content: center;
+  }
+  .navbar-collapse .navbar-nav{
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  @media screen and (min-width: 992px) {
+.navbar {
+ padding-top:0px;
+ padding-bottom:0px;
+}
+
+.navbar .nav-item {
+ padding:.5rem .5rem;
+ margin:0;
+}
+
+.navbar .dropdown {position:static;}
+
+.navbar .dropdown-menu {
+ width:100%;
+ left:0;
+ right:0;
+ top:45px;
+}
+ 
+.navbar .dropdown:hover .dropdown-menu, .navbar .dropdown .dropdown-menu:hover {
+ display:block!important;
+}
+ .navbar .dropdown-menu {
+   border: 1px solid rgba(0,0,0,.15);
+   background-color: #fff;
+ }
+
+}
+
+/* ===========================   end of mega menu   ============================ */
+/* ===========================   start of main Slider   ============================ */
+
+.homePage-indicators{
+  margin: 0px;
+  width: 10%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  bottom:0px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(33,33,33,0.3));
+}
+.homePage-indicators .active, .indicators-news .active{
+  background-color: #2fdcca;
+}
+.homePage-indicators li{
+  border-radius: 100%;
+  height: 13px;
+  width: 13px;
+  margin: 5px auto;
+  cursor: pointer;
+  background-color: white;
+}
+
+.indicators-news li{
+  border-radius: 100%;
+  height: 13px;
+  width: 13px;
+  margin: 5px !important;
+  cursor: pointer;
+  background-color: #004f4a;
+}
+.indicators-news{
+ bottom: 0px;
+}
+.carousel slide{
+  margin: 0;
+}
+
+.carousel-caption{
+  height: auto;
+  bottom: unset;
+  padding: 10px;
+  left: unset;
+}
+.slideTxtDiv{
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  padding: 10px;
+  text-align: right;
+  border-right: 10px solid #2fdcca;
+}
+.slideTxtDiv span{
+  margin:10px;
+  font-size: 1.5em;
+}
+.carousel-caption .btn-main{
+  padding: 5px 10px;
+  font-size: 1.3em;
+  margin: 10px auto;
+  display: inline-block;
+  clear: both;
+}
+
+/* ===========================   end of main Slider   ============================ */
+/* ===========================   start of news Slider   ============================ */
+
+
+.news-slider{
+  background-color: #024d4c;
+  color: white;
+
+}
+.news-slider .row{
+  flex-direction: row-reverse;
+}
+.arrows-news{
+  display: flex;
+  justify-content: center;
+  
+}
+.arrows-news a{
+  position: unset;
+  padding: 5px 10px;
+  background-color: #2fdcca;
+  color: white;
+  border-radius: 5px;
+  margin: 5px 5px;
+  font-size: 0.9em;
+}
+
+.carousel-control-next, .carousel-control-prev{
+  opacity: 1;
+  width: auto;
+}
+.urgent{
+  background-color: #acacac;
+  color: #024d4c;
+  height: 100%;
+  width: auto;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+  padding: 0px 10px;
+  margin: 0px 5px; 
+}
+.news-slider .carousel-item span{
+  font-weight: lighter;
+  font-size: 0.8em;
+  margin-right: 5px;
+  border-right: 1px solid white;
+  padding-right: 10px;
+}
+.news-slider .carousel-item{
+  padding-top: 5px;
+  
+}
+
+
+
+/* ===========================   end of news Slider   ============================ */
+/* ===========================   start of Uni Programs  ============================ */
+
+
+.uni-programsDiv{
+  width: 100%;
+  padding: 1em;
+  background-image: url(../imgs/books.jpg);
+  background-attachment: fixed;
+  background-position: top;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+}
+
+.uni-programsDiv .container{
+  padding: 0px;
+}
+
+.uni-programsDiv .bg-title{
+  margin: 20px 0px;
+}
+
+.uni-programsDiv .programsForms{
+  width: 50%;
+  margin: 15px 0px;
+  padding: 0px;
+}
+
+.uni-programsDiv .programsForms .formsDiv .form-control{
+  font-size: 0.9em;
+}
+.uni-programsDiv .programsForms .formsDiv {
+  margin: 10px 0px;
+}
+
+.uni-programsDiv .programsForms .formsDiv .btn-main{
+  height: 100%;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  display: block;
+}
+
+/* ===========================   end of Uni Programs   ============================ */
+/* ===========================   start of services slider  ============================ */
+
+#resource-slider {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  border-radius: 3px;
+}
+
+#resource-slider .arrow {
+  cursor: pointer;
+  position: absolute;
+  width: 2em;
+  z-index: 60;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  outline: 0;
+}
+.resources {
+	width: 100%;
+  margin: 0px;
+  height: 150px;
+}
+.services{
+  height: 200px;
+  padding: 1em 0px;
+}
+.services button i {
+	font-size: 1.5em;
+}
+
+.services .next{
+	left: 10px;
+}
+.services .prev{
+	right: 10px;
+}
+#resource-slider .resource-slider-frame {
+  position: absolute;
+  top: 0;
+  left: 2em;
+  right: 2em;
+  bottom: 0;
+  border-left: 0.25em solid transparent;
+  border-right: 0.25em solid transparent;
+  overflow: hidden;
+}
+
+#resource-slider .resource-slider-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 25%;
+}
+
+.resource-slider-inset{
+	background-position: center center ;
+	background-repeat: no-repeat;
+}
+#resource-slider .resource-slider-inset {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0.5em 0.25em;
+  overflow: hidden;
+}
+
+@media ( max-width: 60em ) {
+  #resource-slider .resource-slider-item {
+    width: 33.33%;
+  }
+
+}
+
+@media ( max-width: 45em ) {
+  #resource-slider .resource-slider-item {
+    width: 50%;
+  }
+}
+
+@media ( max-width: 30em ) {
+  #resource-slider .resource-slider-item {
+    width: 100%;
+  }
+
+}
+
+.resource-slider-item img{
+	width: 100%;
+	height: 100%;
+}
+
+
+/* ===========================   end of services slider   ============================ */
+/* ===========================   start of news  ============================ */
+
+.news{
+  margin: 1em auto;
+}
+.news-div {
+  margin: 20px 0px;
+}
+    .news-div .news-date, .date {
+        display: block;
+        font-size: 0.9em;
+        color: #474646;
+        margin: 5px 0px;
+    }
+.news-div b{
+  display: block;
+  margin: 5px 0px;
+}
+.news-div a, .news-div img{
+width: 100%;
+}
+.last-news-div a{
+  position: relative;
+}
+.last-news-div div{
+  position: absolute;
+  width: 100%;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.5);
+  height: 100%;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center */
+}
+.last-news-div div .more{
+  position: absolute;
+  text-align: center;
+  top: 30%;
+  padding: 10px;
+  right: 20%;
+  width: auto;
+box-shadow:  5px 5px 15px #484848 !important;
+}
+
+
+/* ===========================   end of news  ============================ */
+/* ===========================   start of colleges  ============================ */
+
+.colleges{
+  width: 100%;
+  background-image: url(../imgs/collegeCover.jpg);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  display: flex;
+  flex-direction: column;
+  padding: 4em 0px;
+  margin: 20px 0px;
+  justify-content: center;
+}
+.colleges .btn-main{
+  padding: 5px 10px;
+  margin: 10px 0px;
+}
+.colleges span, .goto{
+  margin: 15px 0px;
+  display: block;
+  clear: both;
+
+}
+
+
+/* ===========================   end of colleges  ============================ */
+/* ===========================   start of activities   ============================ */
+
+.activities{
+  margin: 2em auto;
+}
+.activities .row div{
+  padding: 0px !important;
+  margin: 20px 0px;
+}
+
+.activities .row div b{
+  margin: 10px 0px;
+  display: block;
+}
+
+.activities .btn-main{
+  padding: 5px 10px;
+}
+/* ===========================   end of activities  ============================ */
+/* ===========================   start of counter  ============================ */
+
+.row{
+  margin: 0%;
+}
+
+.counter{
+  width: 100%;
+  background-image: url(../imgs/counterCover.jpg);
+  background-attachment: fixed;
+  background-position:  center;
+  background-size: cover;
+  margin:2em 0px;
+  padding: 20px 0px;
+}
+.counter .row{
+  margin: 20px 0px 10px 0px;
+}
+.circle {
+  width: 100px;
+  margin: 6px 6px 20px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.circle canvas {
+  vertical-align: top;
+}
+
+.circle strong {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1.5em;
+}
+
+.circle strong i {
+  font-style: normal;
+  font-size: 0.6em;
+  font-weight: normal;
+}
+
+.circle b {
+  display: block;
+  margin: 10px auto;
+  font-size:1.2em;
+  color: #035353;
+  font-weight: bold;
+}
+
+
+
+/* ===========================   start of EVENTS PAGE  ============================ */
+.links-bar{
+  background-color: #e5e5e5;
+  padding: 5px;
+  margin: 10px;
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+.others{
+  background-image: url(../imgs/bg.jpg);
+  background-size: cover;
+  padding: 20px;
+}
+.others ul{
+  margin: 20px 0px;
+}
+.others .eventBar{
+  display: inline-block;
+  width: auto;
+  padding-left: 10px;
+}
+.pgntion, .pgntion li{
+  display: inline-block;
+  margin: 0px;
+}
+
+/* ===========================   start of news  PAGE  ============================ */
+
+.News-img{
+  border: 1px solid #2fdcca;
+  padding: 10px;
+}
+.news-div .btn-main{
+  clear: both;
+  float: left;
+  width: auto;
+  padding: 10px 15px;
+}
+.news-div .info{
+  display: block;
+  margin: 10px 0px;
+}
+
+/* ===========================   start of College  website  ============================ */
+
+.college-headline{
+background-color: rgba(255, 255, 255, 0.8);
+border: 4px solid #2fdcca;
+color:#004f4a;
+}
+.college-headline h3{
+  margin: 5px 
+}
+.carousel-caption-Colleges{
+  padding: 0px;
+}
+.carousel-caption-Colleges .college-headline{
+  padding: 10px;
+}
+.college-headline span a{
+  font-size: 0.7em;
+  font-weight: bold;
+}
+
+.aboutCollege{
+  margin: 40px auto;
+}
+
+.aboutCollege .tab-content{
+  border: 1px solid #cecece;
+  margin: 10px 0px;
+}
+.aboutCollege .tab-content .d-block .btn-main{
+  margin: 10px ;
+  padding: 0px 20px;
+}
+.aboutCollege .tab-content .d-block{
+  margin: 10px 0px ;
+
+}
+.aboutCollege .nav-item a{
+  font-weight: lighter;
+  font-size: 1em;
+  color: #919191;
+  font-family: unset;
+}
+.aboutCollege .nav-item .active{
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.pnu-menu .overlay{
+  width: 100%;
+  height: 100%;
+  z-index: 10500;
+}
+.pnu-menu{
+  position: fixed;
+  background-color: rgba(000, 000, 000, 0);
+  z-index: 10000;
+  width: 0%;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  height: 100vh;
+}
+.pnu-menu .side{
+  width: 0px;
+  z-index: 100000 ;
+  height: 100%;
+  float: left;
+  overflow-x: hidden;
+  /* overflow: auto; */
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1.5em 0;
+
+}
+
+.pnu-menu button{
+  left: -25px;
+  top: 50%;
+  border: none;
+  font-size: 0.9em;
+  cursor: pointer;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  box-shadow: none;
+  padding: 0px 20px;
+}
+.pnu-menu button svg{
+  font-size: 0.7em;
+}
+.pnu-menu button:hover{
+  box-shadow: none;
+}
+.pnu-menu .side h5{
+  border-bottom: 1px solid #2fdcca;
+  padding-bottom: 1em;
+  min-width: 200px;
+}
+.pnu-menu button i{
+  transform: rotate(90deg) !important;
+
+}
+
+.dep-title{
+  background-image: url(../imgs/dep.jpg);
+  background-size:cover;
+  padding:  3em 5em;
+}
+.dep-content{
+  background-color: #004f4a;
+  color: white;
+  padding:  3em 0em;
+}
+.dep-content .fa-caret-left{
+  font-size: 3em;  
+  margin: 5px 0px;
+  color: #2fdcca;
+}
+.dep-content-title{
+  display: flex;
+  align-items: center;
+}
+.dep-content-title .fa-caret-left{
+  margin: 0px;
+}
+.dep-content-title h4{
+  margin: 0px 15px;
+}
+.dep-title ul {
+  margin: 10px;
+}
+.dep-title ul li hr{
+  border-bottom: 1px solid #004f4a;
+  width: 100%;
+  margin-top: 5px;
+}
+.dep-title .fa-circle{
+  font-size: 0.6em;
+  color: #2fdcca;
+  margin-left: 5px; 
+}
+.dep-title .fa-caret-left{
+  margin-left: 5px; 
+  font-size: 1.2em;
+  color: #2fdcca;
+
+}
+.dep-title ul li{
+  margin: 10px 0px;
+  cursor: pointer;
+
+}
+.dep-title ul li:hover{
+  opacity: 0.5;
+}
+.active-title{
+font-weight: bold;
+font-size: 1.1em;
+}
+
+.dep-content .fa-circle{
+  font-size: 0.5em;
+}
+.dep-content ul li hr{
+  border-bottom: 1px solid #177574;
+}
+.dep-content ul {
+  margin: 10px 0px;
+}
+.pnu-menu .container-fluid{
+  padding: 0px;
+  width: 280px;
+}
+.pnu-menu .panel-heading a{
+  border-bottom: 1px solid white;
+  font-size: 1.2em;
+  padding: 15px 0px;
+  display: block;
+}
+.pnu-menu .table{
+  background-color: rgba(255, 255, 255, 0.8)
+}
+.pnu-menu .fa-caret-down{
+  color: #2fdcca;
+  float: left;
+}
+.collegADS ul li {
+  margin: auto;
+}
+
+/* ===========================   start of colleges inner pages    ============================ */
+
+
+.right-menu {
+    padding: 10px 0px;
+    /* height: 500px; */
+    color: #7e7e7e;
+    background-color: #eee;
+}
+.right-menu .panel-default {
+  margin: 15px 0px;
+}
+.right-menu h5 {
+        font-size: 17px;
+    padding: 10px 0;
+  margin: 0;
+  overflow: hidden;
+}
+.right-menu h5 b{
+  padding: 0px 10px;
+}
+.right-menu .bg-title{
+        padding: 0.25rem 0.25rem;
+}
+.right-menu .panel-default hr{
+  border-top: 1px solid white;
+  margin: 5px;
+}
+.right-menu   .panel-group{
+  padding: 0px;
+}
+.right-menu .panel-group a{
+  height: 100%;
+  margin: 1px;
+  display: block;
+}
+    .right-menu .fa-circle, .right-menu .fa-long-arrow-alt-left, .right-menu .drpdwn {
+        font-size: 0.7em;
+        color: #2fdcca;
+        margin: 6px 10px;
+    }
+.right-menu .fa-long-arrow-alt-left, .right-menu .drpdwn{
+  font-size: 1.2em;
+}
+.panel-heading.active, .panel-default td.active{
+  background-color: white;
+  color: #2fdcca;
+  font-weight: bold;
+  padding-right: 20px;
+  font-size: 1.1em;
+}
+
+.right-menu .panel-body{
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.innerColleges{
+  padding: 20px;
+}
+.innerContent {
+  padding: 20px 0px;
+}
+.innerColleges .search-input{
+font-size: 1em;
+padding: 10px;
+display: block;
+margin: 10px 0px;
+}
+.serviceModal .bg-title{
+  margin: 10px 0px;
+}
+.modal-content{
+  padding: 10px;
+}
+.servic-card{
+  margin: 10px 0px;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid #2fdcca;
+  border-radius: 10px;
+}
+.serviceModal ul li{
+  margin: 10px 0px;
+}
+.serviceModal .fa-circle{
+  font-size: 0.7em;
+  color: #2fdcca
+}
+.cntct{
+  margin: 20px 0px;
+  padding: 10px;
+ 
+  border: 1px solid #eee
+}
+.cntctDiv{
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+}
+
+@media only screen and (max-width: 768px) {
+    .black-nav div {
+        text-align: center !important;
+    }
+
+    nav {
+        margin: 0px;
+    }
+
+    .flx {
+        display: flex;
+    }
+
+    .green-links, .main-logos {
+        text-align: center;
+        margin: 5px 0px;
+    }
+
+        .main-logos .pnu-logo {
+            width: 60%;
+        }
+
+        .main-logos .vision-logo {
+            width: 20%;
+        }
+
+        .green-links ul li {
+            margin: 10px 5px;
+            display: inline-block;
+        }
+
+    .slideTxtDiv {
+        margin: 0px;
+        font-size: 0.5em;
+    }
+
+    .carousel-caption .btn-main {
+        font-size: 1em;
+    }
+
+    .news-slider {
+        display: block;
+    }
+
+    .services .next {
+        left: 30px;
+    }
+
+    .services .prev {
+        right: 30px;
+    }
+
+    .uni-programsDiv .programsForms {
+        width: 100%;
+    }
+    /* .eventBar .eventIcons{
+    width: 100%;
+  } */
+    .green-links ul li a {
+        font-size: 0.8em;
+    }
+
+    .green-links ul li {
+        margin: 2px;
+    }
+
+    .btn-fixed {
+        top: 85%;
+        box-shadow: none;
+    }
+
+    .dropdown-menu .container {
+        max-height: 200px;
+        overflow: auto;
+    }
+
+    .homePage-indicators {
+        flex-direction: unset;
+        width: 100%;
+        bottom: 0px;
+        height: auto;
+    }
+
+        .homePage-indicators li, .indicators-news li {
+            margin: 5px;
+        }
+
+    .news-slider .carousel-item {
+        font-size: 0.8em;
+        margin: 5px;
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 100%;
+    }
+
+    .event-main-Div {
+        padding: 7px;
+        font-size: 0.8em;
+        /* text-align: center */
+    }
+
+    .noPad {
+        padding: 0px;
+    }
+        .menucollbut
+
+{
+    display: block;
+    position: absolute;
+    left: 10px;
+}
+
+.accordiontoggle {
+    display: none;
+}
+
+.right-menu {
+    padding: 10px;
+  }
+  .othersInfo{
+    width: 100%;
+    display: block;
+    clear: both;
+  }
+}

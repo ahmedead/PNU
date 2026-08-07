@@ -1,0 +1,249 @@
+﻿<Project ToolsVersion="17.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F7E01A92-A589-40B0-9A08-000BA36ECBEF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PNU.Workflow</RootNamespace>
+    <AssemblyName>PNU.Workflow</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetOfficeVersion>19.0</TargetOfficeVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <MinimumOfficeToolsVersion>14.1</MinimumOfficeToolsVersion>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SharePoint.Linq, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Publishing, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Publishing.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Dtos\RequestDetailsModel.cs" />
+    <Compile Include="Dtos\RequestModel.cs" />
+    <Compile Include="Entities\LookUp.cs" />
+    <Compile Include="Entities\Media.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\EmailUtility.cs" />
+    <Compile Include="Entities\PnuUser.cs" />
+    <Compile Include="WebParts\RequestDetails\RequestDetails.cs" />
+    <Compile Include="WebParts\RequestDetails\RequestDetailsUserControl.ascx.cs">
+      <DependentUpon>RequestDetailsUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebParts\RequestDetails\RequestDetailsUserControl.ascx.designer.cs">
+      <DependentUpon>RequestDetailsUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\MessageType.cs" />
+    <Compile Include="WebParts\RequestForm\RequestForm.cs" />
+    <Compile Include="WebParts\RequestForm\RequestFormUserControl.ascx.cs">
+      <DependentUpon>RequestFormUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebParts\RequestForm\RequestFormUserControl.ascx.designer.cs">
+      <DependentUpon>RequestFormUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WebParts\RequestsListForm\RequestsListForm.cs" />
+    <Compile Include="WebParts\RequestsListForm\RequestsListFormUserControl.ascx.cs">
+      <DependentUpon>RequestsListFormUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebParts\RequestsListForm\RequestsListFormUserControl.ascx.designer.cs">
+      <DependentUpon>RequestsListFormUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WebParts\RequestsUserActions\RequestsUserActions.cs" />
+    <Compile Include="WebParts\RequestsUserActions\RequestsUserActionsUserControl.ascx.cs">
+      <DependentUpon>RequestsUserActionsUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebParts\RequestsUserActions\RequestsUserActionsUserControl.ascx.designer.cs">
+      <DependentUpon>RequestsUserActionsUserControl.ascx.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Content\bootstrap-grid.css.map" />
+    <None Include="Content\bootstrap-grid.min.css.map" />
+    <None Include="Content\bootstrap-grid.rtl.css.map" />
+    <None Include="Content\bootstrap-grid.rtl.min.css.map" />
+    <None Include="Content\bootstrap-reboot.css.map" />
+    <None Include="Content\bootstrap-reboot.min.css.map" />
+    <None Include="Content\bootstrap-reboot.rtl.css.map" />
+    <None Include="Content\bootstrap-reboot.rtl.min.css.map" />
+    <None Include="Content\bootstrap-utilities.css.map" />
+    <None Include="Content\bootstrap-utilities.min.css.map" />
+    <None Include="Content\bootstrap-utilities.rtl.css.map" />
+    <None Include="Content\bootstrap-utilities.rtl.min.css.map" />
+    <None Include="Content\bootstrap.css.map" />
+    <None Include="Content\bootstrap.min.css.map" />
+    <None Include="Content\bootstrap.rtl.css.map" />
+    <None Include="Content\bootstrap.rtl.min.css.map" />
+    <None Include="Features\PNU.Workflow Custom Lists\PNU.Workflow Custom Lists.feature">
+      <FeatureId>{d9b2f1a5-535c-4243-bbe4-f72e6f7d5a91}</FeatureId>
+    </None>
+    <None Include="Features\PNU.Workflow WebParts\PNU.Workflow WebParts.feature">
+      <FeatureId>{2ee362a8-6645-4279-8d38-724d9df9136d}</FeatureId>
+    </None>
+    <None Include="key.snk" />
+    <None Include="Lists\RequestsList\RequestsListInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{c9e0afd4-884f-4b7d-9942-caef02f8d8e5}</SharePointProjectItemId>
+    </None>
+    <None Include="Lists\RequestsList\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{ba153c47-6f34-4508-800a-9256b4d47e53}</SharePointProjectItemId>
+    </None>
+    <None Include="Lists\WorkFlowRequestersList\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{dea97662-99be-4418-babf-4709c03adf3d}</SharePointProjectItemId>
+    </None>
+    <None Include="Lists\WorkFlowRequestersList\WorkFlowRequestersListInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{d7d4d045-445a-462f-8144-9428a7c8d682}</SharePointProjectItemId>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Package\Package.package">
+      <PackageId>{933c1f82-9d4c-47ec-ae27-7a528442688a}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+    <None Include="Resources\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{84b7f6ac-62e0-4cd8-94f0-1a814a9a99cb}</SharePointProjectItemId>
+    </None>
+    <None Include="Scripts\bootstrap.bundle.js.map" />
+    <None Include="Scripts\bootstrap.bundle.min.js.map" />
+    <None Include="Scripts\bootstrap.esm.js.map" />
+    <None Include="Scripts\bootstrap.esm.min.js.map" />
+    <None Include="Scripts\bootstrap.js.map" />
+    <None Include="Scripts\bootstrap.min.js.map" />
+    <None Include="WebParts\RequestDetails\RequestDetails.webpart" />
+    <None Include="WebParts\RequestDetails\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{a405afac-426b-434b-a38c-cf75cc020063}</SharePointProjectItemId>
+    </None>
+    <None Include="WebParts\RequestForm\RequestForm.webpart" />
+    <None Include="WebParts\RequestForm\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{21152d25-1213-40f0-95da-dc1a396c9007}</SharePointProjectItemId>
+    </None>
+    <None Include="WebParts\RequestsListForm\RequestsListForm.webpart" />
+    <None Include="WebParts\RequestsListForm\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{08a51e55-3ab5-428f-9031-49d8fba3bc4e}</SharePointProjectItemId>
+    </None>
+    <None Include="WebParts\RequestsUserActions\RequestsUserActions.webpart" />
+    <None Include="WebParts\RequestsUserActions\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b50bf5a0-bfd2-424a-b7c9-c8c6021e821b}</SharePointProjectItemId>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\PNU.Workflow Custom Lists\PNU.Workflow Custom Lists.Template.xml">
+      <DependentUpon>PNU.Workflow Custom Lists.feature</DependentUpon>
+    </Content>
+    <Content Include="Lists\RequestsList\Elements.xml" />
+    <Content Include="Lists\RequestsList\RequestsListInstance\Elements.xml" />
+    <Content Include="Lists\RequestsList\Schema.xml" />
+    <Content Include="Lists\WorkFlowRequestersList\Elements.xml" />
+    <Content Include="Lists\WorkFlowRequestersList\Schema.xml" />
+    <Content Include="Lists\WorkFlowRequestersList\WorkFlowRequestersListInstance\Elements.xml" />
+    <Content Include="Resources\PNU-WF.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-grid.rtl.css" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Content\bootstrap-utilities.css" />
+    <Content Include="Content\bootstrap-utilities.min.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.rtl.css" />
+    <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Features\PNU.Workflow WebParts\PNU.Workflow WebParts.Template.xml">
+      <DependentUpon>PNU.Workflow WebParts.feature</DependentUpon>
+    </Content>
+    <Content Include="Resources\Elements.xml" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.esm.js" />
+    <Content Include="Scripts\bootstrap.esm.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="WebParts\RequestDetails\Elements.xml" />
+    <Content Include="WebParts\RequestDetails\RequestDetailsUserControl.ascx" />
+    <Content Include="WebParts\RequestForm\Elements.xml" />
+    <Content Include="WebParts\RequestForm\RequestFormUserControl.ascx" />
+    <Content Include="WebParts\RequestsListForm\Elements.xml" />
+    <Content Include="WebParts\RequestsListForm\RequestsListFormUserControl.ascx" />
+    <Content Include="WebParts\RequestsUserActions\Elements.xml" />
+    <Content Include="WebParts\RequestsUserActions\RequestsUserActionsUserControl.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\PNU-WF.en-US.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\PNU-WF.ar-SA.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PNU.Internet.WebParts\PNU.Internet.WebParts.csproj">
+      <Project>{0D0716CB-2529-4FA3-810D-F5F2B3420F41}</Project>
+      <Name>PNU.Internet.WebParts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Portal.Main.Helper\Portal.Main.Helper.csproj">
+      <Project>{0277058D-BA00-4C4C-9509-303DB79D472D}</Project>
+      <Name>Portal.Main.Helper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>

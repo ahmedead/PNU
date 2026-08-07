@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="6c005d22-ff55-4d36-ae4c-8c06bf668b14" Scope="Site" Title="PNU-SP Feature3">
+  <ElementManifests>
+    <ElementManifest Location="Attachment-WP\Elements.xml" />
+    <ElementFile Location="Attachment-WP\Attachment-WP.webpart" />
+    <ElementManifest Location="Gallery-WP\Elements.xml" />
+    <ElementFile Location="Gallery-WP\Gallery-WP.webpart" />
+    <ElementManifest Location="ItemDetails-WP\Elements.xml" />
+    <ElementFile Location="ItemDetails-WP\ItemDetails-WP.webpart" />
+    <ElementManifest Location="MoreRecentReleases-WP\Elements.xml" />
+    <ElementFile Location="MoreRecentReleases-WP\MoreRecentReleases-WP.webpart" />
+    <ElementManifest Location="Search-Criteria-WP\Elements.xml" />
+    <ElementFile Location="Search-Criteria-WP\Search-Criteria-WP.webpart" />
+    <ElementManifest Location="Search-WP\Elements.xml" />
+    <ElementFile Location="Search-WP\Search-WP.webpart" />
+  </ElementManifests>
+</Feature>

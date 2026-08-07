@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="Gallery-WP" List="113" Url="_catalogs/wp">
+    <File Path="Gallery-WP\Gallery-WP.webpart" Url="PNU-SP_Gallery-WP.webpart" Type="GhostableInLibrary" >
+      <Property Name="Group" Value="Custom" />
+    </File>
+  </Module>
+</Elements>
