@@ -1,0 +1,2 @@
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\Portal.Main.Helper\obj\Debug\Portal.Main.Helper.csproj.AssemblyReference.cache
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\Portal.Main.Helper\obj\Debug\Portal.Main.Helper.csproj.CoreCompileInputs.cache

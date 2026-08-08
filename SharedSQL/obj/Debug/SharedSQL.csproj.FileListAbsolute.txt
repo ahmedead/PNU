@@ -1,0 +1,17 @@
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\SharedSQL.dll.config
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\SharedSQL.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\SharedSQL.pdb
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.Unity.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.Unity.Interception.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\bin\Debug\Microsoft.Practices.Unity.Interception.pdb
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.csproj.AssemblyReference.cache
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.csproj.CoreCompileInputs.cache
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.csproj.Up2Date
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.dll
+D:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.pdb
