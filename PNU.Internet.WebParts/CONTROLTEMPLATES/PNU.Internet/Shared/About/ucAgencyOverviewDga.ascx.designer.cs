@@ -8,14 +8,30 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
 {
     public partial class ucAgencyOverviewDga
     {
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl secOverview;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlOverviewHeader;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlOverviewText;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hOverviewHeading;
         protected global::System.Web.UI.WebControls.Literal litOverviewHeading;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pOverviewIntro;
         protected global::System.Web.UI.WebControls.Literal litOverviewIntro;
-        protected global::System.Web.UI.WebControls.Literal litVisionTitle;
-        protected global::System.Web.UI.WebControls.Literal litVisionBody;
-        protected global::System.Web.UI.WebControls.Literal litMissionTitle;
-        protected global::System.Web.UI.WebControls.Literal litMissionBody;
-        protected global::System.Web.UI.WebControls.Literal litObjectivesTitle;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlOverviewImage;
         protected global::System.Web.UI.HtmlControls.HtmlImage imgOverview;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlCardsRow;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlVision;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hVisionTitle;
+        protected global::System.Web.UI.WebControls.Literal litVisionTitle;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pVisionBody;
+        protected global::System.Web.UI.WebControls.Literal litVisionBody;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlMission;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hMissionTitle;
+        protected global::System.Web.UI.WebControls.Literal litMissionTitle;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pMissionBody;
+        protected global::System.Web.UI.WebControls.Literal litMissionBody;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlObjectives;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hObjectivesTitle;
+        protected global::System.Web.UI.WebControls.Literal litObjectivesTitle;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ulObjectives;
         protected global::System.Web.UI.WebControls.Repeater rptObjectives;
     }
 }
