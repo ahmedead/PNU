@@ -1,6 +1,7 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -18,7 +19,26 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA
     /// </summary>
     public partial class ucCollegeDocuments : UserControl
     {
-        public const string LIST_NAME = "CollegeDocuments";
+        private string _listName;
+
+        [WebBrowsable(true),
+         Category("List Settings"),
+         DefaultValue("CollegeDocuments"),
+         Description("Name of the SharePoint list containing college documents.")]
+        [Browsable(true)]
+        [PersistenceMode(PersistenceMode.Attribute)]
+        public string LIST_NAME
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_listName)) return "CollegeDocuments";
+                return _listName;
+            }
+            set
+            {
+                _listName = value;
+            }
+        }
 
         private bool IsArabic
         {

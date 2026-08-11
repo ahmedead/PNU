@@ -19,20 +19,35 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
 
         public static void EnsureLists(SPWeb web)
         {
+            if (web == null && SPContext.Current != null) web = SPContext.Current.Web;
             if (web == null) return;
             lock (_lock)
             {
                 try
                 {
-                    var groups = EnsureGroups(web);
-                    var points = EnsurePoints(web);
+                    Guid siteId = web.Site.ID;
+                    Guid webId = web.ID;
 
-                    if (groups != null && groups.ItemCount == 0)
-                        Seed(groups, points);
+                    SPSecurity.RunWithElevatedPrivileges(() =>
+                    {
+                        using (var site = new SPSite(siteId))
+                        using (var elevatedWeb = site.OpenWeb(webId))
+                        {
+                            elevatedWeb.AllowUnsafeUpdates = true;
+
+                            var groups = EnsureGroups(elevatedWeb);
+                            var points = EnsurePoints(elevatedWeb);
+
+                            if (groups != null && groups.ItemCount == 0)
+                                Seed(groups, points);
+
+                            elevatedWeb.AllowUnsafeUpdates = false;
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {
-                    Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "AgencyTasksProvisioner.EnsureLists", ex.Message);
+                    Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "AgencyTasksProvisioner.EnsureLists", ex.Message);
                 }
             }
         }

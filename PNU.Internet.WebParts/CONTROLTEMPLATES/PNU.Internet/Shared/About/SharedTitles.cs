@@ -37,51 +37,66 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
         /// </summary>
         public static void EnsureList(SPWeb web)
         {
+            if (web == null && SPContext.Current != null) web = SPContext.Current.Web;
             if (web == null) return;
             lock (_lock)
             {
                 try
                 {
-                    var list = web.Lists.TryGetList(ListName);
-                    if (list == null)
+                    Guid siteId = web.Site.ID;
+                    Guid webId = web.ID;
+
+                    SPSecurity.RunWithElevatedPrivileges(() =>
                     {
-                        Guid id = web.Lists.Add(ListName, "Shared titles/labels for About & Agency controls.",
-                                                SPListTemplateType.GenericList);
-                        list = web.Lists[id];
-                        list.OnQuickLaunch = false;
+                        using (var site = new SPSite(siteId))
+                        using (var elevatedWeb = site.OpenWeb(webId))
+                        {
+                            elevatedWeb.AllowUnsafeUpdates = true;
 
-                        EnsureField(list, "TitleKey", SPFieldType.Text);
-                        EnsureField(list, "TitleAr",  SPFieldType.Note);
-                        EnsureField(list, "TitleEn",  SPFieldType.Note);
+                            var list = elevatedWeb.Lists.TryGetList(ListName);
+                            if (list == null)
+                            {
+                                Guid id = elevatedWeb.Lists.Add(ListName, "Shared titles/labels for About & Agency controls.",
+                                                        SPListTemplateType.GenericList);
+                                list = elevatedWeb.Lists[id];
+                                list.OnQuickLaunch = false;
 
-                        var view = list.DefaultView;
-                        var cols = view.ViewFields;
-                        if (!cols.Exists("TitleKey")) cols.Add("TitleKey");
-                        if (!cols.Exists("TitleAr"))  cols.Add("TitleAr");
-                        if (!cols.Exists("TitleEn"))  cols.Add("TitleEn");
-                        view.Update();
+                                EnsureField(list, "TitleKey", SPFieldType.Text);
+                                EnsureField(list, "TitleAr",  SPFieldType.Note);
+                                EnsureField(list, "TitleEn",  SPFieldType.Note);
 
-                        list.Update();
-                    }
-                    else
-                    {
-                        EnsureField(list, "TitleKey", SPFieldType.Text);
-                        EnsureField(list, "TitleAr",  SPFieldType.Note);
-                        EnsureField(list, "TitleEn",  SPFieldType.Note);
-                    }
+                                var view = list.DefaultView;
+                                var cols = view.ViewFields;
+                                if (!cols.Exists("TitleKey")) cols.Add("TitleKey");
+                                if (!cols.Exists("TitleAr"))  cols.Add("TitleAr");
+                                if (!cols.Exists("TitleEn"))  cols.Add("TitleEn");
+                                view.Update();
 
-                    // Anonymous read
-                    if (web.HasUniqueRoleAssignments == false)
-                        list.BreakRoleInheritance(true, false);
-                    list.AnonymousPermMask64 = SPBasePermissions.ViewListItems | SPBasePermissions.ViewPages;
-                    list.Update();
+                                list.Update();
+                            }
+                            else
+                            {
+                                EnsureField(list, "TitleKey", SPFieldType.Text);
+                                EnsureField(list, "TitleAr",  SPFieldType.Note);
+                                EnsureField(list, "TitleEn",  SPFieldType.Note);
+                            }
 
-                    if (list.ItemCount == 0)
-                        Seed(list);
+                            // Anonymous read
+                            if (elevatedWeb.HasUniqueRoleAssignments == false)
+                                list.BreakRoleInheritance(true, false);
+                            list.AnonymousPermMask64 = SPBasePermissions.ViewListItems | SPBasePermissions.ViewPages;
+                            list.Update();
+
+                            if (list.ItemCount == 0)
+                                Seed(list);
+
+                            elevatedWeb.AllowUnsafeUpdates = false;
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {
-                    Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SharedTitles.EnsureList", ex.Message);
+                    Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "SharedTitles.EnsureList", ex.Message);
                 }
             }
         }

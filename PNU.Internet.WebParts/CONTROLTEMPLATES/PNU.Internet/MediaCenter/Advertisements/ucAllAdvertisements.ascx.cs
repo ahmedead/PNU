@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -113,6 +113,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advert
         public string ArticleEditor { get; set; }
         public string Date { get; set; }
         public string Link { get; set; }
+        public string Comments { get; set; }
 
 }
 }

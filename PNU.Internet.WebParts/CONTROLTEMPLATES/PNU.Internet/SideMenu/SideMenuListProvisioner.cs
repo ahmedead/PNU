@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using Microsoft.SharePoint.Publishing;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges;
 using System;
@@ -282,24 +282,24 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             }
         }
 
-        private static void AddLevel2MoreAbout(SPList level2, int parentItemId,string ParentTitle,string titleAr, string titleEn, string url, int order)
+        public static void AddLevel2MoreAbout(SPList level2, int parentItemId, string ParentTitle, string titleAr, string titleEn, string url, int order, bool visibility = true)
         {
             try
             {
-
                 try
                 {
                     SPListItem newItem = level2.AddItem();
                     newItem["Title"] = titleAr;
                     newItem["Title_EN"] = titleEn;
-                    newItem["URL"] = new SPFieldUrlValue { Url = url, Description = titleAr };
+                    if (!string.IsNullOrEmpty(url))
+                        newItem["URL"] = new SPFieldUrlValue { Url = url, Description = titleAr };
 
                     // Lookup fields need an ID-backed value, NOT a display string -
                     // assigning the bare text throws "invalid data ... read only".
                     newItem["Parent"] = new SPFieldLookupValue(parentItemId, ParentTitle);
 
-                    newItem["ItemOrder"] = (double)order++;
-                    newItem["Visibility"] = true;
+                    newItem["ItemOrder"] = (double)order;
+                    newItem["Visibility"] = visibility;
                     newItem.Update();
                 }
                 catch (Exception itemEx)
@@ -314,8 +314,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
-                    "SideMenuListProvisioner.SeedDepartments", ex.Message);
+                    "SideMenuListProvisioner.AddLevel2MoreAbout", ex.Message);
             }
+        }
+
+        public static void AddLevel2(SPList level2, int parentItemId, string parentTitle, string titleAr, string titleEn, string url, int order, bool visibility = true)
+        {
+            AddLevel2MoreAbout(level2, parentItemId, parentTitle, titleAr, titleEn, url, order, visibility);
         }
 
         /// <summary>
@@ -477,7 +482,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
         }
 
         /// <summary>Adds a Level1 item and returns its new list item ID.</summary>
-        private static int AddLevel1(SPList list, string titleAr, string titleEn, string url, int order)
+        public static int AddLevel1(SPList list, string titleAr, string titleEn, string url, int order, bool visibility = true)
         {
             SPListItem item = list.AddItem();
             item["Title"] = titleAr;
@@ -487,10 +492,74 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 item["URL"] = new SPFieldUrlValue { Url = url, Description = titleAr };
 
             item["ItemOrder"] = (double)order;
-            item["Visibility"] = true;
+            item["Visibility"] = visibility;
             item.Update();
 
             return item.ID;
+        }
+
+        public static void UpdateLevel1(SPList list, int itemId, string titleAr, string titleEn, string url, int order, bool visibility)
+        {
+            SPListItem item = list.GetItemById(itemId);
+            if (item == null) return;
+
+            item["Title"] = titleAr;
+            item["Title_EN"] = titleEn;
+            if (!string.IsNullOrEmpty(url))
+                item["URL"] = new SPFieldUrlValue { Url = url, Description = titleAr };
+            else
+                item["URL"] = null;
+
+            item["ItemOrder"] = (double)order;
+            item["Visibility"] = visibility;
+            item.Update();
+        }
+
+        public static void UpdateLevel2(SPList list, int itemId, int parentItemId, string parentTitle, string titleAr, string titleEn, string url, int order, bool visibility)
+        {
+            SPListItem item = list.GetItemById(itemId);
+            if (item == null) return;
+
+            item["Title"] = titleAr;
+            item["Title_EN"] = titleEn;
+            if (!string.IsNullOrEmpty(url))
+                item["URL"] = new SPFieldUrlValue { Url = url, Description = titleAr };
+            else
+                item["URL"] = null;
+
+            item["Parent"] = new SPFieldLookupValue(parentItemId, parentTitle);
+            item["ItemOrder"] = (double)order;
+            item["Visibility"] = visibility;
+            item.Update();
+        }
+
+        public static void DeleteItem(SPList list, int itemId)
+        {
+            SPListItem item = list.GetItemById(itemId);
+            if (item != null)
+            {
+                item.Delete();
+            }
+        }
+
+        public static bool CheckPageExists(SPWeb web, string pageName)
+        {
+            try
+            {
+                if (web == null || string.IsNullOrEmpty(pageName)) return false;
+                if (!PublishingWeb.IsPublishingWeb(web)) return false;
+
+                PublishingWeb pubWeb = PublishingWeb.GetPublishingWeb(web);
+                if (pubWeb == null) return false;
+
+                string pageServerRelativeUrl = web.ServerRelativeUrl.TrimEnd('/') + "/" + pubWeb.PagesListName + "/" + pageName.TrimStart('/');
+                SPFile existingFile = web.GetFile(pageServerRelativeUrl);
+                return existingFile != null && existingFile.Exists;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         // ==================================================================
@@ -503,8 +572,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
         /// No-op if the page already exists. Follows the same sequence as
         /// PageGenerator.CreatePublishingPage.
         /// </summary>
-        private static void EnsurePage(SPWeb web, string pageName, string titleAr,
-                                       string titleEn, string userControlPath, string UserControlProperties = "")
+        public static void EnsurePage(SPWeb web, string pageName, string titleAr,
+                                       string titleEn, string userControlPath, string UserControlProperties = "", string pageLayoutUrl = PAGE_LAYOUT_URL)
         {
             try
             {
@@ -522,12 +591,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 using (SPSite site = new SPSite(web.Site.ID))
                 using (SPWeb rootWeb = site.RootWeb)
                 {
-                    SPFile layoutFile = rootWeb.GetFile(PAGE_LAYOUT_URL);
+                    string targetLayout = string.IsNullOrEmpty(pageLayoutUrl) ? PAGE_LAYOUT_URL : pageLayoutUrl;
+                    SPFile layoutFile = rootWeb.GetFile(targetLayout);
                     if (layoutFile == null || !layoutFile.Exists)
                     {
                         Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
                             "SideMenuListProvisioner.EnsurePage:" + pageName,
-                            "Page layout not found: " + PAGE_LAYOUT_URL);
+                            "Page layout not found: " + targetLayout);
                         return;
                     }
 

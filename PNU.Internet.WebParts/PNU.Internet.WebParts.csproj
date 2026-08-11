@@ -1717,6 +1717,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisements.ascx.designer.cs">
       <DependentUpon>ucAllAdvertisements.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisementsDGA.ascx.cs">
+      <DependentUpon>ucAllAdvertisementsDGA.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisementsDGA.ascx.designer.cs">
+      <DependentUpon>ucAllAdvertisementsDGA.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllCollegeAdvs.ascx.cs">
       <DependentUpon>ucAllCollegeAdvs.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2402,6 +2409,14 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucDgaSurveyFeedback.ascx.designer.cs">
       <DependentUpon>ucDgaSurveyFeedback.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\EntitySectionProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx.cs">
+      <DependentUpon>ucEntitySection.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx.designer.cs">
+      <DependentUpon>ucEntitySection.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\SideMenuListProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\SideMenuModels.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenu.ascx.cs">
@@ -2410,6 +2425,13 @@
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenu.ascx.designer.cs">
       <DependentUpon>ucSideMenu.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenuListAdmin.ascx.cs">
+      <DependentUpon>ucSideMenuListAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenuListAdmin.ascx.designer.cs">
+      <DependentUpon>ucSideMenuListAdmin.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SR\ucKnowMore.ascx.cs">
       <DependentUpon>ucKnowMore.ascx</DependentUpon>
@@ -2794,6 +2816,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisements.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisementsDGA.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllCollegeAdvs.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucEditAdvertisements.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\usEditAdvertisements.ascx" />
@@ -2888,7 +2911,9 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucContactUsDGA.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucDgaRatingFeedback.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucDgaSurveyFeedback.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenu.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenuListAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SR\ucKnowMore.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Statiscs\ucPNUInNumbers.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Statiscs\ucPNUInNumbersTabs.ascx" />
