@@ -160,7 +160,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             lnkHome.InnerText = GetRes("res_Home", "الرئيسية", "Home");
 
             HtmlAnchor lnkEServices = (HtmlAnchor)e.Item.FindControl("lnkEServices");
-            lnkEServices.HRef = langPrefix + "/E-Services/Pages/default.aspx";
+            //lnkEServices.HRef = langPrefix + "/Pages/Eservice.aspx";
             lnkEServices.InnerText = GetRes("res_EServices", "الخدمات الإلكترونية", "E-Services");
 
             // Start service button (href already databound from URL field)

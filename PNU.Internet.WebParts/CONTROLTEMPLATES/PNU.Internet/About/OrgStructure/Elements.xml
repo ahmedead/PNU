@@ -8,7 +8,7 @@
   -->
   <SafeControl
       Assembly="$SharePoint.Project.AssemblyFullName$"
-      Namespace="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure"
+      Namespace="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About"
       TypeName="*"
       Safe="True"
       SafeAgainstScript="False" />

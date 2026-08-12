@@ -8,6 +8,8 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAllAdvertisements.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advertisements.ucAllAdvertisements" %>
 
 
+
+
 <section class="py-5 mb-5">
   <div class="container">
 <div class="row paginated-content">

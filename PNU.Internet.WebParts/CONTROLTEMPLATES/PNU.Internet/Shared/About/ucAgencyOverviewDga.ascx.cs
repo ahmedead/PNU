@@ -19,10 +19,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
             try
             {
                 if (HttpContext.Current != null &&
-                HttpContext.Current.User != null &&
-                HttpContext.Current.User.Identity.IsAuthenticated &&
-                SPContext.Current != null &&
-                SPContext.Current.Web.CurrentUser != null)
+                    HttpContext.Current.User != null &&
+                    HttpContext.Current.User.Identity.IsAuthenticated &&
+                    SPContext.Current != null &&
+                    SPContext.Current.Web.CurrentUser != null)
                 {
                     SharedTitles.EnsureList(SPContext.Current.Web);
                     AgencyOverviewProvisioner.EnsureList(SPContext.Current.Web);

@@ -831,7 +831,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.NewsBe
         {
             get
             {
-                return SPFactory.GetSiteURL() + "MediaCenter/Pages/AllNews.aspx?Id=" + this.ID;
+                return SPFactory.GetSiteURL() + "MediaCenter/Pages/AllNews.aspx";//?Id=" + this.ID;
 
             }
         }

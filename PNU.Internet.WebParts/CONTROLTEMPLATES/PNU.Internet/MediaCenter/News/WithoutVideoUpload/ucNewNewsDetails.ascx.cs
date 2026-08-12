@@ -34,7 +34,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News.W
                         //clsRequestsList _CurrentNew = busclsRequestsList.GetItemByID(ID);
                         ////clsRequestsList _CurrentNew = new clsRequestsList();
                         clsRequestsList _CurrentNew = new clsRequestsList();
-                        AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/Pages/AllNews.aspx?Id=" + _CurrentNew.CatID;
+                        AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/Pages/AllNews.aspx";
 
                         SPSecurity.RunWithElevatedPrivileges(delegate ()
                         {

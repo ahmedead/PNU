@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
 using Microsoft.SharePoint;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySection
@@ -55,7 +56,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
                 {
                     string tListName = string.IsNullOrWhiteSpace(TracksListName) ? EntitySectionProvisioner.DefaultTracksList : TracksListName;
                     string bListName = string.IsNullOrWhiteSpace(BulletsListName) ? EntitySectionProvisioner.DefaultBulletsList : BulletsListName;
-                    
+
                     Guid siteId = SPContext.Current.Site.ID;
                     Guid webId = SPContext.Current.Web.ID;
 
@@ -87,14 +88,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(CustomSectionTitle))
-                {
-                    litSectionTitle.Text = CustomSectionTitle;
-                }
-                else
-                {
-                    litSectionTitle.Text = IsArabic ? "مسارات المستفيدين" : "Beneficiary Tracks";
-                }
+                //if (!string.IsNullOrWhiteSpace(CustomSectionTitle))
+                //{
+                //    litSectionTitle.Text = CustomSectionTitle;
+                //}
+                //else
+                //{
+                //    litSectionTitle.Text = IsArabic ? "مسارات المستفيدين" : "Beneficiary Tracks";
+                //}
 
                 var tracks = LoadTracks();
                 rptTracks.DataSource = tracks;

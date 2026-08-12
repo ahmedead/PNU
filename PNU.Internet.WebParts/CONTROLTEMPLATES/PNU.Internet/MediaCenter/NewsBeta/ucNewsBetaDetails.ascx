@@ -28,7 +28,7 @@
                         <li class="breadcrumb-item"><a href="<%# String.Format("{0}/{1}/", SPFactory.GetSiteURL(),"MediaCenter") %>" class="text-decoration-none fw-bold">
                             <asp:Literal runat="server" Text="<%$ Resources: PNUres, MediaCenter %>" /></a></li>
 
-                        <li class="breadcrumb-item"><a href="<%# String.Format("{0}{1}{2}", SPFactory.GetSiteURL(),"/MediaCenter/Pages/AllNews.aspx?Id=", Eval("CatID")) %>" class="text-decoration-none fw-bold">
+                        <li class="breadcrumb-item"><a href="<%# String.Format("{0}{1}", SPFactory.GetSiteURL(),"/MediaCenter/Pages/AllNews.aspx") %>" class="text-decoration-none fw-bold">
 
                             <asp:Literal runat="server" Text='<%# String.Format("{0}", Eval("DisplayCatName")) %> ' /></a></li>
                         </li>

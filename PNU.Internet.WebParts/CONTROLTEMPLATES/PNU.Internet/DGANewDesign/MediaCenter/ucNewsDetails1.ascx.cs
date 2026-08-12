@@ -82,8 +82,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.Media
                         // "All news" link in the related section header
                         AllMCNews.HRef = "https://"
                             + HttpContext.Current.Request.Url.Host.ToString()
-                            + "/ar/MediaCenter/Pages/AllNews.aspx?Id="
-                            + (_CurrentNew != null ? _CurrentNew.CatID : "1");
+                            + "/ar/MediaCenter/Pages/AllNews.aspx";
+                        //+ (_CurrentNew != null ? _CurrentNew.CatID : "1");
 
                         // Bind the main news + breadcrumb (both use the same single-item source)
                         if (_CurrentNew != null)

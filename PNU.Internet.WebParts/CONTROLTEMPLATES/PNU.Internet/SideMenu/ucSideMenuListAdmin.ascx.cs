@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Text;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -968,6 +970,860 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             return urls;
         }
 
+        private class SPWebSummary
+        {
+            public string SiteTitle { get; set; }
+            public string SiteUrl { get; set; }
+            public string ServerRelativeUrl { get; set; }
+            public bool Success { get; set; }
+            public string ErrorMessage { get; set; }
+
+            public List<SPListSummary> Lists { get; set; }
+            public List<SPPageSummary> Pages { get; set; }
+            public List<SPMenuItemSummary> MenuLevel1Items { get; set; }
+            public List<SPMenuItemSummary> MenuLevel2Items { get; set; }
+
+            public SPWebSummary()
+            {
+                Lists = new List<SPListSummary>();
+                Pages = new List<SPPageSummary>();
+                MenuLevel1Items = new List<SPMenuItemSummary>();
+                MenuLevel2Items = new List<SPMenuItemSummary>();
+            }
+        }
+
+        private class SPListSummary
+        {
+            public string ListNameAr { get; set; }
+            public string ListNameEn { get; set; }
+            public string InternalName { get; set; }
+            public int ItemCount { get; set; }
+            public bool Exists { get; set; }
+        }
+
+        private class SPPageSummary
+        {
+            public string PageName { get; set; }
+            public string TitleAr { get; set; }
+            public string TitleEn { get; set; }
+            public string PageUrl { get; set; }
+            public bool Exists { get; set; }
+        }
+
+        private class SPMenuItemSummary
+        {
+            public int ItemId { get; set; }
+            public string TitleAr { get; set; }
+            public string TitleEn { get; set; }
+            public string Url { get; set; }
+            public int Order { get; set; }
+            public bool Visible { get; set; }
+            public string ParentTitleAr { get; set; }
+            public string ParentTitleEn { get; set; }
+        }
+
+        private SPWebSummary CollectWebSummary(SPWeb web)
+        {
+            var summary = new SPWebSummary
+            {
+                SiteTitle = web.Title,
+                SiteUrl = web.Url,
+                ServerRelativeUrl = web.ServerRelativeUrl,
+                Success = true
+            };
+
+            Dictionary<string, Tuple<string, string>> listNamesMap = new Dictionary<string, Tuple<string, string>>(StringComparer.OrdinalIgnoreCase)
+            {
+                { SideMenuListProvisioner.LIST_LEVEL1, new Tuple<string, string>("القائمة الجانبية (المستوى 1)", "Side Menu Level 1") },
+                { SideMenuListProvisioner.LIST_LEVEL2, new Tuple<string, string>("القائمة الجانبية (المستوى 2)", "Side Menu Level 2") },
+
+                // Deanship Lists (Dn...)
+                { "DnDocuments", new Tuple<string, string>("مستندات ونماذج العمادة", "Deanship Documents") },
+                { "DnBeneficiaryPathwaysTracks", new Tuple<string, string>("مسارات المستفيدين (المسارات)", "Beneficiary Pathways Tracks") },
+                { "DnBeneficiaryPathwaysBullets", new Tuple<string, string>("مسارات المستفيدين (النقاط)", "Beneficiary Pathways Bullets") },
+                { "DnServicesTracks", new Tuple<string, string>("خدمات العمادة (المسارات)", "Deanship Services Tracks") },
+                { "DnServicesBullets", new Tuple<string, string>("خدمات العمادة (النقاط)", "Deanship Services Bullets") },
+                { "DnInitiativesTracks", new Tuple<string, string>("مبادرات العمادة (المسارات)", "Deanship Initiatives Tracks") },
+                { "DnInitiativesBullets", new Tuple<string, string>("مبادرات العمادة (النقاط)", "Deanship Initiatives Bullets") },
+                { "DnAgencies", new Tuple<string, string>("وكالات العمادة", "Deanship Agencies") },
+                { "DnDepartments", new Tuple<string, string>("إدارات العمادة", "Deanship Departments") },
+                { "DnCenters", new Tuple<string, string>("مراكز العمادة", "Deanship Centers") },
+                { "DnUnits", new Tuple<string, string>("وحدات العمادة", "Deanship Units") },
+
+                // Agency Lists
+                { "AgencyAchievements", new Tuple<string, string>("جوائز الوكالة والشهادات", "Agency Achievements") },
+                { "AgencyDeens", new Tuple<string, string>("العمادات التابعة للوكالة", "Agency Deens") },
+                { "AgencyDepartments", new Tuple<string, string>("الإدارات التابعة للوكالة", "Agency Departments") },
+                { "AgencyCenters", new Tuple<string, string>("المراكز التابعة للوكالة", "Agency Centers") },
+                { "AgencyUnits", new Tuple<string, string>("الوحدات التابعة للوكالة", "Agency Units") },
+
+                // Faculty Lists
+                { "AllFacultyDepartments", new Tuple<string, string>("أقسام الكلية", "Faculty Departments") }
+            };
+
+            // 1. Scan Known & Existing Custom Lists
+            HashSet<string> processedLists = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var kvp in listNamesMap)
+            {
+                string internalName = kvp.Key;
+                SPList spList = web.Lists.TryGetList(internalName);
+                if (spList != null)
+                {
+                    processedLists.Add(internalName);
+                    summary.Lists.Add(new SPListSummary
+                    {
+                        InternalName = internalName,
+                        ListNameAr = kvp.Value.Item1,
+                        ListNameEn = kvp.Value.Item2,
+                        Exists = true,
+                        ItemCount = spList.ItemCount
+                    });
+                }
+            }
+
+            // Also check any other non-hidden custom list in web.Lists
+            try
+            {
+                foreach (SPList list in web.Lists)
+                {
+                    try
+                    {
+                        if (list.Hidden) continue;
+                        string title = list.Title;
+                        if (processedLists.Contains(title)) continue;
+                        if (title.Equals("Pages", StringComparison.OrdinalIgnoreCase) ||
+                            title.Equals("Documents", StringComparison.OrdinalIgnoreCase) ||
+                            title.Equals("Images", StringComparison.OrdinalIgnoreCase) ||
+                            title.Equals("Site Assets", StringComparison.OrdinalIgnoreCase) ||
+                            title.Equals("Microfeed", StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        processedLists.Add(title);
+                        summary.Lists.Add(new SPListSummary
+                        {
+                            InternalName = title,
+                            ListNameAr = title,
+                            ListNameEn = title,
+                            Exists = true,
+                            ItemCount = list.ItemCount
+                        });
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+
+            // 2. Read actual items from SideMenuLevel1 and SideMenuLevel2
+            try
+            {
+                SPList level1List = web.Lists.TryGetList(SideMenuListProvisioner.LIST_LEVEL1);
+                if (level1List != null && level1List.ItemCount > 0)
+                {
+                    SPQuery q1 = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                    foreach (SPListItem item in level1List.GetItems(q1))
+                    {
+                        try
+                        {
+                            string titleAr = item["Title"] != null ? Convert.ToString(item["Title"]) : "";
+                            string titleEn = item.Fields.ContainsField("Title_EN") && item["Title_EN"] != null ? Convert.ToString(item["Title_EN"]) : "";
+                            string url = "";
+                            if (item.Fields.ContainsField("URL") && item["URL"] != null)
+                            {
+                                SPFieldUrlValue urlVal = new SPFieldUrlValue(Convert.ToString(item["URL"]));
+                                url = urlVal.Url ?? "";
+                            }
+                            int order = 0;
+                            if (item.Fields.ContainsField("ItemOrder") && item["ItemOrder"] != null)
+                            {
+                                double dOrder = 0;
+                                double.TryParse(Convert.ToString(item["ItemOrder"]), out dOrder);
+                                order = (int)dOrder;
+                            }
+                            bool visible = true;
+                            if (item.Fields.ContainsField("Visibility") && item["Visibility"] != null)
+                                visible = Convert.ToBoolean(item["Visibility"]);
+
+                            summary.MenuLevel1Items.Add(new SPMenuItemSummary
+                            {
+                                ItemId = item.ID,
+                                TitleAr = titleAr,
+                                TitleEn = string.IsNullOrEmpty(titleEn) ? titleAr : titleEn,
+                                Url = url,
+                                Order = order,
+                                Visible = visible
+                            });
+                        }
+                        catch { }
+                    }
+                }
+
+                SPList level2List = web.Lists.TryGetList(SideMenuListProvisioner.LIST_LEVEL2);
+                if (level2List != null && level2List.ItemCount > 0)
+                {
+                    SPQuery q2 = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                    foreach (SPListItem item in level2List.GetItems(q2))
+                    {
+                        try
+                        {
+                            string titleAr = item["Title"] != null ? Convert.ToString(item["Title"]) : "";
+                            string titleEn = item.Fields.ContainsField("Title_EN") && item["Title_EN"] != null ? Convert.ToString(item["Title_EN"]) : "";
+                            string url = "";
+                            if (item.Fields.ContainsField("URL") && item["URL"] != null)
+                            {
+                                SPFieldUrlValue urlVal = new SPFieldUrlValue(Convert.ToString(item["URL"]));
+                                url = urlVal.Url ?? "";
+                            }
+                            int order = 0;
+                            if (item.Fields.ContainsField("ItemOrder") && item["ItemOrder"] != null)
+                            {
+                                double dOrder = 0;
+                                double.TryParse(Convert.ToString(item["ItemOrder"]), out dOrder);
+                                order = (int)dOrder;
+                            }
+                            bool visible = true;
+                            if (item.Fields.ContainsField("Visibility") && item["Visibility"] != null)
+                                visible = Convert.ToBoolean(item["Visibility"]);
+
+                            string parentTitleAr = "";
+                            string parentTitleEn = "";
+                            if (item.Fields.ContainsField("Parent") && item["Parent"] != null)
+                            {
+                                SPFieldLookupValue lkp = new SPFieldLookupValue(Convert.ToString(item["Parent"]));
+                                parentTitleAr = lkp.LookupValue ?? "";
+                                // Try to match parent title EN from Level1 items already collected
+                                var parentMatch = summary.MenuLevel1Items.Find(m => m.ItemId == lkp.LookupId);
+                                parentTitleEn = parentMatch != null ? parentMatch.TitleEn : parentTitleAr;
+                            }
+
+                            summary.MenuLevel2Items.Add(new SPMenuItemSummary
+                            {
+                                ItemId = item.ID,
+                                TitleAr = titleAr,
+                                TitleEn = string.IsNullOrEmpty(titleEn) ? titleAr : titleEn,
+                                Url = url,
+                                Order = order,
+                                Visible = visible,
+                                ParentTitleAr = parentTitleAr,
+                                ParentTitleEn = parentTitleEn
+                            });
+                        }
+                        catch { }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "CollectWebSummary.MenuItems", ex.Message);
+            }
+
+            // 3. Scan Pages Library
+            try
+            {
+                SPList pagesList = web.Lists.TryGetList("Pages");
+                if (pagesList != null)
+                {
+                    foreach (SPListItem item in pagesList.GetItems())
+                    {
+                        try
+                        {
+                            string fileName = item.Name;
+                            if (string.IsNullOrEmpty(fileName) && item.File != null)
+                            {
+                                fileName = item.File.Name;
+                            }
+                            if (string.IsNullOrEmpty(fileName) || !fileName.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase))
+                                continue;
+
+                            string titleAr = "";
+                            if (item.Fields.ContainsField("Title") && item["Title"] != null)
+                            {
+                                titleAr = Convert.ToString(item["Title"]);
+                            }
+                            if (string.IsNullOrEmpty(titleAr)) titleAr = fileName;
+
+                            string titleEn = "";
+                            if (item.Fields.ContainsField("Title_EN") && item["Title_EN"] != null)
+                            {
+                                titleEn = Convert.ToString(item["Title_EN"]);
+                            }
+                            if (string.IsNullOrEmpty(titleEn)) titleEn = titleAr;
+
+                            string pageUrl = "";
+                            if (item.File != null)
+                            {
+                                pageUrl = item.File.ServerRelativeUrl;
+                            }
+                            else
+                            {
+                                pageUrl = web.ServerRelativeUrl.TrimEnd('/') + "/Pages/" + fileName;
+                            }
+
+                            summary.Pages.Add(new SPPageSummary
+                            {
+                                PageName = fileName,
+                                TitleAr = titleAr,
+                                TitleEn = titleEn,
+                                PageUrl = pageUrl,
+                                Exists = true
+                            });
+                        }
+                        catch (Exception pageEx)
+                        {
+                            Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "CollectWebSummary.PageItem", pageEx.Message);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "CollectWebSummary.PagesList", ex.Message);
+            }
+
+            return summary;
+        }
+
+        private string GetAbsoluteUrl(string siteUrl, string pageUrl)
+        {
+            if (string.IsNullOrEmpty(pageUrl)) return "";
+            pageUrl = pageUrl.Trim();
+            if (pageUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                pageUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                return pageUrl;
+            }
+
+            try
+            {
+                if (string.IsNullOrEmpty(siteUrl)) return pageUrl;
+                string baseUrl = siteUrl.TrimEnd('/') + "/";
+                Uri baseUri = new Uri(baseUrl);
+                if (pageUrl.StartsWith("/"))
+                {
+                    string authority = baseUri.GetLeftPart(UriPartial.Authority);
+                    return authority + pageUrl;
+                }
+                else
+                {
+                    return new Uri(baseUri, pageUrl).ToString();
+                }
+            }
+            catch
+            {
+                return pageUrl;
+            }
+        }
+
+        private void RenderBilingualExecutionSummary(List<SPWebSummary> webSummaries)
+        {
+            if (webSummaries == null || webSummaries.Count == 0) return;
+
+            // Populate the multiline TextBox with the page titles and full absolute URLs
+            StringBuilder textSummary = new StringBuilder();
+            foreach (var webSum in webSummaries)
+            {
+                if (!webSum.Success) continue;
+
+                HashSet<string> addedUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                int pageCounter = 1;
+
+                // 1. Gather Level 1 items with page links
+                foreach (var m in webSum.MenuLevel1Items)
+                {
+                    if (string.IsNullOrEmpty(m.Url)) continue;
+                    string absUrl = GetAbsoluteUrl(webSum.SiteUrl, m.Url);
+                    if (addedUrls.Contains(absUrl)) continue;
+                    addedUrls.Add(absUrl);
+
+                    string title = string.IsNullOrEmpty(m.TitleAr) ? m.TitleEn : m.TitleAr;
+                    textSummary.AppendLine(string.Format("{0}- {1} :\t{2}", pageCounter++, title, absUrl));
+                }
+
+                // 2. Gather Level 2 items with page links
+                foreach (var m in webSum.MenuLevel2Items)
+                {
+                    if (string.IsNullOrEmpty(m.Url)) continue;
+                    string absUrl = GetAbsoluteUrl(webSum.SiteUrl, m.Url);
+                    if (addedUrls.Contains(absUrl)) continue;
+                    addedUrls.Add(absUrl);
+
+                    string title = string.IsNullOrEmpty(m.TitleAr) ? m.TitleEn : m.TitleAr;
+                    textSummary.AppendLine(string.Format("{0}- {1} :\t{2}", pageCounter++, title, absUrl));
+                }
+
+                // 3. Gather Pages library items
+                foreach (var p in webSum.Pages)
+                {
+                    if (string.IsNullOrEmpty(p.PageUrl)) continue;
+                    string absUrl = GetAbsoluteUrl(webSum.SiteUrl, p.PageUrl);
+                    if (addedUrls.Contains(absUrl)) continue;
+                    addedUrls.Add(absUrl);
+
+                    string title = string.IsNullOrEmpty(p.TitleAr) ? (string.IsNullOrEmpty(p.TitleEn) ? p.PageName : p.TitleEn) : p.TitleAr;
+                    textSummary.AppendLine(string.Format("{0}- {1} :\t{2}", pageCounter++, title, absUrl));
+                }
+            }
+
+            if (txtPagesSummary != null)
+            {
+                txtPagesSummary.Text = textSummary.ToString().TrimEnd();
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("<div class='summary-bilingual-wrapper'>");
+
+            // Navigation pill buttons for switching view
+            sb.Append("<div class='d-flex justify-content-start mb-3 border-bottom pb-2'>");
+            sb.Append("<button type='button' onclick='switchSummaryTab(\"ar\")' class='btn btn-outline-primary active font-weight-bold me-2' id='btnTabAr'>🇸🇦 التقرير باللغة العربية (Arabic)</button>");
+            sb.Append("<button type='button' onclick='switchSummaryTab(\"en\")' class='btn btn-outline-primary font-weight-bold' id='btnTabEn'>🇬🇧 Report in English (الإنجليزية)</button>");
+            sb.Append("</div>");
+
+            sb.Append("<script type='text/javascript'>");
+            sb.Append("function switchSummaryTab(lang) {");
+            sb.Append("  var arContent = document.getElementById('ar-summary-view');");
+            sb.Append("  var enContent = document.getElementById('en-summary-view');");
+            sb.Append("  var btnAr = document.getElementById('btnTabAr');");
+            sb.Append("  var btnEn = document.getElementById('btnTabEn');");
+            sb.Append("  if (lang === 'ar') {");
+            sb.Append("    if(arContent) arContent.style.display = 'block';");
+            sb.Append("    if(enContent) enContent.style.display = 'none';");
+            sb.Append("    if(btnAr) { btnAr.classList.add('active', 'btn-primary'); btnAr.classList.remove('btn-outline-primary'); }");
+            sb.Append("    if(btnEn) { btnEn.classList.remove('active', 'btn-primary'); btnEn.classList.add('btn-outline-primary'); }");
+            sb.Append("  } else {");
+            sb.Append("    if(arContent) arContent.style.display = 'none';");
+            sb.Append("    if(enContent) enContent.style.display = 'block';");
+            sb.Append("    if(btnEn) { btnEn.classList.add('active', 'btn-primary'); btnEn.classList.remove('btn-outline-primary'); }");
+            sb.Append("    if(btnAr) { btnAr.classList.remove('active', 'btn-primary'); btnAr.classList.add('btn-outline-primary'); }");
+            sb.Append("  }");
+            sb.Append("}");
+            sb.Append("</script>");
+
+            // -------------------------------------------------------------
+            // ARABIC VIEW
+            // -------------------------------------------------------------
+            sb.Append("<div id='ar-summary-view' dir='rtl'>");
+            foreach (var webSum in webSummaries)
+            {
+                sb.Append("<div class='card mb-3 border-primary'>");
+                sb.AppendFormat("<div class='card-header bg-primary text-white font-weight-bold'>📍 الموقع المستهدف: {0} ({1})</div>",
+                    HttpUtility.HtmlEncode(webSum.SiteTitle ?? "موقع غير معروف"),
+                    HttpUtility.HtmlEncode(webSum.SiteUrl ?? ""));
+
+                sb.Append("<div class='card-body'>");
+
+                if (!webSum.Success)
+                {
+                    sb.AppendFormat("<div class='alert alert-danger'>فشلت العملية على هذا الموقع: {0}</div>", HttpUtility.HtmlEncode(webSum.ErrorMessage));
+                }
+                else
+                {
+                    // --- SubMenu Level 1 Items (Arabic) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📋 عناصر القائمة الجانبية - المستوى الأول (عدد العناصر: {0}):</h6>", webSum.MenuLevel1Items.Count);
+                    if (webSum.MenuLevel1Items.Count == 0)
+                    {
+                        sb.Append("<div class='text-muted mb-3'>لا توجد عناصر في القائمة الجانبية - المستوى الأول.</div>");
+                    }
+                    else
+                    {
+                        sb.Append("<div class='table-responsive mb-4'>");
+                        sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                        sb.Append("<thead class='table-dark'><tr><th>#</th><th>العنوان بالعربية</th><th>العنوان بالإنجليزية</th><th>الرابط (URL)</th><th>الترتيب</th><th>الحالة</th></tr></thead>");
+                        sb.Append("<tbody>");
+                        int idx = 1;
+                        foreach (var m in webSum.MenuLevel1Items)
+                        {
+                            string absUrl = GetAbsoluteUrl(webSum.SiteUrl, m.Url);
+                            string urlCell = string.IsNullOrEmpty(m.Url)
+                                ? "<span class='text-muted'>—</span>"
+                                : string.Format("<a href='{0}' target='_blank' class='text-primary'>{0}</a>", HttpUtility.HtmlEncode(absUrl));
+                            string visBadge = m.Visible
+                                ? "<span class='badge bg-success'>ظاهر ✓</span>"
+                                : "<span class='badge bg-secondary'>مخفي ✗</span>";
+
+                            sb.AppendFormat("<tr><td>{0}</td><td><strong>{1}</strong></td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td></tr>",
+                                idx++,
+                                HttpUtility.HtmlEncode(m.TitleAr),
+                                HttpUtility.HtmlEncode(m.TitleEn),
+                                urlCell,
+                                m.Order,
+                                visBadge);
+                        }
+                        sb.Append("</tbody></table></div>");
+                    }
+
+                    // --- SubMenu Level 2 Items (Arabic) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📋 عناصر القائمة الجانبية - المستوى الثاني (عدد العناصر: {0}):</h6>", webSum.MenuLevel2Items.Count);
+                    if (webSum.MenuLevel2Items.Count == 0)
+                    {
+                        sb.Append("<div class='text-muted mb-3'>لا توجد عناصر في القائمة الجانبية - المستوى الثاني.</div>");
+                    }
+                    else
+                    {
+                        sb.Append("<div class='table-responsive mb-4'>");
+                        sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                        sb.Append("<thead class='table-dark'><tr><th>#</th><th>العنصر الأب</th><th>العنوان بالعربية</th><th>العنوان بالإنجليزية</th><th>الرابط (URL)</th><th>الترتيب</th><th>الحالة</th></tr></thead>");
+                        sb.Append("<tbody>");
+                        int idx2 = 1;
+                        foreach (var m in webSum.MenuLevel2Items)
+                        {
+                            string absUrl = GetAbsoluteUrl(webSum.SiteUrl, m.Url);
+                            string urlCell = string.IsNullOrEmpty(m.Url)
+                                ? "<span class='text-muted'>—</span>"
+                                : string.Format("<a href='{0}' target='_blank' class='text-primary'>{0}</a>", HttpUtility.HtmlEncode(absUrl));
+                            string visBadge = m.Visible
+                                ? "<span class='badge bg-success'>ظاهر ✓</span>"
+                                : "<span class='badge bg-secondary'>مخفي ✗</span>";
+
+                            sb.AppendFormat("<tr><td>{0}</td><td><span class='badge bg-info text-dark'>{1}</span></td><td><strong>{2}</strong></td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                idx2++,
+                                HttpUtility.HtmlEncode(m.ParentTitleAr),
+                                HttpUtility.HtmlEncode(m.TitleAr),
+                                HttpUtility.HtmlEncode(m.TitleEn),
+                                urlCell,
+                                m.Order,
+                                visBadge);
+                        }
+                        sb.Append("</tbody></table></div>");
+                    }
+
+                    // --- Lists Table (Arabic) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📋 القوائم المنشأة والمفحوصة تحت الموقع (عدد القوائم المفحوصة: {0}):</h6>", webSum.Lists.Count);
+                    sb.Append("<div class='table-responsive mb-4'>");
+                    sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                    sb.Append("<thead class='table-dark'><tr><th>اسم القائمة بالعربية</th><th>الاسم الداخلي (Internal Name)</th><th>حالة القائمة</th><th>عدد العناصر</th></tr></thead>");
+                    sb.Append("<tbody>");
+                    foreach (var l in webSum.Lists)
+                    {
+                        string badge = l.Exists
+                            ? "<span class='badge bg-success'>موجودة وجاهزة ✓</span>"
+                            : "<span class='badge bg-secondary'>غير منشأة ✗</span>";
+
+                        sb.AppendFormat("<tr><td><strong>{0}</strong></td><td><code>{1}</code></td><td>{2}</td><td><span class='badge bg-info text-dark'>{3} عنصر</span></td></tr>",
+                            HttpUtility.HtmlEncode(l.ListNameAr),
+                            HttpUtility.HtmlEncode(l.InternalName),
+                            badge,
+                            l.ItemCount);
+                    }
+                    sb.Append("</tbody></table></div>");
+
+                    // --- Pages Table (Arabic) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📄 الصفحات المنشأة والمجهزة تحت الموقع (إجمالي عدد الصفحات: {0}):</h6>", webSum.Pages.Count);
+                    if (webSum.Pages.Count == 0)
+                    {
+                        sb.Append("<div class='text-muted mb-3'>لا توجد صفحات منشأة حالياً في مكتبة الصفحات.</div>");
+                    }
+                    else
+                    {
+                        sb.Append("<div class='table-responsive'>");
+                        sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                        sb.Append("<thead class='table-dark'><tr><th>#</th><th>اسم ملف الصفحة</th><th>العنوان بالعربية</th><th>الرابط المباشر</th><th>حالة الصفحة</th></tr></thead>");
+                        sb.Append("<tbody>");
+                        int pIdx = 1;
+                        foreach (var p in webSum.Pages)
+                        {
+                            string absUrl = GetAbsoluteUrl(webSum.SiteUrl, p.PageUrl);
+                            sb.AppendFormat("<tr><td>{0}</td><td><code>{1}</code></td><td>{2}</td><td><a href='{3}' target='_blank' class='text-primary'>{3}</a></td><td><span class='badge bg-success'>مجهزة وموجودة ✓</span></td></tr>",
+                                pIdx++,
+                                HttpUtility.HtmlEncode(p.PageName),
+                                HttpUtility.HtmlEncode(p.TitleAr),
+                                HttpUtility.HtmlEncode(absUrl));
+                        }
+                        sb.Append("</tbody></table></div>");
+                    }
+                }
+
+                sb.Append("</div></div>");
+            }
+            sb.Append("</div>"); // End Arabic View
+
+            // -------------------------------------------------------------
+            // ENGLISH VIEW
+            // -------------------------------------------------------------
+            sb.Append("<div id='en-summary-view' dir='ltr' style='display:none;'>");
+            foreach (var webSum in webSummaries)
+            {
+                sb.Append("<div class='card mb-3 border-primary'>");
+                sb.AppendFormat("<div class='card-header bg-primary text-white font-weight-bold'>📍 Target Site: {0} ({1})</div>",
+                    HttpUtility.HtmlEncode(webSum.SiteTitle ?? "Unknown Site"),
+                    HttpUtility.HtmlEncode(webSum.SiteUrl ?? ""));
+
+                sb.Append("<div class='card-body'>");
+
+                if (!webSum.Success)
+                {
+                    sb.AppendFormat("<div class='alert alert-danger'>Execution failed on this site: {0}</div>", HttpUtility.HtmlEncode(webSum.ErrorMessage));
+                }
+                else
+                {
+                    // --- SubMenu Level 1 Items (English) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📋 SubMenu Level 1 Items (Total: {0}):</h6>", webSum.MenuLevel1Items.Count);
+                    if (webSum.MenuLevel1Items.Count == 0)
+                    {
+                        sb.Append("<div class='text-muted mb-3'>No SubMenu Level 1 items found.</div>");
+                    }
+                    else
+                    {
+                        sb.Append("<div class='table-responsive mb-4'>");
+                        sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                        sb.Append("<thead class='table-dark'><tr><th>#</th><th>Title (AR)</th><th>Title (EN)</th><th>URL</th><th>Order</th><th>Status</th></tr></thead>");
+                        sb.Append("<tbody>");
+                        int idx = 1;
+                        foreach (var m in webSum.MenuLevel1Items)
+                        {
+                            string absUrl = GetAbsoluteUrl(webSum.SiteUrl, m.Url);
+                            string urlCell = string.IsNullOrEmpty(m.Url)
+                                ? "<span class='text-muted'>—</span>"
+                                : string.Format("<a href='{0}' target='_blank' class='text-primary'>{0}</a>", HttpUtility.HtmlEncode(absUrl));
+                            string visBadge = m.Visible
+                                ? "<span class='badge bg-success'>Visible ✓</span>"
+                                : "<span class='badge bg-secondary'>Hidden ✗</span>";
+
+                            sb.AppendFormat("<tr><td>{0}</td><td><strong>{1}</strong></td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td></tr>",
+                                idx++,
+                                HttpUtility.HtmlEncode(m.TitleAr),
+                                HttpUtility.HtmlEncode(m.TitleEn),
+                                urlCell,
+                                m.Order,
+                                visBadge);
+                        }
+                        sb.Append("</tbody></table></div>");
+                    }
+
+                    // --- SubMenu Level 2 Items (English) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📋 SubMenu Level 2 Items (Total: {0}):</h6>", webSum.MenuLevel2Items.Count);
+                    if (webSum.MenuLevel2Items.Count == 0)
+                    {
+                        sb.Append("<div class='text-muted mb-3'>No SubMenu Level 2 items found.</div>");
+                    }
+                    else
+                    {
+                        sb.Append("<div class='table-responsive mb-4'>");
+                        sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                        sb.Append("<thead class='table-dark'><tr><th>#</th><th>Parent</th><th>Title (AR)</th><th>Title (EN)</th><th>URL</th><th>Order</th><th>Status</th></tr></thead>");
+                        sb.Append("<tbody>");
+                        int idx2 = 1;
+                        foreach (var m in webSum.MenuLevel2Items)
+                        {
+                            string absUrl = GetAbsoluteUrl(webSum.SiteUrl, m.Url);
+                            string urlCell = string.IsNullOrEmpty(m.Url)
+                                ? "<span class='text-muted'>—</span>"
+                                : string.Format("<a href='{0}' target='_blank' class='text-primary'>{0}</a>", HttpUtility.HtmlEncode(absUrl));
+                            string visBadge = m.Visible
+                                ? "<span class='badge bg-success'>Visible ✓</span>"
+                                : "<span class='badge bg-secondary'>Hidden ✗</span>";
+
+                            sb.AppendFormat("<tr><td>{0}</td><td><span class='badge bg-info text-dark'>{1}</span></td><td><strong>{2}</strong></td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                idx2++,
+                                HttpUtility.HtmlEncode(m.ParentTitleEn),
+                                HttpUtility.HtmlEncode(m.TitleAr),
+                                HttpUtility.HtmlEncode(m.TitleEn),
+                                urlCell,
+                                m.Order,
+                                visBadge);
+                        }
+                        sb.Append("</tbody></table></div>");
+                    }
+
+                    // --- Lists Table (English) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📋 Lists Created & Verified Under Site (Total Verified Lists: {0}):</h6>", webSum.Lists.Count);
+                    sb.Append("<div class='table-responsive mb-4'>");
+                    sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                    sb.Append("<thead class='table-dark'><tr><th>List Name (EN)</th><th>Internal Name</th><th>List Status</th><th>Item Count</th></tr></thead>");
+                    sb.Append("<tbody>");
+                    foreach (var l in webSum.Lists)
+                    {
+                        string badge = l.Exists
+                            ? "<span class='badge bg-success'>Exists & Ready ✓</span>"
+                            : "<span class='badge bg-secondary'>Not Created ✗</span>";
+
+                        sb.AppendFormat("<tr><td><strong>{0}</strong></td><td><code>{1}</code></td><td>{2}</td><td><span class='badge bg-info text-dark'>{3} items</span></td></tr>",
+                            HttpUtility.HtmlEncode(l.ListNameEn),
+                            HttpUtility.HtmlEncode(l.InternalName),
+                            badge,
+                            l.ItemCount);
+                    }
+                    sb.Append("</tbody></table></div>");
+
+                    // --- Pages Table (English) ---
+                    sb.AppendFormat("<h6 class='font-weight-bold text-dark border-bottom pb-2 mb-3'>📄 Pages Created & Provisioned Under Site (Total Created Pages: {0}):</h6>", webSum.Pages.Count);
+                    if (webSum.Pages.Count == 0)
+                    {
+                        sb.Append("<div class='text-muted mb-3'>No pages found in Pages library.</div>");
+                    }
+                    else
+                    {
+                        sb.Append("<div class='table-responsive'>");
+                        sb.Append("<table class='table table-bordered table-striped table-sm align-middle'>");
+                        sb.Append("<thead class='table-dark'><tr><th>#</th><th>Page File Name</th><th>English Title</th><th>Absolute URL</th><th>Status</th></tr></thead>");
+                        sb.Append("<tbody>");
+                        int pIdx = 1;
+                        foreach (var p in webSum.Pages)
+                        {
+                            string absUrl = GetAbsoluteUrl(webSum.SiteUrl, p.PageUrl);
+                            sb.AppendFormat("<tr><td>{0}</td><td><code>{1}</code></td><td>{2}</td><td><a href='{3}' target='_blank' class='text-primary'>{3}</a></td><td><span class='badge bg-success'>Provisioned & Ready ✓</span></td></tr>",
+                                pIdx++,
+                                HttpUtility.HtmlEncode(p.PageName),
+                                HttpUtility.HtmlEncode(p.TitleEn),
+                                HttpUtility.HtmlEncode(absUrl));
+                        }
+                        sb.Append("</tbody></table></div>");
+                    }
+                }
+
+                sb.Append("</div></div>");
+            }
+            sb.Append("</div>"); // End English View
+
+            sb.Append("</div>"); // End Wrapper
+
+            if (litExecutionSummaryContent != null)
+            {
+                litExecutionSummaryContent.Text = sb.ToString();
+            }
+            if (pnlExecutionSummary != null)
+            {
+                pnlExecutionSummary.Visible = true;
+            }
+        }
+
+        protected void btnCloseSummary_Click(object sender, EventArgs e)
+        {
+            if (pnlExecutionSummary != null)
+            {
+                pnlExecutionSummary.Visible = false;
+            }
+        }
+
+        protected void btnExportSummary_Click(object sender, EventArgs e)
+        {
+            List<string> targetUrls = GetTargetWebUrls();
+            if (targetUrls == null || targetUrls.Count == 0)
+            {
+                ShowAlert("يرجى اختيار أو إدخال موقع استهداف صحيح لتصدير الملخص. (No target site selected)", "warning");
+                return;
+            }
+
+            List<SPWebSummary> webSummaries = new List<SPWebSummary>();
+            foreach (string url in targetUrls)
+            {
+                try
+                {
+                    SPSecurity.RunWithElevatedPrivileges(() =>
+                    {
+                        using (SPSite site = new SPSite(url))
+                        using (SPWeb web = site.OpenWeb())
+                        {
+                            SPWebSummary summary = CollectWebSummary(web);
+                            webSummaries.Add(summary);
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    webSummaries.Add(new SPWebSummary
+                    {
+                        SiteUrl = url,
+                        Success = false,
+                        ErrorMessage = ex.Message
+                    });
+                }
+            }
+
+            if (webSummaries.Count == 0)
+            {
+                ShowAlert("لا يوجد ملخص تنفيذ لتصديره. (No summary to export)", "warning");
+                return;
+            }
+
+            StringBuilder csv = new StringBuilder();
+            string sep = "\t";
+
+            foreach (var webSum in webSummaries)
+            {
+                csv.AppendLine("==========================================================");
+                csv.AppendLine("Site / الموقع" + sep + (webSum.SiteTitle ?? "") + sep + (webSum.SiteUrl ?? ""));
+                csv.AppendLine("==========================================================");
+
+                if (!webSum.Success)
+                {
+                    csv.AppendLine("Error / خطأ" + sep + (webSum.ErrorMessage ?? ""));
+                    csv.AppendLine();
+                    continue;
+                }
+
+                // --- SubMenu Level 1 ---
+                csv.AppendLine();
+                csv.AppendLine("--- SubMenu Level 1 / عناصر المستوى الأول ---");
+                csv.AppendLine("#" + sep + "Title AR / العنوان بالعربية" + sep + "Title EN / العنوان بالإنجليزية" + sep + "URL / الرابط" + sep + "Order / الترتيب" + sep + "Status / الحالة");
+                int idx = 1;
+                foreach (var m in webSum.MenuLevel1Items)
+                {
+                    csv.AppendLine(string.Format("{0}{1}{2}{1}{3}{1}{4}{1}{5}{1}{6}",
+                        idx++, sep,
+                        m.TitleAr ?? "", m.TitleEn ?? "",
+                        m.Url ?? "", m.Order,
+                        m.Visible ? "Visible / ظاهر" : "Hidden / مخفي"));
+                }
+
+                // --- SubMenu Level 2 ---
+                csv.AppendLine();
+                csv.AppendLine("--- SubMenu Level 2 / عناصر المستوى الثاني ---");
+                csv.AppendLine("#" + sep + "Parent AR / العنصر الأب" + sep + "Title AR / العنوان بالعربية" + sep + "Title EN / العنوان بالإنجليزية" + sep + "URL / الرابط" + sep + "Order / الترتيب" + sep + "Status / الحالة");
+                int idx2 = 1;
+                foreach (var m in webSum.MenuLevel2Items)
+                {
+                    csv.AppendLine(string.Format("{0}{1}{2}{1}{3}{1}{4}{1}{5}{1}{6}{1}{7}",
+                        idx2++, sep,
+                        m.ParentTitleAr ?? "", m.TitleAr ?? "",
+                        m.TitleEn ?? "", m.Url ?? "",
+                        m.Order,
+                        m.Visible ? "Visible / ظاهر" : "Hidden / مخفي"));
+                }
+
+                // --- Pages ---
+                csv.AppendLine();
+                csv.AppendLine("--- Pages / الصفحات المنشأة ---");
+                csv.AppendLine("#" + sep + "Page Name / اسم الصفحة" + sep + "Title AR / العنوان بالعربية" + sep + "Title EN / العنوان بالإنجليزية" + sep + "URL / الرابط");
+                int pIdx = 1;
+                foreach (var p in webSum.Pages)
+                {
+                    csv.AppendLine(string.Format("{0}{1}{2}{1}{3}{1}{4}{1}{5}",
+                        pIdx++, sep,
+                        p.PageName ?? "", p.TitleAr ?? "",
+                        p.TitleEn ?? "", p.PageUrl ?? ""));
+                }
+
+                // --- Lists ---
+                csv.AppendLine();
+                csv.AppendLine("--- Lists / القوائم ---");
+                csv.AppendLine("List Name AR / اسم القائمة بالعربية" + sep + "List Name EN / الاسم بالإنجليزية" + sep + "Internal Name / الاسم الداخلي" + sep + "Status / الحالة" + sep + "Item Count / عدد العناصر");
+                foreach (var l in webSum.Lists)
+                {
+                    csv.AppendLine(string.Format("{0}{1}{2}{1}{3}{1}{4}{1}{5}",
+                        l.ListNameAr ?? "", sep,
+                        l.ListNameEn ?? "", l.InternalName ?? "",
+                        l.Exists ? "Exists / موجودة" : "Not Created / غير منشأة",
+                        l.ItemCount));
+                }
+
+                csv.AppendLine();
+            }
+
+            // Write as Excel-compatible tab-separated CSV with UTF-8 BOM
+            Response.Clear();
+            Response.Buffer = true;
+            Response.ContentType = "application/vnd.ms-excel";
+            string fileName = "SideMenu_Summary_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+            Response.AddHeader("content-disposition", "attachment;filename=" + fileName);
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            // Write UTF-8 BOM for proper Arabic display in Excel
+            Response.BinaryWrite(new byte[] { 0xEF, 0xBB, 0xBF });
+            Response.Write(csv.ToString());
+            Response.Flush();
+            Response.End();
+        }
+
         private void ExecuteAction(Action<SPWeb> action, bool reloadSiteData = true)
         {
             List<string> targetUrls = GetTargetWebUrls();
@@ -977,6 +1833,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 return;
             }
 
+            List<SPWebSummary> webSummaries = new List<SPWebSummary>();
             List<string> processedWebs = new List<string>();
             List<string> failedWebs = new List<string>();
 
@@ -995,6 +1852,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                             {
                                 action(web);
                                 processedWebs.Add(web.Title + " (" + web.Url + ")");
+
+                                SPWebSummary summary = CollectWebSummary(web);
+                                webSummaries.Add(summary);
                             }
                             finally
                             {
@@ -1006,6 +1866,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 catch (Exception ex)
                 {
                     failedWebs.Add(url + " (" + ex.Message + ")");
+                    webSummaries.Add(new SPWebSummary
+                    {
+                        SiteUrl = url,
+                        Success = false,
+                        ErrorMessage = ex.Message
+                    });
                     Publics.WriteToLog(Request.Url.ToString(), "ucSideMenuListAdmin.ExecuteAction [" + url + "]", ex.Message);
                 }
             }
@@ -1026,6 +1892,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 {
                     ShowAlert(statusMsg, "success");
                 }
+
+                RenderBilingualExecutionSummary(webSummaries);
             }
             else if (failedWebs.Count > 0)
             {
@@ -1040,9 +1908,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
 
         private void ShowAlert(string message, string alertType)
         {
-            pnlAlert.Visible = true;
-            pnlAlert.CssClass = "alert alert-" + alertType + " alert-dismissible fade show mb-4";
-            litAlertMessage.Text = message;
+            if (pnlAlert != null)
+            {
+                pnlAlert.Visible = true;
+                pnlAlert.CssClass = "alert alert-" + alertType + " alert-dismissible fade show mb-4";
+            }
+            if (litAlertMessage != null)
+            {
+                litAlertMessage.Text = message;
+            }
         }
     }
 }

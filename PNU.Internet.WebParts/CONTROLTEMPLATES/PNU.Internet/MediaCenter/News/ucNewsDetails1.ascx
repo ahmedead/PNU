@@ -28,7 +28,7 @@
                                 <asp:Literal runat="server" Text="<%$ Resources: PNUres, MediaCenter %>" /></a>
                         </li>
                         <li class="breadcrumb-item small">
-                            <a href='<%# String.Format("{0}{1}{2}", SPFactory.GetSiteURL(), "/MediaCenter/Pages/AllNews.aspx?Id=", Eval("CatID")) %>'>
+                            <a href='<%# String.Format("{0}{1}", SPFactory.GetSiteURL(), "/MediaCenter/Pages/AllNews.aspx") %>'>
                                 <%# Eval("DisplayCatName") %></a>
                         </li>
                         <li class="breadcrumb-item small active" aria-current="page">

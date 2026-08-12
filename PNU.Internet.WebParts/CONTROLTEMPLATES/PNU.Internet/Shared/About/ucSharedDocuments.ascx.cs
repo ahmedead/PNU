@@ -25,7 +25,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
         {
             get
             {
-                if (string.IsNullOrEmpty(_listName)) return "CollegeDocuments";
+                if (string.IsNullOrEmpty(_listName)) return "EntityDocuments";
                 return _listName;
             }
             set

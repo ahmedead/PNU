@@ -50,11 +50,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Digita
                         if (objNew == null)
                             return;
                         _CurrentNew = SPFactory.MapListItemsToClass<clsAdvertisements>(objNew);
-                       
 
 
 
-                        AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/Pages/AllNews.aspx?Id=" + _CurrentNew.CatID;
+
+                        AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/Pages/AllPNUMedia.aspx";//?Id=" + _CurrentNew.CatID;
 
                         SPSecurity.RunWithElevatedPrivileges(delegate ()
                         {

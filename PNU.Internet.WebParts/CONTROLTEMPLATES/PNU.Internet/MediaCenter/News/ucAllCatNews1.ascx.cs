@@ -49,8 +49,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
 
                                 if (_CurrentNew != null)
                                 {
-                                    
-                                    AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/News/Pages/AllNews.aspx?Id=" + _CurrentNew.CatID;
+
+                                    AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/News/Pages/AllNews.aspx";//?Id=" + _CurrentNew.CatID;
                                     SPQuery query = new SPQuery();
                                     query.Query = $@"<Where>
                                   <And>

@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
-    
-    
-    public partial class ucSideMenuListAdmin {
-        
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
+{
+
+
+    public partial class ucSideMenuListAdmin
+    {
+
         /// <summary>
         /// pnlAlert control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlAlert;
-        
+
         /// <summary>
         /// litAlertMessage control.
         /// </summary>
@@ -29,7 +31,52 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litAlertMessage;
-        
+
+        /// <summary>
+        /// pnlExecutionSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlExecutionSummary;
+
+        /// <summary>
+        /// btnExportSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportSummary;
+
+        /// <summary>
+        /// btnCloseSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseSummary;
+
+        /// <summary>
+        /// txtPagesSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPagesSummary;
+
+        /// <summary>
+        /// litExecutionSummaryContent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litExecutionSummaryContent;
+
         /// <summary>
         /// txtWebSiteURL control.
         /// </summary>
@@ -38,7 +85,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtWebSiteURL;
-        
+
         /// <summary>
         /// ddlSubwebs control.
         /// </summary>
@@ -47,7 +94,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlSubwebs;
-        
+
         /// <summary>
         /// btnLoadSite control.
         /// </summary>
@@ -56,7 +103,34 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnLoadSite;
-        
+
+        /// <summary>
+        /// btnSelectAllSubwebs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSelectAllSubwebs;
+
+        /// <summary>
+        /// btnDeselectAllSubwebs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeselectAllSubwebs;
+
+        /// <summary>
+        /// cblSubwebs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList cblSubwebs;
+
         /// <summary>
         /// lblCurrentLoadedSite control.
         /// </summary>
@@ -65,7 +139,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblCurrentLoadedSite;
-        
+
         /// <summary>
         /// pnlProvisioning control.
         /// </summary>
@@ -74,7 +148,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlProvisioning;
-        
+
         /// <summary>
         /// lblListsStatus control.
         /// </summary>
@@ -83,7 +157,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblListsStatus;
-        
+
         /// <summary>
         /// btnCreateLists control.
         /// </summary>
@@ -92,7 +166,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCreateLists;
-        
+
         /// <summary>
         /// btnSeedCollege control.
         /// </summary>
@@ -101,7 +175,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSeedCollege;
-        
+
         /// <summary>
         /// btnSeedAgency control.
         /// </summary>
@@ -110,7 +184,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSeedAgency;
-        
+
+        /// <summary>
+        /// btnSeedDeenships control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSeedDeenships;
+
+        /// <summary>
+        /// btnSeedDepartments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSeedDepartments;
+
         /// <summary>
         /// btnClearLists control.
         /// </summary>
@@ -119,7 +211,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnClearLists;
-        
+
         /// <summary>
         /// pnlMainManagement control.
         /// </summary>
@@ -128,16 +220,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlMainManagement;
-        
-        /// <summary>
-        /// ddlSubMenuLevel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSubMenuLevel1;
-        
+
         /// <summary>
         /// litL1FormTitle control.
         /// </summary>
@@ -146,7 +229,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litL1FormTitle;
-        
+
         /// <summary>
         /// hfL1EditID control.
         /// </summary>
@@ -155,7 +238,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hfL1EditID;
-        
+
         /// <summary>
         /// txtL1TitleAr control.
         /// </summary>
@@ -164,7 +247,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL1TitleAr;
-        
+
         /// <summary>
         /// txtL1TitleEn control.
         /// </summary>
@@ -173,7 +256,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL1TitleEn;
-        
+
         /// <summary>
         /// txtL1Url control.
         /// </summary>
@@ -182,7 +265,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL1Url;
-        
+
         /// <summary>
         /// txtL1Order control.
         /// </summary>
@@ -191,7 +274,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL1Order;
-        
+
         /// <summary>
         /// chkL1Visibility control.
         /// </summary>
@@ -200,7 +283,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkL1Visibility;
-        
+
         /// <summary>
         /// btnAddLevel1 control.
         /// </summary>
@@ -209,7 +292,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddLevel1;
-        
+
         /// <summary>
         /// btnUpdateLevel1 control.
         /// </summary>
@@ -218,7 +301,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUpdateLevel1;
-        
+
         /// <summary>
         /// btnCancelL1Edit control.
         /// </summary>
@@ -227,7 +310,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelL1Edit;
-        
+
         /// <summary>
         /// gvLevel1Items control.
         /// </summary>
@@ -236,7 +319,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvLevel1Items;
-        
+
         /// <summary>
         /// litSelectedParentBadge control.
         /// </summary>
@@ -245,7 +328,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litSelectedParentBadge;
-        
+
         /// <summary>
         /// litL2FormTitle control.
         /// </summary>
@@ -254,7 +337,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litL2FormTitle;
-        
+
         /// <summary>
         /// hfL2EditID control.
         /// </summary>
@@ -263,7 +346,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hfL2EditID;
-        
+
         /// <summary>
         /// ddlL2Parent control.
         /// </summary>
@@ -272,7 +355,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlL2Parent;
-        
+
         /// <summary>
         /// txtL2TitleAr control.
         /// </summary>
@@ -281,7 +364,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL2TitleAr;
-        
+
         /// <summary>
         /// txtL2TitleEn control.
         /// </summary>
@@ -290,7 +373,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL2TitleEn;
-        
+
         /// <summary>
         /// txtL2Url control.
         /// </summary>
@@ -299,7 +382,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL2Url;
-        
+
         /// <summary>
         /// txtL2Order control.
         /// </summary>
@@ -308,7 +391,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtL2Order;
-        
+
         /// <summary>
         /// chkL2Visibility control.
         /// </summary>
@@ -317,7 +400,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkL2Visibility;
-        
+
         /// <summary>
         /// btnAddLevel2 control.
         /// </summary>
@@ -326,7 +409,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddLevel2;
-        
+
         /// <summary>
         /// btnUpdateLevel2 control.
         /// </summary>
@@ -335,7 +418,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUpdateLevel2;
-        
+
         /// <summary>
         /// btnCancelL2Edit control.
         /// </summary>
@@ -344,7 +427,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelL2Edit;
-        
+
+        /// <summary>
+        /// ddlSubMenuLevel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlSubMenuLevel1;
+
         /// <summary>
         /// gvLevel2Items control.
         /// </summary>
@@ -353,7 +445,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvLevel2Items;
-        
+
         /// <summary>
         /// chkCreatePage control.
         /// </summary>
@@ -362,7 +454,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkCreatePage;
-        
+
         /// <summary>
         /// ddlControlPresets control.
         /// </summary>
@@ -371,7 +463,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlControlPresets;
-        
+
         /// <summary>
         /// txtPageName control.
         /// </summary>
@@ -380,25 +472,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPageName;
-        
-        /// <summary>
-        /// txtPageLayoutUrl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPageLayoutUrl;
-        
-        /// <summary>
-        /// txtUserControlPath control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtUserControlPath;
-        
+
         /// <summary>
         /// txtStandaloneTitleAr control.
         /// </summary>
@@ -416,6 +490,24 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtStandaloneTitleEn;
+
+        /// <summary>
+        /// txtPageLayoutUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPageLayoutUrl;
+
+        /// <summary>
+        /// txtUserControlPath control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUserControlPath;
 
         /// <summary>
         /// txtUserControlProperties control.

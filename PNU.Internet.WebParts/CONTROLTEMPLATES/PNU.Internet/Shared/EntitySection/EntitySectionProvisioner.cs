@@ -257,13 +257,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
             string[] bulletsAr, string[] bulletsEn)
         {
             SPListItem t = tracks.AddItem();
-            t["Title"]         = "TRK-" + order;
-            t["TitleAr"]       = titleAr;
-            t["TitleEn"]       = titleEn;
+            t["Title"] = "TRK-" + order;
+            t["TitleAr"] = titleAr;
+            t["TitleEn"] = titleEn;
             t["DescriptionAr"] = descAr;
             t["DescriptionEn"] = descEn;
-            t["ListStyle"]     = listStyle;
-            t["SortOrder"]     = order;
+            t["ListStyle"] = listStyle;
+            t["SortOrder"] = order;
             t.Update();
 
             int trackId = t.ID;
@@ -272,10 +272,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
             for (int i = 0; i < bulletsAr.Length; i++)
             {
                 SPListItem b = bullets.AddItem();
-                b["Title"]     = "TRK-" + order + "-B" + (i + 1);
-                b["TextAr"]    = bulletsAr[i];
-                b["TextEn"]    = (bulletsEn != null && i < bulletsEn.Length) ? bulletsEn[i] : bulletsAr[i];
-                b["GroupId"]   = trackId;
+                b["Title"] = "TRK-" + order + "-B" + (i + 1);
+                b["TextAr"] = bulletsAr[i];
+                b["TextEn"] = (bulletsEn != null && i < bulletsEn.Length) ? bulletsEn[i] : bulletsAr[i];
+                b["GroupId"] = trackId;
                 b["SortOrder"] = i + 1;
                 b.Update();
             }

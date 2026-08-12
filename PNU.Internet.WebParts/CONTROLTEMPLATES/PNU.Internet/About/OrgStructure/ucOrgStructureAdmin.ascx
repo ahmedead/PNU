@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucOrgStructureAdmin.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure.ucOrgStructureAdmin" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucOrgStructureAdmin.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.ucOrgStructureAdmin" %>
 <%--
     ucOrgStructureAdmin — in-page content editor for the OrgStructureUnits list.
     Access is gated by the PortalAdmins list (same pattern as ucContentAdmin).
@@ -45,9 +45,14 @@
                                 <asp:ListItem Value="saMuted">saMuted</asp:ListItem>
                             </asp:DropDownList>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label class="form-label"><asp:Literal ID="litLblIcon" runat="server" /></label>
                             <asp:TextBox ID="txtIcon" runat="server" CssClass="form-control" placeholder="hgi-hierarchy" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><asp:Literal ID="litLblTextColor" runat="server" /></label>
+                            <asp:TextBox ID="txtTextColor" runat="server" CssClass="form-control" dir="ltr"
+                                placeholder="var(--dga-primary-950)" />
                         </div>
 
                         <div class="col-12">

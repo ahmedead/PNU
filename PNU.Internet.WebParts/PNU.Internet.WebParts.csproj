@@ -1,4 +1,4 @@
-<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -138,8 +138,8 @@
     <Compile Include="CONTROLTEMPLATES\Classes\clsCourses.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\clsFaculties.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\clsSlider.cs" />
-    <Compile Include="CONTROLTEMPLATES\Classes\ContentSection.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\ContentAdm.cs" />
+    <Compile Include="CONTROLTEMPLATES\Classes\ContentSection.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\dataEvent.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\DBClasses.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\EmailUtility.cs" />
@@ -1650,66 +1650,16 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\International\Infrastructure\IntlTargetWeb.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Admin\ucSscAdmin.ascx.cs">
-      <DependentUpon>ucSscAdmin.ascx</DependentUpon>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\Classes\busclsPageCreator.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\Classes\PageCreatorModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\Classes\PageCreatorProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\ITAdmin\ucPageCreator.ascx.cs">
+      <DependentUpon>ucPageCreator.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Admin\ucSscAdmin.ascx.designer.cs">
-      <DependentUpon>ucSscAdmin.ascx.cs</DependentUpon>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\ITAdmin\ucPageCreator.ascx.designer.cs">
+      <DependentUpon>ucPageCreator.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseAccess.ascx.cs">
-      <DependentUpon>ucSmartSuitcaseAccess.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseAccess.ascx.designer.cs">
-      <DependentUpon>ucSmartSuitcaseAccess.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseFaq.ascx.cs">
-      <DependentUpon>ucSmartSuitcaseFaq.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseFaq.ascx.designer.cs">
-      <DependentUpon>ucSmartSuitcaseFaq.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseHero.ascx.cs">
-      <DependentUpon>ucSmartSuitcaseHero.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseHero.ascx.designer.cs">
-      <DependentUpon>ucSmartSuitcaseHero.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcasePage.ascx.cs">
-      <DependentUpon>ucSmartSuitcasePage.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcasePage.ascx.designer.cs">
-      <DependentUpon>ucSmartSuitcasePage.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx.cs">
-      <DependentUpon>ucSmartSuitcaseServices.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx.designer.cs">
-      <DependentUpon>ucSmartSuitcaseServices.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx.cs">
-      <DependentUpon>ucSmartSuitcaseSupport.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx.designer.cs">
-      <DependentUpon>ucSmartSuitcaseSupport.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Features\SmartSuitcaseListsFeatureReceiver.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SmartSuitcaseListProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscHelper.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscListNames.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscListSchema.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscLog.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscModels.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscSectionBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\clsAdsRequestsList.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisements.ascx.cs">
       <DependentUpon>ucAllAdvertisements.ascx</DependentUpon>
@@ -2388,7 +2338,22 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucSharedAboutDga.ascx.designer.cs">
       <DependentUpon>ucSharedAboutDga.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucSharedDocuments.ascx.cs">
+      <DependentUpon>ucSharedDocuments.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucSharedDocuments.ascx.designer.cs">
+      <DependentUpon>ucSharedDocuments.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\ContactUsProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\EntitySectionProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx.cs">
+      <DependentUpon>ucEntitySection.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx.designer.cs">
+      <DependentUpon>ucEntitySection.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucContactUsDGA.ascx.cs">
       <DependentUpon>ucContactUsDGA.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2410,14 +2375,6 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucDgaSurveyFeedback.ascx.designer.cs">
       <DependentUpon>ucDgaSurveyFeedback.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\EntitySectionProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx.cs">
-      <DependentUpon>ucEntitySection.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx.designer.cs">
-      <DependentUpon>ucEntitySection.ascx.cs</DependentUpon>
-    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\SideMenuListProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\SideMenuModels.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenu.ascx.cs">
@@ -2434,6 +2391,66 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenuListAdmin.ascx.designer.cs">
       <DependentUpon>ucSideMenuListAdmin.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Admin\ucSscAdmin.ascx.cs">
+      <DependentUpon>ucSscAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Admin\ucSscAdmin.ascx.designer.cs">
+      <DependentUpon>ucSscAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseAccess.ascx.cs">
+      <DependentUpon>ucSmartSuitcaseAccess.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseAccess.ascx.designer.cs">
+      <DependentUpon>ucSmartSuitcaseAccess.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseFaq.ascx.cs">
+      <DependentUpon>ucSmartSuitcaseFaq.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseFaq.ascx.designer.cs">
+      <DependentUpon>ucSmartSuitcaseFaq.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseHero.ascx.cs">
+      <DependentUpon>ucSmartSuitcaseHero.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseHero.ascx.designer.cs">
+      <DependentUpon>ucSmartSuitcaseHero.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcasePage.ascx.cs">
+      <DependentUpon>ucSmartSuitcasePage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcasePage.ascx.designer.cs">
+      <DependentUpon>ucSmartSuitcasePage.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx.cs">
+      <DependentUpon>ucSmartSuitcaseServices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx.designer.cs">
+      <DependentUpon>ucSmartSuitcaseServices.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx.cs">
+      <DependentUpon>ucSmartSuitcaseSupport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx.designer.cs">
+      <DependentUpon>ucSmartSuitcaseSupport.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Features\SmartSuitcaseListsFeatureReceiver.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SmartSuitcaseListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscSectionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Infrastructure\SscTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\SR\ucKnowMore.ascx.cs">
       <DependentUpon>ucKnowMore.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2570,6 +2587,7 @@
       <SharePointProjectItemId>{334e4c75-317e-4b6b-9151-7f273e62e112}</SharePointProjectItemId>
     </None>
     <None Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\README.md" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\README.md" />
     <None Include="CONTROLTEMPLATES\PNU.Internet\NouraStudents\README.md" />
     <None Include="CONTROLTEMPLATES\PNU.Internet\Tawasul\README.md" />
     <None Include="CONTROLTEMPLATES\SharePointProjectItem.spdata">
@@ -2809,13 +2827,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\International\Controls\ucIntlNumbers.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\International\Controls\ucIntlOffice.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\International\Controls\ucIntlOnArrival.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Admin\ucSscAdmin.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseAccess.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseFaq.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseHero.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcasePage.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\ITAdmin\ucPageCreator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisements.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllAdvertisementsDGA.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\Advertisements\ucAllCollegeAdvs.ascx" />
@@ -2909,12 +2921,20 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucAgencyOverviewDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucAgencyTasksDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucSharedAboutDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\About\ucSharedDocuments.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucContactUsDGA.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucDgaRatingFeedback.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\ucDgaSurveyFeedback.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Shared\EntitySection\ucEntitySection.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenu.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SideMenu\ucSideMenuListAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Admin\ucSscAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseAccess.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseFaq.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseHero.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcasePage.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseServices.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SmartSuitcase\Controls\ucSmartSuitcaseSupport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\SR\ucKnowMore.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Statiscs\ucPNUInNumbers.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Statiscs\ucPNUInNumbersTabs.ascx" />

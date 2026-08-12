@@ -1,4 +1,4 @@
-using Microsoft.IdentityModel.Web;
+﻿using Microsoft.IdentityModel.Web;
 using Microsoft.SharePoint;
 using Portal.Main.Helper;
 using Portal.Main.Helper.Utils;
@@ -637,7 +637,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             Context.ApplicationInstance.CompleteRequest();
         }
 
-        
+
 
         private void FixCanonicalLink()
         {
@@ -682,6 +682,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             foreach (Control child in root.Controls)
                 HideCanonicalControls(child);
         }
-    
+
     }
 }

@@ -27,7 +27,7 @@
                     </button>
                     <ul class="dropdown-menu shadow border-0" aria-labelledby="moreNewsEventsDropdown">
                         <%-- Note: These links are pulled from the first item in the master repeater context --%>
-                        <li><a class="dropdown-item" href='<%= SPFactory.GetSiteURL() %>MediaCenter/Pages/AllNews.aspx?Id=1'><asp:Literal runat="server" Text="<%$ Resources: PNUres, res_MoreAllNews %>" /></a></li>
+                        <li><a class="dropdown-item" href='<%= SPFactory.GetSiteURL() %>MediaCenter/Pages/AllNews.aspx'><asp:Literal runat="server" Text="<%$ Resources: PNUres, res_MoreAllNews %>" /></a></li>
                         <li><a class="dropdown-item" href='<%= SPFactory.GetSiteURL() %>MediaCenter/Pages/LatestAdvertisements.aspx'><asp:Literal runat="server" Text="<%$ Resources: PNUres, res_MoreAllAdvsLink %>" /></a></li>
                     </ul>
                 </div>

@@ -47,7 +47,7 @@
                                         <%# Eval("Type") %>
                                     </span>
                                 </div>
-                                <div class="d-flex justify-content-start">
+                                <%--<div class="d-flex justify-content-start">
                                     <button
                                         class="btn btn-primary media-preview-trigger"
                                         type="button"
@@ -55,6 +55,16 @@
                                         data-bs-target="#mediaPreviewModal"
                                         data-media-title="<%# Eval("Title") %>"
                                         data-media-src="<%# Eval("ImageUrl") %>">
+                                        <%= Request.Url.AbsolutePath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase)
+                                            ? "عرض"
+                                            : "View" %>
+                                    </button>
+                                </div>--%>
+                                <div class="d-flex justify-content-start">
+                                    <button
+                                        class="btn btn-primary"
+                                        type="button"
+                                        onclick='window.open("<%# Eval("URL") %>", "_blank", "noopener,noreferrer");'>
                                         <%= Request.Url.AbsolutePath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase)
                                             ? "عرض"
                                             : "View" %>
@@ -68,3 +78,48 @@
         </asp:Repeater>
     </div>
 </section>
+
+<div class="modal fade" id="mediaPreviewModal" tabindex="-1" aria-labelledby="mediaPreviewModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header p-3">
+                <h3 class="modal-title h5 m-0 p-0" id="mediaPreviewModalTitle"></h3>
+                <button type="button"
+                        class="btn btn-secondary icon-btn"
+                        data-bs-dismiss="modal"
+                        aria-label="إغلاق">
+                    <span class="d-inline-flex fs-5">
+                        <i class="hgi hgi-stroke hgi-cancel-01" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body px-3 py-0 pb-3">
+                <img id="mediaPreviewImage"
+                     class="img-fluid w-100 rounded-3"
+                     src=""
+                     alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.querySelectorAll(".media-preview-trigger").forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            document.getElementById("mediaPreviewModalTitle").textContent =
+                this.dataset.mediaTitle;
+
+            document.getElementById("mediaPreviewImage").src =
+                this.dataset.mediaSrc;
+
+            document.getElementById("mediaPreviewImage").alt =
+                this.dataset.mediaTitle;
+
+        });
+
+    });
+
+</script>

@@ -26,7 +26,7 @@
                                 <a id="lnkHome" runat="server"></a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a id="lnkEServices" runat="server"></a>
+                                <a id="lnkEServices" runat="server" href='<%# IsArabic ? "/ar/Pages/Eservice.aspx" : "/en/Pages/Eservice.aspx" %>'></a>
                             </li>
                             <li aria-current="page" class="breadcrumb-item active">
                                 <%# SPFactory.GetLocalizedTitle(Eval("ARServiceName"), Eval("ENServiceName")) %>

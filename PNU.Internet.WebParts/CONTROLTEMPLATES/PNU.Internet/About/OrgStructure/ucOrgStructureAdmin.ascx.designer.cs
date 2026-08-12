@@ -6,7 +6,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
 {
     public partial class ucOrgStructureAdmin
     {
@@ -30,6 +30,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         protected global::System.Web.UI.WebControls.Literal litLblTheme;
         protected global::System.Web.UI.WebControls.TextBox txtIcon;
         protected global::System.Web.UI.WebControls.Literal litLblIcon;
+        protected global::System.Web.UI.WebControls.TextBox txtTextColor;
+        protected global::System.Web.UI.WebControls.Literal litLblTextColor;
         protected global::System.Web.UI.WebControls.TextBox txtSelector;
         protected global::System.Web.UI.WebControls.Literal litLblSelector;
         protected global::System.Web.UI.WebControls.Literal litHintSelector;

@@ -12,10 +12,10 @@
 <%@ Import Namespace="PNU.Internet.WebParts" %>
 
 <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    (function (c, l, a, r, i, t, y) {
+        c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+        t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", "wsyx3gfl6p");
 </script>
 <dga-header role="banner">
@@ -95,6 +95,7 @@
         class="btn btn-primary" 
         aria-label="بحث" 
         onclick="document.getElementById('btnSearch').click();">
+    
     <%= IsArabic ? "بحث" : "Search" %>
 </button>
                                         </div>
@@ -118,7 +119,7 @@
                         aria-expanded="false" aria-controls="searchDropdownMenu"
                         class="nav-link position-relative p-0 px-3 h-100 rounded-1 d-flex justify-content-center align-items-center fw-medium">
                         <i class="hgi-stroke hgi-search-01" aria-hidden="true"></i>
-                        <span class="ps-2">بحث</span>
+                        <span class="ps-2"><%= IsArabic ? "بحث" : "Search" %></span>
                     </a>
                     <div id="searchDropdownMenu" aria-labelledby="SearchDropdownBtn" class="dropdown-menu start-0 end-0">
                         <div class="container">
@@ -156,6 +157,9 @@ onkeydown="if(event.keyCode===13||event.key==='Enter'){event.preventDefault();do
         onclick="document.getElementById('btnSearchDesktop').click();">
     <%= IsArabic ? "بحث" : "Search" %>
 </button>
+
+
+
                                     </div>
                                 </dga-search-input>
                             </div>
@@ -169,7 +173,7 @@ onkeydown="if(event.keyCode===13||event.key==='Enter'){event.preventDefault();do
                         aria-controls="languagesDropdownMenu"
                         class="nav-link position-relative p-0 px-3 h-100 rounded-1 d-flex justify-content-center align-items-center fw-medium">
                         <i class="hgi-stroke hgi-translation" aria-hidden="true"></i>
-                        <span class="ps-2">العربية</span>
+                        <span class="ps-2"><%= IsArabic ? "العربية" : "English" %></span>
                     </a>
                     <ul id="languagesDropdownMenu" aria-labelledby="LanguagesDropdownBtn" class="dropdown-menu p-3 gap-1 ">
                         <li>

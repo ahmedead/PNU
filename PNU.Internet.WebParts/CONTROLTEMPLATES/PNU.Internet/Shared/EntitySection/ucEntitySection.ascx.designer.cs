@@ -9,8 +9,11 @@
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySection
 {
+
+
     public partial class ucEntitySection
     {
+
         /// <summary>
         /// pnlSection control.
         /// </summary>
@@ -19,15 +22,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlSection;
-
-        /// <summary>
-        /// litSectionTitle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litSectionTitle;
 
         /// <summary>
         /// rptTracks control.

@@ -3,37 +3,48 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.SharePoint;
 
-namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
 {
     /// <summary>
-    /// Read/write access for the OrgStructureUnits list. Reads run under elevated
-    /// privileges (site/web reopened by ID inside the delegate) so anonymous portal
-    /// visitors can see the chart. Field mapping is manual via Safe* helpers.
+    /// Read/write access for the OrgStructureUnits list, which lives on a specific web
+    /// (default /ar/AboutUniversity/). Reads run under elevated privileges (site/web
+    /// reopened inside the delegate) so anonymous portal visitors can see the chart.
+    /// Field mapping is manual via Safe* helpers.
     /// </summary>
     public class OrgStructureRepository
     {
         private readonly Guid _siteId;
-        private readonly Guid _webId;
+        private readonly string _webUrl;
 
-        public OrgStructureRepository(SPWeb web)
+        /// <param name="currentWeb">Any web in the target site collection (for the site id).</param>
+        /// <param name="listWebServerRelativeUrl">Server-relative URL of the web that holds the list, e.g. /ar/AboutUniversity/.</param>
+        public OrgStructureRepository(SPWeb currentWeb, string listWebServerRelativeUrl)
         {
-            if (web == null) throw new ArgumentNullException("web");
-            _siteId = web.Site.ID;
-            _webId = web.ID;
+            if (currentWeb == null) throw new ArgumentNullException("currentWeb");
+            _siteId = currentWeb.Site.ID;
+            _webUrl = Normalize(listWebServerRelativeUrl, currentWeb.ServerRelativeUrl);
         }
 
-        /// <summary>Returns all active units ordered by OrgOrder, resolved for anonymous read.</summary>
+        internal static string Normalize(string url, string fallback)
+        {
+            string u = string.IsNullOrWhiteSpace(url) ? fallback : url.Trim();
+            if (u.Length > 1) u = u.TrimEnd('/');
+            if (string.IsNullOrEmpty(u)) u = "/";
+            return u;
+        }
+
+        /// <summary>All active units ordered by OrgOrder, resolved for anonymous read.</summary>
         public List<OrgStructureUnit> GetActiveUnits()
         {
             var result = new List<OrgStructureUnit>();
-
             try
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate
                 {
                     using (var site = new SPSite(_siteId))
-                    using (var web = site.OpenWeb(_webId))
+                    using (var web = site.OpenWeb(_webUrl))
                     {
+                        if (web == null || !web.Exists) return;
                         SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
                         if (list == null) return;
 
@@ -45,11 +56,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
                                 "<OrderBy><FieldRef Name='" + OrgStructureProvisioner.F_Order + "' Ascending='TRUE'/></OrderBy>",
                             ViewAttributes = "Scope='RecursiveAll'"
                         };
-
                         foreach (SPListItem item in list.GetItems(query))
-                        {
                             result.Add(Map(item));
-                        }
                     }
                 });
             }
@@ -57,28 +65,29 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
             {
                 Publics.WriteToLog(GetUrl(), "OrgStructureRepository.GetActiveUnits", ex.Message);
             }
-
             return result;
         }
 
-        /// <summary>Returns every unit (active + inactive) for the admin grid.</summary>
+        /// <summary>Every unit (active + inactive) for the admin grid, run as the current user.</summary>
         public List<OrgStructureUnit> GetAllUnits()
         {
             var result = new List<OrgStructureUnit>();
             try
             {
-                SPList list = SPContext.Current.Web.Lists.TryGetList(OrgStructureProvisioner.ListName);
-                if (list == null) return result;
-
-                var query = new SPQuery
+                using (var site = new SPSite(SPContext.Current.Site.ID))
+                using (var web = site.OpenWeb(_webUrl))
                 {
-                    Query = "<OrderBy><FieldRef Name='" + OrgStructureProvisioner.F_Order + "' Ascending='TRUE'/></OrderBy>",
-                    ViewAttributes = "Scope='RecursiveAll'"
-                };
+                    if (web == null || !web.Exists) return result;
+                    SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
+                    if (list == null) return result;
 
-                foreach (SPListItem item in list.GetItems(query))
-                {
-                    result.Add(Map(item));
+                    var query = new SPQuery
+                    {
+                        Query = "<OrderBy><FieldRef Name='" + OrgStructureProvisioner.F_Order + "' Ascending='TRUE'/></OrderBy>",
+                        ViewAttributes = "Scope='RecursiveAll'"
+                    };
+                    foreach (SPListItem item in list.GetItems(query))
+                        result.Add(Map(item));
                 }
             }
             catch (Exception ex)
@@ -92,9 +101,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         {
             try
             {
-                SPList list = SPContext.Current.Web.Lists.TryGetList(OrgStructureProvisioner.ListName);
-                if (list == null) return null;
-                return Map(list.GetItemById(id));
+                using (var site = new SPSite(SPContext.Current.Site.ID))
+                using (var web = site.OpenWeb(_webUrl))
+                {
+                    if (web == null || !web.Exists) return null;
+                    SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
+                    if (list == null) return null;
+                    return Map(list.GetItemById(id));
+                }
             }
             catch (Exception ex)
             {
@@ -107,34 +121,39 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         {
             try
             {
-                SPWeb web = SPContext.Current.Web;
-                SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
-                if (list == null) return;
+                using (var site = new SPSite(SPContext.Current.Site.ID))
+                using (var web = site.OpenWeb(_webUrl))
+                {
+                    if (web == null || !web.Exists) return;
+                    SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
+                    if (list == null) return;
 
-                bool allowUnsafe = web.AllowUnsafeUpdates;
-                try
-                {
-                    web.AllowUnsafeUpdates = true;
-                    SPListItem item = (u.Id > 0) ? list.GetItemById(u.Id) : list.AddItem();
-                    item["Title"] = u.Title ?? string.Empty;
-                    item[OrgStructureProvisioner.F_TitleEn] = u.TitleEn ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Order] = u.Order;
-                    item[OrgStructureProvisioner.F_Selector] = u.Selector ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Desc] = u.Description ?? string.Empty;
-                    item[OrgStructureProvisioner.F_DescEn] = u.DescriptionEn ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Badge] = u.Badge ?? string.Empty;
-                    item[OrgStructureProvisioner.F_BadgeEn] = u.BadgeEn ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Meta] = u.Meta ?? string.Empty;
-                    item[OrgStructureProvisioner.F_MetaEn] = u.MetaEn ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Icon] = u.Icon ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Theme] = u.Theme ?? string.Empty;
-                    item[OrgStructureProvisioner.F_LinkUrl] = u.LinkUrl ?? string.Empty;
-                    item[OrgStructureProvisioner.F_Active] = u.Active;
-                    item.Update();
-                }
-                finally
-                {
-                    web.AllowUnsafeUpdates = allowUnsafe;
+                    bool allowUnsafe = web.AllowUnsafeUpdates;
+                    try
+                    {
+                        web.AllowUnsafeUpdates = true;
+                        SPListItem item = (u.Id > 0) ? list.GetItemById(u.Id) : list.AddItem();
+                        item["Title"] = u.Title ?? string.Empty;
+                        item[OrgStructureProvisioner.F_TitleEn] = u.TitleEn ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Order] = u.Order;
+                        item[OrgStructureProvisioner.F_Selector] = u.Selector ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Desc] = u.Description ?? string.Empty;
+                        item[OrgStructureProvisioner.F_DescEn] = u.DescriptionEn ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Badge] = u.Badge ?? string.Empty;
+                        item[OrgStructureProvisioner.F_BadgeEn] = u.BadgeEn ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Meta] = u.Meta ?? string.Empty;
+                        item[OrgStructureProvisioner.F_MetaEn] = u.MetaEn ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Icon] = u.Icon ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Theme] = u.Theme ?? string.Empty;
+                        item[OrgStructureProvisioner.F_TextColor] = u.TextColor ?? string.Empty;
+                        item[OrgStructureProvisioner.F_LinkUrl] = u.LinkUrl ?? string.Empty;
+                        item[OrgStructureProvisioner.F_Active] = u.Active;
+                        item.Update();
+                    }
+                    finally
+                    {
+                        web.AllowUnsafeUpdates = allowUnsafe;
+                    }
                 }
             }
             catch (Exception ex)
@@ -147,19 +166,23 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         {
             try
             {
-                SPWeb web = SPContext.Current.Web;
-                SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
-                if (list == null) return;
+                using (var site = new SPSite(SPContext.Current.Site.ID))
+                using (var web = site.OpenWeb(_webUrl))
+                {
+                    if (web == null || !web.Exists) return;
+                    SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ListName);
+                    if (list == null) return;
 
-                bool allowUnsafe = web.AllowUnsafeUpdates;
-                try
-                {
-                    web.AllowUnsafeUpdates = true;
-                    list.GetItemById(id).Delete();
-                }
-                finally
-                {
-                    web.AllowUnsafeUpdates = allowUnsafe;
+                    bool allowUnsafe = web.AllowUnsafeUpdates;
+                    try
+                    {
+                        web.AllowUnsafeUpdates = true;
+                        list.GetItemById(id).Delete();
+                    }
+                    finally
+                    {
+                        web.AllowUnsafeUpdates = allowUnsafe;
+                    }
                 }
             }
             catch (Exception ex)
@@ -185,6 +208,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
                 MetaEn = SafeString(item, OrgStructureProvisioner.F_MetaEn),
                 Icon = SafeString(item, OrgStructureProvisioner.F_Icon),
                 Theme = SafeString(item, OrgStructureProvisioner.F_Theme),
+                TextColor = SafeString(item, OrgStructureProvisioner.F_TextColor),
                 LinkUrl = SafeString(item, OrgStructureProvisioner.F_LinkUrl),
                 Active = SafeBool(item, OrgStructureProvisioner.F_Active)
             };

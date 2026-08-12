@@ -972,7 +972,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
         {
             get
             {
-                return SPFactory.GetSiteURL() + "MediaCenter/Pages/AllNews.aspx?Id=" + this.ID;
+                return SPFactory.GetSiteURL() + "MediaCenter/Pages/AllNews.aspx";//?Id=" + this.ID;
 
             }
         }

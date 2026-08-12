@@ -20,6 +20,29 @@
         <asp:Literal ID="litAlertMessage" runat="server" />
     </asp:Panel>
 
+    <!-- Detailed Execution Summary Panel (Bilingual: Arabic & English) -->
+    <asp:Panel ID="pnlExecutionSummary" runat="server" Visible="false" CssClass="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white font-weight-bold d-flex justify-content-between align-items-center">
+            <span>
+                <i class="hgi hgi-stroke hgi-check-circle-01 me-2"></i>
+                ملخص التنفيذ والتفاصيل (Execution Summary & Created Objects)
+            </span>
+            <div>
+                <asp:Button ID="btnExportSummary" runat="server" Text="📥 تصدير إلى Excel" OnClick="btnExportSummary_Click" CssClass="btn btn-sm btn-warning text-dark font-weight-bold me-2" CausesValidation="false" />
+                <asp:Button ID="btnCloseSummary" runat="server" Text="إغلاق ✕" OnClick="btnCloseSummary_Click" CssClass="btn btn-sm btn-light text-dark font-weight-bold" CausesValidation="false" />
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="<%= txtPagesSummary.ClientID %>" class="form-label font-weight-bold text-dark mb-2">
+                    📄 روابط الصفحات المنشأة (Created Pages & Links):
+                </label>
+                <asp:TextBox ID="txtPagesSummary" runat="server" TextMode="MultiLine" Rows="10" CssClass="form-control font-monospace p-3" style="direction: ltr; text-align: left; background-color: #f8f9fa; font-size: 13px; line-height: 1.6; border: 1px solid #ced4da;" ReadOnly="true" />
+            </div>
+            <asp:Literal ID="litExecutionSummaryContent" runat="server" />
+        </div>
+    </asp:Panel>
+
     <!-- 1. Target Site Selector Panel -->
     <div class="card mb-4 border-primary">
         <div class="card-header bg-primary text-white font-weight-bold d-flex justify-content-between align-items-center">

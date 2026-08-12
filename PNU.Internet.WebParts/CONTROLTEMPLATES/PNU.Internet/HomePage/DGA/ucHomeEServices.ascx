@@ -23,12 +23,12 @@
             <div class="d-flex justify-content-between align-items-start gap-2">
                 <h2 class="mb-0">
                     
-                    <%# IsArabic ? "اهم الخدمات الإلكترونية" : "Key ESservices" %>
+                    <%= IsArabic ? "اهم الخدمات الإلكترونية" : "Key ESservices" %>
 
                 </h2>
                 <a class="btn btn-outline-secondary fw-semibold" href="Eservice.aspx">
-                    <%# IsArabic ? "دليل الخدمات الإلكترونية" : "ESservices Guide" %>
-                    </a>
+                    <%= IsArabic ? "دليل الخدمات الإلكترونية" : "E-Services Guide" %>
+                </a>
             </div>
             <!-- <p class="mb-0 mt-3">هنا يمكنك التعرف على منصاتنا الرقمية </p> -->
         </div>

@@ -1,31 +1,70 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Text;
+using System.Web;
 using System.Web.UI;
 using Microsoft.SharePoint;
 using Portal.Main.Helper;
 
-namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
 {
     /// <summary>
-    /// Renders the PNU organizational-structure chart. Reads unit content from the
-    /// OrgStructureUnits list and emits it as JSON (window.__pnuOrgUnits) plus a
-    /// bilingual fallback config (window.__pnuOrgConfig) consumed by the client script.
-    /// The SVG geometry lives in the .ascx and is never touched here.
+    /// Renders the PNU organizational-structure chart. The SVG skeleton (boxes +
+    /// connectors, no text) lives in the .ascx; every label is bound here into an
+    /// overlay Repeater from the OrgStructureUnits list (on the ListWebUrl web),
+    /// positioned over its box, localized (AR/EN), with a Hugeicons glyph.
     /// </summary>
     public partial class ucOrgStructure : UserControl
     {
+        /// <summary>Server-relative URL of the web that holds the list.</summary>
+        [Browsable(true)]
+        public string ListWebUrl { get; set; }
+
+        /// <summary>URL of the Hugeicons stylesheet to inject (so box icons render as glyphs).</summary>
+        [Browsable(true)]
+        public string IconCssUrl { get; set; }
+
+        private string EffectiveWebUrl
+        {
+            get { return string.IsNullOrWhiteSpace(ListWebUrl) ? "/ar/AboutUniversity/" : ListWebUrl.Trim(); }
+        }
+
+        private string EffectiveIconCss
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(IconCssUrl)
+                    ? "/_layouts/15/PNU.Internet/vendor/hugeicons/hgi-stroke-rounded.css"
+                    : IconCssUrl.Trim();
+            }
+        }
+
+        /// <summary>Bind-only view model for one overlay label (plain string props for Eval()).</summary>
+        public class OrgLabelVM
+        {
+            public string Style { get; set; }
+            public string Label { get; set; }
+            public string Title { get; set; }
+            public string Desc { get; set; }
+            public string Icon { get; set; }
+            public string IconClass { get; set; }
+            public string Href { get; set; }
+            public string HasLink { get; set; }
+            public string LinkClass { get; set; }
+            public string AriaLabel { get; set; }
+        }
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
             try
             {
-                // Provision the list/fields/seed only for authenticated users.
-                if (SPContext.Current != null &&
-                    SPContext.Current.Web != null &&
+                if (SPContext.Current != null && SPContext.Current.Web != null &&
                     SPContext.Current.Web.CurrentUser != null)
                 {
-                    OrgStructureProvisioner.EnsureList(SPContext.Current.Web);
+                    OrgStructureProvisioner.EnsureListAt(SPContext.Current.Site.ID, EffectiveWebUrl);
                 }
             }
             catch (Exception ex)
@@ -36,8 +75,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // ViewState is disabled in SharePoint page zones — rebind every load.
-            BindData();
+            BindData(); // ViewState off in SP zones — rebind every load.
         }
 
         private bool IsArabic
@@ -47,8 +85,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
                 try { return PortalHelper.IsArabic; }
                 catch
                 {
-                    return SPContext.Current != null &&
-                           SPContext.Current.Web != null &&
+                    return SPContext.Current != null && SPContext.Current.Web != null &&
                            SPContext.Current.Web.Language == 1025;
                 }
             }
@@ -56,87 +93,112 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
 
         private void BindData()
         {
+            bool ar = IsArabic;
+            pnlStage.Attributes["dir"] = ar ? "rtl" : "ltr";
+            // Language class drives per-language alignment (Arabic leads right, English left)
+            // independent of dir inheritance from the master page.
+            pnlStage.CssClass = "org-structure-stage " + (ar ? "org-rtl" : "org-ltr");
+
+            // Inject the Hugeicons stylesheet so box icons render as glyphs.
+            string css = EffectiveIconCss;
+            litIconCss.Text = string.IsNullOrEmpty(css)
+                ? string.Empty
+                : "<link rel=\"stylesheet\" href=\"" + HttpUtility.HtmlAttributeEncode(css) + "\" />";
+
             try
             {
-                bool ar = IsArabic;
-                var repo = new OrgStructureRepository(SPContext.Current.Web);
+                var repo = new OrgStructureRepository(SPContext.Current.Web, EffectiveWebUrl);
                 List<OrgStructureUnit> units = repo.GetActiveUnits();
 
-                var sb = new StringBuilder();
-                sb.Append("<script>");
-                sb.Append("window.__pnuOrgUnits=");
-                sb.Append(BuildUnitsJson(units, ar));
-                sb.Append(";window.__pnuOrgConfig=");
-                sb.Append(BuildConfigJson(ar));
-                sb.Append(";</script>");
+                var vms = new List<OrgLabelVM>(units.Count);
+                string sep = ar ? "، " : ", ";
+                foreach (OrgStructureUnit u in units)
+                {
+                    string title = u.LocalizedTitle(ar) ?? string.Empty;
+                    string desc = u.LocalizedDescription(ar) ?? string.Empty;
+                    string badge = u.LocalizedBadge(ar) ?? string.Empty;
+                    bool hasLink = !string.IsNullOrWhiteSpace(u.LinkUrl);
+                    string icon = (u.Icon ?? string.Empty).Trim();
 
-                litUnitsJson.Text = sb.ToString();
+                    vms.Add(new OrgLabelVM
+                    {
+                        Style = u.OverlayStyle(ar),                    // server-generated, safe
+                        Label = Enc(title),
+                        Title = Enc(title),
+                        Desc = Enc(desc),
+                        Icon = Enc(icon),
+                        IconClass = string.IsNullOrEmpty(icon) ? string.Empty : "hgi hgi-stroke " + Enc(icon),
+                        Href = hasLink ? Enc(u.LinkUrl) : string.Empty,
+                        HasLink = hasLink ? "true" : "false",
+                        LinkClass = hasLink ? "has-link" : string.Empty,
+                        AriaLabel = Enc(title + sep + badge + (string.IsNullOrEmpty(desc) ? "" : ". " + desc))
+                    });
+                }
+
+                rptLabels.DataSource = vms;
+                rptLabels.DataBind();
+
+                rptLegend.DataSource = BuildLegend(ar);
+                rptLegend.DataBind();
+
+                litConfig.Text = BuildConfig(ar);
             }
             catch (Exception ex)
             {
                 Publics.WriteToLog(GetUrl(), "ucOrgStructure.BindData", ex.Message);
-                litUnitsJson.Text = "<script>window.__pnuOrgUnits=[];</script>";
+                rptLabels.DataSource = new List<OrgLabelVM>();
+                rptLabels.DataBind();
             }
         }
 
-        private static string BuildUnitsJson(List<OrgStructureUnit> units, bool ar)
+        // Legend (color key) entries — swatch center Y in SVG coords + bilingual text.
+        private List<OrgLabelVM> BuildLegend(bool ar)
         {
-            var sb = new StringBuilder();
-            sb.Append("[");
-            for (int i = 0; i < units.Count; i++)
+            var rows = new[]
             {
-                OrgStructureUnit u = units[i];
-                if (i > 0) sb.Append(",");
-                sb.Append("{");
-                sb.Append("\"selector\":").Append(J(u.Selector)).Append(",");
-                sb.Append("\"title\":").Append(J(u.LocalizedTitle(ar))).Append(",");
-                sb.Append("\"desc\":").Append(J(u.LocalizedDescription(ar))).Append(",");
-                sb.Append("\"badge\":").Append(J(u.LocalizedBadge(ar))).Append(",");
-                sb.Append("\"meta\":").Append(J(u.LocalizedMeta(ar))).Append(",");
-                sb.Append("\"icon\":").Append(J(u.Icon)).Append(",");
-                sb.Append("\"theme\":").Append(J(u.Theme)).Append(",");
-                sb.Append("\"href\":").Append(J(u.LinkUrl));
-                sb.Append("}");
+                new { Cy = 20.2,  Ar = "المجالس",                                En = "Councils" },
+                new { Cy = 48.0,  Ar = "الوكالات",                               En = "Vice-Presidencies" },
+                new { Cy = 75.8,  Ar = "الإدارات العامة المرتبطة برئاسة الجامعة", En = "General departments linked to the University Presidency" },
+                new { Cy = 103.5, Ar = "الكليات والمعاهد",                        En = "Colleges and Institutes" },
+                new { Cy = 131.2, Ar = "العمادات",                               En = "Deanships" },
+                new { Cy = 159.0, Ar = "المراكز",                                En = "Centers" },
+                new { Cy = 186.8, Ar = "الكيانات المرتبطة برئاسة الجامعة",        En = "Entities linked to the University Presidency" },
+                new { Cy = 214.5, Ar = "كيانات أخرى",                            En = "Other entities" }
+            };
+
+            var ci = CultureInfo.InvariantCulture;
+            const double leftPx = 6.0, rightPx = 150.0, rowH = 26.0;
+            double left = leftPx / OrgStructureUnit.ViewBoxW * 100.0;
+            double width = (rightPx - leftPx) / OrgStructureUnit.ViewBoxW * 100.0;
+            double height = rowH / OrgStructureUnit.ViewBoxH * 100.0;
+
+            var list = new List<OrgLabelVM>(rows.Length);
+            foreach (var r in rows)
+            {
+                double top = (r.Cy - rowH / 2.0) / OrgStructureUnit.ViewBoxH * 100.0;
+                string style = string.Format(ci,
+                    "left:{0:0.###}%;top:{1:0.###}%;width:{2:0.###}%;height:{3:0.###}%;",
+                    left, top, width, height);
+                list.Add(new OrgLabelVM { Style = style, Label = Enc(ar ? r.Ar : r.En) });
             }
-            sb.Append("]");
-            return sb.ToString();
+            return list;
         }
 
-        private static string BuildConfigJson(bool ar)
+        private static string BuildConfig(bool ar)
         {
-            var sb = new StringBuilder();
-            sb.Append("{");
-            sb.Append("\"fallbackTitle\":").Append(J(ar ? "وحدة تنظيمية" : "Organizational unit")).Append(",");
-            sb.Append("\"noDetails\":").Append(J(ar ? "لا توجد صفحة تفاصيل" : "No details page")).Append(",");
-            sb.Append("\"generic\":{");
-            sb.Append("\"defaultBadge\":").Append(J(ar ? "ضمن الهيكل التنظيمي" : "Part of the org structure")).Append(",");
-            sb.Append("\"defaultDesc\":").Append(J(ar
-                ? "هذه الجهة موضحة ضمن الهيكل التنظيمي للجامعة، ولا تتوفر لها صفحة تفاصيل مستقلة حاليًا."
-                : "This entity appears in the university org structure and currently has no standalone details page.")).Append(",");
-            sb.Append("\"defaultMeta\":").Append(J(ar ? "الهيكل التنظيمي" : "Org structure")).Append(",");
-            sb.Append("\"councilTitle\":").Append(J(ar ? "مجلس أو لجنة" : "Council or committee")).Append(",");
-            sb.Append("\"councilBadge\":").Append(J(ar ? "جهة إشرافية" : "Supervisory body")).Append(",");
-            sb.Append("\"agencyTitle\":").Append(J(ar ? "وكالة" : "Agency")).Append(",");
-            sb.Append("\"agencyBadge\":").Append(J(ar ? "وكالة رئيسية" : "Main agency")).Append(",");
-            sb.Append("\"deanshipTitle\":").Append(J(ar ? "عمادة" : "Deanship")).Append(",");
-            sb.Append("\"deanshipBadge\":").Append(J(ar ? "عمادة مساندة" : "Supporting deanship")).Append(",");
-            sb.Append("\"deptTitle\":").Append(J(ar ? "إدارة عامة" : "General department")).Append(",");
-            sb.Append("\"deptBadge\":").Append(J(ar ? "جهة مرتبطة برئاسة الجامعة" : "Reports to the presidency")).Append(",");
-            sb.Append("\"centerTitle\":").Append(J(ar ? "مركز" : "Center")).Append(",");
-            sb.Append("\"centerBadge\":").Append(J(ar ? "مركز تخصصي" : "Specialized center")).Append(",");
-            sb.Append("\"collegeTitle\":").Append(J(ar ? "كلية أو معهد" : "College or institute")).Append(",");
-            sb.Append("\"collegeBadge\":").Append(J(ar ? "جهة أكاديمية" : "Academic body")).Append(",");
-            sb.Append("\"entityTitle\":").Append(J(ar ? "جهة تنظيمية" : "Organizational entity")).Append(",");
-            sb.Append("\"entityBadge\":").Append(J(ar ? "جهة مرتبطة" : "Affiliated body"));
-            sb.Append("}");
-            sb.Append("}");
-            return sb.ToString();
+            string fallback = ar ? "وحدة تنظيمية" : "Organizational unit";
+            string noDetails = ar ? "لا توجد صفحة تفاصيل" : "No details page";
+            return "<script>window.__pnuOrgConfig={fallbackTitle:" + JsStr(fallback) +
+                   ",noDetails:" + JsStr(noDetails) + "};</script>";
         }
 
-        /// <summary>Minimal, safe JSON string encoder for values injected into a &lt;script&gt; block.</summary>
-        private static string J(string s)
+        private static string Enc(string s)
         {
-            if (s == null) return "\"\"";
+            return HttpUtility.HtmlEncode(s ?? string.Empty);
+        }
+
+        private static string JsStr(string s)
+        {
             var sb = new StringBuilder(s.Length + 2);
             sb.Append('"');
             foreach (char c in s)
@@ -145,14 +207,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
                 {
                     case '"': sb.Append("\\\""); break;
                     case '\\': sb.Append("\\\\"); break;
-                    case '\b': sb.Append("\\b"); break;
-                    case '\f': sb.Append("\\f"); break;
-                    case '\n': sb.Append("\\n"); break;
-                    case '\r': sb.Append("\\r"); break;
-                    case '\t': sb.Append("\\t"); break;
-                    case '<': sb.Append("\\u003c"); break; // prevent </script> breakout
+                    case '<': sb.Append("\\u003c"); break;
                     case '>': sb.Append("\\u003e"); break;
                     case '&': sb.Append("\\u0026"); break;
+                    case '\n': sb.Append("\\n"); break;
+                    case '\r': sb.Append("\\r"); break;
                     default:
                         if (c < ' ') sb.Append("\\u").Append(((int)c).ToString("x4"));
                         else sb.Append(c);
@@ -167,9 +226,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         {
             try
             {
-                return System.Web.HttpContext.Current != null
-                    ? System.Web.HttpContext.Current.Request.Url.ToString()
-                    : string.Empty;
+                return HttpContext.Current != null ? HttpContext.Current.Request.Url.ToString() : string.Empty;
             }
             catch { return string.Empty; }
         }
