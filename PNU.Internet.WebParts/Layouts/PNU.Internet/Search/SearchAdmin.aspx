@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Import Namespace="Microsoft.SharePoint.ApplicationPages" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -109,6 +109,13 @@
                         OnClick="btnTaskRetry_Click" /></td>
                     <td>—</td>
                 </tr>
+                <tr>
+                    <td>9. Index Website Pages</td>
+                    <td>Crawl websites from root or targeted site URL, extract PageTitle, PageURL, PageLayout, UserControls &amp; UserControlProperties into <code>dbo.WebsitePages</code> with live status grid &amp; Excel export</td>
+                    <td><a href="PageIndexAdmin.aspx" class="btn btn-success">Open Website Pages Indexer</a></td>
+                    <td>—</td>
+                </tr>
+
             </tbody>
         </table>
 

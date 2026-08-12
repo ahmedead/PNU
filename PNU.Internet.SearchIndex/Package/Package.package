@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="bdd23629-c765-4c5c-8bd5-8f234a4d2742" solutionId="bdd23629-c765-4c5c-8bd5-8f234a4d2742" resetWebServer="false" sharePointProductVersion="19.0" name="PNU.Internet.SearchIndexIndex" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
-  <features>
-    <featureReference itemId="43e6ed4c-eba0-482a-9de6-828d700d01b5" />
-  </features>
-</package>
