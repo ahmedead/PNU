@@ -80,10 +80,12 @@
                                                 </span>
                                                 <asp:TextBox runat="server" ID="txtKeyword"
     CssClass="form-control" autocomplete="off"
-    ClientIDMode="Static" />
+    ClientIDMode="Static"
+    onkeydown="if(event.keyCode===13||event.key==='Enter'){event.preventDefault();document.getElementById('btnSearch').click();}" />
                                             </div>
                                                    <!-- The ASP.NET Button (Hidden or Visible) -->
 <asp:Button runat="server" ID="btnSearch"
+     ClientIDMode="Static"
      CssClass="btn btn-primary"
      OnClick="btnSearch_Click"
      style="display:none;" /> <!-- Optional: hide it if you only want the custom button visible -->
@@ -92,8 +94,8 @@
 <button type="button" 
         class="btn btn-primary" 
         aria-label="بحث" 
-        onclick="document.getElementById('<%= btnSearch.ClientID %>').click();">
-    بحث
+        onclick="document.getElementById('btnSearch').click();">
+    <%= IsArabic ? "بحث" : "Search" %>
 </button>
                                         </div>
                                     </dga-search-input>
@@ -138,9 +140,11 @@
                                             </span>
                                                                                         <asp:TextBox runat="server" ID="txtKeywordDesktop"
 CssClass="form-control" autocomplete="off"
-ClientIDMode="Static" />
+ClientIDMode="Static"
+onkeydown="if(event.keyCode===13||event.key==='Enter'){event.preventDefault();document.getElementById('btnSearchDesktop').click();}" />
                                         </div>
                                         <asp:Button runat="server" ID="btnSearchDesktop"
+     ClientIDMode="Static"
      CssClass="btn btn-primary"
      OnClick="btnSearchDesktop_Click"
      style="display:none;" /> <!-- Optional: hide it if you only want the custom button visible -->
@@ -149,8 +153,8 @@ ClientIDMode="Static" />
 <button type="button" 
         class="btn btn-primary" 
         aria-label="بحث" 
-        onclick="document.getElementById('<%= btnSearchDesktop.ClientID %>').click();">
-    بحث
+        onclick="document.getElementById('btnSearchDesktop').click();">
+    <%= IsArabic ? "بحث" : "Search" %>
 </button>
                                     </div>
                                 </dga-search-input>

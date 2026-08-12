@@ -139,6 +139,7 @@
     <Compile Include="CONTROLTEMPLATES\Classes\clsFaculties.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\clsSlider.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\ContentSection.cs" />
+    <Compile Include="CONTROLTEMPLATES\Classes\ContentAdm.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\dataEvent.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\DBClasses.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\EmailUtility.cs" />

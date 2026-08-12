@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Tawasul.Controls
 {
@@ -664,95 +665,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Tawasul.Controls
         /// </summary>
         private bool IsAdmin()
         {
-            try
-            {
-                if (SPContext.Current == null || SPContext.Current.Web == null) return false;
-
-                SPUser user = SPContext.Current.Web.CurrentUser;
-                if (user == null) return false;                        // anonymous
-
-                // Read the identity BEFORE elevating - inside the delegate the current
-                // user is the app pool account. The id is site-collection wide, so it is
-                // valid on the ContentAdmin web even if the user never visited it.
-                int userId = user.ID;
-                string userName = user.Name;
-
-                Guid siteId = SPContext.Current.Site.ID;
-                bool allowed = false;
-
-                SPSecurity.RunWithElevatedPrivileges(delegate ()
-                {
-                    using (SPSite site = new SPSite(siteId))
-                    using (SPWeb adminWeb = TwTargetWeb.OpenAdminWeb(site))
-                    {
-                        allowed = IsListedAdmin(adminWeb, userId, userName);
-                    }
-                });
-
-                return allowed;
-            }
-            catch (Exception ex)
-            {
-                TwLog.Write("ucTwAdmin.IsAdmin", ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// True when the user has an enabled row in the AdminUsers list on this web.
-        /// UserAccount is a Person column, so it is matched two ways in one query:
-        /// by lookup id (exact, survives a rename) and by display name (the form an
-        /// editor sees). A missing web or list means "no match" - which denies access.
-        /// An empty Active column counts as enabled.
-        /// </summary>
-        private bool IsListedAdmin(SPWeb web, int userId, string userName)
-        {
-            if (web == null) return false;
-
-            try
-            {
-                SPList list = web.Lists.TryGetList(AdminUsersList);
-                if (list == null || list.ItemCount == 0) return false;
-
-                string safeName = System.Security.SecurityElement.Escape(userName ?? string.Empty);
-
-                var query = new SPQuery
-                {
-                    RowLimit = 10,
-                    Query =
-                        "<Where>" +
-                          "<Or>" +
-                            "<Eq>" +
-                              "<FieldRef Name='UserAccount' LookupId='TRUE' />" +
-                              "<Value Type='Integer'>" + userId.ToString(CultureInfo.InvariantCulture) + "</Value>" +
-                            "</Eq>" +
-                            "<Eq>" +
-                              "<FieldRef Name='UserAccount' />" +
-                              "<Value Type='User'>" + safeName + "</Value>" +
-                            "</Eq>" +
-                          "</Or>" +
-                        "</Where>"
-                };
-
-                SPListItemCollection matches = list.GetItems(query);
-                if (matches.Count == 0) return false;
-
-                foreach (SPListItem item in matches)
-                {
-                    string active = TwHelper.SafeString(item, "Active").Trim();
-                    if (active.Length == 0) return true;                // column missing or blank
-                    if (active == "1" || active == "-1") return true;
-
-                    bool flag;
-                    if (bool.TryParse(active, out flag) && flag) return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                TwLog.Write("ucTwAdmin.IsListedAdmin:" + web.Url, ex);
-            }
-
-            return false;
+            return ContentAdm.IsAdmin();
         }
     }
 

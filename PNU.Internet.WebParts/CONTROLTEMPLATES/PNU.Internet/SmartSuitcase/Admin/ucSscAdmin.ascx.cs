@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Controls
 {
@@ -525,85 +526,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Cont
 
         private bool IsAdmin()
         {
-            try
-            {
-                if (SPContext.Current == null || SPContext.Current.Web == null) return false;
-
-                SPUser user = SPContext.Current.Web.CurrentUser;
-                if (user == null) return false;
-
-                int userId = user.ID;
-                string userName = user.Name;
-
-                Guid siteId = SPContext.Current.Site.ID;
-                bool allowed = false;
-
-                SPSecurity.RunWithElevatedPrivileges(delegate ()
-                {
-                    using (SPSite site = new SPSite(siteId))
-                    using (SPWeb adminWeb = SscTargetWeb.OpenAdminWeb(site))
-                    {
-                        allowed = IsListedAdmin(adminWeb, userId, userName);
-                    }
-                });
-
-                return allowed;
-            }
-            catch (Exception ex)
-            {
-                SscLog.Write("ucSscAdmin.IsAdmin", ex);
-                return false;
-            }
-        }
-
-        private bool IsListedAdmin(SPWeb web, int userId, string userName)
-        {
-            if (web == null) return false;
-
-            try
-            {
-                SPList list = web.Lists.TryGetList(AdminUsersList);
-                if (list == null || list.ItemCount == 0) return false;
-
-                string safeName = System.Security.SecurityElement.Escape(userName ?? string.Empty);
-
-                var query = new SPQuery
-                {
-                    RowLimit = 10,
-                    Query =
-                        "<Where>" +
-                          "<Or>" +
-                            "<Eq>" +
-                              "<FieldRef Name='UserAccount' LookupId='TRUE' />" +
-                              "<Value Type='Integer'>" + userId.ToString(CultureInfo.InvariantCulture) + "</Value>" +
-                            "</Eq>" +
-                            "<Eq>" +
-                              "<FieldRef Name='UserAccount' />" +
-                              "<Value Type='User'>" + safeName + "</Value>" +
-                            "</Eq>" +
-                          "</Or>" +
-                        "</Where>"
-                };
-
-                SPListItemCollection matches = list.GetItems(query);
-                if (matches.Count == 0) return false;
-
-                foreach (SPListItem item in matches)
-                {
-                    string active = SscHelper.SafeString(item, "Active").Trim();
-                    if (active.Length == 0) return true;
-                    if (active == "1" || active == "-1") return true;
-
-                    bool flag;
-                    if (bool.TryParse(active, out flag) && flag) return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                SscLog.Write("ucSscAdmin.IsListedAdmin:" + web.Url, ex);
-            }
-
-            return false;
+            return ContentAdm.IsAdmin();
         }
     }
 }

@@ -4,8 +4,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.SharePoint;
 using Portal.Main.Helper;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 
-namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
 {
     /// <summary>
     /// In-page admin editor for the OrgStructureUnits list. Authorized via the
@@ -15,8 +16,17 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
     /// </summary>
     public partial class ucOrgStructureAdmin : UserControl
     {
-        private const string PortalAdminsList = "PortalAdmins";
+        private const string PortalAdminsList = "AdminUsers";
         private bool _authorized;
+
+        /// <summary>Server-relative URL of the web that holds the OrgStructureUnits list.</summary>
+        [System.ComponentModel.Browsable(true)]
+        public string ListWebUrl { get; set; }
+
+        private string EffectiveWebUrl
+        {
+            get { return string.IsNullOrWhiteSpace(ListWebUrl) ? "/ar/AboutUniversity/" : ListWebUrl.Trim(); }
+        }
 
         protected override void OnInit(EventArgs e)
         {
@@ -27,7 +37,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
                     SPContext.Current.Web != null &&
                     SPContext.Current.Web.CurrentUser != null)
                 {
-                    OrgStructureProvisioner.EnsureList(SPContext.Current.Web);
+                    OrgStructureProvisioner.EnsureListAt(SPContext.Current.Site.ID, EffectiveWebUrl);
                 }
             }
             catch (Exception ex)
@@ -62,45 +72,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         // ---------------------------------------------------------------
         private bool IsAuthorized()
         {
-            try
-            {
-                SPWeb web = SPContext.Current != null ? SPContext.Current.Web : null;
-                if (web == null || web.CurrentUser == null) return false;          // check 1: authenticated
-                if (web.CurrentUser.IsSiteAdmin) return true;                       // check 2: SCA shortcut
-
-                bool inList = false;
-                SPSecurity.RunWithElevatedPrivileges(delegate                       // check 3: PortalAdmins list
-                {
-                    using (var site = new SPSite(web.Site.ID))
-                    using (var elevatedWeb = site.OpenWeb(web.ID))
-                    {
-                        SPList admins = elevatedWeb.Lists.TryGetList(PortalAdminsList);
-                        if (admins == null) return;
-
-                        string login = web.CurrentUser.LoginName;
-                        var q = new SPQuery
-                        {
-                            Query = "<Where><Eq><FieldRef Name='UserLogin'/><Value Type='Text'>" +
-                                    SafeCaml(login) + "</Value></Eq></Where>",
-                            RowLimit = 1
-                        };
-                        inList = admins.GetItems(q).Count > 0;
-                    }
-                });
-                return inList;
-            }
-            catch (Exception ex)
-            {
-                Publics.WriteToLog(GetUrl(), "ucOrgStructureAdmin.IsAuthorized", ex.Message);
-                return false;
-            }
+            return ContentAdm.IsAdmin();
         }
 
         private void BindGrid()
         {
             try
             {
-                var repo = new OrgStructureRepository(SPContext.Current.Web);
+                var repo = new OrgStructureRepository(SPContext.Current.Web, EffectiveWebUrl);
                 rptUnits.DataSource = repo.GetAllUnits();
                 rptUnits.DataBind();
             }
@@ -126,7 +105,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
             }
             else if (e.CommandName == "DeleteUnit")
             {
-                new OrgStructureRepository(SPContext.Current.Web).Delete(id);
+                new OrgStructureRepository(SPContext.Current.Web, EffectiveWebUrl).Delete(id);
                 ShowMessage(IsArabic ? "تم حذف الوحدة." : "Unit deleted.");
                 pnlEditor.Visible = false;
                 BindGrid();
@@ -173,11 +152,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
                 MetaEn = txtMetaEn.Text.Trim(),
                 Icon = txtIcon.Text.Trim(),
                 Theme = ddlTheme.SelectedValue,
+                TextColor = txtTextColor.Text.Trim(),
                 LinkUrl = txtLinkUrl.Text.Trim(),
                 Active = chkActive.Checked
             };
 
-            new OrgStructureRepository(SPContext.Current.Web).Save(unit);
+            new OrgStructureRepository(SPContext.Current.Web, EffectiveWebUrl).Save(unit);
             ShowMessage(IsArabic ? "تم حفظ الوحدة." : "Unit saved.");
             pnlEditor.Visible = false;
             BindGrid();
@@ -188,7 +168,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
         // ---------------------------------------------------------------
         private void LoadIntoEditor(int id)
         {
-            OrgStructureUnit u = new OrgStructureRepository(SPContext.Current.Web).GetById(id);
+            OrgStructureUnit u = new OrgStructureRepository(SPContext.Current.Web, EffectiveWebUrl).GetById(id);
             if (u == null) return;
 
             hidId.Value = u.Id.ToString(CultureInfo.InvariantCulture);
@@ -204,6 +184,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
             txtMetaEn.Text = u.MetaEn;
             txtIcon.Text = u.Icon;
             SelectTheme(u.Theme);
+            txtTextColor.Text = u.TextColor;
             txtLinkUrl.Text = u.LinkUrl;
             chkActive.Checked = u.Active;
 
@@ -233,6 +214,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
             txtMetaEn.Text = string.Empty;
             txtIcon.Text = string.Empty;
             SelectTheme("primary");
+            txtTextColor.Text = string.Empty;
             txtLinkUrl.Text = string.Empty;
             chkActive.Checked = true;
         }
@@ -242,7 +224,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
             try
             {
                 int max = 0;
-                foreach (OrgStructureUnit u in new OrgStructureRepository(SPContext.Current.Web).GetAllUnits())
+                foreach (OrgStructureUnit u in new OrgStructureRepository(SPContext.Current.Web, EffectiveWebUrl).GetAllUnits())
                     if (u.Order > max) max = u.Order;
                 return max + 10;
             }
@@ -269,6 +251,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About.OrgStructure
             litLblOrder.Text = ar ? "الترتيب" : "Order";
             litLblTheme.Text = ar ? "النمط" : "Theme";
             litLblIcon.Text = ar ? "الأيقونة" : "Icon";
+            litLblTextColor.Text = ar ? "لون النص" : "Text color";
             litLblSelector.Text = ar ? "محدد المربع (SVG)" : "SVG selector";
             litHintSelector.Text = ar
                 ? "يطابق مستطيل الهيكل في الرسم، مثل: rect[x=\"482.5\"][y=\"79.5\"][width=\"280\"][height=\"56\"]"

@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Web;
+using Microsoft.IdentityModel.Web;
 using Microsoft.SharePoint;
 using Portal.Main.Helper;
 using Portal.Main.Helper.Utils;
@@ -607,20 +607,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             string q = txtKeyword.Text == null ? "" : txtKeyword.Text.Trim();
-            string target = !string.IsNullOrEmpty(ResultsPageUrl)
-                ? ResultsPageUrl
-                : (IsArabic
-                    ? "/ar/Search/Pages/SearchResults.aspx"
-                    : "/en/Search/Pages/SearchResults.aspx");
-
-            string url = target + "?q=" + HttpUtility.UrlEncode(q);
-            Response.Redirect(url, false);
-            Context.ApplicationInstance.CompleteRequest();
+            if (string.IsNullOrEmpty(q) && txtKeywordDesktop != null && !string.IsNullOrEmpty(txtKeywordDesktop.Text))
+            {
+                q = txtKeywordDesktop.Text.Trim();
+            }
+            DoSearch(q);
         }
 
         protected void btnSearchDesktop_Click(object sender, EventArgs e)
         {
             string q = txtKeywordDesktop.Text == null ? "" : txtKeywordDesktop.Text.Trim();
+            if (string.IsNullOrEmpty(q) && txtKeyword != null && !string.IsNullOrEmpty(txtKeyword.Text))
+            {
+                q = txtKeyword.Text.Trim();
+            }
+            DoSearch(q);
+        }
+
+        private void DoSearch(string q)
+        {
             string target = !string.IsNullOrEmpty(ResultsPageUrl)
                 ? ResultsPageUrl
                 : (IsArabic

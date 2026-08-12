@@ -81,25 +81,73 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
 
         private void PopulateSubwebs()
         {
+            string url = TargetSiteUrl;
+            if (string.IsNullOrEmpty(url)) return;
+
             try
             {
+                List<string> previouslyChecked = new List<string>();
+                if (cblSubwebs != null)
+                {
+                    foreach (ListItem item in cblSubwebs.Items)
+                    {
+                        if (item.Selected && !string.IsNullOrEmpty(item.Value))
+                        {
+                            previouslyChecked.Add(item.Value);
+                        }
+                    }
+                }
+
                 ddlSubwebs.Items.Clear();
+                if (cblSubwebs != null) cblSubwebs.Items.Clear();
+
                 ddlSubwebs.Items.Add(new ListItem("-- اختر موقع --", ""));
 
-                if (SPContext.Current != null && SPContext.Current.Web != null)
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    SPWeb currentWeb = SPContext.Current.Web;
-                    ddlSubwebs.Items.Add(new ListItem("الموقع الحالي (" + currentWeb.Title + ")", currentWeb.Url));
-
-                    foreach (SPWeb subweb in currentWeb.Webs)
+                    using (SPSite site = new SPSite(url))
+                    using (SPWeb web = site.OpenWeb())
                     {
-                        try
+                        string currentTitle = web.Title;
+                        string currentUrl = web.Url;
+                        string currentRelUrl = web.ServerRelativeUrl;
+
+                        ddlSubwebs.Items.Add(new ListItem("الموقع الحالي (" + currentTitle + ")", currentUrl));
+
+                        if (cblSubwebs != null)
                         {
-                            ddlSubwebs.Items.Add(new ListItem("└─ " + subweb.Title + " (" + subweb.ServerRelativeUrl + ")", subweb.Url));
+                            cblSubwebs.Items.Add(new ListItem(currentTitle + " (" + currentRelUrl + ") - [الموقع الرئيسي]", currentUrl));
                         }
-                        finally
+
+                        foreach (SPWeb subweb in web.Webs)
                         {
-                            subweb.Dispose();
+                            try
+                            {
+                                string subTitle = subweb.Title;
+                                string subUrl = subweb.Url;
+                                string subRelUrl = subweb.ServerRelativeUrl;
+
+                                ddlSubwebs.Items.Add(new ListItem("└─ " + subTitle + " (" + subRelUrl + ")", subUrl));
+                                if (cblSubwebs != null)
+                                {
+                                    cblSubwebs.Items.Add(new ListItem(subTitle + " (" + subRelUrl + ")", subUrl));
+                                }
+                            }
+                            finally
+                            {
+                                subweb.Dispose();
+                            }
+                        }
+                    }
+                });
+
+                if (cblSubwebs != null && previouslyChecked.Count > 0)
+                {
+                    foreach (ListItem item in cblSubwebs.Items)
+                    {
+                        if (previouslyChecked.Contains(item.Value))
+                        {
+                            item.Selected = true;
                         }
                     }
                 }
@@ -124,13 +172,37 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             if (!string.IsNullOrEmpty(ddlSubwebs.SelectedValue))
             {
                 txtWebSiteURL.Text = ddlSubwebs.SelectedValue;
+                PopulateSubwebs();
                 LoadSiteData();
             }
         }
 
         protected void btnLoadSite_Click(object sender, EventArgs e)
         {
+            PopulateSubwebs();
             LoadSiteData();
+        }
+
+        protected void btnSelectAllSubwebs_Click(object sender, EventArgs e)
+        {
+            if (cblSubwebs != null)
+            {
+                foreach (ListItem item in cblSubwebs.Items)
+                {
+                    item.Selected = true;
+                }
+            }
+        }
+
+        protected void btnDeselectAllSubwebs_Click(object sender, EventArgs e)
+        {
+            if (cblSubwebs != null)
+            {
+                foreach (ListItem item in cblSubwebs.Items)
+                {
+                    item.Selected = false;
+                }
+            }
         }
 
         private void LoadSiteData()
@@ -201,6 +273,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 SideMenuListProvisioner.EnsureLists(web);
                 SideMenuListProvisioner.SeedMenuForAgencies(web);
                 ShowAlert("تمت عملية تعبئة القائمة الافتراضية للوكالات والصفحات بنجاح!", "success");
+            });
+        }
+
+        protected void btnSeedDeenships_Click(object sender, EventArgs e)
+        {
+            ExecuteAction((web) =>
+            {
+                SideMenuListProvisioner.EnsureLists(web);
+                SideMenuListProvisioner.SeedMenuForDeenShips(web);
+                ShowAlert("تمت عملية تعبئة القائمة الافتراضية للعمادة والصفحات بنجاح!", "success");
+            });
+        }
+        protected void btnSeedDepartments_Click(object sender, EventArgs e)
+        {
+            ExecuteAction((web) =>
+            {
+                SideMenuListProvisioner.EnsureLists(web);
+                SideMenuListProvisioner.SeedMenuForDepartments(web);
+                ShowAlert("تمت عملية تعبئة القائمة الافتراضية للإدارات والصفحات بنجاح!", "success");
             });
         }
 
@@ -848,44 +939,102 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             }
         }
 
+        private List<string> GetTargetWebUrls()
+        {
+            List<string> urls = new List<string>();
+            if (cblSubwebs != null)
+            {
+                foreach (ListItem item in cblSubwebs.Items)
+                {
+                    if (item.Selected && !string.IsNullOrEmpty(item.Value))
+                    {
+                        if (!urls.Contains(item.Value))
+                        {
+                            urls.Add(item.Value);
+                        }
+                    }
+                }
+            }
+
+            if (urls.Count == 0)
+            {
+                string primaryUrl = TargetSiteUrl;
+                if (!string.IsNullOrEmpty(primaryUrl))
+                {
+                    urls.Add(primaryUrl);
+                }
+            }
+
+            return urls;
+        }
+
         private void ExecuteAction(Action<SPWeb> action, bool reloadSiteData = true)
         {
-            string url = TargetSiteUrl;
-            if (string.IsNullOrEmpty(url))
+            List<string> targetUrls = GetTargetWebUrls();
+            if (targetUrls == null || targetUrls.Count == 0)
             {
                 ShowAlert("يرجى اختيار أو إدخال موقع استهداف صحيح", "warning");
                 return;
             }
 
-            try
-            {
-                SPSecurity.RunWithElevatedPrivileges(() =>
-                {
-                    using (SPSite site = new SPSite(url))
-                    using (SPWeb web = site.OpenWeb())
-                    {
-                        bool origAllowUnsafe = web.AllowUnsafeUpdates;
-                        web.AllowUnsafeUpdates = true;
-                        try
-                        {
-                            action(web);
-                        }
-                        finally
-                        {
-                            web.AllowUnsafeUpdates = origAllowUnsafe;
-                        }
-                    }
-                });
+            List<string> processedWebs = new List<string>();
+            List<string> failedWebs = new List<string>();
 
-                if (reloadSiteData)
+            foreach (string url in targetUrls)
+            {
+                try
                 {
-                    LoadSiteData();
+                    SPSecurity.RunWithElevatedPrivileges(() =>
+                    {
+                        using (SPSite site = new SPSite(url))
+                        using (SPWeb web = site.OpenWeb())
+                        {
+                            bool origAllowUnsafe = web.AllowUnsafeUpdates;
+                            web.AllowUnsafeUpdates = true;
+                            try
+                            {
+                                action(web);
+                                processedWebs.Add(web.Title + " (" + web.Url + ")");
+                            }
+                            finally
+                            {
+                                web.AllowUnsafeUpdates = origAllowUnsafe;
+                            }
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    failedWebs.Add(url + " (" + ex.Message + ")");
+                    Publics.WriteToLog(Request.Url.ToString(), "ucSideMenuListAdmin.ExecuteAction [" + url + "]", ex.Message);
                 }
             }
-            catch (Exception ex)
+
+            if (processedWebs.Count > 0)
             {
-                ShowAlert("حدث خطأ أثناء تنفيذ الإجراء: " + ex.Message, "danger");
-                Publics.WriteToLog(Request.Url.ToString(), "ucSideMenuListAdmin.ExecuteAction", ex.Message);
+                string statusMsg = string.Format("تم تنفيذ الإجراء بنجاح على {0} موقع/مواقع: <br/>- {1}",
+                    processedWebs.Count,
+                    string.Join("<br/>- ", processedWebs.ToArray()));
+
+                if (failedWebs.Count > 0)
+                {
+                    statusMsg += string.Format("<br/><span class='text-danger font-weight-bold'>حدث خطأ في المواقع التالية: <br/>- {0}</span>",
+                        string.Join("<br/>- ", failedWebs.ToArray()));
+                    ShowAlert(statusMsg, "warning");
+                }
+                else
+                {
+                    ShowAlert(statusMsg, "success");
+                }
+            }
+            else if (failedWebs.Count > 0)
+            {
+                ShowAlert("فشل تنفيذ الإجراء على جميع المواقع المحددة:<br/>- " + string.Join("<br/>- ", failedWebs.ToArray()), "danger");
+            }
+
+            if (reloadSiteData)
+            {
+                LoadSiteData();
             }
         }
 

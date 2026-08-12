@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 using Microsoft.SharePoint;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
 {
@@ -50,55 +51,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
 
         private static bool Evaluate()
         {
-            SPWeb current = SPContext.Current != null ? SPContext.Current.Web : null;
-            if (current == null) return false;
-
-            SPUser user = current.CurrentUser;
-            if (user == null) return false;                 // anonymous - never allowed
-
-            // Capture identity BEFORE elevating; inside elevation CurrentUser
-            // becomes the app-pool account, which would defeat the check.
-            string login = (user.LoginName ?? string.Empty).Trim();
-            if (login.Length == 0) return false;
-
-            if (user.IsSiteAdmin) return true;
-
-            bool allowed = false;
-            Guid siteId = current.Site.ID;
-
-            SPSecurity.RunWithElevatedPrivileges(delegate ()
-            {
-                using (SPSite site = new SPSite(siteId))
-                {
-                    SPWeb adminWeb = AdminUsersProvisioner.OpenAdminWeb(site);
-                    if (adminWeb == null) return;
-                    try
-                    {
-                        SPList list = adminWeb.Lists.TryGetList(AdminUsersProvisioner.ListName);
-                        if (list == null) return;
-
-                        foreach (SPListItem item in list.Items)
-                        {
-                            string rowLogin = item["Title"] != null ? item["Title"].ToString().Trim() : "";
-                            if (rowLogin.Length == 0) continue;
-                            if (!string.Equals(rowLogin, login, StringComparison.OrdinalIgnoreCase)) continue;
-
-                            object active = item.Fields.ContainsField("IsActive") ? item["IsActive"] : null;
-                            bool isActive = true;
-                            if (active != null)
-                            {
-                                bool b;
-                                if (bool.TryParse(active.ToString(), out b)) isActive = b;
-                                else isActive = active.ToString() == "1";
-                            }
-                            if (isActive) { allowed = true; break; }
-                        }
-                    }
-                    finally { adminWeb.Dispose(); }
-                }
-            });
-
-            return allowed;
+            return ContentAdm.IsAdmin();
         }
 
         /// <summary>

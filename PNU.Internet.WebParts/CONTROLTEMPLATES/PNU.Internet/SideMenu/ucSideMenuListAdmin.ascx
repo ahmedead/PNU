@@ -7,6 +7,7 @@
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucSideMenuListAdmin.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu.ucSideMenuListAdmin" %>
 
+
 <div class="side-menu-admin-container p-4 bg-white border rounded shadow-sm" dir="rtl">
     <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
         <h2 class="h4 mb-0 text-primary font-weight-bold">
@@ -21,11 +22,11 @@
 
     <!-- 1. Target Site Selector Panel -->
     <div class="card mb-4 border-primary">
-        <div class="card-header bg-primary text-white font-weight-bold">
-            1. تحديد موقع الاستهداف (Target Site Selection)
+        <div class="card-header bg-primary text-white font-weight-bold d-flex justify-content-between align-items-center">
+            <span>1. تحديد موقع الاستهداف (Target Site Selection)</span>
         </div>
         <div class="card-body">
-            <div class="row align-items-center">
+            <div class="row align-items-center mb-3">
                 <div class="col-md-7 mb-2">
                     <label for="<%= txtWebSiteURL.ClientID %>" class="form-label font-weight-bold">رابط الموقع (Web Site URL):</label>
                     <asp:TextBox ID="txtWebSiteURL" runat="server" CssClass="form-control" placeholder="https://..." />
@@ -38,6 +39,26 @@
                     <asp:Button ID="btnLoadSite" runat="server" Text="فحص / تحميل" OnClick="btnLoadSite_Click" CssClass="btn btn-primary w-100 mt-4" />
                 </div>
             </div>
+
+            <!-- Multi-Site Selection List Section -->
+            <div class="p-3 bg-light rounded border mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label font-weight-bold text-dark mb-0">
+                        <i class="hgi hgi-stroke hgi-folder-02 me-1"></i>قائمة المواقع والمواقع الفرعية للتطبيق المتعدد (Multiple Target Sites Selection):
+                    </label>
+                    <div>
+                        <asp:Button ID="btnSelectAllSubwebs" runat="server" Text="تحديد الكل" OnClick="btnSelectAllSubwebs_Click" CssClass="btn btn-sm btn-outline-primary me-1" CausesValidation="false" />
+                        <asp:Button ID="btnDeselectAllSubwebs" runat="server" Text="إلغاء تحديد الكل" OnClick="btnDeselectAllSubwebs_Click" CssClass="btn btn-sm btn-outline-secondary" CausesValidation="false" />
+                    </div>
+                </div>
+                <small class="text-muted d-block mb-2">
+                    عند تحديد عدة مواقع من القائمة، سيتم تطبيق جميع العمليات (إنشاء القوائم، التعبئة الافتراضية للكليات/الوكالات/العمادات/الإدارات، إلخ) على كافة المواقع المحددة.
+                </small>
+                <div style="max-height: 180px; overflow-y: auto; background: #fff; padding: 10px; border: 1px solid #dee2e6; border-radius: 4px;">
+                    <asp:CheckBoxList ID="cblSubwebs" runat="server" CssClass="form-check-group" RepeatLayout="UnorderedList" />
+                </div>
+            </div>
+
             <div class="mt-2 text-muted small">
                 <asp:Label ID="lblCurrentLoadedSite" runat="server" Text="" />
             </div>
@@ -57,6 +78,8 @@
                 <asp:Button ID="btnCreateLists" runat="server" Text="إنشاء القوائم (Ensure Lists)" OnClick="btnCreateLists_Click" CssClass="btn btn-outline-primary me-2 mb-2" />
                 <asp:Button ID="btnSeedCollege" runat="server" Text="تعبئة القائمة الافتراضية للكليات (Seed College)" OnClick="btnSeedCollege_Click" CssClass="btn btn-outline-success me-2 mb-2" />
                 <asp:Button ID="btnSeedAgency" runat="server" Text="تعبئة القائمة الافتراضية للوكالات (Seed Agency)" OnClick="btnSeedAgency_Click" CssClass="btn btn-outline-info me-2 mb-2" />
+                <asp:Button ID="btnSeedDeenships" runat="server" Text="تعبئة القائمة الافتراضية للعمادات (Seed Deenships)" OnClick="btnSeedDeenships_Click" CssClass="btn btn-outline-info me-2 mb-2" />
+                <asp:Button ID="btnSeedDepartments" runat="server" Text="تعبئة القائمة الافتراضية للإدارات (Seed Departments)" OnClick="btnSeedDepartments_Click" CssClass="btn btn-outline-info me-2 mb-2" />
                 <asp:Button ID="btnClearLists" runat="server" Text="مسح القوائم الحالية (Clear Menu Items)" OnClick="btnClearLists_Click" CssClass="btn btn-outline-danger mb-2" OnClientClick="return confirm('هل أنت تأكد من مسح جميع عناصر القائمة؟');" />
             </div>
         </div>
@@ -69,12 +92,7 @@
                 3. عناصر المستوى الأول (SubMenu Level 1)
             </div>
             <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="<%= ddlSubMenuLevel1.ClientID %>" class="form-label font-weight-bold">اختر عنصر المستوى الأول لعرض أبنائه:</label>
-                        <asp:DropDownList ID="ddlSubMenuLevel1" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlSubMenuLevel1_SelectedIndexChanged" />
-                    </div>
-                </div>
+                
 
                 <!-- Form Add / Edit Level 1 -->
                 <div class="p-3 bg-light rounded mb-3 border">
@@ -188,7 +206,12 @@
                         <asp:Button ID="btnCancelL2Edit" runat="server" Text="إلغاء" OnClick="btnCancelL2Edit_Click" CssClass="btn btn-secondary" Visible="false" />
                     </div>
                 </div>
-
+                <div class="row mb-3">
+    <div class="col-md-6">
+        <label for="<%= ddlSubMenuLevel1.ClientID %>" class="form-label font-weight-bold">اختر عنصر المستوى الأول لعرض أبنائه:</label>
+        <asp:DropDownList ID="ddlSubMenuLevel1" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlSubMenuLevel1_SelectedIndexChanged" />
+    </div>
+</div>
                 <!-- GridView Level 2 Items -->
                 <div class="table-responsive">
                     <asp:GridView ID="gvLevel2Items" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-striped align-middle"

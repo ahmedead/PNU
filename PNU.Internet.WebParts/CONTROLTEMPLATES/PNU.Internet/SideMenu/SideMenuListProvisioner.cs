@@ -39,47 +39,46 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
         private const string CTRL_CONTACT = "PNU.Internet/Colleges/DGA/ucCollegeContactDga.ascx";
         private const string CTRL_DOCUMENTS = "PNU.Internet/Colleges/DGA/ucCollegeDocuments.ascx";
         private const string CTRL_PROGRAMS = "PNU.Internet/Colleges/DGA/ucCollegeProgramsDga.ascx";
+        private const string CTRL_Advertisments = "PNU.Internet/MediaCenter/Advertisements/ucAllAdvertisementsDGA.ascx";
+        private const string CTRL_Hierarchy = "PNU.Internet/Faculties/DGA/OrgStructure/ucFacultyOrgStructureDga.ascx";
+        private const string CTRL_Achievements = "PNU.Internet/Colleges/Details/ucCollegeAchievements.ascx";
+        private const string CTRL_Agancies = "PNU.Internet/Colleges/Details/ucCollegeAgancies.ascx";
+        private const string CTRL_Facilities = "PNU.Internet/Colleges/Details/ucCollegeFacilities.ascx";
+        private const string CTRL_Researches = "PNU.Internet/Faculties/DGA/Research/ucFacultyResearchDga.ascx";
+        private const string CTRL_Students = "PNU.Internet/Colleges/Details/ucCollegeStudents.ascx";
+        private const string CTRL_Services = "PNU.Internet/Colleges/Details/ucCollegeStudentServices.ascx";
+        private const string CTRL_Clubs = "PNU.Internet/Colleges/Details/ucCollegeClubs.ascx";
+        private const string CTRL_Initiatives = "PNU.Internet/Colleges/Details/ucCollegeInitiatives.ascx";
+        private const string CTRL_Trainings = "PNU.Internet/Colleges/Details/ucCollegeTrainings.ascx";
+        private const string CTRL_SharedCONTACT = "PNU.Internet/Shared/ucContactUsDGA.ascx";
+        private const string CTRL_SharedAbout = "PNU.Internet/Shared/About/ucSharedAboutDga.ascx";
+        private const string CTRL_DestDepartments = "PNU.Internet/GeneralDest/ucDestDepartments.ascx";
+        private const string CTRL_DestCertificates = "PNU.Internet/GeneralDest/ucDestCertificates.ascx";
+        private const string CTRL_DestSections = "PNU.Internet/GeneralDest/ucDestSections.ascx";
+        private const string CTRL_EntitySection = "PNU.Internet/Shared/EntitySection/ucEntitySection.ascx";
+
 
         private const string PAGE_CONTACT = "CollegeContacts.aspx";
         private const string PAGE_DOCUMENTS = "CollegeDocuments.aspx";
         private const string PAGE_PROGRAMS = "CollegePrograms.aspx";
-
-
-        
         private const string PAGE_Hierarchy = "NewHierarchy.aspx";
-        private const string CTRL_Hierarchy = "PNU.Internet/Faculties/DGA/OrgStructure/ucFacultyOrgStructureDga.ascx";
         private const string PAGE_Achievements = "NewAchievements.aspx";
-        private const string CTRL_Achievements = "PNU.Internet/Colleges/Details/ucCollegeAchievements.ascx";
         private const string PAGE_Agancies = "NewAgancies.aspx";
-        private const string CTRL_Agancies = "PNU.Internet/Colleges/Details/ucCollegeAgancies.ascx";
-
         private const string PAGE_Facilities = "NewFacilities.aspx";
-        private const string CTRL_Facilities = "PNU.Internet/Colleges/Details/ucCollegeFacilities.ascx";
         private const string PAGE_Researches = "NewResearches.aspx";
-        private const string CTRL_Researches = "PNU.Internet/Faculties/DGA/Research/ucFacultyResearchDga.ascx";
         private const string PAGE_Students = "NewStudents.aspx";
-        private const string CTRL_Students = "PNU.Internet/Colleges/Details/ucCollegeStudents.ascx";
         private const string PAGE_Services = "NewServices.aspx";
-        private const string CTRL_Services = "PNU.Internet/Colleges/Details/ucCollegeStudentServices.ascx";
         private const string PAGE_Clubs = "NewClubs.aspx";
-        private const string CTRL_Clubs = "PNU.Internet/Colleges/Details/ucCollegeClubs.ascx";
         private const string PAGE_Initiatives = "NewInitiatives.aspx";
-        private const string CTRL_Initiatives = "PNU.Internet/Colleges/Details/ucCollegeInitiatives.ascx";
         private const string PAGE_Trainings = "NewTrainings.aspx";
-        private const string CTRL_Trainings = "PNU.Internet/Colleges/Details/ucCollegeTrainings.ascx";
+        
 
-
-        private const string CTRL_SharedCONTACT = "PNU.Internet/Shared/ucContactUsDGA.ascx";
         private const string PAGE_SharedCONTACT = "SharedContactUs.aspx";
-        private const string CTRL_SharedAbout = "PNU.Internet/Shared/About/ucSharedAboutDga.ascx";
         private const string PAGE_SharedAbout = "SharedAbout.aspx";
 
         //private const string CTRL_SharedDOCUMENTS = "PNU.Internet/Colleges/DGA/ucCollegeDocuments.ascx";
         //private const string PAGE_SharedDOCUMENTS = "SharedDocuments.aspx";
 
-        private const string CTRL_DestDepartments = "PNU.Internet/GeneralDest/ucDestDepartments.ascx";
-        private const string CTRL_DestCertificates = "PNU.Internet/GeneralDest/ucDestCertificates.ascx";
-        private const string CTRL_DestSections = "PNU.Internet/GeneralDest/ucDestSections.ascx";
         //private const string PAGE_SharedCONTACT = "SharedContactUs.aspx";
 
         // ControlLoaderWebPart - same type/assembly used by PageGenerator.
@@ -273,6 +272,164 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
 
 
 
+
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
+                    "SideMenuListProvisioner.SeedMenu", ex.Message);
+            }
+        }
+        public static void SeedMenuForDeenShips(SPWeb web)
+        {
+            try
+            {
+                if (web == null) return;
+
+                // Only seed college subwebs
+                if (web.ServerRelativeUrl.IndexOf("/Deanship/", StringComparison.OrdinalIgnoreCase) < 0)
+                    return;
+
+                SPList level1 = web.Lists.TryGetList(LIST_LEVEL1);
+                SPList level2 = web.Lists.TryGetList(LIST_LEVEL2);
+                if (level1 == null || level2 == null) return;
+
+                if (level1.ItemCount > 0) return;   // already seeded
+
+                bool originalAllowUnsafeUpdates = web.AllowUnsafeUpdates;
+                web.AllowUnsafeUpdates = true;
+
+                // Build "/ar/Faculties/IT/" (or "/en/...") from the web's own path.
+                // ServerRelativeUrl normally already carries the language segment;
+                // if it doesn't, prepend the one matching this web's language.
+                string webPath = web.ServerRelativeUrl.TrimEnd('/') + "/";
+                string langSegment = web.Language == 1025 ? "/ar/" : "/en/";
+
+                if (!webPath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase)
+                    && !webPath.StartsWith("/en/", StringComparison.OrdinalIgnoreCase))
+                {
+                    webPath = langSegment + webPath.TrimStart('/');
+                }
+
+                AddLevel1(level1, "الرئيسية", "Main", webPath + "Pages/" + PAGE_SharedAbout, 1);
+                int MoreAboutCollegeItemId = AddLevel1(level1, "المزيد عن العمادة", "More About Vice Rectorate", "", 2);
+                int departmentsItemId = AddLevel1(level1, "الجهات التابعة", "Affiliated entities", "", 3);
+
+                AddLevel1(level1, "المستندات والنماذج والأدلة", "Documents, Forms and Guides", webPath + "Pages/DnDocuments.aspx" , 4);
+                AddLevel1(level1, "الأخبار", "News", webPath + "News/Pages/default.aspx", 5);
+                AddLevel1(level1, "الإعلانات", "Advertisements", webPath + "Pages/DnAdvertisements.aspx", 6);
+                
+                AddLevel1(level1, "تواصل معنا", "Contact Us", webPath + "Pages/" + PAGE_SharedCONTACT, 7);
+
+
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن العمادة", "الهيكل التنظيمي", "Hierarchy", webPath + "Pages/" + PAGE_Hierarchy, 1);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن العمادة", "مسارات المستفيدين", "Beneficiary Pathways", webPath + "Pages/" + "DnBeneficiaryPathways.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن العمادة", "الخدمات", "Services", webPath + "Pages/" + "DnServices.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن العمادة", "البرامج والمبادرات", "Programs and Initiatives", webPath + "Pages/" + "DnInitiatives.aspx", 2);
+                //AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن العمادة", "مسارات المستفيدين", "AgencyAchievements", webPath + "Pages/" + "AgencyAchievements.aspx", 2);
+
+                //DnBeneficiaryPathways
+
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوكالات", "Deenship Agencies", webPath + "Pages/" + "DnAgencies.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الإدارات", "Deenship Departments", webPath + "Pages/" + "DnDepartments.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "المراكز", "Deenship Centers", webPath + "Pages/" + "DnCenters.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوحدات", "Deenship Units", webPath + "Pages/" + "DnUnits.aspx", 2);
+
+                web.AllowUnsafeUpdates = originalAllowUnsafeUpdates;
+
+                // Create the pages the Level1 items point at
+                EnsurePage(web, PAGE_SharedAbout, "الرئيسية ", "About", CTRL_SharedAbout);
+                EnsurePage(web, "DnDocuments.aspx", "المستندات والنماذج والأدلة", "Documents, Forms and Guides", CTRL_DOCUMENTS, "LIST_NAME#DnDocuments");
+                EnsurePage(web, PAGE_SharedCONTACT, "تواصل معنا ", "Contact Us", CTRL_SharedCONTACT);
+                EnsurePage(web, PAGE_Hierarchy, "الهيكل التنظيمي", "Hierarchy", CTRL_Hierarchy);
+
+                EnsurePage(web, "DnAdvertisements.aspx", "الإعلانات", "Advertisements", CTRL_Advertisments);
+                EnsurePage(web, "DnBeneficiaryPathways.aspx", "مسارات المستفيدين", "Beneficiary Pathways", CTRL_EntitySection, "TracksListName#DnBeneficiaryPathwaysTracks;BulletsListName#DnBeneficiaryPathwaysBullets");
+                EnsurePage(web, "DnServices.aspx", "الخدمات", "Services", CTRL_EntitySection, "TracksListName#DnServicesTracks;BulletsListName#DnServicesBullets" );
+                EnsurePage(web, "DnInitiatives.aspx", "البرامج والمبادرات", "Programs and Initiatives", CTRL_EntitySection, "TracksListName#DnInitiativesTracks;BulletsListName#DnInitiativesBullets");
+
+                EnsurePage(web, "DnAgencies.aspx", "الوكالات", "Deenship Agencies", CTRL_DestDepartments, "ListName#DnAgencies");
+                EnsurePage(web, "DnDepartments.aspx", "الإدارات", "Deenship Departments", CTRL_DestDepartments, "ListName#DnDepartments");
+                EnsurePage(web, "DnCenters.aspx", "المراكز", "Deenship Centers", CTRL_DestDepartments, "ListName#DnCenters");
+                EnsurePage(web, "DnUnits.aspx", "الوحدات", "Deenship Units", CTRL_DestDepartments, "ListName#DnUnits");
+
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
+                    "SideMenuListProvisioner.SeedMenu", ex.Message);
+            }
+        }
+
+        public static void SeedMenuForDepartments(SPWeb web)
+        {
+            try
+            {
+                if (web == null) return;
+
+                // Only seed college subwebs
+                if (web.ServerRelativeUrl.IndexOf("/Departments/", StringComparison.OrdinalIgnoreCase) < 0)
+                    return;
+
+                SPList level1 = web.Lists.TryGetList(LIST_LEVEL1);
+                SPList level2 = web.Lists.TryGetList(LIST_LEVEL2);
+                if (level1 == null || level2 == null) return;
+
+                if (level1.ItemCount > 0) return;   // already seeded
+
+                bool originalAllowUnsafeUpdates = web.AllowUnsafeUpdates;
+                web.AllowUnsafeUpdates = true;
+
+                // Build "/ar/Faculties/IT/" (or "/en/...") from the web's own path.
+                // ServerRelativeUrl normally already carries the language segment;
+                // if it doesn't, prepend the one matching this web's language.
+                string webPath = web.ServerRelativeUrl.TrimEnd('/') + "/";
+                string langSegment = web.Language == 1025 ? "/ar/" : "/en/";
+
+                if (!webPath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase)
+                    && !webPath.StartsWith("/en/", StringComparison.OrdinalIgnoreCase))
+                {
+                    webPath = langSegment + webPath.TrimStart('/');
+                }
+
+                AddLevel1(level1, "الرئيسية", "Main", webPath + "Pages/" + PAGE_SharedAbout, 1);
+                int MoreAboutCollegeItemId = AddLevel1(level1, "المزيد عن الإدارة", "More About Vice Rectorate", "", 2);
+                int departmentsItemId = AddLevel1(level1, "الجهات التابعة", "Affiliated entities", "", 3);
+
+                AddLevel1(level1, "المستندات والنماذج والأدلة", "Documents, Forms and Guides", webPath + "Pages/DnDocuments.aspx", 4);
+                AddLevel1(level1, "تواصل معنا", "Contact Us", webPath + "Pages/" + PAGE_SharedCONTACT, 5);
+
+
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "الهيكل التنظيمي", "Hierarchy", webPath + "Pages/" + "DEPTHierarchy.aspx", 1);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "مسارات المستفيدين", "Beneficiary Pathways", webPath + "Pages/" + "DEPTBeneficiaryPathways.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "الخدمات", "Services", webPath + "Pages/" + "DEPTServices.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "البرامج والمبادرات", "Programs and Initiatives", webPath + "Pages/" + "DEPTInitiatives.aspx", 2);
+                //AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "مسارات المستفيدين", "AgencyAchievements", webPath + "Pages/" + "AgencyAchievements.aspx", 2);
+
+                //DnBeneficiaryPathways
+
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوكالات", "Department Agencies", webPath + "Pages/" + "DEPTAgencies.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الإدارات", "Department Departments", webPath + "Pages/" + "DnDepartments.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "المراكز", "Department Centers", webPath + "Pages/" + "DnCenters.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوحدات", "Department Units", webPath + "Pages/" + "DEPTUnits.aspx", 2);
+
+                web.AllowUnsafeUpdates = originalAllowUnsafeUpdates;
+
+                // Create the pages the Level1 items point at
+                EnsurePage(web, PAGE_SharedAbout, "الرئيسية ", "About", CTRL_SharedAbout);
+                EnsurePage(web, "DEPTDocuments.aspx", "المستندات والنماذج والأدلة", "Documents, Forms and Guides", CTRL_DOCUMENTS, "LIST_NAME#DEPTDocuments");
+                EnsurePage(web, PAGE_SharedCONTACT, "تواصل معنا ", "Contact Us", CTRL_SharedCONTACT);
+                EnsurePage(web, "DEPTHierarchy.aspx", "الهيكل التنظيمي", "Hierarchy", CTRL_EntitySection, "TracksListName#DEPTHierarchyTracks;BulletsListName#DEPTHierarchyBullets");
+
+                EnsurePage(web, "DnAdvertisements.aspx", "الإعلانات", "Advertisements", CTRL_Advertisments);
+                EnsurePage(web, "DnBeneficiaryPathways.aspx", "مسارات المستفيدين", "Beneficiary Pathways", CTRL_EntitySection, "TracksListName#DnBeneficiaryPathwaysTracks;BulletsListName#DnBeneficiaryPathwaysBullets");
+                EnsurePage(web, "DnServices.aspx", "الخدمات", "Services", CTRL_EntitySection, "TracksListName#DnServicesTracks;BulletsListName#DnServicesBullets");
+                EnsurePage(web, "DnInitiatives.aspx", "البرامج والمبادرات", "Programs and Initiatives", CTRL_EntitySection, "TracksListName#DnInitiativesTracks;BulletsListName#DnInitiativesBullets");
+
+                EnsurePage(web, "DnAgencies.aspx", "الوكالات", "Deenship Agencies", CTRL_DestDepartments, "ListName#DnAgencies");
+                EnsurePage(web, "DnDepartments.aspx", "الإدارات", "Deenship Departments", CTRL_DestDepartments, "ListName#DnDepartments");
+                EnsurePage(web, "DnCenters.aspx", "المراكز", "Deenship Centers", CTRL_DestDepartments, "ListName#DnCenters");
+                EnsurePage(web, "DnUnits.aspx", "الوحدات", "Deenship Units", CTRL_DestDepartments, "ListName#DnUnits");
 
             }
             catch (Exception ex)

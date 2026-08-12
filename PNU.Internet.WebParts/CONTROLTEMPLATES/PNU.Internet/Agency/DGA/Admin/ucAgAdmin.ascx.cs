@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Agency.DGA
 {
@@ -592,32 +593,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Agency.DGA
         /// </summary>
         private bool IsAdmin()
         {
-            try
-            {
-                SPWeb web = SPContext.Current.Web;
-                if (web.CurrentUser == null) return false;
-                if (web.CurrentUser.IsSiteAdmin) return true;
-                if (web.DoesUserHavePermissions(SPBasePermissions.ManageLists)) return true;
-
-                SPList adminList = web.Lists.TryGetList(AdminUsersList);
-                if (adminList == null && web.Site.RootWeb != null)
-                    adminList = web.Site.RootWeb.Lists.TryGetList(AdminUsersList);
-                if (adminList == null) return false;
-
-                string login = web.CurrentUser.LoginName;
-                var q = new SPQuery
-                {
-                    Query = "<Where><Eq><FieldRef Name='UserLogin'/>"
-                          + "<Value Type='Text'>" + System.Security.SecurityElement.Escape(login) + "</Value></Eq></Where>",
-                    RowLimit = 1
-                };
-                return adminList.GetItems(q).Count > 0;
-            }
-            catch (Exception ex)
-            {
-                AgLog.Write("ucAgAdmin.IsAdmin", ex);
-                return false;
-            }
+            return ContentAdm.IsAdmin();
         }
     }
 
