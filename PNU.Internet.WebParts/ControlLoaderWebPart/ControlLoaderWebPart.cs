@@ -50,6 +50,8 @@ namespace PNU.Internet.WebParts.ControlLoaderWebPart
 			base.CreateChildControls();
 			try
 			{
+				if(this.Page == null) { return; }
+
 				this.ExportMode = WebPartExportMode.All;
 				this.ChromeType = PartChromeType.None;
 				if (!string.IsNullOrEmpty(UserControlPath))

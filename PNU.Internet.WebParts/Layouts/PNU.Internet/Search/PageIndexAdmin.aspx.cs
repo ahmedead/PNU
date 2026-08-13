@@ -1,191 +1,385 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
 using PNU.Internet.SearchIndex.DAL;
+using PNU.Internet.SearchIndex.Indexer;
+using System;
+using System.Collections.Generic;
+using System.Web.UI.WebControls;
+
+
+using System.Text;
+
 using PNU.Internet.SearchIndex.Logging;
-using PNU.Internet.SearchIndex.Tasks;
 
 namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
 {
     public partial class PageIndexAdmin : LayoutsPageBase
     {
+        // --- transient state kept across postbacks in ViewState ---------
+        private const string VS_PAGES = "PageIndexAdmin.LoadedPages";
+
+        private List<PageRow> LoadedPages
+        {
+            get
+            {
+                return ViewState[VS_PAGES] as List<PageRow>
+                       ?? new List<PageRow>();
+            }
+            set { ViewState[VS_PAGES] = value; }
+        }
+
+        // ----------------------------------------------------------------
+        [Serializable]
+        public class PageRow
+        {
+            public string PageTitle { get; set; }
+            public string PageURL { get; set; }
+            public string PageLayout { get; set; }
+            public string UserControlPath { get; set; }
+            public string UserControlProperties { get; set; }
+            public string WebUrl { get; set; }
+            public string Status { get; set; }  // Indexed / Not Indexed
+            public string LastIndexedDisplay { get; set; }
+        }
+
+        // ================================================================
         protected void Page_Load(object sender, EventArgs e)
         {
+            Server.ScriptTimeout = 1800;
+
             try
             {
-                Server.ScriptTimeout = 1800; // 30 minutes for large crawl
-
-                if (SPContext.Current == null) return;
-
-                if (!IsPostBack)
-                {
-                    litStatus.Text = "<div class='alert alert-info'>Ready. Enter target site URL (or leave blank for root) and click action.</div>";
-                }
+                WebsitePagesDal.EnsureWebsitePagesTableExists();
             }
             catch (Exception ex)
             {
-                litStatus.Text = ErrorBlock("Page_Load", ex);
-                SearchLogger.WriteToLog("UI", "PageIndexAdmin.Page_Load", ex.Message);
+                litStatus.Text = Error("Ensuring WebsitePages table", ex);
+                SearchLogger.WriteToLog("UI",
+                    "PageIndexAdmin.EnsureTable", ex.Message);
+                return;
             }
+
+            if (!IsPostBack)
+                litStatus.Text = Info(
+                    "Enter a target web (or leave blank for site root) and " +
+                    "click <strong>Load &amp; Check Pages</strong>.");
         }
 
+        // ================================================================
         protected void btnLoadPages_Click(object sender, EventArgs e)
         {
             try
             {
-                string siteUrl = txtSiteUrl.Text.Trim();
-                bool singleSiteOnly = chkCurrentSiteOnly.Checked;
+                bool webNotFound;
+                string resolvedWebUrl;
+                LoadedPages = LoadPagesFromSharePoint(
+                    out webNotFound, out resolvedWebUrl);
+                BindGrid();
 
-                var pages = IndexingTasks.LoadWebPagesInfo(SPContext.Current.Site.ID, siteUrl, singleSiteOnly);
+                if (webNotFound)
+                {
+                    litStatus.Text = Warn(
+                        "No SharePoint web was found at that URL. "
+                        + "The path may be a folder inside the root web's "
+                        + "<code>Pages</code> library, not a separate subsite. "
+                        + "Try the parent web URL (e.g. <code>/</code>) or "
+                        + "the exact server-relative URL of the subsite "
+                        + "you want to scan.");
+                    return;
+                }
 
-                gvPages.DataSource = pages;
-                gvPages.DataBind();
-
-                lblPageCount.Text = pages.Count.ToString();
-                litStatus.Text = OkBlock("Loaded " + pages.Count + " pages for inspection. (Single site only: " + singleSiteOnly + ")");
+                string msg = LoadedPages.Count + " page(s) discovered";
+                if (!string.IsNullOrEmpty(resolvedWebUrl))
+                    msg += " under <code>" + Server.HtmlEncode(resolvedWebUrl)
+                         + "</code>";
+                msg += ".";
+                litStatus.Text = Ok(msg);
             }
             catch (Exception ex)
             {
-                litStatus.Text = ErrorBlock("LoadPages", ex);
-                SearchLogger.WriteToLog("UI", "PageIndexAdmin.btnLoadPages_Click", ex.Message);
+                litStatus.Text = Error("Load pages", ex);
+                SearchLogger.WriteToLog("UI",
+                    "PageIndexAdmin.Load", ex.Message);
             }
         }
 
+        // ================================================================
         protected void btnIndexPages_Click(object sender, EventArgs e)
         {
             try
             {
-                string siteUrl = txtSiteUrl.Text.Trim();
-                bool singleSiteOnly = chkCurrentSiteOnly.Checked;
-
-                TaskResult r = IndexingTasks.RunWebsitePagesTask(SPContext.Current.Site.ID, siteUrl, singleSiteOnly);
-
-                // Reload list to update status in grid
-                btnLoadPages_Click(sender, e);
-
-                string body = "<strong>Website Pages Indexing Completed</strong><br/>" + r.Summary;
-                if (!string.IsNullOrEmpty(r.Errors))
+                var pages = LoadedPages;
+                bool webNotFound = false;
+                string resolvedWebUrl = null;
+                if (pages.Count == 0)
                 {
-                    body += "<br/><pre style='max-height:300px;overflow:auto;background:#f6f6f6;padding:8px;'>"
-                          + Server.HtmlEncode(r.Errors) + "</pre>";
+                    pages = LoadPagesFromSharePoint(
+                        out webNotFound, out resolvedWebUrl);
                 }
 
-                litStatus.Text = "<div class='alert alert-success'>" + body + "</div>";
+                if (webNotFound)
+                {
+                    litStatus.Text = Warn(
+                        "No SharePoint web was found at that URL. "
+                        + "Nothing was indexed.");
+                    return;
+                }
+
+                int n = 0;
+                foreach (var p in pages)
+                {
+                    WebsitePagesDal.UpsertWebsitePage(
+                        p.PageTitle, p.PageURL, p.PageLayout,
+                        p.UserControlPath, p.UserControlProperties,
+                        p.WebUrl);
+                    n++;
+                }
+
+                // Refresh status column from DB after upsert
+                LoadedPages = MergeWithIndexStatus(pages);
+                BindGrid();
+
+                litStatus.Text = Ok(n + " page(s) indexed / updated in " +
+                    "<code>dbo.WebsitePages</code>.");
             }
             catch (Exception ex)
             {
-                litStatus.Text = ErrorBlock("IndexPages", ex);
-                SearchLogger.WriteToLog("UI", "PageIndexAdmin.btnIndexPages_Click", ex.Message);
+                litStatus.Text = Error("Run indexing", ex);
+                SearchLogger.WriteToLog("UI",
+                    "PageIndexAdmin.Index", ex.Message);
             }
         }
 
+        // ================================================================
         protected void btnExportExcel_Click(object sender, EventArgs e)
         {
             try
             {
-                string siteUrl = txtSiteUrl.Text.Trim();
-                bool singleSiteOnly = chkCurrentSiteOnly.Checked;
+                // Prefer live loaded rows; fall back to whatever is in the DB
+                var pages = LoadedPages;
+                if (pages == null || pages.Count == 0)
+                {
+                    var db = WebsitePagesDal.GetAll();
+                    pages = new List<PageRow>();
+                    foreach (var d in db)
+                    {
+                        pages.Add(new PageRow
+                        {
+                            PageTitle = d.PageTitle,
+                            PageURL = d.PageURL,
+                            PageLayout = d.PageLayout,
+                            UserControlPath = d.UserControlPath,
+                            UserControlProperties = d.UserControlProperties,
+                            WebUrl = d.WebUrl,
+                            Status = "Indexed",
+                            LastIndexedDisplay = d.LastIndexed
+                                .ToString("yyyy-MM-dd HH:mm")
+                        });
+                    }
+                }
 
-                var pages = IndexingTasks.LoadWebPagesInfo(SPContext.Current.Site.ID, siteUrl, singleSiteOnly);
+                string html = BuildExcelHtml(pages);
+                string fileName = "PageCatalog_"
+                    + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".xls";
 
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("Content-Disposition", "attachment; filename=Website_Pages_Index_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls");
                 Response.Charset = "utf-8";
                 Response.ContentEncoding = Encoding.UTF8;
-
-                var sb = new StringBuilder();
-                sb.AppendLine("<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">");
-                sb.AppendLine("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-                sb.AppendLine("<style>");
-                sb.AppendLine("th { background-color: #0056b3; color: #ffffff; font-weight: bold; border: 1px solid #cccccc; text-align: center; padding: 8px; }");
-                sb.AppendLine("td { border: 1px solid #cccccc; vertical-align: top; padding: 6px; }");
-                sb.AppendLine(".indexed { background-color: #d4edda; color: #155724; font-weight: bold; }");
-                sb.AppendLine(".not-indexed { background-color: #e2e3e5; color: #383d41; }");
-                sb.AppendLine("</style></head><body>");
-
-                sb.AppendLine("<h3>PNU Website Pages Index Report</h3>");
-                sb.AppendLine("<p>Target Site: " + Server.HtmlEncode(string.IsNullOrEmpty(siteUrl) ? "Root Web" : siteUrl) + " | Single Site Only: " + singleSiteOnly + " | Export Date: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "</p>");
-
-                sb.AppendLine("<table border='1'>");
-                sb.AppendLine("<thead><tr>");
-                sb.AppendLine("<th>#</th>");
-                sb.AppendLine("<th>Status</th>");
-                sb.AppendLine("<th>Page Title</th>");
-                sb.AppendLine("<th>Page URL</th>");
-                sb.AppendLine("<th>Page Layout</th>");
-                sb.AppendLine("<th>User Control Path</th>");
-                sb.AppendLine("<th>User Control Properties</th>");
-                sb.AppendLine("<th>Web URL</th>");
-                sb.AppendLine("<th>Last Indexed</th>");
-                sb.AppendLine("</tr></thead><tbody>");
-
-                int idx = 1;
-                foreach (var p in pages)
-                {
-                    string statusClass = p.IsIndexed ? "indexed" : "not-indexed";
-                    string statusText = p.IsIndexed ? "Indexed" : "Not Indexed";
-                    string lastIndexedStr = p.LastIndexed > DateTime.MinValue ? p.LastIndexed.ToString("yyyy-MM-dd HH:mm") : "—";
-
-                    sb.AppendLine("<tr>");
-                    sb.AppendLine("<td>" + idx++ + "</td>");
-                    sb.AppendLine("<td class='" + statusClass + "'>" + statusText + "</td>");
-                    sb.AppendLine("<td>" + Server.HtmlEncode(p.PageTitle ?? "") + "</td>");
-                    sb.AppendLine("<td><a href='" + Server.HtmlEncode(p.PageURL ?? "") + "'>" + Server.HtmlEncode(p.PageURL ?? "") + "</a></td>");
-                    sb.AppendLine("<td>" + Server.HtmlEncode(p.PageLayout ?? "") + "</td>");
-                    sb.AppendLine("<td>" + Server.HtmlEncode(p.UserControlPath ?? "") + "</td>");
-                    sb.AppendLine("<td>" + Server.HtmlEncode(p.UserControlProperties ?? "") + "</td>");
-                    sb.AppendLine("<td>" + Server.HtmlEncode(p.WebUrl ?? "") + "</td>");
-                    sb.AppendLine("<td>" + lastIndexedStr + "</td>");
-                    sb.AppendLine("</tr>");
-                }
-
-                sb.AppendLine("</tbody></table></body></html>");
-
-                Response.Write(sb.ToString());
-                Response.End();
+                Response.AddHeader("Content-Disposition",
+                    "attachment; filename=" + fileName);
+                Response.Write("\uFEFF"); // BOM so Excel picks up UTF-8
+                Response.Write(html);
+                Response.Flush();
+                Context.ApplicationInstance.CompleteRequest();
             }
             catch (Exception ex)
             {
-                litStatus.Text = ErrorBlock("ExportExcel", ex);
-                SearchLogger.WriteToLog("UI", "PageIndexAdmin.btnExportExcel_Click", ex.Message);
+                litStatus.Text = Error("Export to Excel", ex);
+                SearchLogger.WriteToLog("UI",
+                    "PageIndexAdmin.Export", ex.Message);
             }
         }
 
-        protected void gvPages_RowDataBound(object sender, GridViewRowEventArgs e)
+        // ================================================================
+        protected void gvPages_RowDataBound(object sender,
+            GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (e.Row.RowType != DataControlRowType.DataRow) return;
+            var lbl = e.Row.FindControl("lblStatus") as Label;
+            if (lbl == null) return;
+
+            if (string.Equals(lbl.Text, "Indexed",
+                    StringComparison.OrdinalIgnoreCase))
+                lbl.CssClass = "badge bg-success";
+            else
+                lbl.CssClass = "badge bg-warning text-dark";
+        }
+
+        // ================================================================
+        private List<PageRow> LoadPagesFromSharePoint(
+            out bool webNotFound, out string resolvedWebUrl)
+        {
+            string targetUrl = (txtSiteUrl.Text ?? "").Trim();
+            bool currentOnly = chkCurrentSiteOnly.Checked;
+
+            PageInspector.InspectionResult inspection = null;
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
             {
-                var dto = e.Row.DataItem as WebsitePageDto;
-                var lblBadge = e.Row.FindControl("lblStatusBadge") as Label;
-                if (lblBadge != null && dto != null)
+                using (SPSite site = new SPSite(SPContext.Current.Site.ID))
                 {
-                    if (dto.IsIndexed)
-                    {
-                        lblBadge.Text = "<span class='badge badge-success' style='background:#28a745;color:#fff;padding:4px 8px;border-radius:4px;'>Indexed</span>";
-                    }
-                    else
-                    {
-                        lblBadge.Text = "<span class='badge badge-secondary' style='background:#6c757d;color:#fff;padding:4px 8px;border-radius:4px;'>Not Indexed</span>";
-                    }
+                    inspection = PageInspector.InspectPages(
+                        site, targetUrl, currentOnly);
+                }
+            });
+
+            if (inspection == null)
+                inspection = new PageInspector.InspectionResult();
+
+            webNotFound = inspection.WebNotFound;
+            resolvedWebUrl = inspection.ResolvedWebUrl;
+
+            var raw = new List<PageRow>();
+            foreach (var ip in inspection.Pages)
+            {
+                raw.Add(new PageRow
+                {
+                    PageTitle = ip.PageTitle,
+                    PageURL = ip.PageURL,
+                    PageLayout = ip.PageLayout,
+                    UserControlPath = ip.UserControlPath,
+                    UserControlProperties = ip.UserControlProperties,
+                    WebUrl = ip.WebUrl,
+                    Status = "Not Indexed",
+                    LastIndexedDisplay = ""
+                });
+            }
+            return MergeWithIndexStatus(raw);
+        }
+
+        private static List<PageRow> MergeWithIndexStatus(List<PageRow> pages)
+        {
+            if (pages == null || pages.Count == 0)
+                return pages ?? new List<PageRow>();
+
+            var indexedMap = WebsitePagesDal.GetIndexedWebsitePagesMap();
+            foreach (var p in pages)
+            {
+                WebsitePageDto hit;
+                if (!string.IsNullOrEmpty(p.PageURL)
+                    && indexedMap.TryGetValue(p.PageURL, out hit))
+                {
+                    p.Status = "Indexed";
+                    p.LastIndexedDisplay = hit.LastIndexed
+                        .ToString("yyyy-MM-dd HH:mm");
+                }
+                else
+                {
+                    p.Status = "Not Indexed";
+                    p.LastIndexedDisplay = "";
                 }
             }
+            return pages;
         }
 
-        private static string OkBlock(string msg)
+        private void BindGrid()
+        {
+            gvPages.DataSource = LoadedPages;
+            gvPages.DataBind();
+        }
+
+        // ================================================================
+        // Formatted Excel via HTML table + application/vnd.ms-excel MIME.
+        // Excel honours the inline CSS below.
+        // ================================================================
+        private static string BuildExcelHtml(List<PageRow> pages)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            sb.AppendLine("<head><meta charset=\"utf-8\" /><style>");
+            sb.AppendLine("  body { font-family: Segoe UI, Arial, sans-serif; font-size: 11pt; }");
+            sb.AppendLine("  h2   { color: #005c39; }");
+            sb.AppendLine("  table { border-collapse: collapse; width: 100%; }");
+            sb.AppendLine("  th { background: #005c39; color: #fff; " +
+                          "padding: 6px 8px; text-align: left; border: 1px solid #002a1a; }");
+            sb.AppendLine("  td { padding: 6px 8px; border: 1px solid #cfd6df; " +
+                          "vertical-align: top; }");
+            sb.AppendLine("  tr:nth-child(even) td { background: #f5f7fa; }");
+            sb.AppendLine("  td.status-indexed    { color: #0a6c2a; font-weight: bold; }");
+            sb.AppendLine("  td.status-notindexed { color: #a15c00; font-weight: bold; }");
+            sb.AppendLine("  pre { margin: 0; font-family: Consolas, monospace; " +
+                          "font-size: 10pt; white-space: pre-wrap; }");
+            sb.AppendLine("</style></head><body>");
+
+            sb.AppendLine("<h2>PNU - Page Catalog Export</h2>");
+            sb.AppendLine("<p>Generated: "
+                + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + " | "
+                + pages.Count + " page(s)</p>");
+
+            sb.AppendLine("<table>");
+            sb.AppendLine("<thead><tr>" +
+                "<th>Title</th><th>Page URL</th><th>Layout</th>" +
+                "<th>User Controls</th><th>Properties</th>" +
+                "<th>Web</th><th>Status</th><th>Last indexed</th>" +
+                "</tr></thead><tbody>");
+
+            foreach (var p in pages)
+            {
+                bool indexed = string.Equals(p.Status, "Indexed",
+                    StringComparison.OrdinalIgnoreCase);
+                string statusClass = indexed
+                    ? "status-indexed" : "status-notindexed";
+
+                sb.AppendLine("<tr>");
+                sb.Append("<td>").Append(H(p.PageTitle)).AppendLine("</td>");
+                sb.Append("<td><a href=\"").Append(H(p.PageURL))
+                  .Append("\">").Append(H(p.PageURL)).AppendLine("</a></td>");
+                sb.Append("<td>").Append(H(p.PageLayout)).AppendLine("</td>");
+                sb.Append("<td><pre>").Append(H(p.UserControlPath))
+                  .AppendLine("</pre></td>");
+                sb.Append("<td><pre>").Append(H(p.UserControlProperties))
+                  .AppendLine("</pre></td>");
+                sb.Append("<td>").Append(H(p.WebUrl)).AppendLine("</td>");
+                sb.Append("<td class=\"").Append(statusClass).Append("\">")
+                  .Append(H(p.Status)).AppendLine("</td>");
+                sb.Append("<td>").Append(H(p.LastIndexedDisplay))
+                  .AppendLine("</td>");
+                sb.AppendLine("</tr>");
+            }
+
+            sb.AppendLine("</tbody></table></body></html>");
+            return sb.ToString();
+        }
+
+        private static string H(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            return System.Web.HttpUtility.HtmlEncode(s);
+        }
+
+        // ================================================================
+        private static string Ok(string msg)
+        {
+            return "<div class='alert alert-success'>" + msg + "</div>";
+        }
+
+        private static string Info(string msg)
         {
             return "<div class='alert alert-info'>" + msg + "</div>";
         }
 
-        private static string ErrorBlock(string label, Exception ex)
+        private static string Warn(string msg)
         {
-            return "<div class='alert alert-danger'><strong>" + label + "</strong><br/>" + ex.Message + "</div>";
+            return "<div class='alert alert-warning'>" + msg + "</div>";
+        }
+
+        private static string Error(string label, Exception ex)
+        {
+            return "<div class='alert alert-danger'><strong>" + label
+                + "</strong><br/>" + System.Web.HttpUtility.HtmlEncode(ex.Message)
+                + "</div>";
         }
     }
+
 }

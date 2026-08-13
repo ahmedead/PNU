@@ -1,4 +1,4 @@
-<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -2552,11 +2552,13 @@
       <DependentUpon>PageIndexAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Layouts\PNU.Internet\Search\PageIndexAdmin.aspx.designer.cs">
+      <DependentUpon>PageIndexAdmin.aspx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Layouts\PNU.Internet\Search\SearchAdmin.aspx.cs">
       <DependentUpon>SearchAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-
     <Compile Include="Layouts\PNU.Internet\Search\SearchAdmin.aspx.designer.cs">
       <DependentUpon>SearchAdmin.aspx.cs</DependentUpon>
     </Compile>
@@ -2972,7 +2974,6 @@
     <Content Include="Layouts\PNU.Internet\CaptchaImage.aspx" />
     <Content Include="Layouts\PNU.Internet\Search\PageIndexAdmin.aspx" />
     <Content Include="Layouts\PNU.Internet\Search\SearchAdmin.aspx" />
-
     <Content Include="Layouts\PNU.Internet\TimerJobsManual.aspx" />
     <Content Include="Layouts\PNU.NewEvents.WebParts\404\404.aspx" />
     <Content Include="Layouts\PNU.NewEvents.WebParts\404\404.css" />

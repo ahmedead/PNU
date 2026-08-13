@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" AlwaysForceInstall="TRUE" Id="b0299f6c-ceda-4614-b319-63a704490e11" ReceiverAssembly="PNU.Internet.SearchIndex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c3efcc65bd63271f" ReceiverClass="PNU.Internet.SearchIndex.Features.PNUSearchInfrastructureIndex.PNUSearchInfrastructureEventReceiver" Scope="Web" Title="PNU Custom Search Infrastructure Index"></Feature>

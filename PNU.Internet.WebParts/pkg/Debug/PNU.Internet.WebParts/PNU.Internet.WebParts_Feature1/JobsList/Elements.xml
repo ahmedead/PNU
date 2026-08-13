@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
-  <Module Name="JobsList" List="113" Url="_catalogs/wp">
-    <File Path="JobsList\JobsList.webpart" Url="PNU.Jobs_JobsList.webpart" Type="GhostableInLibrary" >
-      <Property Name="Group" Value="PNU.Jobs" />
-    </File>
-  </Module>
-</Elements>
