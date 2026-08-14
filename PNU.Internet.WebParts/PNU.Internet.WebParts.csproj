@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -2786,6 +2786,14 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Research\ucFacultyResearchDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\StudentServices\ucFacultyStudentServicesDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Training\ucFacultyTrainingDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Admin\ucHerbariumAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbarium.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumContact.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumHeader.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMilestones.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMission.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumOverview.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumServices.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Forms\ucDataLeakReport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Forms\ucDataLeakReportsView.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Forms\ucNoraNabtaker.ascx" />

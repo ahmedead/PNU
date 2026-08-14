@@ -57,3 +57,5 @@ E:\AESharaf\PNU\MyWorkSpaces\PNU.Internet.SP\PNU.Internet.SearchIndex\obj\Debug\
 E:\AESharaf\PNU\MyWorkSpaces\PNU.Internet.SP\PNU.Internet.SearchIndex\obj\Debug\PNU.Inte.F4F878EF.Up2Date
 E:\AESharaf\PNU\MyWorkSpaces\PNU.Internet.SP\PNU.Internet.SearchIndex\obj\Debug\PNU.Internet.SearchIndex.dll
 E:\AESharaf\PNU\MyWorkSpaces\PNU.Internet.SP\PNU.Internet.SearchIndex\obj\Debug\PNU.Internet.SearchIndex.pdb
+d:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\PNU.Internet.SearchIndex\obj\Debug\PNU.Internet.SearchIndex.dll
+d:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\PNU.Internet.SearchIndex\obj\Debug\PNU.Internet.SearchIndex.pdb
