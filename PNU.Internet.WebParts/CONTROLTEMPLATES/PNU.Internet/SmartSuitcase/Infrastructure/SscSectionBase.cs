@@ -103,12 +103,28 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Cont
                 ImageUrl = SscHelper.Enc(SscHelper.SafeUrl(item, "ImageUrl")),
                 ImageAlt = SscHelper.Enc(SscHelper.Pick(SscHelper.SafeString(item, "ImageAlt"),
                                                         SscHelper.SafeString(item, "ImageAlt_EN"))),
-                Badge1 = SscHelper.Enc(SscHelper.SafeString(item, "Badge1")),
-                Badge2 = SscHelper.Enc(SscHelper.SafeString(item, "Badge2")),
+                Badge1 = SscHelper.Enc(ResolveBadge(SscHelper.SafeString(item, "Badge1"), SscHelper.SafeString(item, "Badge1_EN"))),
+                Badge2 = SscHelper.Enc(ResolveBadge(SscHelper.SafeString(item, "Badge2"), SscHelper.SafeString(item, "Badge2_EN"))),
                 ItemOrder = SscHelper.SafeInt(item, "ItemOrder")
             };
 
             return card;
+        }
+
+        private static string ResolveBadge(string ar, string en)
+        {
+            if (SscHelper.IsArabic) return string.IsNullOrEmpty(ar) ? (en ?? string.Empty) : ar;
+
+            if (!string.IsNullOrEmpty(en)) return en;
+
+            // Fallback translations if EN field was not yet populated in existing lists
+            if (ar == "طالبات") return "Students";
+            if (ar == "منسوبو الجامعة") return "University Staff";
+            if (ar == "أعضاء هيئة التدريس") return "Faculty";
+            if (ar == "الموظفون") return "Staff";
+            if (ar == "طلاب") return "Students";
+
+            return ar ?? string.Empty;
         }
     }
 }

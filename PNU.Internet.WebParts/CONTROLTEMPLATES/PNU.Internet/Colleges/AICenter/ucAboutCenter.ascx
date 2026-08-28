@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -6,122 +6,94 @@
 <%@ Import Namespace="Microsoft.SharePoint" %> 
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAboutCenter.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter.ucAboutCenter" %>
-
-
-
-
-<style>
-    .wrap-text {
-        white-space: normal; /* Allows text to wrap to the next line */
-        word-wrap: break-word; /* Allows long words to be broken and wrap onto the next line */
-        overflow-wrap: break-word; /* Similar to word-wrap for better compatibility */
-    }
-</style>
-
-
-
 <%@ Import Namespace="System.Resources" %>
 <%@ Import Namespace="PNU.Internet.WebParts" %>
 
-<div class="the-message p-2">
-    <div class="mt-3 px-md-5 px-0">
-        <asp:Repeater ID="rptMainData" runat="server">
-            <ItemTemplate>
-
-
-
-
-
-
-
-                <div class="d-block">
-                    <h1 class="title text-dark fw-bold px-2 border-start border-primary mb-4 h3">
-                        <%# SPFactory.GetLocalizedTitle(Eval("AboutTitle"), Eval("AboutTitle")) %>
-                    </h1>
+<div class="d-flex flex-column gap-4">
+    <asp:Repeater ID="rptMainData" runat="server">
+        <ItemTemplate>
+            <!-- About Section -->
+            <section class="mb-4" aria-labelledby="ai-center-about-title">
+                <h2 id="ai-center-about-title" class="mb-4">
+                    <%# SPFactory.GetLocalizedTitle(Eval("AboutTitle"), Eval("AboutTitle")) %>
+                </h2>
+                <div class="lead mb-4 text-justify text-muted lh-base">
+                    <%# SPFactory.GetLocalizedTitle(Eval("AboutText"), Eval("AboutText")) %>
                 </div>
-                <div class="d-block text-start">
-                    <p class=" text-muted lh-base fs-5">
-                        <%# SPFactory.GetLocalizedTitle(Eval("AboutText"), Eval("AboutText")) %>
-                    </p>
-                </div>
+            </section>
 
-                <div class="d-block">
-                    <h1 class="title text-dark fw-bold px-2 border-start border-primary mb-4 h3">
-                        <%# SPFactory.GetLocalizedTitle(Eval("VisionTitle"), Eval("VisionTitle")) %>
-                    </h1>
-                </div>
-                <div class="d-block text-start">
-                    <p class=" text-muted lh-base fs-5">
-                        <%# SPFactory.GetLocalizedTitle(Eval("VisionText"), Eval("VisionText")) %>
-                    </p>
-                </div>
-
-                <div class="d-block">
-                    <h1 class="title text-dark fw-bold px-2 border-start border-primary mb-4 h3">
-                        <%# SPFactory.GetLocalizedTitle(Eval("MessageTitle"), Eval("MessageTitle")) %>
-                    </h1>
-                </div>
-                <div class="d-block text-start">
-                    <p class=" text-muted lh-base fs-5">
-                        <%# SPFactory.GetLocalizedTitle(Eval("MessageText"), Eval("MessageText")) %>
-                    </p>
+            <!-- Vision & Mission Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-md-6">
+                    <div class="card h-100 border-0 bg-primary-25 rounded-3">
+                        <div class="card-body p-4 d-flex flex-column gap-3">
+                            <div class="icon-container bg-white">
+                                <i class="hgi hgi-stroke hgi-target-02 fs-3 text-primary" aria-hidden="true"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title h5 mb-2 fw-semibold">
+                                    <%# SPFactory.GetLocalizedTitle(Eval("VisionTitle"), Eval("VisionTitle")) %>
+                                </h3>
+                                <p class="card-text text-muted mb-0 lh-base">
+                                    <%# SPFactory.GetLocalizedTitle(Eval("VisionText"), Eval("VisionText")) %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-
-
-
-
-
-
-
-            </ItemTemplate>
-        </asp:Repeater>
-
-        <asp:Repeater ID="Repeater1" runat="server">
-            <ItemTemplate>
-                <div class="d-block">
-                    <h1 class="title text-dark fw-bold px-2 border-start border-primary mb-4 h3">
-                        <%# SPFactory.GetLocalizedTitle(Eval("StrategicGoalsTitle"), Eval("StrategicGoalsTitle")) %>
-                    </h1>
+                <div class="col-12 col-md-6">
+                    <div class="card h-100 border-0 bg-primary-25 rounded-3">
+                        <div class="card-body p-4 d-flex flex-column gap-3">
+                            <div class="icon-container bg-white">
+                                <i class="hgi hgi-stroke hgi-flag-02 fs-3 text-primary" aria-hidden="true"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title h5 mb-2 fw-semibold">
+                                    <%# SPFactory.GetLocalizedTitle(Eval("MessageTitle"), Eval("MessageTitle")) %>
+                                </h3>
+                                <p class="card-text text-muted mb-0 lh-base">
+                                    <%# SPFactory.GetLocalizedTitle(Eval("MessageText"), Eval("MessageText")) %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </ItemTemplate>
-        </asp:Repeater>
+            </div>
+        </ItemTemplate>
+    </asp:Repeater>
 
-        <div class="d-block text-start">
-            <p class=" text-muted lh-base fs-5">
-                <table class="d-block">
+    <!-- Strategic Goals Card -->
+    <div class="card h-100 border rounded-3 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="icon-container">
+                    <i class="hgi hgi-stroke hgi-checkmark-circle-02 fs-3 text-primary" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <asp:Repeater ID="Repeater1" runat="server">
+                        <ItemTemplate>
+                            <h3 class="card-title h5 mb-0 fw-semibold">
+                                <%# SPFactory.GetLocalizedTitle(Eval("StrategicGoalsTitle"), Eval("StrategicGoalsTitle")) %>
+                            </h3>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+            </div>
 
-
-                    <tbody>
-                        <asp:Repeater ID="rptStrategicPlan" runat="server">
-                            <ItemTemplate>
-                                <tr>
-
-                                    <td class="text-muted lh-base fs-5"><%# SPFactory.GetLocalizedTitle(Eval("DisplayNo"), Eval("DisplayNo_EN")) %> - </td>
-                                    <td class="text-muted lh-base fs-5"><%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %> </td>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:Repeater>
-                    </tbody>
-
-                </table>
-            </p>
+            <ul class="mb-0 list-unstyled d-flex flex-column gap-3">
+                <asp:Repeater ID="rptStrategicPlan" runat="server">
+                    <ItemTemplate>
+                        <li class="d-flex align-items-start gap-2">
+                            <i class="hgi hgi-stroke hgi-arrow-left-01 text-primary mt-1 flex-shrink-0" aria-hidden="true"></i>
+                            <span class="text-muted lh-base">
+                                <strong><%# SPFactory.GetLocalizedTitle(Eval("DisplayNo"), Eval("DisplayNo_EN")) %> - </strong>
+                                <%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %>
+                            </span>
+                        </li>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </ul>
         </div>
-
-
-
-
-
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-

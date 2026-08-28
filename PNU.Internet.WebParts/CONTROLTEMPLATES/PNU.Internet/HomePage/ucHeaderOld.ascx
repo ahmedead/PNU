@@ -422,7 +422,7 @@
 
     </div>
 </header>
-
+<script src="/Style%20Library/Portal/js/seoScripts.js" type="text/javascript"></script>
 <script src='/Style%20Library/Portal/js/dialog.min.js'></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -831,3 +831,4 @@
         }
     });
 </script>
+

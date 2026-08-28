@@ -133,7 +133,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Cont
                     new SscFieldDef("ButtonText", "نص الزر (عربي)", "Button Text (AR)", SPFieldType.Text),
                     new SscFieldDef("ButtonText_EN", "نص الزر (إنجليزي)", "Button Text (EN)", SPFieldType.Text),
                     new SscFieldDef("Badge1", "شارة 1 (عربي)", "Badge 1 (AR)", SPFieldType.Text),
+                    new SscFieldDef("Badge1_EN", "شارة 1 (إنجليزي)", "Badge 1 (EN)", SPFieldType.Text),
                     new SscFieldDef("Badge2", "شارة 2 (عربي)", "Badge 2 (AR)", SPFieldType.Text),
+                    new SscFieldDef("Badge2_EN", "شارة 2 (إنجليزي)", "Badge 2 (EN)", SPFieldType.Text),
                     Order()
                 },
                 Seed = new List<Dictionary<string, string>>
@@ -144,7 +146,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Cont
                         "IconClass","hgi-login-01",
                         "LinkUrl","https://www.office.com/, الدخول إلى خدمات Microsoft 365",
                         "ButtonText","الدخول على الحقيبة","ButtonText_EN","Access Suitcase",
-                        "Badge1","طالبات","Badge2","منسوبو الجامعة",
+                        "Badge1","طالبات","Badge1_EN","Students",
+                        "Badge2","منسوبو الجامعة","Badge2_EN","University Staff",
                         "ItemOrder","1"),
                     Row("Title","دليل الاستخدام","Title_EN","User Guide",
                         "Description","راجع الدليل الإرشادي للتعرف على خطوات استخدام الحقيبة الذكية وخدماتها.",

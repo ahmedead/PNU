@@ -46,8 +46,17 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                 var titles = SharedTitleReader.Load(IsArabic);
                 litTasksHeading.Text = SharedTitleReader.Get(titles, SharedTitles.TasksHeading);
 
-                rptTaskGroups.DataSource = LoadTaskGroups();
-                rptTaskGroups.DataBind();
+                var groups = LoadTaskGroups();
+                bool hasGroups = (groups != null && groups.Count > 0);
+
+                if (secTasks != null)
+                    secTasks.Visible = hasGroups;
+
+                if (hasGroups)
+                {
+                    rptTaskGroups.DataSource = groups;
+                    rptTaskGroups.DataBind();
+                }
             }
             catch (Exception ex)
             {

@@ -45,7 +45,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             new ControlPreset { Name = "العمادات (Agency Deans)", PageName = "AgencyDeens.aspx", TitleAr = "العمادات", TitleEn = "Agency Deens", ControlPath = "PNU.Internet/GeneralDest/ucDestDepartments.ascx", Properties = "ListName#AgencyDeens" },
             new ControlPreset { Name = "الإدارات (Agency Departments)", PageName = "AgencyDepartments.aspx", TitleAr = "الإدارات", TitleEn = "Agency Departments", ControlPath = "PNU.Internet/GeneralDest/ucDestDepartments.ascx", Properties = "ListName#AgencyDepartments" },
             new ControlPreset { Name = "المراكز (Agency Centers)", PageName = "AgencyCenters.aspx", TitleAr = "المراكز", TitleEn = "Agency Centers", ControlPath = "PNU.Internet/GeneralDest/ucDestDepartments.ascx", Properties = "ListName#AgencyCenters" },
-            new ControlPreset { Name = "الوحدات (Agency Units)", PageName = "AgencyUnits.aspx", TitleAr = "الوحدات", TitleEn = "Agency Units", ControlPath = "PNU.Internet/GeneralDest/ucDestDepartments.ascx", Properties = "ListName#AgencyUnits" }
+            new ControlPreset { Name = "الوحدات (Agency Units)", PageName = "AgencyUnits.aspx", TitleAr = "الوحدات", TitleEn = "Agency Units", ControlPath = "PNU.Internet/GeneralDest/ucDestDepartments.ascx", Properties = "ListName#AgencyUnits" },
+            new ControlPreset { Name = "رئيسية المركز (Center Home)", PageName = "SharedAbout.aspx", TitleAr = "الرئيسية", TitleEn = "About", ControlPath = "PNU.Internet/Centers/DGA/ucCenterHomeDga.ascx", Properties = "" },
+            new ControlPreset { Name = "المزيد عن المركز (More About Center)", PageName = "CenterMoreAbout.aspx", TitleAr = "المزيد عن المركز", TitleEn = "More About Center", ControlPath = "PNU.Internet/Centers/DGA/ucCenterMoreAboutDga.ascx", Properties = "" },
+            new ControlPreset { Name = "فئات مستفيدة للمركز (Center Beneficiaries)", PageName = "CenterBeneficiaries.aspx", TitleAr = "الفئات المستفيدة", TitleEn = "Beneficiaries", ControlPath = "PNU.Internet/Centers/DGA/ucCenterBeneficiariesDga.ascx", Properties = "" },
+            new ControlPreset { Name = "سجل المركز / سموق (Center Record)", PageName = "CenterRecord.aspx", TitleAr = "سجل سموق المهاري", TitleEn = "Smoc Skills Record", ControlPath = "PNU.Internet/Centers/DGA/ucCenterRecordDga.ascx", Properties = "" },
+            new ControlPreset { Name = "برامج المركز (Center Programs)", PageName = "CenterPrograms.aspx", TitleAr = "البرامج", TitleEn = "Programs", ControlPath = "PNU.Internet/Centers/DGA/ucCenterProgramsDga.ascx", Properties = "" },
+            new ControlPreset { Name = "قنوات ومنصات المركز (Center Channels)", PageName = "CenterChannels.aspx", TitleAr = "المنصات والخدمات المرتبطة", TitleEn = "Linked Platforms & Services", ControlPath = "PNU.Internet/Centers/DGA/ucCenterDigitalChannelsDga.ascx", Properties = "" },
+            new ControlPreset { Name = "إدارات المركز (Center Departments)", PageName = "CenterDepartments.aspx", TitleAr = "إدارات المركز", TitleEn = "Center Departments", ControlPath = "PNU.Internet/Centers/DGA/ucCenterDepartmentsDga.ascx", Properties = "" },
+            new ControlPreset { Name = "تواصل مع المركز (Center Contact)", PageName = "CenterContacts.aspx", TitleAr = "تواصل مع المركز", TitleEn = "Contact the Center", ControlPath = "PNU.Internet/Centers/DGA/ucCenterContactDga.ascx", Properties = "" },
+            new ControlPreset { Name = "مستندات المركز (Center Documents)", PageName = "CenterDocuments.aspx", TitleAr = "المستندات والنماذج والأدلة", TitleEn = "Documents, Forms and Guides", ControlPath = "PNU.Internet/Centers/DGA/ucCenterDocumentsDga.ascx", Properties = "" }
         };
 
         protected void Page_Load(object sender, EventArgs e)
@@ -294,6 +303,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 SideMenuListProvisioner.EnsureLists(web);
                 SideMenuListProvisioner.SeedMenuForDepartments(web);
                 ShowAlert("تمت عملية تعبئة القائمة الافتراضية للإدارات والصفحات بنجاح!", "success");
+            });
+        }
+
+        protected void btnSeedCenters_Click(object sender, EventArgs e)
+        {
+            ExecuteAction((web) =>
+            {
+                SideMenuListProvisioner.EnsureLists(web);
+                SideMenuListProvisioner.SeedMenuForCenters(web);
+                ShowAlert("تمت عملية تعبئة القائمة الافتراضية للمراكز والصفحات بنجاح!", "success");
             });
         }
 

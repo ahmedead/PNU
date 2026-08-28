@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -7,498 +7,413 @@
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAICalenderNew.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter.ucAICalenderNew" %>
 
-
-
-
-
-
 <style>
-    .calendar {
+    .ai-calendar-box {
         width: 100%;
-        max-width: 900px;
         background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 20px;
     }
-    .calendar-header {
+    .ai-calendar-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
     }
-    .calendar-header button {
-        padding: 10px;
-        background-color: #4a90e2;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        color: white;
-    }
-    .calendar-header button:hover {
-        background-color: #357ab7;
-    }
-    .calendar-header h2 {
-        font-size: 24px;
-        margin: 0;
-    }
-    .calendar-filters {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    .calendar-filters select, .calendar-filters input {
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    .calendar-days {
+    .ai-calendar-days-header {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
+        gap: 6px;
         text-align: center;
+        margin-bottom: 8px;
     }
-    .calendar-day {
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #f0f0f0;
+    .ai-calendar-day-head {
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 4px;
+        background-color: var(--bs-primary-25, #f0f7f3);
+        color: var(--bs-primary, #006923);
+        border-radius: 6px;
     }
-    .calendar-day:hover {
-        background-color: #d0d0d0;
+    .ai-calendar-days-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
     }
-    .calendar-day.event {
-        background-color: #4a90e2;
-        color: white;
+    .ai-calendar-day-cell {
+        min-height: 80px;
+        padding: 6px;
+        border-radius: 6px;
+        background-color: #fafafa;
+        border: 1px solid #eee;
+        transition: background-color 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
     }
-    .calendar-day.event:hover {
-        background-color: #357ab7;
+    .ai-calendar-day-cell:hover {
+        background-color: #f2f2f2;
     }
-    .event-label {
+    .ai-calendar-day-number {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #444;
+    }
+    .ai-event-label {
         display: block;
-        margin-top: 5px;
-        font-size: 16px;
+        width: 100%;
+        margin-top: 3px;
+        font-size: 0.72rem;
         color: #fff;
-        padding: 3px;
-        border-radius: 3px;
+        padding: 2px 5px;
+        border-radius: 4px;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.2;
     }
-    
-    select#yearSelect,
-    select#monthSelect {
-        width: 80px;
-        padding: 15px;
+    .track-legend-circle {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
     }
-	.fc a {
-            text-decoration: unset !important;
-        }
-
-        .fc .fc-daygrid-day-top {
-            flex-direction: row;
-        }
-
-        .fc-h-event .fc-event-title {
-            text-wrap: wrap;
-        }
-
-        .circle {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 10px;
-        }
-
-        #calendarZ .fc-scrollgrid {
-            border-radius: 0.75rem;
-            overflow: hidden;
-        }
-
-        #calendarZ .fc-scrollgrid-section.fc-scrollgrid-section-body td[role='presentation'] {
-            border-radius: 0 0 0.75rem 0.75rem;
-        }
-
-        #calendarZ th[role='presentation']:first-of-type {
-            border-radius: 0.75rem 0 0 0;
-        }
-
-        #calendarZ th[role='presentation']:last-of-type {
-            border-radius: 0 0.75rem 0 0;
-        }
 </style>
 
-
 <%
-    // Check the current site language
     var currentLanguage2 = SPContext.Current.Web.Language;
-    string PrevContent = (currentLanguage2 == 1025) // Arabic Language LCID
-        ? "▶"
-        : "◀";
-		
-		string NextContent = (currentLanguage2 == 1025) // Arabic Language LCID
-        ? "◀"
-        : "▶";
-		
-		
-		string GamificationandMetaverseTrack = (currentLanguage2 == 1025) ? "مسار التلعيب والميتافيرس": "Gamification and Metaverse Track";
-		string InformationSecurityTrack = (currentLanguage2 == 1025) ? "مسار أمن المعلومات": "Information Security Track";
-		string HealthcareBioinformaticsTrack = (currentLanguage2 == 1025) ? "مسار الصحة والمعلوماتية الحيوية": "Healthcare & Bioinformatics Track";
-		string ComputationalLearningTheoryTrack = (currentLanguage2 == 1025) ? "مسار نظرية التعلم الحوسبي": "Computational Learning Theory Track";
-		string InternetofThingsTrack = (currentLanguage2 == 1025) ? "مسار انترنت الأشياء": "Internet of Things Track";
-		string ComputerVisionTrack = (currentLanguage2 == 1025) ? "مسار رؤية الحاسب": "Computer Vision Track";
-		string GenerativeAINLPTrack = (currentLanguage2 == 1025) ? "مسار الذكاء الاصطناعي التوليدي ومعالجة اللغات الطبيعية": "Generative AI & NLP Track";
-		string AICenterTrack = (currentLanguage2 == 1025) ? "مركز الذكاء الاصطناعي": "AI center";
-		
-		
-		
-		
-	
-	
-	
-		
-		string Sunday = (currentLanguage2 == 1025) ? "الأحد": "Sunday";
-		string Monday = (currentLanguage2 == 1025) ? "الاثنين": "Monday";
-		string Tuesday = (currentLanguage2 == 1025) ? "الثلاثاء": "Tuesday";
-		string Wednesday = (currentLanguage2 == 1025) ? "الأربعاء": "Wednesday";
-		string Thursday = (currentLanguage2 == 1025) ? "الخميس": "Thursday";
-		string Friday = (currentLanguage2 == 1025) ? "الجمعة": "Friday";
-		string Saturday = (currentLanguage2 == 1025) ? "السبت": "Saturday";
-		
+    bool isArLang = (currentLanguage2 == 1025);
+    
+    string GamificationandMetaverseTrack = isArLang ? "مسار التلعيب والميتافيرس": "Gamification and Metaverse Track";
+    string InformationSecurityTrack = isArLang ? "مسار أمن المعلومات": "Information Security Track";
+    string HealthcareBioinformaticsTrack = isArLang ? "مسار الصحة والمعلوماتية الحيوية": "Healthcare & Bioinformatics Track";
+    string ComputationalLearningTheoryTrack = isArLang ? "مسار نظرية التعلم الحوسبي": "Computational Learning Theory Track";
+    string InternetofThingsTrack = isArLang ? "مسار انترنت الأشياء": "Internet of Things Track";
+    string ComputerVisionTrack = isArLang ? "مسار رؤية الحاسب": "Computer Vision Track";
+    string GenerativeAINLPTrack = isArLang ? "مسار الذكاء الاصطناعي التوليدي ومعالجة اللغات الطبيعية": "Generative AI & NLP Track";
+    string AICenterTrack = isArLang ? "مركز الذكاء الاصطناعي": "AI center";
+    
+    string Sunday = isArLang ? "الأحد": "Sun";
+    string Monday = isArLang ? "الاثنين": "Mon";
+    string Tuesday = isArLang ? "الثلاثاء": "Tue";
+    string Wednesday = isArLang ? "الأربعاء": "Wed";
+    string Thursday = isArLang ? "الخميس": "Thu";
+    string Friday = isArLang ? "الجمعة": "Fri";
+    string Saturday = isArLang ? "السبت": "Sat";
 %>
 
-<section class="full-calendar">
-    <div class="container py-5 my-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="calendar">
-                    <div class="calendar-filters">
-                        <input type="text" id="searchEvent" placeholder="بحث عن الفعالية..."  style="display:none"/>
-                        <select id="yearSelect"></select>
-                        <select id="monthSelect"></select>
+<div class="d-flex flex-column gap-4">
+    <h2 class="mb-4 fw-semibold">
+        <asp:Literal runat="server" Text="<%$ Resources: PNUres, AICalender %>" />
+    </h2>
+
+    <div class="row g-4">
+        <!-- Calendar Main Grid -->
+        <div class="col-12 col-xl-8">
+            <div class="card border rounded-3 p-4 shadow-sm ai-calendar-box">
+                <!-- Filters & Controls -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <select id="monthSelect" class="form-select form-select-sm" style="width: auto; min-width: 120px;"></select>
+                        <select id="yearSelect" class="form-select form-select-sm" style="width: auto; min-width: 90px;"></select>
                     </div>
-                    
-                    <div class="calendar-header">
-                        <button id="prevMonth"><%= PrevContent %></button>
-                        <h2 id="monthName"></h2>
-                        <button id="nextMonth"><%= NextContent %></button>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <button id="prevMonth" type="button" class="btn btn-sm btn-outline-primary" aria-label="الشهر السابق">
+                            <i class="hgi hgi-stroke hgi-arrow-right-01 fs-6" aria-hidden="true"></i>
+                        </button>
+                        <h3 id="monthName" class="h6 fw-bold mb-0 text-center px-2" style="min-width: 140px;"></h3>
+                        <button id="nextMonth" type="button" class="btn btn-sm btn-outline-primary" aria-label="الشهر القادم">
+                            <i class="hgi hgi-stroke hgi-arrow-left-01 fs-6" aria-hidden="true"></i>
+                        </button>
                     </div>
-                    <div class="calendar-days">
-                        <div class="calendar-day"><%= Sunday %></div>
-                        <div class="calendar-day"><%= Monday %></div>
-                        <div class="calendar-day"><%= Tuesday %></div>
-                        <div class="calendar-day"><%= Wednesday %></div>
-                        <div class="calendar-day"><%= Thursday %></div>
-                        <div class="calendar-day"><%= Friday %></div>
-                        <div class="calendar-day"><%= Saturday %></div>
-                    </div>
-                    
-                    <div id="days" class="calendar-days"></div>
                 </div>
+
+                <!-- Days Header -->
+                <div class="ai-calendar-days-header">
+                    <div class="ai-calendar-day-head"><%= Sunday %></div>
+                    <div class="ai-calendar-day-head"><%= Monday %></div>
+                    <div class="ai-calendar-day-head"><%= Tuesday %></div>
+                    <div class="ai-calendar-day-head"><%= Wednesday %></div>
+                    <div class="ai-calendar-day-head"><%= Thursday %></div>
+                    <div class="ai-calendar-day-head"><%= Friday %></div>
+                    <div class="ai-calendar-day-head"><%= Saturday %></div>
+                </div>
+
+                <!-- Days Grid -->
+                <div id="days" class="ai-calendar-days-grid"></div>
             </div>
-            <div class="col-lg-4">
-                <div class="d-flex flex-column">
-                    <div>
-                        <div class="p-2 px-3 my-2 border rounded-4">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #a8c3c3;"></span>
-                                    <span><%= GamificationandMetaverseTrack %></span>
-                                </li>
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #3b4cc0;"></span>
-                                    <span><%= InformationSecurityTrack %></span>
-                                </li>
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #9f74c1;"></span>
-                                    <span><%= HealthcareBioinformaticsTrack %></span>
-                                </li>
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #56b0b6;"></span>
-                                    <span><%= ComputationalLearningTheoryTrack %></span>
-                                </li>
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #7a5a9c;"></span>
-                                    <span><%= InternetofThingsTrack %></span>
-                                </li>
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #d15555;"></span>
-                                    <span><%= ComputerVisionTrack %></span>
-                                </li>
-                                <li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #f2c04e;"></span>
-                                    <span><%= GenerativeAINLPTrack %></span>
-                                </li>
-								<li class="d-flex align-items-center my-2">
-                                    <span class="circle" style="background-color: #556B2F;"></span>
-                                    <span><%= AICenterTrack %></span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+        </div>
+
+        <!-- Legend Sidebar -->
+        <div class="col-12 col-xl-4">
+            <div class="card border rounded-3 p-4 shadow-sm bg-light h-100">
+                <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                    <i class="hgi hgi-stroke hgi-filter fs-5 text-primary" aria-hidden="true"></i>
+                    <h3 class="h6 fw-bold mb-0"><%= isArLang ? "مسارات الفعاليات" : "Event Tracks" %></h3>
                 </div>
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-2 small">
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #a8c3c3;"></span>
+                        <span class="text-secondary"><%= GamificationandMetaverseTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #3b4cc0;"></span>
+                        <span class="text-secondary"><%= InformationSecurityTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #9f74c1;"></span>
+                        <span class="text-secondary"><%= HealthcareBioinformaticsTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #56b0b6;"></span>
+                        <span class="text-secondary"><%= ComputationalLearningTheoryTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #7a5a9c;"></span>
+                        <span class="text-secondary"><%= InternetofThingsTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #d15555;"></span>
+                        <span class="text-secondary"><%= ComputerVisionTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #f2c04e;"></span>
+                        <span class="text-secondary"><%= GenerativeAINLPTrack %></span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <span class="track-legend-circle" style="background-color: #006923;"></span>
+                        <span class="text-secondary"><%= AICenterTrack %></span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-</section>
+</div>
 
-<script>
-    const events = [];
-    const currentLanguage = <%= SPContext.Current.Web.Language %>;
+<script type="text/javascript">
+    (function () {
+        const events = [];
+        const currentLanguage = <%= SPContext.Current.Web.Language %>;
+        const isArabic = currentLanguage === 1025;
 
-    $(function () {
-        // load banners images
-        var bannersObject = {
-            'op': 'GetEventsData',
-            'listUrl': $util.LangUrl + '/Lists/Events',
-            'viewName': 'Home',
-            'pageURL': document.location.href
+        const categoryColors_AR = {
+            "مسار التلعيب والميتافيرس": "#a8c3c3",
+            "مسار أمن المعلومات": "#3b4cc0",
+            "مسار الصحة والمعلوماتية الحيوية": "#9f74c1",
+            "مسار نظرية التعلم الحوسبي": "#56b0b6",
+            "مسار انترنت الأشياء": "#7a5a9c",
+            "مسار رؤية الحاسب": "#d15555",
+            "مركز الذكاء الاصطناعي": "#006923",
+            "مسار الذكاء الاصطناعي التوليدي ومعالجة اللغات الطبيعية": "#f2c04e"
         };
-        LoadDataFromSharePoint(bannersObject, BindEventsData);
-    });
 
-    function formatDate(dateStr) {
-        const [day, month, year] = dateStr.split('/');
-        return `${year}-${month}-${day}`;
-    }
+        const categoryColors_EN = {
+            "Gamification and Metaverse Track": "#a8c3c3",
+            "Information Security Track": "#3b4cc0",
+            "Healthcare & Bioinformatics Track": "#9f74c1",
+            "Computational Learning Theory Track": "#56b0b6",
+            "Internet of Things Track": "#7a5a9c",
+            "Computer Vision Track": "#d15555",
+            "AI center": "#006923",
+            "Generative AI & NLP Track": "#f2c04e"
+        };
 
-    // Define event categories and their corresponding colors
-    const categoryColors_AR = {
-        "مسار التلعيب والميتافيرس": "#a8c3c3", // Light Blue
-        "مسار أمن المعلومات": "#3b4cc0", // Dark Blue
-        "مسار الصحة والمعلوماتية الحيوية": "#9f74c1", // Purple
-        "مسار نظرية التعلم الحوسبي": "#56b0b6", // Teal
-        "مسار انترنت الأشياء": "#7a5a9c", // Lavender
-        "مسار رؤية الحاسب": "#d15555", // Red
-        "مركز الذكاء الاصطناعي": "#556B2F", // Green
-        "مسار الذكاء الاصطناعي التوليدي ومعالجة اللغات الطبيعية": "#f2c04e" // Yellow
-    };
+        const months_AR = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+        const months_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const months = isArabic ? months_AR : months_EN;
+        const categoryColors = isArabic ? categoryColors_AR : categoryColors_EN;
 
-    const categoryColors_EN = {
-        "Gamification and Metaverse Track": "#a8c3c3", // Light Blue
-        "Information Security Track": "#3b4cc0", // Dark Blue
-        "Healthcare & Bioinformatics Track": "#9f74c1", // Purple
-        "Computational Learning Theory Track": "#56b0b6", // Teal
-        "Internet of Things Track": "#7a5a9c", // Lavender
-        "Computer Vision Track": "#d15555", // Red
-        "AI center": "#556B2F", // Green
-        "Generative AI & NLP Track": "#f2c04e" // Yellow
-    };
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
+            }
+            return dateStr;
+        }
 
-    const isArabic = currentLanguage === 1025;
+        var BindEventsData = function (data) {
+            if (data && data.length > 0) {
+                data.forEach(function (event) {
+                    events.push({
+                        title: event.EventTitle || event.Title,
+                        startDate: formatDate(event.startDate),
+                        endDate: formatDate(event.endDate),
+                        category: event.Category
+                    });
+                });
+            }
+            renderCalendar();
+        };
 
-    const months_AR = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-    const months_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var LoadDataFromSharePoint = function (params, success) {
+            if (typeof $util === 'undefined' || !window.jQuery) return;
+            var query = '';
+            var i = 0;
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    query += (i == 0 ? '' : '&') + key + '=' + encodeURIComponent(params[key]);
+                    i++;
+                }
+            }
+            jQuery.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: ($util.LangUrl || '') + '/_LAYOUTS/15/NewPortal/PortalHandler.ashx?' + query,
+                dataType: "json",
+                async: true,
+                cache: true,
+                success: function (data) {
+                    success(data);
+                },
+                error: function () {
+                    renderCalendar();
+                }
+            });
+        };
 
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
 
-    const months = isArabic ? months_AR : months_EN;
+        function initFilters() {
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            if (!yearSelect || !monthSelect) return;
 
-    const categoryColors = isArabic ? categoryColors_AR : categoryColors_EN;
-    var BindEventsData = function (data, listName) {
-        if (data && data.length > 0) {
+            yearSelect.innerHTML = '';
+            monthSelect.innerHTML = '';
+
+            for (let i = 2020; i <= 2030; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                if (i === currentYear) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+
+            months.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = month;
+                if (index === currentMonth) option.selected = true;
+                monthSelect.appendChild(option);
+            });
+        }
+
+        function isDateInRange(date, startDate, endDate) {
+            if (!startDate) return false;
+            if (!endDate) return date === startDate;
+            return date >= startDate && date <= endDate;
+        }
+
+        function renderCalendar() {
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+            const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDayOfMonth.getDate();
+            const startingDay = firstDayOfMonth.getDay();
+
+            const monthHeading = document.getElementById('monthName');
+            if (monthHeading) {
+                monthHeading.textContent = months[currentMonth] + ' ' + currentYear;
+            }
+
             const daysContainer = document.getElementById('days');
-            const dayElements = daysContainer.querySelectorAll('.calendar-day');
+            if (!daysContainer) return;
+            daysContainer.innerHTML = '';
 
-            // Create an array to store event data for each day
-            const eventSpans = [];
-
-            // Loop through the data to match event dates with calendar days
-            data.forEach(function (event) {
-                const startDate = formatDate(event.startDate);  // Fix invalid date format
-                const endDate = formatDate(event.endDate);  // Fix invalid date format
-                const eventTitle = event.EventTitle;
-                const eventCategory = event.Category; // Assuming event has a 'Category' property
-
-                events.push({
-                    title: eventTitle,
-                    startDate: startDate,
-                    endDate: endDate,
-                    category: eventCategory
-                });
-            });
-
-        } else {
-            console.log("No events available");
-        }
-
-        renderCalendar();
-    };
-
-    // Load data from list
-    var LoadDataFromSharePoint = function LoadDataFromFaculty(params, success, container, handler) {
-        var listUrl = '';
-        var query = '';
-        var i = 0;
-        for (var key in params) {
-            if (params.hasOwnProperty(key)) {
-                query += (i == 0 ? '' : '&') + key + '=' + params[key];
-                i++;
+            // Empty slots
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'ai-calendar-day-cell bg-transparent border-0';
+                daysContainer.appendChild(emptyDiv);
             }
-            if (key.toLowerCase() === 'listUrl'.toLowerCase()) {
-                listUrl = params[key];
-            }
-        }
-        var lang = $util.currentLang;
 
-        $.ajax({
-            type: "GET",
-            contentType: "application/json; charset=utf-8",
-            url: $util.LangUrl + '/_LAYOUTS/15/NewPortal/' + (handler ?? 'PortalHandler') + '.ashx?' + query,
-            dataType: "json",
-            async: true,
-            cache: true,
-            success: function (data) {
-                success(data, listUrl, container)
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $(container).find('.internal_loader').html($util.getLocalString("NoDataContainer"));
-            }
-        })
-    };
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('ai-calendar-day-cell');
 
-    let currentMonth = new Date().getMonth();
-    let currentYear = new Date().getFullYear();
+                const numSpan = document.createElement('span');
+                numSpan.classList.add('ai-calendar-day-number');
+                numSpan.textContent = day;
+                dayDiv.appendChild(numSpan);
 
-    function initFilters() {
-        const yearSelect = document.getElementById('yearSelect');
-        const monthSelect = document.getElementById('monthSelect');
+                const currentDate = currentYear + '-' + (currentMonth + 1).toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
 
-        for (let i = 2020; i <= 2030; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
-            if (i === currentYear) option.selected = true;
-            yearSelect.appendChild(option);
-        }
-
-        months.forEach((month, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = month;
-            if (index === currentMonth) option.selected = true;
-            monthSelect.appendChild(option);
-        });
-    }
-
-    function renderCalendar() {
-        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
-        const daysInMonth = lastDayOfMonth.getDate();
-        const startingDay = firstDayOfMonth.getDay();
-
-        const monthName = firstDayOfMonth.toLocaleString('default', { month: 'long' });
-        document.getElementById('monthName').textContent = `${monthName} ${currentYear}`;
-
-        const daysContainer = document.getElementById('days');
-        daysContainer.innerHTML = '';
-
-        // Empty slots before the start of the month
-        for (let i = 0; i < startingDay; i++) {
-            const emptyDiv = document.createElement('div');
-            daysContainer.appendChild(emptyDiv);
-        }
-
-        const eventSpans = [];
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayDiv = document.createElement('div');
-            dayDiv.classList.add('calendar-day');
-            dayDiv.textContent = day;
-
-            const currentDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-
-            events.forEach(event => {
-                if (isDateInRange(currentDate, event.startDate, event.endDate)) {
-                    if (!eventSpans[day]) {
-                        eventSpans[day] = [];
+                events.forEach(event => {
+                    if (isDateInRange(currentDate, event.startDate, event.endDate)) {
+                        const eventLabel = document.createElement('span');
+                        eventLabel.classList.add('ai-event-label');
+                        eventLabel.textContent = event.title;
+                        eventLabel.style.backgroundColor = categoryColors[event.category] || '#006923';
+                        dayDiv.appendChild(eventLabel);
                     }
-                    eventSpans[day].push(event);
-                }
-            });
-
-            daysContainer.appendChild(dayDiv);
-        }
-
-        createEventBars(eventSpans);
-    }
-
-    function createEventBars(eventSpans) {
-        const daysContainer = document.getElementById('days');
-        const dayElements = daysContainer.querySelectorAll('.calendar-day');
-
-        eventSpans.forEach((eventsForDay, dayIndex) => {
-            if (eventsForDay) {
-                const eventBar = document.createElement('div');
-                eventBar.classList.add('event-bar');
-
-                eventsForDay.forEach(event => {
-                    const eventLabel = document.createElement('span');
-                    eventLabel.classList.add('event-label');
-                    eventLabel.textContent = event.title;
-
-                    // Apply background color based on category
-                    eventLabel.style.backgroundColor = categoryColors[event.category] || '#ccc'; // Default color if category is not found
-
-                    eventBar.appendChild(eventLabel);
                 });
 
-                dayElements[dayIndex - 1].appendChild(eventBar);
+                daysContainer.appendChild(dayDiv);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initFilters();
+            renderCalendar();
+
+            if (typeof $util !== 'undefined') {
+                var bannersObject = {
+                    'op': 'GetEventsData',
+                    'listUrl': ($util.LangUrl || '') + '/Lists/Events',
+                    'viewName': 'Home',
+                    'pageURL': document.location.href
+                };
+                LoadDataFromSharePoint(bannersObject, BindEventsData);
+            }
+
+            const yearSelect = document.getElementById('yearSelect');
+            if (yearSelect) {
+                yearSelect.addEventListener('change', (e) => {
+                    currentYear = parseInt(e.target.value);
+                    renderCalendar();
+                });
+            }
+
+            const monthSelect = document.getElementById('monthSelect');
+            if (monthSelect) {
+                monthSelect.addEventListener('change', (e) => {
+                    currentMonth = parseInt(e.target.value);
+                    renderCalendar();
+                });
+            }
+
+            const prevBtn = document.getElementById('prevMonth');
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (currentMonth === 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    } else {
+                        currentMonth--;
+                    }
+                    if (monthSelect) monthSelect.value = currentMonth;
+                    if (yearSelect) yearSelect.value = currentYear;
+                    renderCalendar();
+                });
+            }
+
+            const nextBtn = document.getElementById('nextMonth');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (currentMonth === 11) {
+                        currentMonth = 0;
+                        currentYear++;
+                    } else {
+                        currentMonth++;
+                    }
+                    if (monthSelect) monthSelect.value = currentMonth;
+                    if (yearSelect) yearSelect.value = currentYear;
+                    renderCalendar();
+                });
             }
         });
-    }
-
-    function isDateInRange(date, startDate, endDate) {
-        return date >= startDate && date <= endDate;
-    }
-
-    document.getElementById('yearSelect').addEventListener('change', (e) => {
-        currentYear = parseInt(e.target.value);
-        renderCalendar();
-    });
-
-    document.getElementById('monthSelect').addEventListener('change', (e) => {
-        currentMonth = parseInt(e.target.value);
-        renderCalendar();
-    });
-
-    document.getElementById('searchEvent').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const allDays = document.querySelectorAll('.calendar-day');
-
-        allDays.forEach((dayDiv) => {
-            const eventLabel = dayDiv.querySelector('.event-label');
-            if (eventLabel) {
-                const eventText = eventLabel.textContent.toLowerCase();
-                if (eventText.includes(searchTerm)) {
-                    dayDiv.style.display = 'block';
-                } else {
-                    dayDiv.style.display = 'none';
-                }
-            }
-        });
-    });
-
-    initFilters();
-    renderCalendar();
-
-    // Handle "Previous" and "Next" Month Button Click
-    document.getElementById('prevMonth').addEventListener('click', function (e) {
-        e.preventDefault();
-        if (currentMonth === 0) {
-            currentMonth = 11;
-            currentYear--;
-        } else {
-            currentMonth--;
-        }
-        renderCalendar();
-    });
-
-    document.getElementById('nextMonth').addEventListener('click', function (e) {
-        e.preventDefault();
-        if (currentMonth === 11) {
-            currentMonth = 0;
-            currentYear++;
-        } else {
-            currentMonth++;
-        }
-        renderCalendar();
-    });
+    })();
 </script>

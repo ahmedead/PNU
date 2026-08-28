@@ -31,7 +31,7 @@
                                         </a>
                                         <div class="d-flex align-items-center gap-2">
                                             <i class="hgi hgi-stroke hgi-call fs-5 text-primary" aria-hidden="true"></i>
-                                            <span>التحويلة الداخلية: <span dir="ltr">555</span></span>
+                                            <span><%# PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Controls.SscHelper.IsArabic ? "التحويلة الداخلية:" : "Internal Extension:" %> <span dir="ltr">555</span></span>
                                         </div>
                                     </div>
                                 </div>

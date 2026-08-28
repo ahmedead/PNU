@@ -57,6 +57,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
         private const string CTRL_DestCertificates = "PNU.Internet/GeneralDest/ucDestCertificates.ascx";
         private const string CTRL_DestSections = "PNU.Internet/GeneralDest/ucDestSections.ascx";
         private const string CTRL_EntitySection = "PNU.Internet/Shared/EntitySection/ucEntitySection.ascx";
+        private const string CTRL_CTREntitySection = "PNU.Internet/Centers/DGA/ucCenterBeneficiariesDga.ascx";
+        private const string CTRL_CTREPrograms = "PNU.Internet/Centers/DGA/ucCenterProgramsDga.ascx";
+        private const string CTRL_CTREDepartments = "PNU.Internet/Centers/DGA/ucCenterDepartmentsDga.ascx";
+        private const string CTRL_CTRERecord = "PNU.Internet/Centers/DGA/ucCenterRecordDga.ascx";
+        private const string CTRL_CTREDigitalChannels = "PNU.Internet/Centers/DGA/ucCenterDigitalChannelsDga.ascx";
 
 
         private const string PAGE_CONTACT = "CollegeContacts.aspx";
@@ -368,9 +373,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             {
                 if (web == null) return;
 
-                // Only seed college subwebs
-                if (web.ServerRelativeUrl.IndexOf("/Departments/", StringComparison.OrdinalIgnoreCase) < 0)
-                    return;
+                //// Only seed college subwebs
+                //if (web.ServerRelativeUrl.IndexOf("/Departments/", StringComparison.OrdinalIgnoreCase) < 0)
+                //    return;
+
+                string _Prefix = "DEPT";
+                string _PrefixEntity = "Department";
+                string _PrefixEntity_Ar = "Department";
 
                 SPList level1 = web.Lists.TryGetList(LIST_LEVEL1);
                 SPList level2 = web.Lists.TryGetList(LIST_LEVEL2);
@@ -381,9 +390,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 bool originalAllowUnsafeUpdates = web.AllowUnsafeUpdates;
                 web.AllowUnsafeUpdates = true;
 
-                // Build "/ar/Faculties/IT/" (or "/en/...") from the web's own path.
-                // ServerRelativeUrl normally already carries the language segment;
-                // if it doesn't, prepend the one matching this web's language.
                 string webPath = web.ServerRelativeUrl.TrimEnd('/') + "/";
                 string langSegment = web.Language == 1025 ? "/ar/" : "/en/";
 
@@ -394,49 +400,114 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 }
 
                 AddLevel1(level1, "الرئيسية", "Main", webPath + "Pages/" + PAGE_SharedAbout, 1);
-                int MoreAboutCollegeItemId = AddLevel1(level1, "المزيد عن الإدارة", "More About Vice Rectorate", "", 2);
+                int MoreAboutCollegeItemId = AddLevel1(level1, "المزيد عن الإدارة", "More About " + _PrefixEntity, "", 2);
                 int departmentsItemId = AddLevel1(level1, "الجهات التابعة", "Affiliated entities", "", 3);
 
-                AddLevel1(level1, "المستندات والنماذج والأدلة", "Documents, Forms and Guides", webPath + "Pages/DnDocuments.aspx", 4);
+                AddLevel1(level1, "المستندات والنماذج والأدلة", "Documents, Forms and Guides", webPath + "Pages/"+ _Prefix + "Documents.aspx", 4);
                 AddLevel1(level1, "تواصل معنا", "Contact Us", webPath + "Pages/" + PAGE_SharedCONTACT, 5);
 
 
-                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "الهيكل التنظيمي", "Hierarchy", webPath + "Pages/" + "DEPTHierarchy.aspx", 1);
-                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "مسارات المستفيدين", "Beneficiary Pathways", webPath + "Pages/" + "DEPTBeneficiaryPathways.aspx", 2);
-                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "الخدمات", "Services", webPath + "Pages/" + "DEPTServices.aspx", 2);
-                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "البرامج والمبادرات", "Programs and Initiatives", webPath + "Pages/" + "DEPTInitiatives.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن " + _PrefixEntity_Ar, "الهيكل التنظيمي", "Hierarchy", webPath + "Pages/" + _Prefix + "Hierarchy.aspx", 1);
+                //AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن " + _PrefixEntity_Ar, "مسارات المستفيدين", "Beneficiary Pathways", webPath + "Pages/" + _Prefix + "BeneficiaryPathways.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن " + _PrefixEntity_Ar, "الخدمات والبرامج", "Services", webPath + "Pages/"+ _Prefix + "Services.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن " + _PrefixEntity_Ar, "البرامج والمبادرات", "Programs and Initiatives", webPath + "Pages/"+ _Prefix + "Initiatives.aspx", 2);
                 //AddLevel2MoreAbout(level2, MoreAboutCollegeItemId, "المزيد عن الإدارة", "مسارات المستفيدين", "AgencyAchievements", webPath + "Pages/" + "AgencyAchievements.aspx", 2);
 
                 //DnBeneficiaryPathways
 
-                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوكالات", "Department Agencies", webPath + "Pages/" + "DEPTAgencies.aspx", 2);
-                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الإدارات", "Department Departments", webPath + "Pages/" + "DnDepartments.aspx", 2);
-                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "المراكز", "Department Centers", webPath + "Pages/" + "DnCenters.aspx", 2);
-                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوحدات", "Department Units", webPath + "Pages/" + "DEPTUnits.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوكالات", _PrefixEntity +" Agencies", webPath + "Pages/"+ _Prefix + "Agencies.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "العمادات", _PrefixEntity + " Deenships", webPath + "Pages/"+ _Prefix + "Deenships.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "المراكز", _PrefixEntity + " Centers", webPath + "Pages/"+ _Prefix + "Centers.aspx", 2);
+                AddLevel2MoreAbout(level2, departmentsItemId, "الجهات التابعة", "الوحدات", _PrefixEntity + " Units", webPath + "Pages/"+ _Prefix + "Units.aspx", 2);
 
                 web.AllowUnsafeUpdates = originalAllowUnsafeUpdates;
 
                 // Create the pages the Level1 items point at
                 EnsurePage(web, PAGE_SharedAbout, "الرئيسية ", "About", CTRL_SharedAbout);
-                EnsurePage(web, "DEPTDocuments.aspx", "المستندات والنماذج والأدلة", "Documents, Forms and Guides", CTRL_DOCUMENTS, "LIST_NAME#DEPTDocuments");
+                EnsurePage(web,  _Prefix + "Documents.aspx", "المستندات والنماذج والأدلة", "Documents, Forms and Guides", CTRL_DOCUMENTS, "LIST_NAME#"+ _Prefix + "Documents");
                 EnsurePage(web, PAGE_SharedCONTACT, "تواصل معنا ", "Contact Us", CTRL_SharedCONTACT);
-                EnsurePage(web, "DEPTHierarchy.aspx", "الهيكل التنظيمي", "Hierarchy", CTRL_EntitySection, "TracksListName#DEPTHierarchyTracks;BulletsListName#DEPTHierarchyBullets");
+                EnsurePage(web,  _Prefix + "Hierarchy.aspx", "الهيكل التنظيمي", "Hierarchy", CTRL_EntitySection, "TracksListName#"+ _Prefix + "HierarchyTracks;BulletsListName#"+ _Prefix + "HierarchyBullets");
 
-                EnsurePage(web, "DnAdvertisements.aspx", "الإعلانات", "Advertisements", CTRL_Advertisments);
-                EnsurePage(web, "DnBeneficiaryPathways.aspx", "مسارات المستفيدين", "Beneficiary Pathways", CTRL_EntitySection, "TracksListName#DnBeneficiaryPathwaysTracks;BulletsListName#DnBeneficiaryPathwaysBullets");
-                EnsurePage(web, "DnServices.aspx", "الخدمات", "Services", CTRL_EntitySection, "TracksListName#DnServicesTracks;BulletsListName#DnServicesBullets");
-                EnsurePage(web, "DnInitiatives.aspx", "البرامج والمبادرات", "Programs and Initiatives", CTRL_EntitySection, "TracksListName#DnInitiativesTracks;BulletsListName#DnInitiativesBullets");
+                EnsurePage(web,  _Prefix + "Advertisements.aspx", "الإعلانات", "Advertisements", CTRL_Advertisments);
+                //EnsurePage(web,  _Prefix + "BeneficiaryPathways.aspx", "مسارات المستفيدين", "Beneficiary Pathways", CTRL_EntitySection, "TracksListName#"+ _Prefix + "BeneficiaryPathwaysTracks;BulletsListName#"+ _Prefix + "BeneficiaryPathwaysBullets");
+                EnsurePage(web,  _Prefix + "Services.aspx", "الخدمات والبرامج", "Services", CTRL_EntitySection, "TracksListName#"+ _Prefix + "ServicesTracks;BulletsListName#"+ _Prefix + "ServicesBullets");
+                EnsurePage(web,  _Prefix + "Initiatives.aspx", "البرامج والمبادرات", "Programs and Initiatives", CTRL_EntitySection, "TracksListName#"+ _Prefix + "InitiativesTracks;BulletsListName#"+ _Prefix + "InitiativesBullets");
 
-                EnsurePage(web, "DnAgencies.aspx", "الوكالات", "Deenship Agencies", CTRL_DestDepartments, "ListName#DnAgencies");
-                EnsurePage(web, "DnDepartments.aspx", "الإدارات", "Deenship Departments", CTRL_DestDepartments, "ListName#DnDepartments");
-                EnsurePage(web, "DnCenters.aspx", "المراكز", "Deenship Centers", CTRL_DestDepartments, "ListName#DnCenters");
-                EnsurePage(web, "DnUnits.aspx", "الوحدات", "Deenship Units", CTRL_DestDepartments, "ListName#DnUnits");
+                EnsurePage(web,  _Prefix + "Agencies.aspx", "الوكالات", "Department Agencies", CTRL_DestDepartments, "ListName#"+ _Prefix + "Agencies");
+                EnsurePage(web,  _Prefix + "Deenships.aspx", "العمادات", "Department Deenships", CTRL_DestDepartments, "ListName#"+ _Prefix + "Deenships");
+                EnsurePage(web,  _Prefix + "Centers.aspx", "المراكز", "Department Centers", CTRL_DestDepartments, "ListName#"+ _Prefix + "Centers");
+                EnsurePage(web,  _Prefix + "Units.aspx", "الوحدات", "Department Units", CTRL_DestDepartments, "ListName#"+ _Prefix + "Units");
 
             }
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
                     "SideMenuListProvisioner.SeedMenu", ex.Message);
+            }
+        }
+
+        public static void SeedMenuForCenters(SPWeb web)
+        {
+            try
+            {
+                if (web == null) return;
+
+                string _Prefix = "Center";
+                string _PrefixEntity = "Center";
+                string _PrefixEntity_Ar = "المركز";
+
+                SPList level1 = web.Lists.TryGetList(LIST_LEVEL1);
+                SPList level2 = web.Lists.TryGetList(LIST_LEVEL2);
+                if (level1 == null || level2 == null) return;
+
+                if (level1.ItemCount > 0) return;   // already seeded
+
+                bool originalAllowUnsafeUpdates = web.AllowUnsafeUpdates;
+                web.AllowUnsafeUpdates = true;
+
+                string webPath = web.ServerRelativeUrl.TrimEnd('/') + "/";
+                string langSegment = web.Language == 1025 ? "/ar/" : "/en/";
+
+                if (!webPath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase)
+                    && !webPath.StartsWith("/en/", StringComparison.OrdinalIgnoreCase))
+                {
+                    webPath = langSegment + webPath.TrimStart('/');
+                }
+
+                AddLevel1(level1, "الرئيسية", "Main", webPath + "Pages/" + PAGE_SharedAbout, 1);
+                int MoreAboutCenterItemId = AddLevel1(level1, "المزيد عن المركز", "More About " + _PrefixEntity, "", 2);
+
+                
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "الفئات المستفيدة", "Beneficiaries", webPath + "Pages/" + _Prefix + "Beneficiaries.aspx", 1);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "سجل سموق المهاري", "Smoc Record", webPath + "Pages/" + _Prefix + "SmocRecord.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "البرامج", "Programs", webPath + "Pages/" + _Prefix + "Programs.aspx", 3);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "المنصات والخدمات المرتبطة", "Linked Services", webPath + "Pages/" + _Prefix + "LinkedServices.aspx", 4);
+
+                AddLevel1(level1, "الإدارات", _Prefix + "Departments", webPath + "Pages/" + "CenterDepartments.aspx", 5);
+                AddLevel1(level1, "تواصل مع المركز", "Contact Us", webPath + "Pages/" + PAGE_SharedCONTACT, 5);
+
+
+
+                web.AllowUnsafeUpdates = originalAllowUnsafeUpdates;
+
+                // Create the pages the Level1 and Level2 items point at
+                EnsurePage(web, PAGE_SharedAbout, "الرئيسية ", "About", CTRL_SharedAbout);
+                
+                EnsurePage(web, _Prefix + "Beneficiaries.aspx", "الفئات المستفيدة", "Beneficiaries", CTRL_CTREntitySection);
+                EnsurePage(web, _Prefix + "SmocRecord.aspx", "سجل سموق المهاري", "Smoc Record", CTRL_CTRERecord);
+                EnsurePage(web, _Prefix + "Programs.aspx", "البرامج", "Services", CTRL_CTREPrograms);
+                EnsurePage(web, _Prefix + "LinkedServices.aspx", "المنصات والخدمات المرتبطة", "Linked Services", CTRL_CTREDigitalChannels);
+
+                EnsurePage(web, _Prefix + "Departments.aspx", "الإدارات", "Center Departments", CTRL_CTREDepartments);
+                EnsurePage(web, PAGE_SharedCONTACT, "تواصل مع المركز ", "Contact Us", CTRL_SharedCONTACT);
+
+                // Ensure and seed all Center lists
+                PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA.CenterProvisioner.EnsureAllLists(web);
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
+                    "SideMenuListProvisioner.SeedMenuForCenters", ex.Message);
             }
         }
 
@@ -781,6 +852,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                     {
                         PublishingPage page = pubWeb.GetPublishingPages().Add(pageName, layout);
                         page.Title = web.Language == 1025 ? titleAr : titleEn;
+
+                        //for test
+                        page.Title = web.Title + " - " + page.Title;
                         page.Update();
 
                         AddUserControlToPage(web, page, userControlPath, UserControlProperties);
@@ -895,6 +969,36 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
             return list;
         }
 
+        private static void EnsureDefaultViewFields(SPList list, params string[] fieldNames)
+        {
+            if (list == null || fieldNames == null || fieldNames.Length == 0) return;
+            try
+            {
+                SPView view = list.DefaultView;
+                if (view == null) return;
+
+                bool updated = false;
+                foreach (string name in fieldNames)
+                {
+                    if (list.Fields.ContainsField(name) && !view.ViewFields.Exists(name))
+                    {
+                        view.ViewFields.Add(name);
+                        updated = true;
+                    }
+                }
+
+                if (updated)
+                {
+                    view.Update();
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "ucHelpSupport - EnsureDefaultViewFields", ex.Message);
+            }
+        }
+
+
         private static void EnsureLevel2List(SPWeb web, SPList level1List)
         {
             SPList list = web.Lists.TryGetList(LIST_LEVEL2);
@@ -912,6 +1016,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 lookup.LookupField = "Title";
                 lookup.Update();
             }
+
+            EnsureDefaultViewFields(list, "Parent");
 
             list.OnQuickLaunch = false;
             list.Update();
@@ -935,6 +1041,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 fld.DefaultValue = "1";
                 fld.Update();
             }
+
+            EnsureDefaultViewFields(list, "Title_EN", "URL", "ItemOrder", "Visibility");
         }
 
         private static string SafeField(SPListItem item, string fieldName)

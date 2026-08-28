@@ -15,6 +15,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
     {
         public const string GroupsList = "SharedTaskGroups";
         public const string PointsList = "SharedTaskPoints";
+        private const string ProvisionedKey = "PNU_SharedTasks_Provisioned";
         private static readonly object _lock = new object();
 
         public static void EnsureLists(SPWeb web)
@@ -33,13 +34,31 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                         using (var site = new SPSite(siteId))
                         using (var elevatedWeb = site.OpenWeb(webId))
                         {
+                            // If already provisioned, do not recreate deleted lists or re-seed deleted items
+                            if (elevatedWeb.AllProperties.ContainsKey(ProvisionedKey))
+                                return;
+
+                            // If lists already exist, mark as provisioned so deleted items won't re-seed
+                            if (elevatedWeb.Lists.TryGetList(GroupsList) != null ||
+                                elevatedWeb.Lists.TryGetList(PointsList) != null)
+                            {
+                                elevatedWeb.AllowUnsafeUpdates = true;
+                                elevatedWeb.AllProperties[ProvisionedKey] = "1";
+                                elevatedWeb.Update();
+                                elevatedWeb.AllowUnsafeUpdates = false;
+                                return;
+                            }
+
                             elevatedWeb.AllowUnsafeUpdates = true;
 
                             var groups = EnsureGroups(elevatedWeb);
                             var points = EnsurePoints(elevatedWeb);
 
-                            if (groups != null && groups.ItemCount == 0)
+                            if (groups != null)
                                 Seed(groups, points);
+
+                            elevatedWeb.AllProperties[ProvisionedKey] = "1";
+                            elevatedWeb.Update();
 
                             elevatedWeb.AllowUnsafeUpdates = false;
                         }
@@ -73,12 +92,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                 list.DefaultView.Update();
                 list.Update();
             }
-            else
-            {
-                EnsureField(list, "TitleAr",   SPFieldType.Text);
-                EnsureField(list, "TitleEn",   SPFieldType.Text);
-                EnsureField(list, "SortOrder", SPFieldType.Number);
-            }
             GrantAnonymous(list);
             return list;
         }
@@ -105,13 +118,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                 if (!cols.Exists("SortOrder")) cols.Add("SortOrder");
                 list.DefaultView.Update();
                 list.Update();
-            }
-            else
-            {
-                EnsureField(list, "TextAr",    SPFieldType.Note);
-                EnsureField(list, "TextEn",    SPFieldType.Note);
-                EnsureField(list, "GroupId",   SPFieldType.Number);
-                EnsureField(list, "SortOrder", SPFieldType.Number);
             }
             GrantAnonymous(list);
             return list;

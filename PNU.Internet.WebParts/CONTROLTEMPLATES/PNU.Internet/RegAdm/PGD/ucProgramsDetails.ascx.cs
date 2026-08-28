@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.RegAdm.PGD
 {
     public partial class ucProgramsDetails : UserControl
     {
+        public bool IsArabic
+        {
+            get
+            {
+                try
+                {
+                    if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null)
+                    {
+                        string url = HttpContext.Current.Request.Url.AbsolutePath.ToLower();
+                        if (url.Contains("/en/") || url.EndsWith("/en")) return false;
+                    }
+                    if (SPContext.Current != null && SPContext.Current.Web != null)
+                    {
+                        return SPContext.Current.Web.Language == 1025;
+                    }
+                    return System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLower() != "en";
+                }
+                catch { return true; }
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try

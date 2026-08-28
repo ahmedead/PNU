@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.UniversityPresidentOffice
 {
@@ -19,6 +21,18 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
         public bool HasLeadCard { get { return ShowLeadCard && !string.IsNullOrEmpty(LeadText); } }
         public bool HasImage { get { return !string.IsNullOrEmpty(ImageUrl); } }
         public bool HasDescription { get { return !string.IsNullOrEmpty(Description); } }
+
+        public System.Collections.Generic.List<string> Paragraphs
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Description)) return new System.Collections.Generic.List<string>();
+                return new System.Collections.Generic.List<string>(
+                    Description.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.RemoveEmptyEntries)
+                               .Select(p => p.Trim())
+                               .Where(p => p.Length > 0));
+            }
+        }
     }
 
     public class UpoContact

@@ -30,10 +30,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
                 {
                     web.AllowUnsafeUpdates = true;
 
-                    var tracks = EnsureTracksList(web, tracksListName);
-                    var bullets = EnsureBulletsList(web, bulletsListName);
+                    bool tracksCreated;
+                    bool bulletsCreated;
+                    var tracks = EnsureTracksList(web, tracksListName, out tracksCreated);
+                    var bullets = EnsureBulletsList(web, bulletsListName, out bulletsCreated);
 
-                    if (tracks != null && tracks.ItemCount == 0)
+                    if (tracksCreated && tracks != null)
                     {
                         Seed(tracks, bullets);
                     }
@@ -49,8 +51,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
             }
         }
 
-        private static SPList EnsureTracksList(SPWeb web, string listName)
+        private static SPList EnsureTracksList(SPWeb web, string listName, out bool created)
         {
+            created = false;
             var list = web.Lists.TryGetList(listName);
             if (list == null)
             {
@@ -65,6 +68,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
                 EnsureField(list, "ListStyle", SPFieldType.Text); // "bullet" or "number"
                 EnsureField(list, "SortOrder", SPFieldType.Number);
                 list.Update();
+                created = true;
             }
             else
             {
@@ -82,8 +86,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
             return list;
         }
 
-        private static SPList EnsureBulletsList(SPWeb web, string listName)
+        private static SPList EnsureBulletsList(SPWeb web, string listName, out bool created)
         {
+            created = false;
             var list = web.Lists.TryGetList(listName);
             if (list == null)
             {
@@ -96,6 +101,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.EntitySecti
                 EnsureField(list, "GroupId", SPFieldType.Number);
                 EnsureField(list, "SortOrder", SPFieldType.Number);
                 list.Update();
+                created = true;
             }
             else
             {

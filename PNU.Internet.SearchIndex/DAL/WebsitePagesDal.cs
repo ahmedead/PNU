@@ -10,14 +10,24 @@ namespace PNU.Internet.SearchIndex.DAL
 {
     public class WebsitePageDto
     {
-        public long     PageId                { get; set; }
-        public string   PageTitle             { get; set; }
-        public string   PageURL               { get; set; }
-        public string   PageLayout            { get; set; }
-        public string   UserControlPath       { get; set; }
-        public string   UserControlProperties { get; set; }
-        public string   WebUrl                { get; set; }
-        public DateTime LastIndexed           { get; set; }
+        public long PageId { get; set; }
+        public string PageTitle { get; set; }
+        public string PageURL { get; set; }
+        public string PageLayout { get; set; }
+        public string UserControlPath { get; set; }
+        public string UserControlProperties { get; set; }
+        public string WebUrl { get; set; }
+
+        // English mirror
+        public string PageTitleEn { get; set; }
+        public string PageURLEn { get; set; }
+        public string PageLayoutEn { get; set; }
+        public string UserControlPathEn { get; set; }
+        public string UserControlPropertiesEn { get; set; }
+        public string WebUrlEn { get; set; }
+        public bool EnExists { get; set; }
+
+        public DateTime LastIndexed { get; set; }
     }
 
     /// <summary>
@@ -79,6 +89,18 @@ namespace PNU.Internet.SearchIndex.DAL
         /// </summary>
         public static void EnsureWebsitePagesTableExists()
         {
+            string ignored;
+            EnsureWebsitePagesTableExists(out ignored);
+        }
+
+        /// <summary>
+        /// Same as the parameterless overload but reports why schema
+        /// setup failed (bad connection string, no CREATE rights, etc.)
+        /// instead of silently continuing to a run that writes nothing.
+        /// </summary>
+        public static void EnsureWebsitePagesTableExists(out string errorMessage)
+        {
+            string err = null;
             const string ddl = @"
 IF OBJECT_ID('dbo.WebsitePages', 'U') IS NULL
 BEGIN
@@ -91,10 +113,34 @@ BEGIN
         UserControlPath       NVARCHAR(MAX)   NULL,
         UserControlProperties NVARCHAR(MAX)   NULL,
         WebUrl                NVARCHAR(1000)  NULL,
+        PageTitleEn             NVARCHAR(500)  NULL,
+        PageURLEn               NVARCHAR(1000) NULL,
+        PageLayoutEn            NVARCHAR(500)  NULL,
+        UserControlPathEn       NVARCHAR(MAX)  NULL,
+        UserControlPropertiesEn NVARCHAR(MAX)  NULL,
+        WebUrlEn                NVARCHAR(1000) NULL,
+        EnExists                BIT NOT NULL DEFAULT(0),
         LastIndexed           DATETIME        NOT NULL DEFAULT(GETDATE())
     );
     CREATE UNIQUE INDEX UX_WebsitePages_PageURL
         ON dbo.WebsitePages(PageURL);
+END
+ELSE
+BEGIN
+    IF COL_LENGTH('dbo.WebsitePages','PageURLEn')               IS NULL
+        ALTER TABLE dbo.WebsitePages ADD PageURLEn               NVARCHAR(1000) NULL;
+    IF COL_LENGTH('dbo.WebsitePages','PageTitleEn')             IS NULL
+        ALTER TABLE dbo.WebsitePages ADD PageTitleEn             NVARCHAR(500)  NULL;
+    IF COL_LENGTH('dbo.WebsitePages','PageLayoutEn')            IS NULL
+        ALTER TABLE dbo.WebsitePages ADD PageLayoutEn            NVARCHAR(500)  NULL;
+    IF COL_LENGTH('dbo.WebsitePages','UserControlPathEn')       IS NULL
+        ALTER TABLE dbo.WebsitePages ADD UserControlPathEn       NVARCHAR(MAX)  NULL;
+    IF COL_LENGTH('dbo.WebsitePages','UserControlPropertiesEn') IS NULL
+        ALTER TABLE dbo.WebsitePages ADD UserControlPropertiesEn NVARCHAR(MAX)  NULL;
+    IF COL_LENGTH('dbo.WebsitePages','WebUrlEn')                IS NULL
+        ALTER TABLE dbo.WebsitePages ADD WebUrlEn                NVARCHAR(1000) NULL;
+    IF COL_LENGTH('dbo.WebsitePages','EnExists')                IS NULL
+        ALTER TABLE dbo.WebsitePages ADD EnExists                BIT NOT NULL DEFAULT(0);
 END";
 
             const string procDrop = @"
@@ -103,12 +149,19 @@ IF OBJECT_ID('dbo.usp_UpsertWebsitePage','P') IS NOT NULL
 
             const string procCreate = @"
 CREATE PROCEDURE dbo.usp_UpsertWebsitePage
-    @PageTitle             NVARCHAR(500) = NULL,
-    @PageURL               NVARCHAR(1000),
-    @PageLayout            NVARCHAR(500) = NULL,
-    @UserControlPath       NVARCHAR(MAX) = NULL,
-    @UserControlProperties NVARCHAR(MAX) = NULL,
-    @WebUrl                NVARCHAR(1000) = NULL
+    @PageTitle               NVARCHAR(500)  = NULL,
+    @PageURL                 NVARCHAR(1000),
+    @PageLayout              NVARCHAR(500)  = NULL,
+    @UserControlPath         NVARCHAR(MAX)  = NULL,
+    @UserControlProperties   NVARCHAR(MAX)  = NULL,
+    @WebUrl                  NVARCHAR(1000) = NULL,
+    @PageTitleEn             NVARCHAR(500)  = NULL,
+    @PageURLEn               NVARCHAR(1000) = NULL,
+    @PageLayoutEn            NVARCHAR(500)  = NULL,
+    @UserControlPathEn       NVARCHAR(MAX)  = NULL,
+    @UserControlPropertiesEn NVARCHAR(MAX)  = NULL,
+    @WebUrlEn                NVARCHAR(1000) = NULL,
+    @EnExists                BIT            = 0
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -116,17 +169,28 @@ BEGIN
     USING (SELECT @PageURL AS PageURL) AS S ON T.PageURL = S.PageURL
     WHEN MATCHED THEN
         UPDATE SET
-            PageTitle             = @PageTitle,
-            PageLayout            = @PageLayout,
-            UserControlPath       = @UserControlPath,
-            UserControlProperties = @UserControlProperties,
-            WebUrl                = @WebUrl,
-            LastIndexed           = GETDATE()
+            PageTitle               = @PageTitle,
+            PageLayout              = @PageLayout,
+            UserControlPath         = @UserControlPath,
+            UserControlProperties   = @UserControlProperties,
+            WebUrl                  = @WebUrl,
+            PageTitleEn             = @PageTitleEn,
+            PageURLEn               = @PageURLEn,
+            PageLayoutEn            = @PageLayoutEn,
+            UserControlPathEn       = @UserControlPathEn,
+            UserControlPropertiesEn = @UserControlPropertiesEn,
+            WebUrlEn                = @WebUrlEn,
+            EnExists                = @EnExists,
+            LastIndexed             = GETDATE()
     WHEN NOT MATCHED THEN
         INSERT (PageTitle, PageURL, PageLayout, UserControlPath,
-                UserControlProperties, WebUrl, LastIndexed)
+                UserControlProperties, WebUrl,
+                PageTitleEn, PageURLEn, PageLayoutEn, UserControlPathEn,
+                UserControlPropertiesEn, WebUrlEn, EnExists, LastIndexed)
         VALUES (@PageTitle, @PageURL, @PageLayout, @UserControlPath,
-                @UserControlProperties, @WebUrl, GETDATE());
+                @UserControlProperties, @WebUrl,
+                @PageTitleEn, @PageURLEn, @PageLayoutEn, @UserControlPathEn,
+                @UserControlPropertiesEn, @WebUrlEn, @EnExists, GETDATE());
 END";
 
             SPSecurity.RunWithElevatedPrivileges(delegate ()
@@ -138,33 +202,108 @@ END";
                         conn.Open();
                         Exec(conn, ddl);
 
-                        bool procExists = false;
-                        using (var cmd = new SqlCommand(
-                            "SELECT CASE WHEN OBJECT_ID('dbo.usp_UpsertWebsitePage','P') " +
-                            "IS NULL THEN 0 ELSE 1 END", conn))
-                        {
-                            procExists = Convert.ToInt32(cmd.ExecuteScalar()) == 1;
-                        }
-                        if (!procExists)
-                        {
-                            Exec(conn, procDrop);
-                            Exec(conn, procCreate);
-                        }
+                        // Always recreate: the signature changed when the
+                        // bilingual columns were added, so an existing v1
+                        // proc must be replaced.
+                        Exec(conn, procDrop);
+                        Exec(conn, procCreate);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    err = ex.Message;
+                    SearchLogger.WriteToLog("WebsitePagesDal",
+                        "EnsureTable", ex.ToString());
+                }
+            });
+
+            errorMessage = err;
+        }
+
+        /// <summary>
+        /// Round-trips a trivial query so the UI can prove the app pool
+        /// can actually reach PNU_SearchIndex. Returns null on success,
+        /// otherwise the failure message.
+        /// </summary>
+        public static string TestConnection()
+        {
+            string err = null;
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
+            {
+                try
+                {
+                    using (var conn = new SqlConnection(ConnectionString))
+                    using (var cmd = new SqlCommand(
+                        "SELECT COUNT(*) FROM dbo.WebsitePages", conn))
+                    {
+                        conn.Open();
+                        cmd.ExecuteScalar();
+                    }
+                }
+                catch (Exception ex) { err = ex.Message; }
+            });
+            return err;
+        }
+
+        /// <summary>Row count, or -1 when the query fails.</summary>
+        public static int GetRowCount()
+        {
+            int n = -1;
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
+            {
+                try
+                {
+                    using (var conn = new SqlConnection(ConnectionString))
+                    using (var cmd = new SqlCommand(
+                        "SELECT COUNT(*) FROM dbo.WebsitePages", conn))
+                    {
+                        conn.Open();
+                        n = Convert.ToInt32(cmd.ExecuteScalar());
                     }
                 }
                 catch (Exception ex)
                 {
                     SearchLogger.WriteToLog("WebsitePagesDal",
-                        "EnsureTable", ex.Message);
+                        "GetRowCount", ex.Message);
                 }
             });
+            return n;
         }
 
         // ----- upsert ----------------------------------------------------
-        public static void UpsertWebsitePage(string title, string url,
-            string layout, string ucPath, string ucProps, string webUrl)
+        public static bool UpsertWebsitePage(string title, string url,
+            string layout, string ucPath, string ucProps, string webUrl,
+            string titleEn = null, string urlEn = null, string layoutEn = null,
+            string ucPathEn = null, string ucPropsEn = null,
+            string webUrlEn = null, bool enExists = false)
         {
-            if (string.IsNullOrEmpty(url)) return;
+            string ignored;
+            return UpsertWebsitePage(title, url, layout, ucPath, ucProps,
+                webUrl, titleEn, urlEn, layoutEn, ucPathEn, ucPropsEn,
+                webUrlEn, enExists, out ignored);
+        }
+
+        /// <summary>
+        /// Upserts one page row. Returns false and sets
+        /// <paramref name="errorMessage"/> when the write fails, so the
+        /// caller can report a real success count instead of assuming
+        /// every row landed.
+        /// </summary>
+        public static bool UpsertWebsitePage(string title, string url,
+            string layout, string ucPath, string ucProps, string webUrl,
+            string titleEn, string urlEn, string layoutEn,
+            string ucPathEn, string ucPropsEn, string webUrlEn,
+            bool enExists, out string errorMessage)
+        {
+            errorMessage = null;
+            if (string.IsNullOrEmpty(url))
+            {
+                errorMessage = "Empty page URL.";
+                return false;
+            }
+
+            bool ok = false;
+            string err = null;
             SPSecurity.RunWithElevatedPrivileges(delegate ()
             {
                 try
@@ -185,16 +324,36 @@ END";
                             (object)ucProps ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@WebUrl",
                             (object)Truncate(webUrl, 1000) ?? DBNull.Value);
+
+                        cmd.Parameters.AddWithValue("@PageTitleEn",
+                            (object)Truncate(titleEn, 500) ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PageURLEn",
+                            (object)Truncate(urlEn, 1000) ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PageLayoutEn",
+                            (object)Truncate(layoutEn, 500) ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@UserControlPathEn",
+                            (object)ucPathEn ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@UserControlPropertiesEn",
+                            (object)ucPropsEn ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@WebUrlEn",
+                            (object)Truncate(webUrlEn, 1000) ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@EnExists", enExists);
+
                         conn.Open();
                         cmd.ExecuteNonQuery();
+                        ok = true;
                     }
                 }
                 catch (Exception ex)
                 {
+                    err = ex.Message;
                     SearchLogger.WriteToLog("WebsitePagesDal",
-                        "Upsert " + url, ex.Message);
+                        "Upsert " + url, ex.ToString());
                 }
             });
+
+            errorMessage = err;
+            return ok;
         }
 
         // ----- read ------------------------------------------------------
@@ -212,9 +371,12 @@ END";
                 try
                 {
                     using (var conn = new SqlConnection(ConnectionString))
-                    using (var cmd  = new SqlCommand(
+                    using (var cmd = new SqlCommand(
                         "SELECT PageId, PageTitle, PageURL, PageLayout, " +
                         "UserControlPath, UserControlProperties, WebUrl, " +
+                        "PageTitleEn, PageURLEn, PageLayoutEn, " +
+                        "UserControlPathEn, UserControlPropertiesEn, " +
+                        "WebUrlEn, EnExists, " +
                         "LastIndexed FROM dbo.WebsitePages", conn))
                     {
                         cmd.CommandTimeout = 60;
@@ -247,9 +409,12 @@ END";
                 try
                 {
                     using (var conn = new SqlConnection(ConnectionString))
-                    using (var cmd  = new SqlCommand(
+                    using (var cmd = new SqlCommand(
                         "SELECT PageId, PageTitle, PageURL, PageLayout, " +
                         "UserControlPath, UserControlProperties, WebUrl, " +
+                        "PageTitleEn, PageURLEn, PageLayoutEn, " +
+                        "UserControlPathEn, UserControlPropertiesEn, " +
+                        "WebUrlEn, EnExists, " +
                         "LastIndexed FROM dbo.WebsitePages " +
                         "ORDER BY WebUrl, PageURL", conn))
                     {
@@ -273,15 +438,42 @@ END";
         {
             return new WebsitePageDto
             {
-                PageId                = Convert.ToInt64(rdr["PageId"]),
-                PageTitle             = rdr["PageTitle"]             as string,
-                PageURL               = rdr["PageURL"]               as string,
-                PageLayout            = rdr["PageLayout"]            as string,
-                UserControlPath       = rdr["UserControlPath"]       as string,
+                PageId = Convert.ToInt64(rdr["PageId"]),
+                PageTitle = rdr["PageTitle"] as string,
+                PageURL = rdr["PageURL"] as string,
+                PageLayout = rdr["PageLayout"] as string,
+                UserControlPath = rdr["UserControlPath"] as string,
                 UserControlProperties = rdr["UserControlProperties"] as string,
-                WebUrl                = rdr["WebUrl"]                as string,
-                LastIndexed           = (DateTime)rdr["LastIndexed"]
+                WebUrl = rdr["WebUrl"] as string,
+                PageTitleEn = SafeCol(rdr, "PageTitleEn"),
+                PageURLEn = SafeCol(rdr, "PageURLEn"),
+                PageLayoutEn = SafeCol(rdr, "PageLayoutEn"),
+                UserControlPathEn = SafeCol(rdr, "UserControlPathEn"),
+                UserControlPropertiesEn = SafeCol(rdr, "UserControlPropertiesEn"),
+                WebUrlEn = SafeCol(rdr, "WebUrlEn"),
+                EnExists = SafeBool(rdr, "EnExists"),
+                LastIndexed = (DateTime)rdr["LastIndexed"]
             };
+        }
+
+        private static string SafeCol(IDataReader rdr, string name)
+        {
+            try
+            {
+                int i = rdr.GetOrdinal(name);
+                return rdr.IsDBNull(i) ? null : rdr.GetValue(i) as string;
+            }
+            catch { return null; }
+        }
+
+        private static bool SafeBool(IDataReader rdr, string name)
+        {
+            try
+            {
+                int i = rdr.GetOrdinal(name);
+                return !rdr.IsDBNull(i) && Convert.ToBoolean(rdr.GetValue(i));
+            }
+            catch { return false; }
         }
 
         private static void Exec(SqlConnection conn, string sql)

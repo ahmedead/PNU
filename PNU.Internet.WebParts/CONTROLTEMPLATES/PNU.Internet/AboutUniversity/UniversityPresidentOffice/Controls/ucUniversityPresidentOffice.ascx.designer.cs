@@ -10,39 +10,54 @@
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.UniversityPresidentOffice
 {
 
-    
+
     public partial class ucUniversityPresidentOffice
     {
 
         /// <summary>
-        /// rptSections control.
+        /// litMessageTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-
-        protected global::System.Web.UI.WebControls.Repeater rptSections;
+        protected global::System.Web.UI.WebControls.Literal litMessageTitle;
 
         /// <summary>
-        /// litSignatureHeading control.
+        /// rptMessageParagraphs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-
-        protected global::System.Web.UI.WebControls.Literal litSignatureHeading;
+        protected global::System.Web.UI.WebControls.Repeater rptMessageParagraphs;
 
         /// <summary>
-        /// rptSignature control.
+        /// litSignatureName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSignatureName;
 
-        protected global::System.Web.UI.WebControls.Repeater rptSignature;
+        /// <summary>
+        /// litSignatureTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSignatureTitle;
+
+        /// <summary>
+        /// rptAdditionalSections control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptAdditionalSections;
 
         /// <summary>
         /// litContactHeading control.
@@ -51,7 +66,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-
         protected global::System.Web.UI.WebControls.Literal litContactHeading;
 
         /// <summary>
@@ -61,7 +75,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-
         protected global::System.Web.UI.WebControls.Literal litChannelHeader;
 
         /// <summary>
@@ -71,7 +84,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-
         protected global::System.Web.UI.WebControls.Literal litContactDataHeader;
 
         /// <summary>
@@ -81,8 +93,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-
         protected global::System.Web.UI.WebControls.Repeater rptContacts;
-
     }
 }

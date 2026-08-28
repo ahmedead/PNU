@@ -20,12 +20,72 @@ namespace PNU.Internet.SearchIndex.Indexer
     {
         public class InspectedPage
         {
+            // Primary (usually the Arabic page)
             public string PageTitle { get; set; }
             public string PageURL { get; set; }
             public string PageLayout { get; set; }
             public string UserControlPath { get; set; }
             public string UserControlProperties { get; set; }
             public string WebUrl { get; set; }
+
+            // English mirror (/ar/ -> /en/)
+            public string PageTitleEn { get; set; }
+            public string PageURLEn { get; set; }
+            public string PageLayoutEn { get; set; }
+            public string UserControlPathEn { get; set; }
+            public string UserControlPropertiesEn { get; set; }
+            public string WebUrlEn { get; set; }
+
+            /// <summary>True when the /en/ counterpart actually exists.</summary>
+            public bool EnExists { get; set; }
+        }
+
+        // ================================================================
+        // Webs excluded from the page catalog. Matched as a case-insensitive
+        // prefix against each web's server-relative URL, so '/ar/ITAdmin'
+        // also excludes '/ar/ITAdmin/AnySubWeb'.
+        //
+        // These are admin / utility / non-content webs that would only add
+        // noise to the audit.
+        // ================================================================
+        private static readonly string[] ExcludedWebPrefixes =
+        {
+            "/ar/Announcements",
+            "/ar/VirtualTour",
+            "/en/VirtualTour",
+            "/ar/NewStudents",
+            "/ar/NewsActivities",
+            "/ar/ITAdmin",
+            "/ar/ContentAdmin",
+            "/en/NewsActivities"
+        };
+
+        /// <summary>
+        /// True when the given web should be skipped entirely.
+        /// </summary>
+        public static bool IsWebExcluded(SPWeb web)
+        {
+            if (web == null) return true;
+            return IsUrlExcluded(web.ServerRelativeUrl);
+        }
+
+        /// <summary>
+        /// True when a server-relative URL falls under an excluded web.
+        /// </summary>
+        public static bool IsUrlExcluded(string serverRelativeUrl)
+        {
+            if (string.IsNullOrEmpty(serverRelativeUrl)) return false;
+
+            string url = serverRelativeUrl.TrimEnd('/');
+            foreach (string prefix in ExcludedWebPrefixes)
+            {
+                string p = prefix.TrimEnd('/');
+                if (url.Equals(p, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (url.StartsWith(p + "/", StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
 
         public class InspectionResult
@@ -36,6 +96,10 @@ namespace PNU.Internet.SearchIndex.Indexer
             /// <summary>True when the requested target URL doesn't map
             /// to an actual SPWeb.</summary>
             public bool WebNotFound { get; set; }
+
+            /// <summary>True when the requested web is on the exclusion
+            /// list and was deliberately skipped.</summary>
+            public bool WebExcluded { get; set; }
 
             /// <summary>The web URL we actually inspected, or empty when
             /// <see cref="WebNotFound"/> is true.</summary>
@@ -63,6 +127,12 @@ namespace PNU.Internet.SearchIndex.Indexer
                         result.WebNotFound = true;
                         return result;
                     }
+                    if (IsWebExcluded(web))
+                    {
+                        result.WebExcluded = true;
+                        result.ResolvedWebUrl = web.Url;
+                        return result;
+                    }
                     result.ResolvedWebUrl = web.Url;
                     InspectWeb(web, currentSiteOnly, result.Pages);
                 }
@@ -80,6 +150,17 @@ namespace PNU.Internet.SearchIndex.Indexer
             List<InspectedPage> results)
         {
             if (web == null) return;
+
+            // Excluded webs are skipped entirely - including their
+            // descendants, since the recursion happens at the bottom of
+            // this method and we return before reaching it.
+            if (IsWebExcluded(web))
+            {
+                Logging.SearchLogger.WriteToLog("PageInspector",
+                    "InspectWeb", "Skipped excluded web: "
+                    + web.ServerRelativeUrl);
+                return;
+            }
 
             try
             {
@@ -201,7 +282,170 @@ namespace PNU.Internet.SearchIndex.Indexer
 
             row.UserControlPath = string.Join(Environment.NewLine, ucPaths);
             row.UserControlProperties = propsBuffer.ToString().TrimEnd();
+
+            // ---- English mirror -----------------------------------------
+            // Swap the language segment and see whether the counterpart
+            // page exists. When it does, inspect it too so the catalog
+            // row carries both languages side by side.
+            FillEnglishMirror(web.Site, serverRel, row);
+
             return row;
+        }
+
+        // ================================================================
+        // Resolves the /en/ counterpart of a server-relative page URL and,
+        // when it exists, inspects it into the *En fields of the row.
+        // If the primary page is already an /en/ page, the mirror lookup
+        // is skipped (the row is its own English record).
+        // ================================================================
+        private static void FillEnglishMirror(SPSite site,
+            string primaryServerRelUrl, InspectedPage row)
+        {
+            if (site == null || row == null) return;
+            if (string.IsNullOrEmpty(primaryServerRelUrl)) return;
+
+            // Already English? Then there is nothing to mirror.
+            if (primaryServerRelUrl.StartsWith("/en/",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                row.PageTitleEn = row.PageTitle;
+                row.PageURLEn = row.PageURL;
+                row.PageLayoutEn = row.PageLayout;
+                row.UserControlPathEn = row.UserControlPath;
+                row.UserControlPropertiesEn = row.UserControlProperties;
+                row.WebUrlEn = row.WebUrl;
+                row.EnExists = true;
+                return;
+            }
+
+            string enUrl = ToEnglishUrl(primaryServerRelUrl);
+            if (string.IsNullOrEmpty(enUrl)
+                || enUrl.Equals(primaryServerRelUrl,
+                       StringComparison.OrdinalIgnoreCase))
+                return;
+
+            // Record the expected EN URL even when the page is missing,
+            // so the export shows what *should* exist.
+            row.PageURLEn = new Uri(new Uri(site.Url), enUrl).AbsoluteUri;
+
+            if (IsUrlExcluded(enUrl)) return;
+
+            try
+            {
+                using (SPWeb enWeb = OpenWebForPage(site, enUrl))
+                {
+                    if (enWeb == null || !enWeb.Exists) return;
+                    if (IsWebExcluded(enWeb)) return;
+
+                    SPFile file = enWeb.GetFile(enUrl);
+                    if (file == null || !file.Exists) return;
+
+                    row.EnExists = true;
+                    row.WebUrlEn = enWeb.Url;
+
+                    SPListItem item = file.Item;
+                    if (item != null)
+                    {
+                        row.PageTitleEn = Convert.ToString(
+                            item["Title"] ?? file.Name);
+
+                        try
+                        {
+                            PublishingPage enPage =
+                                PublishingPage.GetPublishingPage(item);
+                            if (enPage != null && enPage.Layout != null)
+                                row.PageLayoutEn =
+                                    enPage.Layout.ServerRelativeUrl;
+                        }
+                        catch { /* not a publishing page - layout stays empty */ }
+                    }
+                    else
+                    {
+                        row.PageTitleEn = file.Name;
+                    }
+
+                    // Web parts on the EN page
+                    var ucPathsEn = new List<string>();
+                    var propsEn = new StringBuilder();
+                    try
+                    {
+                        using (SPLimitedWebPartManager mgr =
+                            enWeb.GetLimitedWebPartManager(
+                                enUrl, PersonalizationScope.Shared))
+                        {
+                            foreach (WebPart wp in mgr.WebParts)
+                            {
+                                try
+                                {
+                                    CollectFromWebPart(wp, ucPathsEn, propsEn);
+                                }
+                                catch (Exception ex)
+                                {
+                                    propsEn.AppendLine("[error reading WP "
+                                        + SafeName(wp) + "]: " + ex.Message);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        propsEn.AppendLine("[error opening web-part manager]: "
+                            + ex.Message);
+                    }
+
+                    row.UserControlPathEn =
+                        string.Join(Environment.NewLine, ucPathsEn);
+                    row.UserControlPropertiesEn = propsEn.ToString().TrimEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.SearchLogger.WriteToLog("PageInspector",
+                    "FillEnglishMirror " + enUrl, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Swaps the leading '/ar/' language segment for '/en/'.
+        /// </summary>
+        public static string ToEnglishUrl(string serverRelativeUrl)
+        {
+            if (string.IsNullOrEmpty(serverRelativeUrl)) return serverRelativeUrl;
+            return System.Text.RegularExpressions.Regex.Replace(
+                serverRelativeUrl, "^/ar/", "/en/",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        }
+
+        /// <summary>
+        /// Opens the SPWeb that actually contains the given page URL by
+        /// walking up the path until a real web is found.
+        /// </summary>
+        private static SPWeb OpenWebForPage(SPSite site, string serverRelPageUrl)
+        {
+            try
+            {
+                string path = serverRelPageUrl;
+                int lastSlash = path.LastIndexOf('/');
+                if (lastSlash > 0) path = path.Substring(0, lastSlash);
+
+                while (!string.IsNullOrEmpty(path) && path != "/")
+                {
+                    try
+                    {
+                        SPWeb w = site.OpenWeb(path, true);
+                        if (w != null && w.Exists) return w;
+                        if (w != null) w.Dispose();
+                    }
+                    catch { /* not a web at this level - walk up */ }
+
+                    int idx = path.LastIndexOf('/');
+                    if (idx <= 0) break;
+                    path = path.Substring(0, idx);
+                }
+
+                return site.OpenWeb(site.ServerRelativeUrl);
+            }
+            catch { return null; }
         }
 
         private static void InspectPlainPagesLibrary(SPWeb web,
@@ -243,6 +487,11 @@ namespace PNU.Internet.SearchIndex.Indexer
                         row.UserControlPath = string.Join(
                             Environment.NewLine, ucPaths);
                         row.UserControlProperties = propsBuffer.ToString().TrimEnd();
+
+                        FillEnglishMirror(web.Site,
+                            web.ServerRelativeUrl.TrimEnd('/')
+                            + "/" + pageUrl.TrimStart('/'), row);
+
                         results.Add(row);
                     }
                     catch (Exception ex)

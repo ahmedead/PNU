@@ -14,6 +14,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
     {
         public const string ObjectivesList = "SharedObjectives";
         public const string SettingsList   = "SharedOverviewSettings";
+        private const string ProvisionedKey = "PNU_SharedOverview_Provisioned";
 
         // Default image shipped with the solution (used to seed the settings row).
         private const string DefaultImageUrl = "/_layouts/15/PNU.Internet/images/hero/hero-campus-sm.webp";
@@ -37,9 +38,28 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                         using (var site = new SPSite(siteId))
                         using (var elevatedWeb = site.OpenWeb(webId))
                         {
+                            // If already provisioned, do not recreate deleted lists or re-seed deleted items
+                            if (elevatedWeb.AllProperties.ContainsKey(ProvisionedKey))
+                                return;
+
+                            // If lists already exist, mark as provisioned so deleted items won't re-seed
+                            if (elevatedWeb.Lists.TryGetList(ObjectivesList) != null ||
+                                elevatedWeb.Lists.TryGetList(SettingsList) != null)
+                            {
+                                elevatedWeb.AllowUnsafeUpdates = true;
+                                elevatedWeb.AllProperties[ProvisionedKey] = "1";
+                                elevatedWeb.Update();
+                                elevatedWeb.AllowUnsafeUpdates = false;
+                                return;
+                            }
+
                             elevatedWeb.AllowUnsafeUpdates = true;
                             EnsureObjectives(elevatedWeb);
                             EnsureSettings(elevatedWeb);
+
+                            elevatedWeb.AllProperties[ProvisionedKey] = "1";
+                            elevatedWeb.Update();
+
                             elevatedWeb.AllowUnsafeUpdates = false;
                         }
                     });
@@ -71,18 +91,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                 if (!cols.Exists("SortOrder")) cols.Add("SortOrder");
                 list.DefaultView.Update();
                 list.Update();
-            }
-            else
-            {
-                EnsureField(list, "TextAr",    SPFieldType.Note);
-                EnsureField(list, "TextEn",    SPFieldType.Note);
-                EnsureField(list, "SortOrder", SPFieldType.Number);
-            }
 
-            GrantAnonymous(list);
-
-            if (list.ItemCount == 0)
+                GrantAnonymous(list);
                 SeedObjectives(list);
+            }
         }
 
         private static void EnsureSettings(SPWeb web)
@@ -103,17 +115,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                 if (!cols.Exists("ImageAlt")) cols.Add("ImageAlt");
                 list.DefaultView.Update();
                 list.Update();
-            }
-            else
-            {
-                EnsureField(list, "ImageUrl", SPFieldType.URL);
-                EnsureField(list, "ImageAlt", SPFieldType.Text);
-            }
 
-            GrantAnonymous(list);
-
-            if (list.ItemCount == 0)
+                GrantAnonymous(list);
                 SeedSettings(list);
+            }
         }
 
         private static void EnsureField(SPList list, string name, SPFieldType type)

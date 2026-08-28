@@ -103,6 +103,7 @@
                 <asp:Button ID="btnSeedAgency" runat="server" Text="تعبئة القائمة الافتراضية للوكالات (Seed Agency)" OnClick="btnSeedAgency_Click" CssClass="btn btn-outline-info me-2 mb-2" />
                 <asp:Button ID="btnSeedDeenships" runat="server" Text="تعبئة القائمة الافتراضية للعمادات (Seed Deenships)" OnClick="btnSeedDeenships_Click" CssClass="btn btn-outline-info me-2 mb-2" />
                 <asp:Button ID="btnSeedDepartments" runat="server" Text="تعبئة القائمة الافتراضية للإدارات (Seed Departments)" OnClick="btnSeedDepartments_Click" CssClass="btn btn-outline-info me-2 mb-2" />
+                <asp:Button ID="btnSeedCenters" runat="server" Text="تعبئة القائمة الافتراضية للمراكز (Seed Centers)" OnClick="btnSeedCenters_Click" CssClass="btn btn-outline-info me-2 mb-2" />
                 <asp:Button ID="btnClearLists" runat="server" Text="مسح القوائم الحالية (Clear Menu Items)" OnClick="btnClearLists_Click" CssClass="btn btn-outline-danger mb-2" OnClientClick="return confirm('هل أنت تأكد من مسح جميع عناصر القائمة؟');" />
             </div>
         </div>

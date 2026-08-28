@@ -1,6 +1,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAgencyTasksDga.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About.ucAgencyTasksDga" %>
 
-<section class="pb-5" data-aos="fade-up" aria-labelledby="agency-main-tasks-title">
+<section id="secTasks" runat="server" class="pb-5" data-aos="fade-up" aria-labelledby="agency-main-tasks-title">
     <div class="container">
         <div>
             <h2 id="agency-main-tasks-title" class="mb-4">

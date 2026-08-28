@@ -6,7 +6,7 @@
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SearchAdmin.aspx.cs" Inherits="PNU.Internet.WebParts.Layouts.PNU.Internet.Search.SearchAdmin" 
-    DynamicMasterPageFile="~masterurl/DGA_Internal.master"  Async="false"%>
+    DynamicMasterPageFile="~masterurl/default.master"  Async="false"%>
 
 
 

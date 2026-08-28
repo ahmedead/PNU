@@ -1,6 +1,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAgencyDeputyWelcomeDga.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About.ucAgencyDeputyWelcomeDga" %>
 
-<section id="agency-deputy-welcome" aria-labelledby="agency-deputy-welcome-title">
+<section id="secDeputyWelcome" runat="server" aria-labelledby="agency-deputy-welcome-title">
     <div class="card mb-4 bg-primary-25 border-0">
         <div class="card-body p-4 p-lg-5">
             <div class="d-flex flex-column gap-3">

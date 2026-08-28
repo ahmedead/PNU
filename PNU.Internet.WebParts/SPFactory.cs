@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using Microsoft.SharePoint.Publishing.Fields;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
@@ -68,6 +68,34 @@ namespace PNU.Internet.WebParts
         public static bool IsArabic
         {
             get { return SPContext.Current.Web.Language == 1025; }
+        }
+
+        public static string GetSecondaryTypeBadges(object secondaryTypeObj)
+        {
+            if (secondaryTypeObj == null) return string.Empty;
+            string secondaryType = secondaryTypeObj.ToString();
+            if (string.IsNullOrWhiteSpace(secondaryType)) return string.Empty;
+
+            string[] tracks = secondaryType.Split(new char[] { ';', ',', '#', '|' }, StringSplitOptions.RemoveEmptyEntries);
+            StringBuilder sb = new StringBuilder();
+            foreach (var track in tracks)
+            {
+                string trimmed = track.Trim();
+                if (string.IsNullOrEmpty(trimmed) || trimmed.All(char.IsDigit)) continue;
+
+                string badgeClass = "badge badge-info";
+                if (trimmed.Contains("صحة") || trimmed.Contains("حياة") || trimmed.ToLower().Contains("health"))
+                    badgeClass = "badge badge-success";
+                else if (trimmed.Contains("حاسب") || trimmed.Contains("هندسة") || trimmed.ToLower().Contains("comp") || trimmed.ToLower().Contains("eng"))
+                    badgeClass = "badge badge-warning";
+                else if (trimmed.Contains("عام") || trimmed.ToLower().Contains("general"))
+                    badgeClass = "badge badge-info";
+                else if (trimmed.Contains("إدارة") || trimmed.Contains("أعمال") || trimmed.ToLower().Contains("business"))
+                    badgeClass = "badge badge-primary";
+
+                sb.AppendFormat("<span class=\"{0}\">{1}</span>", badgeClass, HttpUtility.HtmlEncode(trimmed));
+            }
+            return sb.ToString();
         }
 
         public static string GetPNUresResource(string key,string Language)

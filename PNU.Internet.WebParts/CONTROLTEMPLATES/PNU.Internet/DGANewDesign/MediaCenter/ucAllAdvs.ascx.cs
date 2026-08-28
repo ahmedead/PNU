@@ -86,6 +86,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.Media
                         rptSearchCategoryFilter.DataSource = searchCatsWithAdvs;
                         rptSearchCategoryFilter.DataBind();
                     }
+
+                    this.DataBind();
                 }
             }
             catch (Exception ex)

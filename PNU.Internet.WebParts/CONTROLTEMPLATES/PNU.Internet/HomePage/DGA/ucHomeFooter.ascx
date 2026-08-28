@@ -134,7 +134,7 @@
             </button>
             <div class="collapse d-lg-block" id="footerNav1" data-bs-parent="#footerNavContainer">
               <div class="d-flex flex-column gap-2 mt-2">
-                <a href="/<%= IsArabic  ? "ar" : "en" %>/FAQs/Pages/default.aspx" target="_self" class="text-white small">الأسئلة الشائعة</a>
+                <a href="/<%= IsArabic  ? "ar" : "en" %>/FAQs/Pages/default.aspx" target="_self" class="text-white small"><%= IsArabic  ? "الأسئلة الشائعة" : "FAQs" %></a>
                 <a href="https://techcare.pnu.edu.sa/" target="_blank" rel="noopener noreferrer"
                   class="text-white small external-link">
                   <%= IsArabic  ? " تيك كير لتقنية المعلومات" : "Tech Care for for Information Technology " %> 

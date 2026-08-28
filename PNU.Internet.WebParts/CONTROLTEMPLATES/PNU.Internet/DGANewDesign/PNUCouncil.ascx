@@ -4,17 +4,19 @@
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="asp" Namespace="System.Web.UI" Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 <%@ Import Namespace="Microsoft.SharePoint" %> 
+ 
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PNUCouncil.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.PNUCouncil" %>
 
+<%@ Import Namespace="PNU.Internet.WebParts" %>
  <main id="main-content" class="dga-main-body" tabindex="-1">
         <div class="container py-5">
 
 <%-- ================== LEADERSHIP (Chair + Vice Chair) ================== --%>
 <section class="mb-5" data-aos="fade-up" aria-labelledby="council-leadership-title">
     <div class="mb-4">
-        <h2 id="council-leadership-title" class="mb-2">قيادة المجلس</h2>
-        <p class="mb-0">الرئاسة ونائبة الرئيس كما وردت في صفحة مجلس الجامعة.</p>
+        <h2 id="council-leadership-title" class="mb-2"><%= Publics.IsArabic ? "قيادة المجلس" : "Council Leadership" %></h2>
+        <p class="mb-0"><%= Publics.IsArabic ? "الرئاسة ونائبة الرئيس كما وردت في صفحة مجلس الجامعة." : "The Chair and Vice Chair of the University Council, as presented on the official Council page." %></p>
     </div>
     <div class="row g-4">
         <asp:Repeater ID="rptLeadership" runat="server" OnItemDataBound="rptLeadership_ItemDataBound">
@@ -47,8 +49,8 @@
     <div class="container px-0">
         <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
             <div>
-                <h2 id="council-members-title" class="mb-2">الأعضاء</h2>
-                <p class="mb-0">بطاقات مختصرة توضح الاسم والصفة داخل المجلس.</p>
+                <h2 id="council-members-title" class="mb-2"><%= Publics.IsArabic ? "الأعضاء" : "Council Members" %></h2>
+                <p class="mb-0"><%= Publics.IsArabic ? "بطاقات مختصرة توضح الاسم والصفة داخل المجلس." : "Concise profiles presenting each member’s name and role within the Council." %></p>
             </div>
         </div>
         <div id="councilMembersGrid" class="row g-4">
@@ -84,8 +86,8 @@
 <%-- ================== DOCUMENTS ================== --%>
 <section data-aos="fade-up" aria-labelledby="council-documents-title">
     <div class="mb-4">
-        <h2 id="council-documents-title" class="mb-2">مستندات المجلس</h2>
-        <p class="mb-0">روابط مرجعية منشورة في الصفحة الرسمية لمجلس الجامعة.</p>
+        <h2 id="council-documents-title" class="mb-2"><%= Publics.IsArabic ? "مستندات المجلس" : "Council Documents" %></h2>
+        <p class="mb-0"><%= Publics.IsArabic ? "روابط مرجعية منشورة في الصفحة الرسمية لمجلس الجامعة." : "Reference documents published on the official University Council webpage." %></p>
     </div>
     <div class="row g-4">
         <asp:Repeater ID="rptDocuments" runat="server" OnItemDataBound="rptDocuments_ItemDataBound">

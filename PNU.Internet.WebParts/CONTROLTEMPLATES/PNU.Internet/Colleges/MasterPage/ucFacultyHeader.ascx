@@ -7,7 +7,7 @@
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucFacultyHeader.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.MasterPage.ucFacultyHeader" %>
 
-
+<script src="/Style%20Library/Portal/js/seoScripts.js" type="text/javascript"></script>
 <div class="border  border-bottom-1 border-bailey-bells-100 menu_bottom_header">
 
     

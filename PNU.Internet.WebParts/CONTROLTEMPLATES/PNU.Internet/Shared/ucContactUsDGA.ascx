@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -6,6 +6,7 @@
 <%@ Import Namespace="Microsoft.SharePoint" %> 
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucContactUsDGA.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.ucContactUsDGA" %>
+<%@ Import Namespace="Portal.Main.Helper" %>
 
 
 
@@ -135,8 +136,10 @@
                         <p class="card-text"><asp:Literal ID="ltrFormText" runat="server" /></p>
                     </div>
                     <div class="d-flex justify-content-end mt-auto">
-                        <a id="lnkForm" runat="server" class="btn btn-secondary stretched-link" href="ContactUs.aspx">
-                            <i class="hgi hgi-stroke hgi-arrow-left-02 fs-4" aria-hidden="true"></i>
+                        <a class="btn btn-secondary stretched-link"
+                           href="/<%= PortalHelper.IsArabic ? "ar" : "en" %>/Pages/ContactUsForm.aspx"
+                           aria-label='<%= PortalHelper.IsArabic ? "فتح نموذج التواصل الموحد" : "Open the unified contact form" %>'>
+                            <i class="hgi hgi-stroke <%= PortalHelper.IsArabic ? "hgi-arrow-left-02" : "hgi-arrow-right-02" %> fs-4" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>

@@ -23,7 +23,7 @@
                                 </div>
                                 <div>
                                     <%# !string.IsNullOrEmpty(Eval("Badge1").ToString()) || !string.IsNullOrEmpty(Eval("Badge2").ToString()) ? 
-                                        "<div class=\"d-flex flex-wrap gap-2 mb-3\" aria-label=\"الفئات المستفيدة\">" +
+                                        "<div class=\"d-flex flex-wrap gap-2 mb-3\" aria-label=\"" + (PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SmartSuitcase.Controls.SscHelper.IsArabic ? "الفئات المستفيدة" : "Target Audience") + "\">" +
                                         (!string.IsNullOrEmpty(Eval("Badge1").ToString()) ? "<span class=\"badge badge-info\">" + Eval("Badge1") + "</span>" : "") +
                                         (!string.IsNullOrEmpty(Eval("Badge2").ToString()) ? "<span class=\"badge badge-success\">" + Eval("Badge2") + "</span>" : "") +
                                         "</div>" : "" %>

@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +27,18 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared
                         using (SPSite site = new SPSite(SPContext.Current.Site.ID))
                         using (SPWeb web = site.OpenWeb(SPContext.Current.Web.ID))
                         {
+                            // If any list already exists, do not provision missing ones 
+                            // (missing lists may represent intentionally omitted/unused sections).
+                            bool hasAnyList = web.Lists.TryGetList(InfoListName) != null
+                                           || web.Lists.TryGetList(DirectoryListName) != null
+                                           || web.Lists.TryGetList(HoursListName) != null
+                                           || web.Lists.TryGetList(TitlesListName) != null;
+
+                            if (hasAnyList)
+                            {
+                                return;
+                            }
+
                             web.AllowUnsafeUpdates = true;
 
                             SPList info = EnsureList(web, InfoListName, "Contact Us info cards");

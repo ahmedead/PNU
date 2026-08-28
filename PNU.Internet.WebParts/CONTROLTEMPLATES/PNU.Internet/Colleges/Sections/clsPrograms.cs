@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using PNU.Internet.WebParts;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
 using Portal.Main.Helper;
@@ -427,6 +427,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
         public string ProgramName_EN { get; set; }
         public string ProgramNature_EN { get; set; }
         public string ProgramFields_EN { get; set; }
+        public string SecondaryTypeBadgesHtml
+        {
+            get
+            {
+                return SPFactory.GetSecondaryTypeBadges(SecondaryType);
+            }
+        }
     }
 
 

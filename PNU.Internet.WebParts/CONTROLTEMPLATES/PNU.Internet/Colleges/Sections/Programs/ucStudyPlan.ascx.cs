@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
 using System;
 using System.Collections.Generic;
@@ -17,17 +17,24 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
         {
             //if (!Page.IsPostBack)
             //    BindData();
-
         }
         
-        public void BindData(List<NewStudyPlanDto> _AllData,string COLL_CODE)
-        
+        public void BindData(List<NewStudyPlanDto> _AllData, string COLL_CODE)
         {
             try
             { 
                 pnlData.Visible = false;
+                pnlAll.Visible = true;
+
                 ucPLANS_ELEC_C ucPLANS_ELEC_C1 = FindControl("ucPLANS_ELEC_C") as ucPLANS_ELEC_C;
-                ucPLANS_ELEC_C1.BindDataU(COLL_CODE);
+                if (ucPLANS_ELEC_C1 == null && pnlAll != null)
+                {
+                    ucPLANS_ELEC_C1 = pnlAll.FindControl("ucPLANS_ELEC_C") as ucPLANS_ELEC_C;
+                }
+                if (ucPLANS_ELEC_C1 != null)
+                {
+                    ucPLANS_ELEC_C1.BindDataU(COLL_CODE);
+                }
 
                 if (_AllData == null || _AllData.Count == 0)
                 {
@@ -40,16 +47,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                 List<AllProgramsMain> _MainData = new List<AllProgramsMain>();
 
                 List<NewStudyPlanDto> _Data = new List<NewStudyPlanDto>();
-                _Data = _AllData.Where(p=> (p.CLSS == "1" || p.CLSS == "2") && (p.AREA == "جط-ستص01" || p.AREA == "جط-ستص02")).ToList();
+                _Data = _AllData.Where(p => (p.CLSS == "1" || p.CLSS == "2") && (p.AREA == "جط-ستص01" || p.AREA == "جط-ستص02")).ToList();
                 if (_Data != null && _Data.Count > 0)
                 {
                     List<NewStudyPlanDto> _allLevels1 = new List<NewStudyPlanDto>();
 
-
                     _allLevels1 = _Data.Where(d => d.CLSS == "1" && d.AREA == "جط-ستص01").ToList();
                     if (_allLevels1 != null && _allLevels1.Count > 0)
                     {
-                       
                         AllProgramsMain obj1 = new AllProgramsMain();
                         obj1.LevelCode = "-1";
                         obj1.COLL_CODE = _Data[0].COLLEGE_CODE;
@@ -69,16 +74,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
 
                             _MainData.Add(obj1);
                         }
-
-
-
                     }
 
                     _allLevels1 = new List<NewStudyPlanDto>();
                     _allLevels1 = _Data.Where(d => d.CLSS == "2" && d.AREA == "جط-ستص02").ToList();
                     if (_allLevels1 != null && _allLevels1.Count > 0)
                     {
-                        
                         AllProgramsMain obj1 = new AllProgramsMain();
                         obj1.LevelCode = "-2";
                         obj1.COLL_CODE = _Data[0].COLLEGE_CODE;
@@ -98,85 +99,53 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
 
                             _MainData.Add(obj1);
                         }
-
-
-
                     }
-
                 }
 
-
-
-
-
-
-                _AllData = _AllData.Where(p =>  (p.AREA != "جط-ستص01" && p.AREA != "جط-ستص02")).ToList();
-
+                _AllData = _AllData.Where(p => (p.AREA != "جط-ستص01" && p.AREA != "جط-ستص02")).ToList();
 
                 _allLevels = _AllData.GroupBy(d => new { d.CLSS }).Select(group => group.First()).ToList();
-                
-
-
 
                 if (_allLevels != null && _allLevels.Count > 0)
                 {
-                    
-
-                        foreach (NewStudyPlanDto objLevel in _allLevels)
-                        {
+                    foreach (NewStudyPlanDto objLevel in _allLevels)
+                    {
                         AllProgramsMain obj = new AllProgramsMain();
                         obj.LevelCode = objLevel.CLSS;
                         obj.COLL_CODE = objLevel.COLLEGE_CODE;
 
-                    
-                            List<NewStudyPlanDto> _aalDataByLevel = new List<NewStudyPlanDto>();
-                        
+                        List<NewStudyPlanDto> _aalDataByLevel = new List<NewStudyPlanDto>();
 
+                        var levelsData = _AllData.Where(d => d.CLSS == objLevel.CLSS).ToList();
+                        if (levelsData != null && levelsData.Count > 0)
+                        {
+                            List<NewStudyPlanDto> _all = levelsData;
+                            List<NewStudyPlanDto> _allNonData = levelsData.Where(g => g.STVATTR_DESC != null).ToList();
+                            var courses = levelsData.Where(g => g.SUBJ_CODE != null && g.CRSE_NUMB != null).ToList();
+                            List<NewStudyPlanDto> _allDataWithoutDistinct = courses;
+                            _allDataWithoutDistinct = _allDataWithoutDistinct.OrderBy(p => Convert.ToDecimal(p.SCRRTST_SEQNO)).ToList();
 
-                            _allLevels = _AllData.Where(d => d.CLSS == objLevel.CLSS).ToList();
-                            if (_allLevels != null && _allLevels.Count > 0)
+                            courses = courses.GroupBy(d => new { d.SUBJ_CODE, d.CRSE_NUMB, d.COURSE_TITLE, d.CREDIT }).Select(group => group.First()).ToList();
+                            if (courses != null && courses.Count > 0)
                             {
-                                List<NewStudyPlanDto> _all = _allLevels;
-                                //List<NewStudyPlanDto> _allNonData = _allLevels.Where(g => g.STVATTR_DESC != null && g.STVATTR_DESC != "متطلب جامعة اجباري").ToList();
-                                List<NewStudyPlanDto> _allNonData = _allLevels.Where(g => g.STVATTR_DESC != null).ToList();
-                                _allLevels = _allLevels.Where(g => g.SUBJ_CODE != null && g.CRSE_NUMB != null).ToList();
-                                List<NewStudyPlanDto> _allDataWithoutDistinct = _allLevels;
-                                _allDataWithoutDistinct = _allDataWithoutDistinct.OrderBy(p => Convert.ToDecimal(p.SCRRTST_SEQNO)).ToList();
-
-
-                                _allLevels = _allLevels.GroupBy(d => new { d.SUBJ_CODE, d.CRSE_NUMB, d.COURSE_TITLE, d.CREDIT }).Select(group => group.First()).ToList();
-                                if (_allLevels != null && _allLevels.Count > 0)
-                                {
-                                    _allLevels = GetPreRequieites(_allLevels, _allDataWithoutDistinct);
-                                    obj.StudyPlan = _allLevels;
-                                    if (_allNonData != null && _allNonData.Count > 0)
-                                        obj.StudyPlan.AddRange(_allNonData);
-                                }
-
+                                courses = GetPreRequieites(courses, _allDataWithoutDistinct);
+                                obj.StudyPlan = courses;
+                                if (_allNonData != null && _allNonData.Count > 0)
+                                    obj.StudyPlan.AddRange(_allNonData);
                             }
+                        }
 
-
-
-
-
-                            _MainData.Add(obj);
+                        _MainData.Add(obj);
                     }
 
                     masterRepeater.DataSource = _MainData;
                     masterRepeater.DataBind();
-
                 }
-
-
-
-
             }
-
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),this.Page.Title, ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
-            
         }
 
         public void BindData1(List<NewStudyPlanDto> _AllData, string COLL_CODE)
@@ -184,6 +153,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
             try
             {
                 pnlAll.Visible = false;
+                pnlData.Visible = true;
 
                 if (_AllData == null || _AllData.Count == 0)
                 {
@@ -204,47 +174,36 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                         obj.COLL_CODE = objLevel.COLLEGE_CODE;
 
                         List<NewStudyPlanDto> _aalDataByLevel = new List<NewStudyPlanDto>();
-                        _allLevels = _AllData.Where(d => d.CLSS == objLevel.CLSS).ToList();
-                        if (_allLevels != null && _allLevels.Count > 0)
+                        var levelsData = _AllData.Where(d => d.CLSS == objLevel.CLSS).ToList();
+                        if (levelsData != null && levelsData.Count > 0)
                         {
-                            List<NewStudyPlanDto> _all = _allLevels;
-                            //List<NewStudyPlanDto> _allNonData = _allLevels.Where(g => g.STVATTR_DESC != null && g.STVATTR_DESC != "متطلب جامعة اجباري").ToList();
-                            List<NewStudyPlanDto> _allNonData = _allLevels.Where(g => g.STVATTR_DESC != null).ToList();
-                            _allLevels = _allLevels.Where(g => g.SUBJ_CODE != null && g.CRSE_NUMB != null).ToList();
-                            List<NewStudyPlanDto> _allDataWithoutDistinct = _allLevels;
+                            List<NewStudyPlanDto> _all = levelsData;
+                            List<NewStudyPlanDto> _allNonData = levelsData.Where(g => g.STVATTR_DESC != null).ToList();
+                            var courses = levelsData.Where(g => g.SUBJ_CODE != null && g.CRSE_NUMB != null).ToList();
+                            List<NewStudyPlanDto> _allDataWithoutDistinct = courses;
                             _allDataWithoutDistinct = _allDataWithoutDistinct.OrderBy(p => Convert.ToDecimal(p.SCRRTST_SEQNO)).ToList();
 
-
-                            _allLevels = _allLevels.GroupBy(d => new { d.SUBJ_CODE, d.CRSE_NUMB, d.COURSE_TITLE, d.CREDIT }).Select(group => group.First()).ToList();
-                            if (_allLevels != null && _allLevels.Count > 0)
+                            courses = courses.GroupBy(d => new { d.SUBJ_CODE, d.CRSE_NUMB, d.COURSE_TITLE, d.CREDIT }).Select(group => group.First()).ToList();
+                            if (courses != null && courses.Count > 0)
                             {
-                                _allLevels = GetPreRequieites(_allLevels, _allDataWithoutDistinct);
-                                obj.StudyPlan = _allLevels;
+                                courses = GetPreRequieites(courses, _allDataWithoutDistinct);
+                                obj.StudyPlan = courses;
                                 if (_allNonData != null && _allNonData.Count > 0)
                                     obj.StudyPlan.AddRange(_allNonData);
                             }
-
                         }
-
 
                         _MainData.Add(obj);
                     }
 
                     Repeater1.DataSource = _MainData;
                     Repeater1.DataBind();
-
                 }
-
-
-
-
             }
-
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),this.Page.Title, ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
-            
         }
 
         private List<NewStudyPlanDto> GetPreRequieites(List<NewStudyPlanDto> allLevels, List<NewStudyPlanDto> allDataWithoutDistinct)
@@ -269,24 +228,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                             }
                             allLevels[i].S_COREQ1 = PreRequ;
                         }
-
                     }
-
                 }
 
                 return allLevels;
-
-
-
-
             }
-
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),this.Page.Title, ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
             return null;    
-            
         }
     }
 }

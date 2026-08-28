@@ -12,6 +12,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
     public static class SharedTitles
     {
         public const string ListName = "AboutSharedTitles";
+        private const string ProvisionedKey = "PNU_SharedTitles_Provisioned";
 
         // -------- Title keys (stable codes; do NOT rename after go-live) --------
         public const string OverviewHeading      = "Overview.Heading";
@@ -51,6 +52,20 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                         using (var site = new SPSite(siteId))
                         using (var elevatedWeb = site.OpenWeb(webId))
                         {
+                            // If already provisioned, do not recreate deleted list or re-seed deleted items
+                            if (elevatedWeb.AllProperties.ContainsKey(ProvisionedKey))
+                                return;
+
+                            // If list already exists, mark as provisioned so deleted items won't re-seed
+                            if (elevatedWeb.Lists.TryGetList(ListName) != null)
+                            {
+                                elevatedWeb.AllowUnsafeUpdates = true;
+                                elevatedWeb.AllProperties[ProvisionedKey] = "1";
+                                elevatedWeb.Update();
+                                elevatedWeb.AllowUnsafeUpdates = false;
+                                return;
+                            }
+
                             elevatedWeb.AllowUnsafeUpdates = true;
 
                             var list = elevatedWeb.Lists.TryGetList(ListName);
@@ -72,23 +87,17 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                                 if (!cols.Exists("TitleEn"))  cols.Add("TitleEn");
                                 view.Update();
 
+                                // Anonymous read
+                                if (elevatedWeb.HasUniqueRoleAssignments == false)
+                                    list.BreakRoleInheritance(true, false);
+                                list.AnonymousPermMask64 = SPBasePermissions.ViewListItems | SPBasePermissions.ViewPages;
                                 list.Update();
-                            }
-                            else
-                            {
-                                EnsureField(list, "TitleKey", SPFieldType.Text);
-                                EnsureField(list, "TitleAr",  SPFieldType.Note);
-                                EnsureField(list, "TitleEn",  SPFieldType.Note);
-                            }
 
-                            // Anonymous read
-                            if (elevatedWeb.HasUniqueRoleAssignments == false)
-                                list.BreakRoleInheritance(true, false);
-                            list.AnonymousPermMask64 = SPBasePermissions.ViewListItems | SPBasePermissions.ViewPages;
-                            list.Update();
-
-                            if (list.ItemCount == 0)
                                 Seed(list);
+                            }
+
+                            elevatedWeb.AllProperties[ProvisionedKey] = "1";
+                            elevatedWeb.Update();
 
                             elevatedWeb.AllowUnsafeUpdates = false;
                         }

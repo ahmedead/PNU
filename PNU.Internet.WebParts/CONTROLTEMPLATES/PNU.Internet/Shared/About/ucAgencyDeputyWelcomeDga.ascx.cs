@@ -39,10 +39,26 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
             try
             {
                 var titles = SharedTitleReader.Load(IsArabic);
-                litDeputyHeading.Text     = SharedTitleReader.Get(titles, SharedTitles.DeputyHeading);
-                litDeputyBody.Text        = SharedTitleReader.Get(titles, SharedTitles.DeputyBody);
-                litDeputyRoleTitle.Text   = SharedTitleReader.Get(titles, SharedTitles.DeputyRoleTitle);
-                litDeputyRoleSubtitle.Text= SharedTitleReader.Get(titles, SharedTitles.DeputyRoleSubtitle);
+                string heading      = SharedTitleReader.Get(titles, SharedTitles.DeputyHeading);
+                string body         = SharedTitleReader.Get(titles, SharedTitles.DeputyBody);
+                string roleTitle    = SharedTitleReader.Get(titles, SharedTitles.DeputyRoleTitle);
+                string roleSubtitle = SharedTitleReader.Get(titles, SharedTitles.DeputyRoleSubtitle);
+
+                bool hasData = !string.IsNullOrWhiteSpace(heading) ||
+                               !string.IsNullOrWhiteSpace(body) ||
+                               !string.IsNullOrWhiteSpace(roleTitle) ||
+                               !string.IsNullOrWhiteSpace(roleSubtitle);
+
+                if (secDeputyWelcome != null)
+                    secDeputyWelcome.Visible = hasData;
+
+                if (hasData)
+                {
+                    litDeputyHeading.Text      = heading;
+                    litDeputyBody.Text         = body;
+                    litDeputyRoleTitle.Text    = roleTitle;
+                    litDeputyRoleSubtitle.Text = roleSubtitle;
+                }
             }
             catch (Exception ex)
             {

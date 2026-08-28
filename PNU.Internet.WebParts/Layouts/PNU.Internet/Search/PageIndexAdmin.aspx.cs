@@ -38,6 +38,17 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
             public string UserControlPath { get; set; }
             public string UserControlProperties { get; set; }
             public string WebUrl { get; set; }
+
+            // English mirror
+            public string PageTitleEn { get; set; }
+            public string PageURLEn { get; set; }
+            public string PageLayoutEn { get; set; }
+            public string UserControlPathEn { get; set; }
+            public string UserControlPropertiesEn { get; set; }
+            public string WebUrlEn { get; set; }
+            public bool EnExists { get; set; }
+            public string EnStatus { get; set; }
+
             public string Status { get; set; }  // Indexed / Not Indexed
             public string LastIndexedDisplay { get; set; }
         }
@@ -49,7 +60,23 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
 
             try
             {
-                WebsitePagesDal.EnsureWebsitePagesTableExists();
+                string schemaError;
+                WebsitePagesDal.EnsureWebsitePagesTableExists(out schemaError);
+
+                if (!string.IsNullOrEmpty(schemaError))
+                {
+                    litStatus.Text = Error2(
+                        "Could not create or upgrade <code>dbo.WebsitePages</code>. "
+                        + "Indexing will not save anything until this is fixed."
+                        + "<br/>Error: <code>"
+                        + Server.HtmlEncode(schemaError) + "</code>"
+                        + "<br/>Check that the <code>PNU_SearchIndex</code> "
+                        + "connection string exists in this web application's "
+                        + "web.config and that the application pool account has "
+                        + "db_owner (or at least CREATE TABLE / CREATE PROCEDURE) "
+                        + "on the database.");
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -70,11 +97,22 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
         {
             try
             {
-                bool webNotFound;
+                bool webNotFound, webExcluded;
                 string resolvedWebUrl;
                 LoadedPages = LoadPagesFromSharePoint(
-                    out webNotFound, out resolvedWebUrl);
+                    out webNotFound, out webExcluded, out resolvedWebUrl);
                 BindGrid();
+
+                if (webExcluded)
+                {
+                    litStatus.Text = Warn(
+                        "That web is on the catalog exclusion list and was "
+                        + "skipped. Excluded: /ar/Announcements, "
+                        + "/ar/VirtualTour, /en/VirtualTour, /ar/NewStudents, "
+                        + "/ar/NewsActivities, /ar/ITAdmin, /ar/ContentAdmin, "
+                        + "/en/NewsActivities.");
+                    return;
+                }
 
                 if (webNotFound)
                 {
@@ -109,12 +147,30 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
             try
             {
                 var pages = LoadedPages;
-                bool webNotFound = false;
+                bool webNotFound = false, webExcluded = false;
                 string resolvedWebUrl = null;
                 if (pages.Count == 0)
                 {
                     pages = LoadPagesFromSharePoint(
-                        out webNotFound, out resolvedWebUrl);
+                        out webNotFound, out webExcluded, out resolvedWebUrl);
+                }
+
+                if (webExcluded)
+                {
+                    litStatus.Text = Warn("That web is excluded from the "
+                        + "catalog. Nothing was indexed.");
+                    return;
+                }
+
+                if (webExcluded)
+                {
+                    litStatus.Text = Warn(
+                        "That web is on the catalog exclusion list and was "
+                        + "skipped. Excluded: /ar/Announcements, "
+                        + "/ar/VirtualTour, /en/VirtualTour, /ar/NewStudents, "
+                        + "/ar/NewsActivities, /ar/ITAdmin, /ar/ContentAdmin, "
+                        + "/en/NewsActivities.");
+                    return;
                 }
 
                 if (webNotFound)
@@ -125,22 +181,49 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
                     return;
                 }
 
-                int n = 0;
+                int ok = 0, failed = 0;
+                string firstError = null;
+
                 foreach (var p in pages)
                 {
-                    WebsitePagesDal.UpsertWebsitePage(
+                    string err;
+                    bool written = WebsitePagesDal.UpsertWebsitePage(
                         p.PageTitle, p.PageURL, p.PageLayout,
                         p.UserControlPath, p.UserControlProperties,
-                        p.WebUrl);
-                    n++;
+                        p.WebUrl,
+                        p.PageTitleEn, p.PageURLEn, p.PageLayoutEn,
+                        p.UserControlPathEn, p.UserControlPropertiesEn,
+                        p.WebUrlEn, p.EnExists, out err);
+
+                    if (written) ok++;
+                    else
+                    {
+                        failed++;
+                        if (firstError == null) firstError = err;
+                    }
                 }
 
                 // Refresh status column from DB after upsert
                 LoadedPages = MergeWithIndexStatus(pages);
                 BindGrid();
 
-                litStatus.Text = Ok(n + " page(s) indexed / updated in " +
-                    "<code>dbo.WebsitePages</code>.");
+                int rowCount = WebsitePagesDal.GetRowCount();
+
+                if (failed == 0)
+                {
+                    litStatus.Text = Ok(ok + " page(s) written to "
+                        + "<code>dbo.WebsitePages</code>. Table now holds "
+                        + rowCount + " row(s).");
+                }
+                else
+                {
+                    litStatus.Text = Error2(
+                        ok + " succeeded, <strong>" + failed
+                        + " failed</strong>. Table holds " + rowCount
+                        + " row(s).<br/>First error: <code>"
+                        + Server.HtmlEncode(firstError ?? "(none)")
+                        + "</code>");
+                }
             }
             catch (Exception ex)
             {
@@ -171,6 +254,15 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
                             UserControlPath = d.UserControlPath,
                             UserControlProperties = d.UserControlProperties,
                             WebUrl = d.WebUrl,
+                            PageTitleEn = d.PageTitleEn,
+                            PageURLEn = d.PageURLEn,
+                            PageLayoutEn = d.PageLayoutEn,
+                            UserControlPathEn = d.UserControlPathEn,
+                            UserControlPropertiesEn = d.UserControlPropertiesEn,
+                            WebUrlEn = d.WebUrlEn,
+                            EnExists = d.EnExists,
+                            EnStatus = d.EnExists
+                                                        ? "EN found" : "EN missing",
                             Status = "Indexed",
                             LastIndexedDisplay = d.LastIndexed
                                 .ToString("yyyy-MM-dd HH:mm")
@@ -203,6 +295,25 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
         }
 
         // ================================================================
+        protected void btnTestDb_Click(object sender, EventArgs e)
+        {
+            string err = WebsitePagesDal.TestConnection();
+            if (string.IsNullOrEmpty(err))
+            {
+                int n = WebsitePagesDal.GetRowCount();
+                litStatus.Text = Ok("Database reachable. "
+                    + "<code>dbo.WebsitePages</code> currently holds "
+                    + n + " row(s).");
+            }
+            else
+            {
+                litStatus.Text = Error2(
+                    "Cannot reach <code>dbo.WebsitePages</code>.<br/>Error: "
+                    + "<code>" + Server.HtmlEncode(err) + "</code>");
+            }
+        }
+
+        // ================================================================
         protected void gvPages_RowDataBound(object sender,
             GridViewRowEventArgs e)
         {
@@ -215,11 +326,21 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
                 lbl.CssClass = "badge bg-success";
             else
                 lbl.CssClass = "badge bg-warning text-dark";
+
+            var lblEn = e.Row.FindControl("lblEnStatus") as Label;
+            if (lblEn != null)
+            {
+                lblEn.CssClass = lblEn.Text.IndexOf("found",
+                    StringComparison.OrdinalIgnoreCase) >= 0
+                    ? "badge bg-success"
+                    : "badge bg-secondary";
+            }
         }
 
         // ================================================================
         private List<PageRow> LoadPagesFromSharePoint(
-            out bool webNotFound, out string resolvedWebUrl)
+            out bool webNotFound, out bool webExcluded,
+            out string resolvedWebUrl)
         {
             string targetUrl = (txtSiteUrl.Text ?? "").Trim();
             bool currentOnly = chkCurrentSiteOnly.Checked;
@@ -238,6 +359,7 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
                 inspection = new PageInspector.InspectionResult();
 
             webNotFound = inspection.WebNotFound;
+            webExcluded = inspection.WebExcluded;
             resolvedWebUrl = inspection.ResolvedWebUrl;
 
             var raw = new List<PageRow>();
@@ -251,6 +373,14 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
                     UserControlPath = ip.UserControlPath,
                     UserControlProperties = ip.UserControlProperties,
                     WebUrl = ip.WebUrl,
+                    PageTitleEn = ip.PageTitleEn,
+                    PageURLEn = ip.PageURLEn,
+                    PageLayoutEn = ip.PageLayoutEn,
+                    UserControlPathEn = ip.UserControlPathEn,
+                    UserControlPropertiesEn = ip.UserControlPropertiesEn,
+                    WebUrlEn = ip.WebUrlEn,
+                    EnExists = ip.EnExists,
+                    EnStatus = ip.EnExists ? "EN found" : "EN missing",
                     Status = "Not Indexed",
                     LastIndexedDisplay = ""
                 });
@@ -319,9 +449,13 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
 
             sb.AppendLine("<table>");
             sb.AppendLine("<thead><tr>" +
-                "<th>Title</th><th>Page URL</th><th>Layout</th>" +
-                "<th>User Controls</th><th>Properties</th>" +
-                "<th>Web</th><th>Status</th><th>Last indexed</th>" +
+                "<th>Title (AR)</th><th>Page URL (AR)</th><th>Layout (AR)</th>" +
+                "<th>User Controls (AR)</th><th>Properties (AR)</th>" +
+                "<th>Web (AR)</th>" +
+                "<th>Title (EN)</th><th>Page URL (EN)</th><th>Layout (EN)</th>" +
+                "<th>User Controls (EN)</th><th>Properties (EN)</th>" +
+                "<th>Web (EN)</th><th>EN status</th>" +
+                "<th>Status</th><th>Last indexed</th>" +
                 "</tr></thead><tbody>");
 
             foreach (var p in pages)
@@ -341,6 +475,20 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
                 sb.Append("<td><pre>").Append(H(p.UserControlProperties))
                   .AppendLine("</pre></td>");
                 sb.Append("<td>").Append(H(p.WebUrl)).AppendLine("</td>");
+
+                sb.Append("<td>").Append(H(p.PageTitleEn)).AppendLine("</td>");
+                sb.Append("<td><a href=\"").Append(H(p.PageURLEn))
+                  .Append("\">").Append(H(p.PageURLEn)).AppendLine("</a></td>");
+                sb.Append("<td>").Append(H(p.PageLayoutEn)).AppendLine("</td>");
+                sb.Append("<td><pre>").Append(H(p.UserControlPathEn))
+                  .AppendLine("</pre></td>");
+                sb.Append("<td><pre>").Append(H(p.UserControlPropertiesEn))
+                  .AppendLine("</pre></td>");
+                sb.Append("<td>").Append(H(p.WebUrlEn)).AppendLine("</td>");
+                sb.Append("<td class=\"")
+                  .Append(p.EnExists ? "status-indexed" : "status-notindexed")
+                  .Append("\">").Append(H(p.EnStatus)).AppendLine("</td>");
+
                 sb.Append("<td class=\"").Append(statusClass).Append("\">")
                   .Append(H(p.Status)).AppendLine("</td>");
                 sb.Append("<td>").Append(H(p.LastIndexedDisplay))
@@ -372,6 +520,11 @@ namespace PNU.Internet.WebParts.Layouts.PNU.Internet.Search
         private static string Warn(string msg)
         {
             return "<div class='alert alert-warning'>" + msg + "</div>";
+        }
+
+        private static string Error2(string html)
+        {
+            return "<div class='alert alert-danger'>" + html + "</div>";
         }
 
         private static string Error(string label, Exception ex)

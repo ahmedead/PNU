@@ -14,8 +14,18 @@
         <p class="text-muted">
             Scan publishing pages under a target web, capture their
             user-control paths and web-part properties, and export the
-            result to Excel. Data is stored in the
+            result to Excel. Each row also carries the matching
+            <code>/en/</code> page (title, layout, user controls,
+            properties) when one exists. Data is stored in the
             <code>dbo.WebsitePages</code> table.
+        </p>
+        <p class="small text-muted">
+            <strong>Excluded from the catalog:</strong>
+            <code>/ar/Announcements</code>, <code>/ar/VirtualTour</code>,
+            <code>/en/VirtualTour</code>, <code>/ar/NewStudents</code>,
+            <code>/ar/NewsActivities</code>, <code>/ar/ITAdmin</code>,
+            <code>/ar/ContentAdmin</code>, <code>/en/NewsActivities</code>
+            &mdash; including all their subsites.
         </p>
 
         <asp:Panel runat="server" ID="pnlOptions"
@@ -54,6 +64,10 @@
                     CssClass="btn btn-success"
                     Text="Export to Excel"
                     OnClick="btnExportExcel_Click" />
+                <asp:Button runat="server" ID="btnTestDb"
+                    CssClass="btn btn-outline-dark"
+                    Text="Test DB"
+                    OnClick="btnTestDb_Click" />
                 <a href="SearchAdmin.aspx" class="btn btn-outline-secondary ms-auto">
                     &laquo; Back to Search Admin
                 </a>
@@ -68,18 +82,18 @@
             GridLines="None" HeaderStyle-CssClass="table-dark"
             OnRowDataBound="gvPages_RowDataBound">
             <Columns>
-                <asp:BoundField DataField="PageTitle" HeaderText="Title"
+                <asp:BoundField DataField="PageTitle" HeaderText="Title (AR)"
                     ItemStyle-Width="180px" />
-                <asp:TemplateField HeaderText="Page URL" ItemStyle-Width="260px">
+                <asp:TemplateField HeaderText="Page URL (AR)" ItemStyle-Width="260px">
                     <ItemTemplate>
                         <a href='<%# Eval("PageURL") %>' target="_blank">
                             <%# Server.HtmlEncode(Convert.ToString(Eval("PageURL"))) %>
                         </a>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="PageLayout" HeaderText="Layout"
+                <asp:BoundField DataField="PageLayout" HeaderText="Layout (AR)"
                     ItemStyle-Width="140px" />
-                <asp:TemplateField HeaderText="User Controls">
+                <asp:TemplateField HeaderText="User Controls (AR)">
                     <ItemTemplate>
                         <pre class="small mb-0" style="white-space:pre-wrap;
                              max-height:100px; overflow:auto;"><%#
@@ -87,7 +101,7 @@
                         %></pre>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Properties">
+                <asp:TemplateField HeaderText="Properties (AR)">
                     <ItemTemplate>
                         <pre class="small mb-0" style="white-space:pre-wrap;
                              max-height:120px; overflow:auto; max-width:340px;"><%#
@@ -95,8 +109,44 @@
                         %></pre>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="WebUrl" HeaderText="Web"
+                <asp:BoundField DataField="WebUrl" HeaderText="Web (AR)"
                     ItemStyle-Width="180px" />
+
+                <asp:BoundField DataField="PageTitleEn" HeaderText="Title (EN)"
+                    ItemStyle-Width="180px" />
+                <asp:TemplateField HeaderText="Page URL (EN)" ItemStyle-Width="260px">
+                    <ItemTemplate>
+                        <a href='<%# Eval("PageURLEn") %>' target="_blank">
+                            <%# Server.HtmlEncode(Convert.ToString(Eval("PageURLEn"))) %>
+                        </a>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:BoundField DataField="PageLayoutEn" HeaderText="Layout (EN)"
+                    ItemStyle-Width="140px" />
+                <asp:TemplateField HeaderText="User Controls (EN)">
+                    <ItemTemplate>
+                        <pre class="small mb-0" style="white-space:pre-wrap;
+                             max-height:100px; overflow:auto;"><%#
+                            Server.HtmlEncode(Convert.ToString(Eval("UserControlPathEn")))
+                        %></pre>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Properties (EN)">
+                    <ItemTemplate>
+                        <pre class="small mb-0" style="white-space:pre-wrap;
+                             max-height:120px; overflow:auto; max-width:340px;"><%#
+                            Server.HtmlEncode(Convert.ToString(Eval("UserControlPropertiesEn")))
+                        %></pre>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:BoundField DataField="WebUrlEn" HeaderText="Web (EN)"
+                    ItemStyle-Width="180px" />
+                <asp:TemplateField HeaderText="EN" ItemStyle-Width="90px">
+                    <ItemTemplate>
+                        <asp:Label runat="server" ID="lblEnStatus"
+                            Text='<%# Eval("EnStatus") %>' />
+                    </ItemTemplate>
+                </asp:TemplateField>
                 <asp:TemplateField HeaderText="Status" ItemStyle-Width="90px">
                     <ItemTemplate>
                         <asp:Label runat="server" ID="lblStatus"

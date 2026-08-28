@@ -141,7 +141,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
                 rptObjectives.Visible = hasObjectivesList;
                 if (ulObjectives != null) ulObjectives.Visible = hasObjectivesList;
 
-                bool hasObjectives = (hasObjectivesTitle || hasObjectivesList);
+                bool hasObjectives = hasObjectivesList;
                 if (pnlObjectives != null) pnlObjectives.Visible = hasObjectives;
 
                 // Cards Row visibility

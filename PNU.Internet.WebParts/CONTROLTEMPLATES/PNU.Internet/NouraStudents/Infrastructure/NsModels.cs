@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.NouraStudents.Controls
 {
@@ -77,9 +77,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.NouraStudents.Cont
             get
             {
                 if (!HasLink) return string.Empty;
+                string arrowIcon = NsHelper.IsArabic ? "hgi-arrow-left-02" : "hgi-arrow-right-02";
                 return "<div class=\"d-flex justify-content-end mt-auto\">"
                      + "<a class=\"btn btn-secondary stretched-link\" href=\"" + LinkUrl + "\" aria-label=\"" + Title + "\">"
-                     + "<i class=\"hgi hgi-stroke hgi-arrow-left-02 fs-4\" aria-hidden=\"true\"></i></a></div>";
+                     + "<i class=\"hgi hgi-stroke " + arrowIcon + " fs-4\" aria-hidden=\"true\"></i></a></div>";
             }
         }
 

@@ -9,6 +9,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
 {
     public partial class ucUniversityPresidentOffice : UserControl
     {
+        public string PrimarySectionIcon { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             LoadData();
@@ -31,18 +33,61 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
 
                             // Load sections
                             var sections = LoadSections(web);
-                            if (sections != null && sections.Count > 0)
+                            UpoSection primarySection = sections != null && sections.Count > 0
+                                ? sections.FirstOrDefault(s => s.ShowLeadCard) ?? sections[0]
+                                : null;
+
+                            if (primarySection != null)
                             {
-                                rptSections.DataSource = sections;
-                                rptSections.DataBind();
+                                PrimarySectionIcon = !string.IsNullOrEmpty(primarySection.IconClass)
+                                    ? primarySection.IconClass
+                                    : "hgi-quote-down";
+                                litMessageTitle.Text = primarySection.Title;
+                                rptMessageParagraphs.DataSource = primarySection.Paragraphs;
+                                rptMessageParagraphs.DataBind();
+                            }
+                            else
+                            {
+                                PrimarySectionIcon = "hgi-quote-down";
+                                litMessageTitle.Text = UpoHelper.Enc(
+                                    UpoHelper.Pick("كلمة رئيسة الجامعة", "University President's Speech"));
+                                rptMessageParagraphs.DataSource = GetDefaultParagraphs();
+                                rptMessageParagraphs.DataBind();
+                            }
+
+                            // Load additional sections (if any extra sections exist beyond the primary)
+                            var extraSections = sections != null && primarySection != null
+                                ? sections.Where(s => s.Id != primarySection.Id).ToList()
+                                : new List<UpoSection>();
+
+                            if (extraSections.Count > 0)
+                            {
+                                rptAdditionalSections.DataSource = extraSections;
+                                rptAdditionalSections.DataBind();
                             }
 
                             // Load signature
-                            var signature = LoadSignature(web);
-                            if (signature != null && signature.Count > 0)
+                            var signatureList = LoadSignature(web);
+                            var sig = signatureList != null && signatureList.Count > 0 ? signatureList[0] : null;
+
+                            if (sig != null)
                             {
-                                rptSignature.DataSource = signature;
-                                rptSignature.DataBind();
+                                litSignatureName.Text = sig.Title;
+                                litSignatureTitle.Text = sig.Description;
+
+                                //if (!string.IsNullOrEmpty(sig.ImageUrl))
+                                //{
+                                //    imgPresidentPortrait.ImageUrl = sig.ImageUrl;
+                                //}
+                                //imgPresidentPortrait.AlternateText = UpoHelper.Enc(
+                                //    sig.Title + (string.IsNullOrEmpty(sig.Description) ? "" : "، " + sig.Description));
+                            }
+                            else
+                            {
+                                litSignatureName.Text = UpoHelper.Enc(
+                                    UpoHelper.Pick("د نجلاء بنت عبدالله التويجري", "Dr. Najla bint Abdullah Al-Tuwaijri"));
+                                litSignatureTitle.Text = UpoHelper.Enc(
+                                    UpoHelper.Pick("رئيسة جامعة الأميرة نورة بنت عبدالرحمن", "President of Princess Nourah bint Abdulrahman University"));
                             }
 
                             // Load contacts
@@ -54,10 +99,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
                             }
 
                             // Set headings
-                            litSignatureHeading.Text = UpoHelper.Enc(
-                                UpoHelper.Pick("رئيسة الجامعة", "University President"));
                             litContactHeading.Text = UpoHelper.Enc(
-                                UpoHelper.Pick("تواصل مع مكتب رئيسة الجامعة المُكلَّفة", "Contact the Acting President's Office"));
+                                UpoHelper.Pick("تواصل مع مكتب رئيسة الجامعة", "Contact the President's Office"));
                             litChannelHeader.Text = UpoHelper.Enc(
                                 UpoHelper.Pick("القناة", "Channel"));
                             litContactDataHeader.Text = UpoHelper.Enc(
@@ -70,6 +113,31 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
             {
                 UpoLog.Write("ucUniversityPresidentOffice.LoadData", ex);
             }
+        }
+
+        private List<string> GetDefaultParagraphs()
+        {
+            if (UpoHelper.IsArabic)
+            {
+                return new List<string>
+                {
+                    "بسم الله الرحمن الرحيم، والصلاة والسلام على نبينا محمد، وعلى آله وصحبه أجمعين.",
+                    "تواصل جامعة الأميرة نورة بنت عبدالرحمن مسيرتها العلمية والتنموية بوصفها صرحًا وطنيًا متفردًا في التعليم الجامعي، وشاهدًا على ما حققته المرأة السعودية من حضور مؤثر وإسهام فاعل في نهضة الوطن.",
+                    "وقد رسخت الجامعة عبر مسيرتها مكانة تستند إلى إرث عريق، وإمكانات علمية وبحثية ومؤسسية، ومجتمع جامعي يجمعه الطموح والشعور بالمسؤولية، وننطلق من هذه المكانة نحو مرحلة تتطلب منا تعزيز مكتسباتنا، وتجديد ممارساتنا، والارتقاء بأثرنا؛ بما يرسخ حضور الجامعة مؤسسة وطنية رائدة، تنتج المعرفة، وتعمل بفاعلية في خدمة المجتمع، وتحقيق أولويات الوطن ومستهدفات رؤيته الطموحة.",
+                    "وتولي الجامعة جودة التعليم ومخرجاته أولوية رئيسة، من خلال تطوير البرامج الأكاديمية، وتعزيز ارتباطها بالاحتياجات التنموية والمهنية، وتنمية المعارف والمهارات التي تمكّن طالباتنا من المنافسة والقيادة، وتأهيلهن للإسهام بفاعلية في تحقيق تطلعات الوطن.",
+                    "ومع ما يشهده العالم من تحولات معرفية وتقنية واقتصادية متسارعة، نواصل تطوير التجربة التعليمية، وربط المعرفة بالتطبيق، وتوسيع فرص التعلم والممارسة؛ بما يعزز جاهزية خريجاتنا، ويدعم قدرتهن على مواصلة التعلم والتكيف وصناعة الفرص.",
+                    "كما تولي الجامعة البحث والابتكار اهتمامًا محوريًا، انطلاقًا من مسؤوليتهما الوطنية تجاه الإنسان والمجتمع. ومن هنا، نوجّه قدراتنا البحثية نحو الأولويات الوطنية، ونعتز بما بنته الجامعة من شراكات فاعلة مع القطاعات الوطنية والمؤسسات العلمية العالمية، وما أتاحته من تكامل للخبرات وتبادل للمعرفة، ونتطلع إلى توسيع هذه الشراكات وتعميق أثرها؛ بما يسهم في تحويل الأفكار إلى حلول مبتكرة، ويعزز إسهام الجامعة في التنمية محليًا ودوليًا.",
+                    "وتستند قدرة الجامعة على أداء رسالتها إلى بنية تحتية متكاملة، تضم مرافق تعليمية وبحثية وصحية وثقافية ورياضية، تدعمها منظومات تقنية وخدمات متقدمة، وتوظف الجامعة هذه الإمكانات في تطوير التجربة التعليمية والبحثية، وتعزيز جودة الحياة الجامعية، وتوفير بيئة محفزة تمكّن أفراد مجتمعها من التعلم والعمل والإبداع بكفاءة. ويظل الإنسان محور اهتمامنا وأساس رسالتنا؛ لذلك نحرص على بناء بيئة جامعية متكاملة تدعم صحة أفراد مجتمع الجامعة ورفاههم، وتعزز الانتماء والثقة والتكامل، وتتيح لكل فرد أن ينمي قدراته، ويؤدي دوره، ويسهم بفاعلية في تحقيق رسالة الجامعة، ضمن بيئة آمنة ومحفزة تقدر التنوع وتدعم الطموح.",
+                    "إن مسؤوليتنا لا تقتصر على مواكبة المستقبل، بل تمتد إلى المشاركة في صناعته، وبجهود مجتمعنا الجامعي وشركائنا، ستواصل جامعة الأميرة نورة بنت عبدالرحمن بناء القدرات بالمعرفة، وتوسيع الفرص، وصناعة أثر يعبّر عن طموح الجامعة، ويواكب تطلعات الوطن.",
+                    "نسأل الله أن يبارك مسيرة الجامعة، وأن يوفقنا لأداء رسالتنا وخدمة وطننا، ومواصلة الإسهام في نهضته، وأن يحفظ وطننا وقيادته، ويديم عليه التقدم والازدهار.",
+                    "والله ولي التوفيق."
+                };
+            }
+            return new List<string>
+            {
+                "In the name of Allah, the Most Gracious, the Most Merciful, and peace and blessings be upon our Prophet Muhammad, and upon his family and companions.",
+                "Princess Nourah bint Abdulrahman University continues its scientific and developmental journey as a unique national landmark in higher education..."
+            };
         }
 
         private List<UpoSection> LoadSections(SPWeb web)
@@ -145,24 +213,37 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity.Un
 
             var item = (UpoContact)e.Item.DataItem;
             var lnk = (HyperLink)e.Item.FindControl("lnkContact");
+            if (lnk == null || item == null) return;
 
-            lnk.Text = UpoHelper.Enc(item.ContactValue);
+            string val = item.ContactValue ?? string.Empty;
+            lnk.Text = UpoHelper.Enc(val);
             lnk.NavigateUrl = item.ContactHref;
 
-            switch ((item.ContactType ?? "").ToLower())
+            string cType = (item.ContactType ?? "").ToLower();
+            if (cType == "phone")
             {
-                case "phone":
-                    lnk.Attributes["dir"] = "ltr";
-                    break;
-                case "email":
-                    lnk.Attributes["dir"] = "ltr";
-                    break;
-                case "link":
-                    lnk.Target = "_blank";
+                // Phone numbers match prompt: href="tel:..." with dir="rtl" on parent td
+            }
+            else if (cType == "email")
+            {
+                if (val.IndexOf("tawasul", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
                     lnk.CssClass = "external-link";
-                    lnk.Attributes["rel"] = "noopener noreferrer";
-                    lnk.Attributes["dir"] = "ltr";
-                    break;
+                }
+            }
+            else if (cType == "link")
+            {
+                lnk.Target = "_blank";
+                lnk.CssClass = "external-link";
+                lnk.Attributes["rel"] = "noopener noreferrer";
+                if (val.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    lnk.Text = UpoHelper.Enc(val.Substring(8).TrimEnd('/'));
+                }
+                else if (val.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                {
+                    lnk.Text = UpoHelper.Enc(val.Substring(7).TrimEnd('/'));
+                }
             }
         }
     }

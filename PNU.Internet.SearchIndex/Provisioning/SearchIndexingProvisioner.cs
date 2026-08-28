@@ -326,10 +326,16 @@ namespace PNU.Internet.SearchIndex.Provisioning
         private static void SeedDefaultMenuLists(SPWeb web)
         {
             SPList list = web.Lists.TryGetList(LIST_MENU);
-            if (list == null || list.ItemCount > 0) return;
-            AddMenu(list, "TopMenuLevel1", "URL", "صفحات رئيسية", "Main Pages");
-            AddMenu(list, "TopMenuLevel2", "URL", "صفحات فرعية",  "Sub Pages");
-            AddMenu(list, "TopMenuLevel3", "URL", "صفحات داخلية", "Inner Pages");
+            if (list == null) return;
+
+            // Per-row existence check (not ItemCount==0) so re-running
+            // the provisioner adds newly-introduced menu lists (e.g. the
+            // side menus) to existing deployments without duplicating.
+            AddMenuIfMissing(list, "TopMenuLevel1",  "URL", "صفحات رئيسية", "Main Pages");
+            AddMenuIfMissing(list, "TopMenuLevel2",  "URL", "صفحات فرعية",  "Sub Pages");
+            AddMenuIfMissing(list, "TopMenuLevel3",  "URL", "صفحات داخلية", "Inner Pages");
+            AddMenuIfMissing(list, "SideMenuLevel1", "URL", "صفحات جانبية", "Side Pages");
+            AddMenuIfMissing(list, "SideMenuLevel2", "URL", "صفحات جانبية فرعية", "Side Sub Pages");
         }
 
         private static void AddContent(SPList list,
@@ -355,6 +361,17 @@ namespace PNU.Internet.SearchIndex.Provisioning
             item["FilterMode"]      = filterMode;
             item["Active"]          = true;
             item.Update();
+        }
+
+        private static void AddMenuIfMissing(SPList list, string listTitle,
+            string urlField, string catAr, string catEn)
+        {
+            string caml = string.Format(
+                @"<Where><Eq><FieldRef Name='Title'/>
+                  <Value Type='Text'>{0}</Value></Eq></Where>", listTitle);
+            if (list.GetItems(new SPQuery { Query = caml, RowLimit = 1 })
+                    .Count > 0) return;
+            AddMenu(list, listTitle, urlField, catAr, catEn);
         }
 
         private static void AddMenu(SPList list, string listTitle,

@@ -17,7 +17,7 @@
 
         <%-- Search + filter bar --%>
         <dga-search-input>
-            <div class="d-flex gap-3 mb-4" role="search" aria-label="ابحث في الإعلانات">
+            <div class="d-flex gap-3 mb-4" role="search" aria-label='<%# SPFactory.GetLocalizedTitle("ابحث في الإعلانات", "Search advertisements") %>'>
                 <div class="form-control-container has-icon">
                     <span class="d-inline-flex fs-6 form-input-icon text-body-secondary">
                         <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
@@ -25,13 +25,13 @@
                     <input type="search" id="advsSearchInput" autocomplete="off" class="form-control"
                         placeholder='<%# SPFactory.GetLocalizedTitle("ابحث في الإعلانات", "Search advertisements") %>' value="" />
                 </div>
-                <button type="button" class="btn btn-primary" id="btnAdvsSearch" aria-label="بحث">بحث</button>
+                <button type="button" class="btn btn-primary" id="btnAdvsSearch" aria-label='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>'><%# SPFactory.GetLocalizedTitle("بحث", "Search") %></button>
                 <dga-filter-dropdown class="flex-shrink-0">
                     <div class="dropdown flex-shrink-0">
                         <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
                             data-bs-auto-close="outside" class="btn btn-dark gap-1" id="advsFilterToggle">
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-filter" aria-hidden="true"></i></span>
-                            <span>تصفية</span>
+                            <span><%# SPFactory.GetLocalizedTitle("تصفية", "Filter") %></span>
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-arrow-down-01" aria-hidden="true"></i></span>
                         </button>
                         <div class="dropdown-menu p-2" style="width: 20rem;">
@@ -39,13 +39,13 @@
 
                                 <%-- ===== SearchCategory filter section ===== --%>
                                 <asp:Panel ID="pnlSearchCategoryFilter" runat="server" Visible="false">
-                                    <p class="fw-semibold mb-2">الفئة</p>
+                                    <p class="fw-semibold mb-2"><%# SPFactory.GetLocalizedTitle("الفئة", "Category") %></p>
                                     <div class="form-control-container has-icon">
                                         <span class="d-inline-flex fs-6 form-input-icon text-body-secondary">
                                             <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
                                         </span>
                                         <input type="text" autocomplete="off" class="form-control"
-                                               id="advsSearchCatBoxSearch" placeholder="بحث" />
+                                               id="advsSearchCatBoxSearch" placeholder='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>' />
                                     </div>
                                     <div class="d-flex flex-column gap-2 mt-4 px-2 py-2 overflow-auto"
                                          style="max-height: 12.5rem;" id="advsSearchCatBox">
@@ -68,8 +68,8 @@
                                 <hr />
 
                                 <div class="d-flex justify-content-between align-content-stretch align-items-stretch gap-2">
-                                    <button type="button" class="btn btn-primary" id="btnApplyAdvsFilter">تطبيق الاختيارات</button>
-                                    <button type="button" class="btn btn-secondary" id="btnResetAdvsFilter">إعادة تعيين</button>
+                                    <button type="button" class="btn btn-primary" id="btnApplyAdvsFilter"><%# SPFactory.GetLocalizedTitle("تطبيق الاختيارات", "Apply filters") %></button>
+                                    <button type="button" class="btn btn-secondary" id="btnResetAdvsFilter"><%# SPFactory.GetLocalizedTitle("إعادة تعيين", "Reset") %></button>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +126,7 @@
         <%-- Pagination --%>
         <dga-paginator>
             <div class="mt-5 p-2 d-flex justify-content-center pagination-container">
-                <nav aria-label="قائمة التنقل في الصفحات">
+                <nav aria-label='<%# SPFactory.GetLocalizedTitle("قائمة التنقل في الصفحات", "Pagination Navigation") %>'>
                     <ul class="pagination"></ul>
                 </nav>
             </div>
