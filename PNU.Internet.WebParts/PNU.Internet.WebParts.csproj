@@ -393,6 +393,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\PageGenerator.ascx.designer.cs">
       <DependentUpon>PageGenerator.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx.cs">
+      <DependentUpon>ucBilingualPageCreator.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx.designer.cs">
+      <DependentUpon>ucBilingualPageCreator.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteHierarchyNavigator.ascx.cs">
       <DependentUpon>SiteHierarchyNavigator.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2922,6 +2929,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\PageGenerator.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteHierarchyNavigator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteListDataEntry.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAllSubsites.ascx" />

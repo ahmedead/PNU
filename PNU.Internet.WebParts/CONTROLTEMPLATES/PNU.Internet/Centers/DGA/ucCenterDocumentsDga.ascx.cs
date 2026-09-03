@@ -59,54 +59,70 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
             SPWeb web = SPContext.Current.Web;
             CenterProvisioner.EnsureDocumentsList(web, targetListName);
 
-            SPList list = web.Lists.TryGetList(targetListName);
-
             var groups = new List<DocGroupDto>();
 
-            if (list != null && list.ItemCount > 0)
+            try
             {
-                var grouped = new Dictionary<string, List<DocItemDto>>(StringComparer.OrdinalIgnoreCase);
-                foreach (SPListItem item in list.Items)
-                {
-                    string nameAr = Convert.ToString(item["Title"] ?? "");
-                    string nameEn = Convert.ToString(item["Title_EN"] ?? item["TitleEn"] ?? nameAr);
-                    string name = IsArabic ? nameAr : nameEn;
-                    if (string.IsNullOrEmpty(name)) continue;
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
 
-                    string category = Convert.ToString(item["Category"] ?? (IsArabic ? "أدلة ونماذج عامة" : "General Guides and Forms"));
-                    string url = "#";
-                    if (item["URL"] != null || item["LinkUrl"] != null)
+                SPSecurity.RunWithElevatedPrivileges(() =>
+                {
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        var raw = item["URL"] ?? item["LinkUrl"];
-                        try
+                        SPList list = elevatedWeb.Lists.TryGetList(targetListName);
+                        if (list != null && list.ItemCount > 0)
                         {
-                            var uv = new SPFieldUrlValue(Convert.ToString(raw));
-                            url = uv.Url;
-                        }
-                        catch
-                        {
-                            url = Convert.ToString(raw);
+                            var grouped = new Dictionary<string, List<DocItemDto>>(StringComparer.OrdinalIgnoreCase);
+                            foreach (SPListItem item in list.Items)
+                            {
+                                string nameAr = Convert.ToString(item["Title"] ?? "");
+                                string nameEn = Convert.ToString(item["Title_EN"] ?? item["TitleEn"] ?? nameAr);
+                                string name = IsArabic ? nameAr : nameEn;
+                                if (string.IsNullOrEmpty(name)) continue;
+
+                                string category = Convert.ToString(item["Category"] ?? (IsArabic ? "أدلة ونماذج عامة" : "General Guides and Forms"));
+                                string url = "#";
+                                if (item["URL"] != null || item["LinkUrl"] != null)
+                                {
+                                    var raw = item["URL"] ?? item["LinkUrl"];
+                                    try
+                                    {
+                                        var uv = new SPFieldUrlValue(Convert.ToString(raw));
+                                        url = uv.Url;
+                                    }
+                                    catch
+                                    {
+                                        url = Convert.ToString(raw);
+                                    }
+                                }
+
+                                if (!grouped.ContainsKey(category))
+                                    grouped[category] = new List<DocItemDto>();
+
+                                grouped[category].Add(new DocItemDto { Name = name, Url = url });
+                            }
+
+                            int idx = 0;
+                            foreach (var kvp in grouped)
+                            {
+                                groups.Add(new DocGroupDto
+                                {
+                                    GroupTitle = kvp.Key,
+                                    HeadingId = "center-doc-group-heading-" + idx,
+                                    CollapseId = "center-doc-group-collapse-" + idx,
+                                    Items = kvp.Value
+                                });
+                                idx++;
+                            }
                         }
                     }
-
-                    if (!grouped.ContainsKey(category))
-                        grouped[category] = new List<DocItemDto>();
-
-                    grouped[category].Add(new DocItemDto { Name = name, Url = url });
-                }
-
-                int idx = 0;
-                foreach (var kvp in grouped)
-                {
-                    groups.Add(new DocGroupDto
-                    {
-                        GroupTitle = kvp.Key,
-                        HeadingId = "center-doc-group-heading-" + idx,
-                        CollapseId = "center-doc-group-collapse-" + idx,
-                        Items = kvp.Value
-                    });
-                    idx++;
-                }
+                });
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "ucCenterDocumentsDga.BindDocuments", ex.Message);
             }
 
             if (groups.Count == 0)

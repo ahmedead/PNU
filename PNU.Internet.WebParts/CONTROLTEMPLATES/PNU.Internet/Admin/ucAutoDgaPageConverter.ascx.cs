@@ -124,7 +124,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                         }
 
                         string title = pubPage.Title ?? file.Name;
-                        string originalContent = GetPageContent(pubPage);
+                        string originalContent = GetPageContent(pubPage, file);
                         string dgaTransformed = DgaAutoTransformer.TransformContent(pageUrl, title, originalContent);
 
                         litOriginalContent.Text = originalContent;
@@ -326,7 +326,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 
                             // 2. Read Current Title & Content
                             string title = pubPage.Title ?? file.Name;
-                            string originalRawContent = GetPageContent(pubPage);
+                            string originalRawContent = GetPageContent(pubPage, file);
 
                             // 3. Auto-Transform Content to DGA Standards
                             string dgaContent = DgaAutoTransformer.TransformContent(pageUrl, title, originalRawContent);
@@ -350,7 +350,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                             }
 
                             // 5. Update Content
-                            SetPageContent(pubPage, dgaContent);
+                            SetPageContent(pubPage, dgaContent, !DgaAutoTransformer.IsArabicPage(pageUrl, dgaContent));
                             pubPage.Update();
 
                             // 6. Check In
@@ -471,36 +471,78 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             return null;
         }
 
-        private string GetPageContent(PublishingPage pubPage)
+        private string GetPageContent(PublishingPage pubPage, SPFile file = null)
         {
-            if (pubPage.ListItem.Fields.ContainsField("PublishingPageContent"))
+            string content = "";
+            string[] fieldCandidates = new[]
             {
-                return Convert.ToString(pubPage.ListItem["PublishingPageContent"]);
-            }
-            if (pubPage.ListItem.Fields.ContainsField("PageContent"))
+                "PublishingPageContent",
+                "PublishingPageContent_EN",
+                "PageContent",
+                "PublishingPageContentHtml",
+                "Content",
+                "Content_EN",
+                "Description",
+                "Description_EN"
+            };
+
+            foreach (var fieldName in fieldCandidates)
             {
-                return Convert.ToString(pubPage.ListItem["PageContent"]);
+                if (pubPage.ListItem.Fields.ContainsField(fieldName))
+                {
+                    string val = Convert.ToString(pubPage.ListItem[fieldName]);
+                    if (!string.IsNullOrWhiteSpace(val))
+                    {
+                        content = val;
+                        break;
+                    }
+                }
             }
-            if (pubPage.ListItem.Fields.ContainsField("PublishingPageContentHtml"))
+
+            // Fallback: check ContentEditorWebPart in the page
+            if (string.IsNullOrWhiteSpace(content) && file != null)
             {
-                return Convert.ToString(pubPage.ListItem["PublishingPageContentHtml"]);
+                try
+                {
+                    using (SPLimitedWebPartManager wpManager = file.GetLimitedWebPartManager(PersonalizationScope.Shared))
+                    {
+                        foreach (System.Web.UI.WebControls.WebParts.WebPart wp in wpManager.WebParts)
+                        {
+                            if (wp is ContentEditorWebPart cewp && cewp.Content != null)
+                            {
+                                string cewpHtml = cewp.Content.InnerXml;
+                                if (!string.IsNullOrWhiteSpace(cewpHtml))
+                                {
+                                    content = cewpHtml;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { }
             }
-            return "";
+
+            return content ?? "";
         }
 
-        private void SetPageContent(PublishingPage pubPage, string content)
+        private void SetPageContent(PublishingPage pubPage, string content, bool isEnglish = false)
         {
             if (pubPage.ListItem.Fields.ContainsField("PublishingPageContent"))
             {
                 pubPage.ListItem["PublishingPageContent"] = content;
             }
-            else if (pubPage.ListItem.Fields.ContainsField("PageContent"))
+            if (pubPage.ListItem.Fields.ContainsField("PageContent"))
             {
                 pubPage.ListItem["PageContent"] = content;
             }
-            else if (pubPage.ListItem.Fields.ContainsField("PublishingPageContentHtml"))
+            if (pubPage.ListItem.Fields.ContainsField("PublishingPageContentHtml"))
             {
                 pubPage.ListItem["PublishingPageContentHtml"] = content;
+            }
+            if (isEnglish && pubPage.ListItem.Fields.ContainsField("PublishingPageContent_EN"))
+            {
+                pubPage.ListItem["PublishingPageContent_EN"] = content;
             }
         }
 

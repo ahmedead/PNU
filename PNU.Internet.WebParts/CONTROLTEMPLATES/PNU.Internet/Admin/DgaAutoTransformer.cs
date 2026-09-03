@@ -90,7 +90,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 
         private static void TransformHeadingsAndLists(HtmlDocument doc, bool isArabic)
         {
-            // Transform H1, H2, H3, H4 into styled DGA Section Headers
+            string arrowIcon = isArabic ? "hgi-arrow-left-01" : "hgi-arrow-right-01";
+
+            // 1. Transform H1, H2, H3, H4 into styled DGA Section Headers or body paragraphs
             var headings = doc.DocumentNode.SelectNodes("//h1 | //h2 | //h3 | //h4");
             if (headings != null)
             {
@@ -103,62 +105,60 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                         continue;
                     }
 
+                    // In SharePoint RTE, body paragraphs frequently end up inside H1/H2/H3/H4 tags
+                    // when authors press Enter without resetting the style ribbon.
+                    // If text is long (> 85 chars) or ends with a sentence period '.' (and not a colon ':'),
+                    // it is genuine BODY CONTENT, NOT A SECTION HEADER!
+                    if (text.Length > 85 || (text.EndsWith(".") && !text.EndsWith(":") && text.Length > 30))
+                    {
+                        h.Name = "p";
+                        h.SetAttributeValue("class", "text-body-secondary leading-relaxed mb-3");
+                        h.InnerHtml = CleanEncodings(h.InnerHtml);
+                        continue;
+                    }
+
+                    // Otherwise, it is a valid Section Header!
                     h.Name = "h2";
                     h.SetAttributeValue("class", "h5 fw-bold text-dark mt-4 mb-3 d-flex align-items-center gap-2 border-bottom pb-2");
-                    h.InnerHtml = string.Format(@"<i class=""hgi hgi-stroke hgi-arrow-left-01 text-primary fs-5""></i><span>{0}</span>", text);
+                    h.InnerHtml = string.Format(@"<i class=""hgi hgi-stroke {0} text-primary fs-5""></i><span>{1}</span>", arrowIcon, text);
                 }
             }
 
-            // Remove consecutive empty headings
-            var allHeadings = doc.DocumentNode.SelectNodes("//h2");
-            if (allHeadings != null)
-            {
-                foreach (var h in allHeadings)
-                {
-                    HtmlNode next = h.NextSibling;
-                    while (next != null && (next.NodeType == HtmlNodeType.Text && string.IsNullOrWhiteSpace(next.InnerText) || next.Name == "br" || (next.Name == "p" && string.IsNullOrWhiteSpace(next.InnerText))))
-                    {
-                        next = next.NextSibling;
-                    }
-                    if (next != null && next.Name == "h2")
-                    {
-                        h.Remove();
-                    }
-                }
-            }
-
-            // Transform pseudo bullet points in paragraphs like · or o or •
-            var pNodes = doc.DocumentNode.SelectNodes("//p");
+            // 2. Transform pseudo bullet points and subtitle paragraphs/divs
+            var pNodes = doc.DocumentNode.SelectNodes("//p | //div[not(.//div) and not(.//table) and not(.//h2)]");
             if (pNodes != null)
             {
                 foreach (var p in pNodes)
                 {
                     string text = p.InnerText.Trim();
-                    if (text.StartsWith("·") || text.StartsWith("•") || text.StartsWith("o "))
+                    if (text.StartsWith("·") || text.StartsWith("•") || text.StartsWith("o ") || text.StartsWith("- "))
                     {
-                        string cleanText = text.TrimStart('·', '•', 'o', ' ', '\t');
+                        string cleanText = text.TrimStart('·', '•', 'o', '-', ' ', '\t');
                         if (cleanText.EndsWith(":"))
                         {
-                            // It's a subhead
+                            // Subhead bullet
+                            p.Name = "h3";
                             p.SetAttributeValue("class", "h6 fw-bold text-primary mt-3 mb-2 d-flex align-items-center gap-2");
                             p.InnerHtml = string.Format(@"<i class=""hgi hgi-stroke hgi-tick-02 fs-6 text-primary""></i><span>{0}</span>", cleanText);
                         }
                         else
                         {
-                            // It's a bullet item
+                            // Bullet item
                             p.SetAttributeValue("class", "d-flex align-items-start gap-2 mb-2 text-body-secondary");
                             p.InnerHtml = string.Format(@"<i class=""hgi hgi-stroke hgi-checkmark-circle-02 text-success fs-6 mt-1 flex-shrink-0""></i><span>{0}</span>", cleanText);
                         }
                     }
-                    else if (p.SelectSingleNode(".//strong") != null && text.EndsWith(":") && text.Length < 60)
+                    else if (p.Name == "p" && text.EndsWith(":") && text.Length < 60 && !text.Contains("<br"))
                     {
-                        // Paragraph that is just a bold subtitle ending with colon
-                        p.SetAttributeValue("class", "h6 fw-bold text-dark mt-3 mb-2");
+                        // Paragraph that is a bold/normal subtitle ending with colon (like "Overview:", "Tasks:", "المهام:")
+                        p.Name = "h3";
+                        p.SetAttributeValue("class", "h6 fw-bold text-dark mt-3 mb-2 d-flex align-items-center gap-2");
+                        p.InnerHtml = string.Format(@"<i class=""hgi hgi-stroke {0} text-primary fs-6""></i><span>{1}</span>", arrowIcon, text);
                     }
                 }
             }
 
-            // Remove underline formatting spans that look ugly
+            // 3. Remove underline formatting spans that look ugly
             var underlines = doc.DocumentNode.SelectNodes("//span[contains(@style, 'underline')] | //u");
             if (underlines != null)
             {
@@ -171,7 +171,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 
         private static void TransformContactInfo(HtmlDocument doc, bool isArabic)
         {
-            var pNodes = doc.DocumentNode.SelectNodes("//p[contains(text(), '@') or contains(text(), 'WhatsApp') or contains(text(), 'واتساب') or contains(text(), '01182') or contains(text(), 'الهاتف')]");
+            var pNodes = doc.DocumentNode.SelectNodes("//p[contains(text(), '@') or contains(text(), 'WhatsApp') or contains(text(), 'واتساب') or contains(text(), '01182') or contains(text(), 'الهاتف')] | //div[not(.//div) and (contains(text(), '@') or contains(text(), 'WhatsApp') or contains(text(), 'واتساب') or contains(text(), '01182') or contains(text(), 'الهاتف'))]");
             if (pNodes != null)
             {
                 foreach (var p in pNodes)
@@ -230,10 +230,19 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                     }
                 }
 
-                // Remove ms-rte classes
+                // Preserve SharePoint RTE Heading classes before stripping them
                 if (node.Attributes.Contains("class"))
                 {
                     string cls = node.Attributes["class"].Value;
+                    if (cls.IndexOf("ms-rteElement-H", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        string txt = StripTags(node.InnerText);
+                        if (!string.IsNullOrWhiteSpace(txt) && txt.Length <= 85 && (!txt.EndsWith(".") || txt.EndsWith(":")))
+                        {
+                            node.Name = "h2";
+                        }
+                    }
+
                     cls = Regex.Replace(cls, @"ms-rte\S*", "", RegexOptions.IgnoreCase);
                     cls = Regex.Replace(cls, @"MsoNormal\S*", "", RegexOptions.IgnoreCase);
                     if (string.IsNullOrWhiteSpace(cls))
@@ -305,14 +314,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 
         private static string ExtractLeadText(HtmlDocument doc, string pageTitle, string entityName, bool isArabic)
         {
-            var pNodes = doc.DocumentNode.SelectNodes("//p");
+            var pNodes = doc.DocumentNode.SelectNodes("//p | //div[not(.//div) and not(.//table) and not(.//h2)]");
             if (pNodes != null)
             {
                 foreach (var p in pNodes)
                 {
                     string txt = p.InnerText.Trim();
                     txt = CleanEncodings(txt);
-                    if (txt.Length > 25 && !txt.Contains("Click here") && !txt.Contains("اضغط هنا") && !txt.Contains("Download") && !txt.StartsWith("·") && !txt.StartsWith("•"))
+                    if (txt.Length > 25 && !txt.Contains("Click here") && !txt.Contains("اضغط هنا") && !txt.Contains("Download") && !txt.StartsWith("·") && !txt.StartsWith("•") && !txt.EndsWith(":"))
                     {
                         return txt;
                     }

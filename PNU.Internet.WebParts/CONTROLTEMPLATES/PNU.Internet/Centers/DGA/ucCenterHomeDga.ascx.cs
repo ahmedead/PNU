@@ -110,17 +110,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
             try
             {
                 SPWeb web = SPContext.Current.Web;
-                SPList list = web.Lists.TryGetList(LIST_CONTENT);
-                if (list != null)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    foreach (SPListItem item in list.Items)
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string key = Convert.ToString(item["Title"] ?? item["ContentKey"] ?? "").Trim();
-                        string val = Convert.ToString(IsArabic ? (item["Body"] ?? item["Value"]) : (item["Body_EN"] ?? item["Value_EN"] ?? item["Body"] ?? item["Value"]));
-                        if (!string.IsNullOrEmpty(key))
-                            dict[key] = val;
+                        SPList list = elevatedWeb.Lists.TryGetList(LIST_CONTENT);
+                        if (list != null)
+                        {
+                            foreach (SPListItem item in list.Items)
+                            {
+                                string key = Convert.ToString(item["Title"] ?? item["ContentKey"] ?? "").Trim();
+                                string val = Convert.ToString(IsArabic ? (item["Body"] ?? item["Value"]) : (item["Body_EN"] ?? item["Value_EN"] ?? item["Body"] ?? item["Value"]));
+                                if (!string.IsNullOrEmpty(key))
+                                    dict[key] = val;
+                            }
+                        }
                     }
-                }
+                });
             }
             catch { }
             return dict;
@@ -132,17 +142,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
             try
             {
                 SPWeb web = SPContext.Current.Web;
-                SPList spList = web.Lists.TryGetList(LIST_OBJECTIVES);
-                if (spList != null && spList.ItemCount > 0)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
-                    foreach (SPListItem item in spList.GetItems(query))
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string text = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
-                        if (!string.IsNullOrEmpty(text))
-                            list.Add(text);
+                        SPList spList = elevatedWeb.Lists.TryGetList(LIST_OBJECTIVES);
+                        if (spList != null && spList.ItemCount > 0)
+                        {
+                            SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                            foreach (SPListItem item in spList.GetItems(query))
+                            {
+                                string text = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
+                                if (!string.IsNullOrEmpty(text))
+                                    list.Add(text);
+                            }
+                        }
                     }
-                }
+                });
             }
             catch { }
 
@@ -173,18 +193,28 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
             try
             {
                 SPWeb web = SPContext.Current.Web;
-                SPList spList = web.Lists.TryGetList(LIST_TASKS);
-                if (spList != null && spList.ItemCount > 0)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
-                    foreach (SPListItem item in spList.GetItems(query))
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
-                        string desc = Convert.ToString(IsArabic ? item["Description"] : (item["Description_EN"] ?? item["Description"]));
-                        if (!string.IsNullOrEmpty(title))
-                            list.Add(new TaskItem { Title = title, Description = desc });
+                        SPList spList = elevatedWeb.Lists.TryGetList(LIST_TASKS);
+                        if (spList != null && spList.ItemCount > 0)
+                        {
+                            SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                            foreach (SPListItem item in spList.GetItems(query))
+                            {
+                                string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
+                                string desc = Convert.ToString(IsArabic ? item["Description"] : (item["Description_EN"] ?? item["Description"]));
+                                if (!string.IsNullOrEmpty(title))
+                                    list.Add(new TaskItem { Title = title, Description = desc });
+                            }
+                        }
                     }
-                }
+                });
             }
             catch { }
 

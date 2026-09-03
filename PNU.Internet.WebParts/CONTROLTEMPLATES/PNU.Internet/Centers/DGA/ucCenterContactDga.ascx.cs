@@ -81,17 +81,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
             try
             {
                 SPWeb web = SPContext.Current.Web;
-                SPList list = web.Lists.TryGetList(LIST_CONTACT_INFO);
-                if (list != null && list.ItemCount > 0)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    foreach (SPListItem item in list.Items)
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string key = Convert.ToString(item["Title"] ?? item["Key"] ?? "").Trim();
-                        string val = Convert.ToString(IsArabic ? (item["Value"] ?? item["Body"]) : (item["Value_EN"] ?? item["Body_EN"] ?? item["Value"] ?? item["Body"]));
-                        if (!string.IsNullOrEmpty(key))
-                            dict[key] = val;
+                        SPList list = elevatedWeb.Lists.TryGetList(LIST_CONTACT_INFO);
+                        if (list != null && list.ItemCount > 0)
+                        {
+                            foreach (SPListItem item in list.Items)
+                            {
+                                string key = Convert.ToString(item["Title"] ?? item["Key"] ?? "").Trim();
+                                string val = Convert.ToString(IsArabic ? (item["Value"] ?? item["Body"]) : (item["Value_EN"] ?? item["Body_EN"] ?? item["Value"] ?? item["Body"]));
+                                if (!string.IsNullOrEmpty(key))
+                                    dict[key] = val;
+                            }
+                        }
                     }
-                }
+                });
             }
             catch { }
             return dict;
@@ -103,36 +113,46 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
             try
             {
                 SPWeb web = SPContext.Current.Web;
-                SPList spList = web.Lists.TryGetList(LIST_CONTACT_DIRECTORY);
-                if (spList != null && spList.ItemCount > 0)
-                {
-                    SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
-                    foreach (SPListItem item in spList.GetItems(query))
-                    {
-                        string entity = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
-                        string phone = Convert.ToString(item["Phone"] ?? "");
-                        string emailRaw = Convert.ToString(item["Email"] ?? "");
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
 
-                        StringBuilder sbEmail = new StringBuilder();
-                        if (!string.IsNullOrEmpty(emailRaw))
+                SPSecurity.RunWithElevatedPrivileges(() =>
+                {
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
+                    {
+                        SPList spList = elevatedWeb.Lists.TryGetList(LIST_CONTACT_DIRECTORY);
+                        if (spList != null && spList.ItemCount > 0)
                         {
-                            string[] emails = emailRaw.Split(new[] { ';', ',', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                            for (int i = 0; i < emails.Length; i++)
+                            SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                            foreach (SPListItem item in spList.GetItems(query))
                             {
-                                string em = emails[i].Trim();
-                                if (!string.IsNullOrEmpty(em))
+                                string entity = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
+                                string phone = Convert.ToString(item["Phone"] ?? "");
+                                string emailRaw = Convert.ToString(item["Email"] ?? "");
+
+                                StringBuilder sbEmail = new StringBuilder();
+                                if (!string.IsNullOrEmpty(emailRaw))
                                 {
-                                    if (i > 0) sbEmail.Append("<br />");
-                                    sbEmail.AppendFormat("<a href=\"mailto:{0}\" dir=\"ltr\">{0}</a>", em);
+                                    string[] emails = emailRaw.Split(new[] { ';', ',', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                                    for (int i = 0; i < emails.Length; i++)
+                                    {
+                                        string em = emails[i].Trim();
+                                        if (!string.IsNullOrEmpty(em))
+                                        {
+                                            if (i > 0) sbEmail.Append("<br />");
+                                            sbEmail.AppendFormat("<a href=\"mailto:{0}\" dir=\"ltr\">{0}</a>", em);
+                                        }
+                                    }
+                                }
+                                if (!string.IsNullOrEmpty(entity))
+                                {
+                                    list.Add(new DirectoryItem { EntityName = entity, Phone = phone, EmailHtml = sbEmail.ToString() });
                                 }
                             }
                         }
-                        if (!string.IsNullOrEmpty(entity))
-                        {
-                            list.Add(new DirectoryItem { EntityName = entity, Phone = phone, EmailHtml = sbEmail.ToString() });
-                        }
                     }
-                }
+                });
             }
             catch { }
 

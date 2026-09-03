@@ -55,27 +55,40 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
                 SPWeb web = SPContext.Current.Web;
                 CenterProvisioner.EnsureDigitalChannelsList(web, targetListName);
 
-                SPList channelList = web.Lists.TryGetList(targetListName);
-                if (channelList != null && channelList.ItemCount > 0)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
-                    foreach (SPListItem item in channelList.GetItems(query))
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
-                        string desc = Convert.ToString(IsArabic ? item["Description"] : (item["Description_EN"] ?? item["Description"]));
-                        string icon = Convert.ToString(item["IconClass"] ?? "hgi-award-01");
-                        string url = "";
-                        if (item["URL"] != null)
+                        SPList channelList = elevatedWeb.Lists.TryGetList(targetListName);
+                        if (channelList != null && channelList.ItemCount > 0)
                         {
-                            var uv = new SPFieldUrlValue(Convert.ToString(item["URL"]));
-                            url = uv.Url;
+                            SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                            foreach (SPListItem item in channelList.GetItems(query))
+                            {
+                                string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
+                                string desc = Convert.ToString(IsArabic ? item["Description"] : (item["Description_EN"] ?? item["Description"]));
+                                string icon = Convert.ToString(item["IconClass"] ?? "hgi-award-01");
+                                string url = "";
+                                if (item["URL"] != null)
+                                {
+                                    var uv = new SPFieldUrlValue(Convert.ToString(item["URL"]));
+                                    url = uv.Url;
+                                }
+                                if (!string.IsNullOrEmpty(title))
+                                    channelItems.Add(new ChannelItem { Title = title, Description = desc, IconClass = icon, Url = url });
+                            }
                         }
-                        if (!string.IsNullOrEmpty(title))
-                            channelItems.Add(new ChannelItem { Title = title, Description = desc, IconClass = icon, Url = url });
                     }
-                }
+                });
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "ucCenterDigitalChannelsDga.BindData", ex.Message);
+            }
 
             if (channelItems.Count == 0)
             {

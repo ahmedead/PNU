@@ -50,30 +50,49 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
                 SPWeb web = SPContext.Current.Web;
                 CenterProvisioner.EnsureDepartmentsList(web, targetListName);
 
-                SPList list = web.Lists.TryGetList(targetListName);
-                if (list != null && list.ItemCount > 0)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
-                    foreach (SPListItem item in list.GetItems(query))
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
-                        string desc = Convert.ToString(IsArabic ? (item["Description"] ?? item["Body"]) : (item["Description_EN"] ?? item["Body_EN"] ?? item["Description"] ?? item["Body"]));
-                        string url = "";
-                        string urlTitle = "";
-                        if (item["URL"] != null)
+                        SPList list = elevatedWeb.Lists.TryGetList(targetListName);
+                        if (list != null && list.ItemCount > 0)
                         {
-                            var uv = new SPFieldUrlValue(Convert.ToString(item["URL"]));
-                            url = uv.Url;
-                            urlTitle = !string.IsNullOrEmpty(uv.Description) ? uv.Description : title;
-                        }
-                        if (!string.IsNullOrEmpty(title))
-                        {
-                            items.Add(new DepartmentItem { Title = title, Description = desc, Url = url, UrlTitle = urlTitle });
+                            SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                            foreach (SPListItem item in list.GetItems(query))
+                            {
+                                if (item.Fields.ContainsField("Visible"))
+                                {
+                                    object vis = item["Visible"];
+                                    if (vis != null && false.Equals(vis)) continue;
+                                }
+
+                                string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
+                                string desc = Convert.ToString(IsArabic ? (item["Description"] ?? item["Body"]) : (item["Description_EN"] ?? item["Body_EN"] ?? item["Description"] ?? item["Body"]));
+                                string url = "";
+                                string urlTitle = "";
+                                if (item["URL"] != null)
+                                {
+                                    var uv = new SPFieldUrlValue(Convert.ToString(item["URL"]));
+                                    url = uv.Url;
+                                    urlTitle = !string.IsNullOrEmpty(uv.Description) ? uv.Description : title;
+                                }
+                                if (!string.IsNullOrEmpty(title))
+                                {
+                                    items.Add(new DepartmentItem { Title = title, Description = desc, Url = url, UrlTitle = urlTitle });
+                                }
+                            }
                         }
                     }
-                }
+                });
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "ucCenterDepartmentsDga.BindData", ex.Message);
+            }
 
             if (items.Count == 0)
             {

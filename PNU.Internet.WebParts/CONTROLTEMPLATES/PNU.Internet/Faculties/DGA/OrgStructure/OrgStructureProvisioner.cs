@@ -17,10 +17,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
         public const string ImagesListName = "FacultyOrgStructureImages";
         private static readonly object _lock = new object();
 
-        public static void EnsureLists()
+        public static void EnsureLists(string itemsListName = ItemsListName, string imagesListName = ImagesListName)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(itemsListName)) itemsListName = ItemsListName;
+                if (string.IsNullOrWhiteSpace(imagesListName)) imagesListName = ImagesListName;
+
                 lock (_lock)
                 {
                     SPSecurity.RunWithElevatedPrivileges(delegate ()
@@ -30,7 +33,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
                         {
                             web.AllowUnsafeUpdates = true;
 
-                            SPList items = EnsureList(web, ItemsListName, "Faculty org-structure accordion items");
+                            SPList items = EnsureList(web, itemsListName, "Faculty org-structure accordion items");
                             EnsureField(items, "TitleEn", SPFieldType.Text);
                             EnsureField(items, "ItemKey", SPFieldType.Text);
                             EnsureField(items, "BodyAr", SPFieldType.Note);
@@ -40,7 +43,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
                             FacultyProvisioningHelper.GrantAnonymousRead(items);
                             if (items.ItemCount == 0) SeedItems(items);
 
-                            SPList images = EnsureList(web, ImagesListName, "Faculty org-structure images");
+                            SPList images = EnsureList(web, imagesListName, "Faculty org-structure images");
                             EnsureField(images, "ItemKey", SPFieldType.Text);
                             EnsureField(images, "ImageUrl", SPFieldType.URL);
                             EnsureField(images, "SortOrder", SPFieldType.Number);

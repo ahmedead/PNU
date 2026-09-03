@@ -17,6 +17,30 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
     /// </summary>
     public partial class ucFacultyOrgStructureDga : UserControl
     {
+        private string _itemsListName = OrgStructureProvisioner.ItemsListName;
+        private string _imagesListName = OrgStructureProvisioner.ImagesListName;
+
+        public string ItemsListName
+        {
+            get { return string.IsNullOrWhiteSpace(_itemsListName) ? OrgStructureProvisioner.ItemsListName : _itemsListName.Trim(); }
+            set { _itemsListName = value; }
+        }
+
+        public string ImagesListName
+        {
+            get { return string.IsNullOrWhiteSpace(_imagesListName) ? OrgStructureProvisioner.ImagesListName : _imagesListName.Trim(); }
+            set { _imagesListName = value; }
+        }
+
+        /// <summary>
+        /// Alias for ItemsListName to support standard ListName property naming convention.
+        /// </summary>
+        public string ListName
+        {
+            get { return ItemsListName; }
+            set { ItemsListName = value; }
+        }
+
         private bool IsArabic
         {
             get { return SPContext.Current.Web.Language == 1025; }
@@ -43,7 +67,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
                 && HttpContext.Current.User.Identity != null
                 && HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                OrgStructureProvisioner.EnsureLists();
+                OrgStructureProvisioner.EnsureLists(ItemsListName, ImagesListName);
             }
             
         }
@@ -72,7 +96,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
 
         private void BindItems(SPWeb web)
         {
-            SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ItemsListName);
+            SPList list = web.Lists.TryGetList(ItemsListName);
             if (list == null) { phItems.Visible = false; return; }
 
             // Preload images grouped by ItemKey.
@@ -110,7 +134,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
         private Dictionary<string, List<string>> LoadImages(SPWeb web)
         {
             var map = new Dictionary<string, List<string>>();
-            SPList list = web.Lists.TryGetList(OrgStructureProvisioner.ImagesListName);
+            SPList list = web.Lists.TryGetList(ImagesListName);
             if (list == null) return map;
 
             var sorted = new List<SPListItem>();

@@ -53,20 +53,33 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA
                 SPWeb web = SPContext.Current.Web;
                 CenterProvisioner.EnsureRecordList(web, targetListName);
 
-                SPList list = web.Lists.TryGetList(targetListName);
-                if (list != null && list.ItemCount > 0)
+                Guid siteId = web.Site.ID;
+                Guid webId = web.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(() =>
                 {
-                    SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
-                    foreach (SPListItem item in list.GetItems(query))
+                    using (var site = new SPSite(siteId))
+                    using (var elevatedWeb = site.OpenWeb(webId))
                     {
-                        string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
-                        string html = Convert.ToString(IsArabic ? (item["Body"] ?? item["Description"]) : (item["Body_EN"] ?? item["Description_EN"] ?? item["Body"] ?? item["Description"]));
-                        if (!string.IsNullOrEmpty(title))
-                            recordItems.Add(new RecordItem { Title = title, HtmlContent = html });
+                        SPList list = elevatedWeb.Lists.TryGetList(targetListName);
+                        if (list != null && list.ItemCount > 0)
+                        {
+                            SPQuery query = new SPQuery { Query = "<OrderBy><FieldRef Name='ItemOrder' Ascending='True'/></OrderBy>" };
+                            foreach (SPListItem item in list.GetItems(query))
+                            {
+                                string title = Convert.ToString(IsArabic ? item["Title"] : (item["Title_EN"] ?? item["Title"]));
+                                string html = Convert.ToString(IsArabic ? (item["Body"] ?? item["Description"]) : (item["Body_EN"] ?? item["Description_EN"] ?? item["Body"] ?? item["Description"]));
+                                if (!string.IsNullOrEmpty(title))
+                                    recordItems.Add(new RecordItem { Title = title, HtmlContent = html });
+                            }
+                        }
                     }
-                }
+                });
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current?.Request?.Url?.ToString() ?? "", "ucCenterRecordDga.BindData", ex.Message);
+            }
 
             if (recordItems.Count == 0)
             {
