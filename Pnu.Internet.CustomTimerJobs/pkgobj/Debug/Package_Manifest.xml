@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="d6553bf1-a8ca-4aa4-bca0-6b621d77bf55" ResetWebServer="TRUE" SharePointProductVersion="19.0">
+  <Assemblies>
+    <Assembly Location="Oracle.ManagedDataAccess.dll" DeploymentTarget="GlobalAssemblyCache" />
+    <Assembly Location="Pnu.Internet.CustomTimerJobs.dll" DeploymentTarget="GlobalAssemblyCache" />
+  </Assemblies>
+  <FeatureManifests>
+    <FeatureManifest Location="PNU.Internet.CustomTimerJobs_Study Plan Feature\Feature.xml" />
+    <FeatureManifest Location="PNU.Internet.CustomTimerJobs_Colleges Departments Programs Feature\Feature.xml" />
+    <FeatureManifest Location="PNU.Internet.CustomTimerJobs_Colleges Memebers Feature\Feature.xml" />
+    <FeatureManifest Location="PNU.Internet.CustomTimerJobs_Instructor Courses Feature\Feature.xml" />
+    <FeatureManifest Location="PNU.Internet.CustomTimerJobs_Statistics Feature\Feature.xml" />
+  </FeatureManifests>
+</Solution>

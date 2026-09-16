@@ -51,13 +51,15 @@ namespace PNU.Internet.WebParts
                         {
                             web.AllowUnsafeUpdates = true;
 
-                            SPList partners = EnsureList(web, PartnersListName, "College partners");
+                            bool isPartnersCreated;
+                            SPList partners = EnsureList(web, PartnersListName, "College partners", out isPartnersCreated);
                             SPFactory.MapListFieldsFromClass<PartnerItem>(partners);
-                            if (partners.ItemCount == 0) SeedPartners(partners);
+                            if (isPartnersCreated) SeedPartners(partners);
 
-                            SPList accred = EnsureList(web, AccreditationsListName, "College accreditations");
+                            bool isAccredCreated;
+                            SPList accred = EnsureList(web, AccreditationsListName, "College accreditations", out isAccredCreated);
                             SPFactory.MapListFieldsFromClass<AccreditationItem>(accred);
-                            if (accred.ItemCount == 0) SeedAccreditations(accred);
+                            if (isAccredCreated) SeedAccreditations(accred);
 
                             web.AllowUnsafeUpdates = false;
                         }
@@ -71,8 +73,9 @@ namespace PNU.Internet.WebParts
             }
         }
 
-        private static SPList EnsureList(SPWeb web, string name, string desc)
+        private static SPList EnsureList(SPWeb web, string name, string desc, out bool isCreated)
         {
+            isCreated = false;
             SPList list = web.Lists.TryGetList(name);
             if (list == null)
             {
@@ -80,6 +83,7 @@ namespace PNU.Internet.WebParts
                 list = web.Lists[id];
                 list.OnQuickLaunch = false;
                 list.Update();
+                isCreated = true;
             }
             return list;
         }

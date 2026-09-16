@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+
+  <!--
+    SafeControl entries for the Org Structure controls.
+    Deploy the .ascx files to: {SharePointRoot}\TEMPLATE\CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\
+    (i.e. the _controltemplates/15/ hive), matching the namespace below.
+  -->
+  <SafeControl
+      Assembly="PNU.Internet.WebParts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bbc777e63fab09a3"
+      Namespace="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About"
+      TypeName="*"
+      Safe="True"
+      SafeAgainstScript="False" />
+
+</Elements>

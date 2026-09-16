@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using Microsoft.SharePoint.Publishing.Fields;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
@@ -24,7 +24,7 @@ namespace PNU.Internet.WebParts
 
         public string SiteURL { get; set; }
         public string ListURL { get; set; }
-        
+
 
     }
     public static class SPFactory
@@ -49,7 +49,7 @@ namespace PNU.Internet.WebParts
             try
             {
                 var obj = HttpContext.GetGlobalResourceObject("CommonGlobalResources", key);
-                
+
 
                 return obj != null ? obj.ToString() : string.Empty;
 
@@ -59,10 +59,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetPNUresResource", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetPNUresResource", ex.Message);
             }
             return string.Empty;
-            
+
         }
 
         public static bool IsArabic
@@ -98,13 +98,13 @@ namespace PNU.Internet.WebParts
             return sb.ToString();
         }
 
-        public static string GetPNUresResource(string key,string Language)
+        public static string GetPNUresResource(string key, string Language)
         {
             try
             {
-                
-                if(Language == "AR" || Language == "ar")
-                    Language= "ar-SA";
+
+                if (Language == "AR" || Language == "ar")
+                    Language = "ar-SA";
                 else
                     Language = "en-US";
 
@@ -139,7 +139,7 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetEquivalantDayName", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetEquivalantDayName", ex.Message);
             }
             return string.Empty;
 
@@ -157,7 +157,7 @@ namespace PNU.Internet.WebParts
                 // Find the corresponding day name in Arabic
                 DayOfWeek dayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), englishDay);
                 string arabicDay = dtfi.GetDayName(dayOfWeek);
-                
+
 
                 return arabicDay;
 
@@ -167,7 +167,7 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - ConvertToArabicDay", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - ConvertToArabicDay", ex.Message);
             }
             return string.Empty;
         }
@@ -204,11 +204,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetListSettingAllItems", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetListSettingAllItems", ex.Message);
             }
             return null;
         }
-        public static List<T> GetAllItems<T>(string ListName )
+        public static List<T> GetAllItems<T>(string ListName)
         {
             try
             {
@@ -245,11 +245,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetAllItems", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetAllItems", ex.Message);
             }
             return null;
         }
-        public static List<T> GetAllItems<T>(string ListURL,string SiteURL)
+        public static List<T> GetAllItems<T>(string ListURL, string SiteURL)
         {
             try
             {
@@ -283,10 +283,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetAllItems", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetAllItems", ex.Message);
             }
             return null;
-            
+
         }
 
         public static List<T> GetAllItemsWithoutItemOrder<T>(string ListURL, string SiteURL)
@@ -317,13 +317,13 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetAllItemsWithoutItemOrder", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetAllItemsWithoutItemOrder", ex.Message);
             }
-            
+
             return null;
         }
 
-        public static List<T> GetAllItemsByQuery<T>(string SiteURL,string ListURL, SPQuery query)
+        public static List<T> GetAllItemsByQuery<T>(string SiteURL, string ListURL, SPQuery query)
         {
             try
             {
@@ -355,9 +355,9 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetAllItemsByQuery", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetAllItemsByQuery", ex.Message);
             }
-            
+
             return null;
         }
 
@@ -393,10 +393,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetAllDataByQuery", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetAllDataByQuery", ex.Message);
             }
             return null;
-            
+
         }
 
         public static List<T> GetAllItemsByQueryListName<T>(string SiteURL, string ListName, SPQuery query)
@@ -431,11 +431,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetAllItemsByQueryListName", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetAllItemsByQueryListName", ex.Message);
             }
 
             return null;
-            
+
         }
 
         public static List<T> MapListItemsToClass<T>(SPListItemCollection objNew)
@@ -514,7 +514,7 @@ namespace PNU.Internet.WebParts
                                         }
                                         else
                                         {
-                                            if(prop.PropertyType == typeof(string))
+                                            if (prop.PropertyType == typeof(string))
                                                 prop.SetValue(obj, _item[prop.Name].ToString(), null);
                                             else if (prop.PropertyType == typeof(Boolean))
                                                 prop.SetValue(obj, Convert.ToBoolean(_item[prop.Name]), null);
@@ -544,11 +544,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - MapListItemsToClass", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - MapListItemsToClass", ex.Message);
             }
 
-            return  null;
-            
+            return null;
+
         }
 
         public static List<T> MapListItemsToClass<T>(List<SPListItem> objNew)
@@ -669,19 +669,19 @@ namespace PNU.Internet.WebParts
             T obj = default(T);
             try
             {
-                
+
                 obj = Activator.CreateInstance<T>();
                 PropertyInfo[] objprops = obj.GetType().GetProperties();
                 obj = Activator.CreateInstance<T>();
                 for (int i = 0; i < objprops.Length; i++)
                 {
-                    
-                        PropertyInfo prop = objprops[i];
-                        //if (prop.Name == "ID")
-                        //    continue;
-                        //Type PrpType;
-                        if (prop != null)
-                        {
+
+                    PropertyInfo prop = objprops[i];
+                    //if (prop.Name == "ID")
+                    //    continue;
+                    //Type PrpType;
+                    if (prop != null)
+                    {
 
 
                         try
@@ -765,10 +765,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - MapListItemsToClass", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - MapListItemsToClass", ex.Message);
             }
             return obj;
-            
+
         }
 
         public static List<T> MapClassToClass<T>(List<T> items)
@@ -784,16 +784,16 @@ namespace PNU.Internet.WebParts
 
                     for (int i = 0; i < objProps.Length; i++)
                     {
-                        
-                            PropertyInfo prop = objProps[i];
 
-                            if (prop != null)
-                            {
-                                // Assuming the property names in your object match the field names in your SPListItem
-                                // If there is a naming mismatch, you might need some attribute or mapping logic
-                                prop.SetValue(obj, prop.GetValue(item), null);
-                            }
-                        
+                        PropertyInfo prop = objProps[i];
+
+                        if (prop != null)
+                        {
+                            // Assuming the property names in your object match the field names in your SPListItem
+                            // If there is a naming mismatch, you might need some attribute or mapping logic
+                            prop.SetValue(obj, prop.GetValue(item), null);
+                        }
+
                     }
 
                     result.Add(obj);
@@ -807,7 +807,7 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - MapClassToClass", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - MapClassToClass", ex.Message);
             }
 
             return null;
@@ -829,15 +829,15 @@ namespace PNU.Internet.WebParts
 
                 foreach (PropertyInfo prop in objProps)
                 {
-                    
-                        PropertyInfo itemProp = item.GetType().GetProperty(prop.Name);
 
-                        if (itemProp != null && itemProp.CanRead)
-                        {
-                            object value = itemProp.GetValue(item);
-                            prop.SetValue(obj, value, null);
-                        }
-                    
+                    PropertyInfo itemProp = item.GetType().GetProperty(prop.Name);
+
+                    if (itemProp != null && itemProp.CanRead)
+                    {
+                        object value = itemProp.GetValue(item);
+                        prop.SetValue(obj, value, null);
+                    }
+
                 }
 
                 return obj;
@@ -848,10 +848,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - MapClassToClass", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - MapClassToClass", ex.Message);
             }
 
-            return  default(T);
+            return default(T);
         }
 
 
@@ -1013,7 +1013,7 @@ namespace PNU.Internet.WebParts
         //        SPView view = list.DefaultView;
         //        for (int i = 0; i < objprops.Length; i++)
         //        {
-                    
+
 
         //                PropertyInfo prop = objprops[i];
         //                //if (prop.Name == "ID")
@@ -1031,7 +1031,7 @@ namespace PNU.Internet.WebParts
         //                }
 
 
-                    
+
         //        }
 
         //        view.Update();
@@ -1047,7 +1047,7 @@ namespace PNU.Internet.WebParts
         //        Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - MapListFieldsFromClass", ex.Message);
         //    }
         //    return list;
-            
+
         //}
 
         public static string GetLocalizedTitle(object title, object titleEN)
@@ -1056,7 +1056,7 @@ namespace PNU.Internet.WebParts
             {
                 if (PortalHelper.IsArabic) // Arabic language LCID
                 {
-                    
+
                     if (title != null && title.ToString().Trim() != "")
                         return title.ToString();
                     else if (titleEN != null && titleEN.ToString().Trim() != "")
@@ -1080,11 +1080,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetLocalizedTitle", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetLocalizedTitle", ex.Message);
             }
 
 
-            
+
 
             return "";
         }
@@ -1138,7 +1138,7 @@ namespace PNU.Internet.WebParts
                                 return "";
                         }
                     }
-                    else if (title.ToString().Contains("التطبيقية") )
+                    else if (title.ToString().Contains("التطبيقية"))
                     {
                         if (PortalHelper.IsArabic) // Arabic language LCID
                         {
@@ -1171,15 +1171,15 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetFacultyTitleLocalizedTitle", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetFacultyTitleLocalizedTitle", ex.Message);
             }
-            
+
             return "";
-            
+
         }
 
-            
-        
+
+
 
         public static string GetSiteURL()
         {
@@ -1201,11 +1201,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetSiteURL", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetSiteURL", ex.Message);
             }
 
             return "";
-            
+
         }
         private static Type ResolveType(String typeName)
         {
@@ -1229,10 +1229,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - ResolveType", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - ResolveType", ex.Message);
             }
-            
-            
+
+
             return t;
         }
 
@@ -1248,14 +1248,14 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - GetPropertyValue", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - GetPropertyValue", ex.Message);
                 return null;
             }
-            
+
         }
 
-        
-        public static void AddCurrentUserToSharePointGroup( string siteURL, string userGroupName)
+
+        public static void AddCurrentUserToSharePointGroup(string siteURL, string userGroupName)
         {
             try
             {
@@ -1267,37 +1267,37 @@ namespace PNU.Internet.WebParts
                     {
                         using (SPWeb spWeb = spSite.OpenWeb())
                         {
-                            
-                                //Allow updating of some sharepoint lists, (here spUsers, spGroups etc...)
-                                spWeb.AllowUnsafeUpdates = true;
 
-                                //SPUser spUser = spWeb.EnsureUser(userLoginName);
+                            //Allow updating of some sharepoint lists, (here spUsers, spGroups etc...)
+                            spWeb.AllowUnsafeUpdates = true;
 
-                                if (spUser != null)
+                            //SPUser spUser = spWeb.EnsureUser(userLoginName);
+
+                            if (spUser != null)
+                            {
+
+                                SPGroup spGroup = spWeb.Groups[userGroupName];
+
+                                if (spGroup != null)
                                 {
-
-                                    SPGroup spGroup = spWeb.Groups[userGroupName];
-
-                                    if (spGroup != null)
-                                    {
-                                        if (spUser.Groups != null)
-                                            if (spUser.Groups.Count > 0)
+                                    if (spUser.Groups != null)
+                                        if (spUser.Groups.Count > 0)
+                                        {
+                                            bool Found = false;
+                                            foreach (SPGroup _G in spUser.Groups)
                                             {
-                                                bool Found = false;
-                                                foreach (SPGroup _G in spUser.Groups)
+                                                if (_G.Name == userGroupName)
                                                 {
-                                                    if (_G.Name == userGroupName)
-                                                    {
-                                                        Found = true;
-                                                        break;
-                                                    }
+                                                    Found = true;
+                                                    break;
                                                 }
-                                                if (!Found)
-                                                    spGroup.AddUser(spUser);
                                             }
-                                    }
+                                            if (!Found)
+                                                spGroup.AddUser(spUser);
+                                        }
                                 }
-                            
+                            }
+
                         }
                     }
                 });
@@ -1309,44 +1309,44 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - AddCurrentUserToSharePointGroup", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - AddCurrentUserToSharePointGroup", ex.Message);
             }
-            
-            
+
+
         }
 
-        public static SPListItem MapClassToSPListItem(SPListItem _Item, object objNew,bool IsNew=false)
+        public static SPListItem MapClassToSPListItem(SPListItem _Item, object objNew, bool IsNew = false)
         {
             try
             {//string TableName = objNew.GetType().Name;
                 PropertyInfo[] objprops = objNew.GetType().GetProperties();
                 for (int i = 0; i < objprops.Length; i++)
                 {
-                    
-                        PropertyInfo prop = objprops[i];
-                    if(IsNew)
+
+                    PropertyInfo prop = objprops[i];
+                    if (IsNew)
                     {
                         if (prop.Name == "ID")
                             continue;
                     }
-                    
+
                     Type PrpType;
-                        if (prop != null)
-                        {
-                            PrpType = prop.PropertyType;
-                            object Val = null;
+                    if (prop != null)
+                    {
+                        PrpType = prop.PropertyType;
+                        object Val = null;
 
-                            Val = GetPropertyValue(objNew, prop.Name);
-                            if (Val == null)
-                                continue;
-                            else if (Val.ToString().Contains("1/1/0001") || Val.ToString().Contains("01/01/0001"))
-                                continue;
-                            else if (Val.ToString() == "-1")
-                                continue;
+                        Val = GetPropertyValue(objNew, prop.Name);
+                        if (Val == null)
+                            continue;
+                        else if (Val.ToString().Contains("1/1/0001") || Val.ToString().Contains("01/01/0001"))
+                            continue;
+                        else if (Val.ToString() == "-1")
+                            continue;
 
-                            _Item[prop.Name] = Val;
-                        }
-                    
+                        _Item[prop.Name] = Val;
+                    }
+
 
 
                 }
@@ -1359,10 +1359,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - MapClassToSPListItem", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - MapClassToSPListItem", ex.Message);
             }
             return null;
-            
+
         }
 
         public static List<T> DataTableMapToList<T>(DataTable dataTable)
@@ -1418,9 +1418,9 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - DataTableMapToList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - DataTableMapToList", ex.Message);
             }
-            
+
             return null;
         }
 
@@ -1462,7 +1462,7 @@ namespace PNU.Internet.WebParts
                             {
                                 continue;
                             }
-                                
+
                             SPListItem listItem = list.Items.Add();
 
                             listItem = SPFactory.MapClassToSPListItem(listItem, row, true);
@@ -1499,7 +1499,7 @@ namespace PNU.Internet.WebParts
                                 sPListItem["COLL_CLASS_AR"] = row.COLL_CLASS_AR;
                                 sPListItem["COLL_CLASS_EN"] = row.COLL_CLASS_EN;
                             }
-                            
+
 
                             web.AllowUnsafeUpdates = true;
                             listItem.Update();
@@ -1520,10 +1520,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreateCollegesList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreateCollegesList", ex.Message);
             }
 
-            
+
         }
         public static void CreateCollegesCategoryList(List<CollegeCategoryDto> collList)
         {
@@ -1576,10 +1576,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreateCollegesCategoryList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreateCollegesCategoryList", ex.Message);
             }
 
-            
+
         }
 
 
@@ -1633,12 +1633,12 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreatePLANS_ELEC_UList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreatePLANS_ELEC_UList", ex.Message);
             }
 
 
 
-            
+
         }
 
         public static void CreatePLANS_ELEC_CList(List<PLANS_ELEC_C> collList, string CollegeListName)
@@ -1691,11 +1691,11 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreatePLANS_ELEC_CList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreatePLANS_ELEC_CList", ex.Message);
             }
 
 
-            
+
         }
 
 
@@ -1749,10 +1749,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreatePLANS_ELEC_PList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreatePLANS_ELEC_PList", ex.Message);
             }
 
-            
+
         }
 
 
@@ -1838,7 +1838,7 @@ namespace PNU.Internet.WebParts
                         }
 
 
-                        
+
 
 
                     }
@@ -1851,10 +1851,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreateDeptsList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreateDeptsList", ex.Message);
             }
 
-            
+
         }
 
         public static void CreateProgramsList(List<ProgramsDto> collList)
@@ -1981,7 +1981,7 @@ namespace PNU.Internet.WebParts
                         }
 
 
-                        
+
 
 
                     }
@@ -1994,10 +1994,10 @@ namespace PNU.Internet.WebParts
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"SPFactory - CreateProgramsList", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "SPFactory - CreateProgramsList", ex.Message);
             }
 
-           
+
         }
 
     }

@@ -124,7 +124,7 @@
     <value>نظرة عامة</value>
   </data>
   <data name="AboutProgram" xml:space="preserve">
-    <value>عن البرنامج الأكاديمي </value>
+    <value>عن البرنامج</value>
   </data>
   <data name="AboutSection" xml:space="preserve">
     <value>عن القسم </value>
@@ -538,7 +538,7 @@
     <value>لغة التدريس</value>
   </data>
   <data name="ProgramDetails" xml:space="preserve">
-    <value>تفاصيل الدراسة</value>
+    <value>معلومات البرنامج</value>
   </data>
   <data name="ProgramNature" xml:space="preserve">
     <value>الطبيعة الأكاديمية للتخصص</value>
@@ -845,5 +845,8 @@
   </data>
   <data name="CollegeOverviewPrefix" xml:space="preserve">
     <value>نظرة عامة عن </value>
+  </data>
+  <data name="ProgramDetails-1" xml:space="preserve">
+    <value>تفاصيل البرنامج</value>
   </data>
 </root>

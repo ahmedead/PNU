@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" ActivateOnDefault="FALSE" Id="5af5c75b-e32c-4800-849e-ddc4f82edfde" ReceiverAssembly="Pnu.Internet.CustomTimerJobs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9809dc0502a56d3" ReceiverClass="Pnu.Internet.CustomTimerJobs.Features.Instructor_Courses_Feature.Instructor_Courses_FeatureEventReceiver" Scope="WebApplication" Title="Instructor Courses Feature"></Feature>

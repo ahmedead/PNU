@@ -85,5 +85,23 @@ namespace PNU.Internet.WebParts
     }
 
 
+    //public class PostgraduateKitPageBase : PublishingLayoutPage
+    //{
+    //    protected override void OnPreInit(EventArgs e)
+    //    {
+    //        // Run the base logic first
+    //        base.OnPreInit(e);
 
+    //        try
+    //        {
+    //            // Force the master page path
+    //            string rootUrl = SPContext.Current.Site.ServerRelativeUrl.TrimEnd('/');
+    //            this.MasterPageFile = $"{rootUrl}/_catalogs/masterpage/PostgraduateKit.master";
+    //        }
+    //        catch
+    //        {
+    //            // Fallback to default if something goes wrong
+    //        }
+    //    }
+    //}
 }

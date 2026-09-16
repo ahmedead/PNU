@@ -1,4 +1,5 @@
 using Microsoft.SharePoint;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -147,12 +148,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.CentralLibrary.Con
         {
             try
             {
-                if (SPContext.Current != null && SPContext.Current.Web != null)
-                {
-                    return SPContext.Current.Web.CurrentUser.IsSiteAdmin ||
-                           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.ManageWeb) ||
-                           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.EditListItems);
-                }
+                return ContentAdm.IsAdmin();
+                //if (SPContext.Current != null && SPContext.Current.Web != null)
+                //{
+                //    return SPContext.Current.Web.CurrentUser.IsSiteAdmin ||
+                //           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.ManageWeb) ||
+                //           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.EditListItems);
+                //}
             }
             catch { }
             return true;

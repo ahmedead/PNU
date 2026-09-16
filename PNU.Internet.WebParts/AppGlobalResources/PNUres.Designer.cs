@@ -79,7 +79,7 @@ namespace PNU.Internet.WebParts.AppGlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to عن البرنامج الأكاديمي .
+        ///   Looks up a localized string similar to عن البرنامج.
         /// </summary>
         internal static string AboutProgram {
             get {
@@ -1330,11 +1330,20 @@ namespace PNU.Internet.WebParts.AppGlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to تفاصيل الدراسة.
+        ///   Looks up a localized string similar to معلومات البرنامج.
         /// </summary>
         internal static string ProgramDetails {
             get {
                 return ResourceManager.GetString("ProgramDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تفاصيل البرنامج.
+        /// </summary>
+        internal static string ProgramDetails_1 {
+            get {
+                return ResourceManager.GetString("ProgramDetails-1", resourceCulture);
             }
         }
         

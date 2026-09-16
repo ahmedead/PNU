@@ -15,6 +15,33 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
     {
 
         /// <summary>
+        /// lblException control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblException;
+
+        /// <summary>
+        /// pnlSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSuccess;
+
+        /// <summary>
+        /// lblSuccessMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSuccessMessage;
+
+        /// <summary>
         /// pnlData control.
         /// </summary>
         /// <remarks>
@@ -105,15 +132,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         protected global::System.Web.UI.WebControls.RadioButtonList rblCapacity;
 
         /// <summary>
-        /// txtCapacityOther control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCapacityOther;
-
-        /// <summary>
         /// rfvCapacity control.
         /// </summary>
         /// <remarks>
@@ -121,6 +139,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCapacity;
+
+        /// <summary>
+        /// txtCapacityOther control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCapacityOther;
 
         /// <summary>
         /// txtDiscoveryDate control.
@@ -258,15 +285,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAccessMethod;
 
         /// <summary>
-        /// txtAffectedCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAffectedCount;
-
-        /// <summary>
         /// cblDataBelongsTo control.
         /// </summary>
         /// <remarks>
@@ -274,6 +292,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList cblDataBelongsTo;
+
+        /// <summary>
+        /// txtAffectedCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAffectedCount;
 
         /// <summary>
         /// txtIncidentDescription control.
@@ -310,32 +337,5 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubmit;
-
-        /// <summary>
-        /// lblException control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblException;
-
-        /// <summary>
-        /// pnlSuccess control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSuccess;
-
-        /// <summary>
-        /// lblSuccessMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSuccessMessage;
     }
 }

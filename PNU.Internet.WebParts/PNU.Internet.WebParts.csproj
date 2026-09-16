@@ -1,4 +1,4 @@
-<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -183,6 +183,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucAnnualReports.ascx.designer.cs">
       <DependentUpon>ucAnnualReports.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucHelpSupport.ascx.cs">
+      <DependentUpon>ucHelpSupport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucHelpSupport.ascx.designer.cs">
+      <DependentUpon>ucHelpSupport.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucPNUInNumbersCountVisits.ascx.cs">
       <DependentUpon>ucPNUInNumbersCountVisits.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -225,46 +232,6 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucUnivHistory.ascx.designer.cs">
       <DependentUpon>ucUnivHistory.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucHelpSupport.ascx.cs">
-      <DependentUpon>ucHelpSupport.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucHelpSupport.ascx.designer.cs">
-      <DependentUpon>ucHelpSupport.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\AllClasses.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\DgaAutoTransformer.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ProgramPagesDgaData.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\AdminModuleRegistry.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ContentAdminListProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx.cs">
-      <DependentUpon>ucUnifiedContentAdmin.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx.designer.cs">
-      <DependentUpon>ucUnifiedContentAdmin.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx.cs">
-      <DependentUpon>ucAutoDgaPageConverter.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx.designer.cs">
-      <DependentUpon>ucAutoDgaPageConverter.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx.cs">
-      <DependentUpon>ucUpdatePageLayoutAndContent.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx.designer.cs">
-      <DependentUpon>ucUpdatePageLayoutAndContent.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\ucUniversityPresidentsAdmin.ascx.cs">
-      <DependentUpon>ucUniversityPresidentsAdmin.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\ucUniversityPresidentsAdmin.ascx.designer.cs">
-      <DependentUpon>ucUniversityPresidentsAdmin.ascx.cs</DependentUpon>
-    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidentOffice\Admin\ucUpoAdmin.ascx.cs">
       <DependentUpon>ucUpoAdmin.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -286,6 +253,14 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidentOffice\Infrastructure\UpoLog.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidentOffice\Infrastructure\UpoModels.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidentOffice\Infrastructure\UpoTargetWeb.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\AllClasses.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\ucUniversityPresidentsAdmin.ascx.cs">
+      <DependentUpon>ucUniversityPresidentsAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\ucUniversityPresidentsAdmin.ascx.designer.cs">
+      <DependentUpon>ucUniversityPresidentsAdmin.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\OrgStructureProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\OrgStructureRepository.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\OrgStructureUnit.cs" />
@@ -328,6 +303,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\AcademicCalendar\Infrastructure\AcTargetWeb.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\BilingualHtmlTranslator.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\clsDynamicPages.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ManageMemebers\EditAllData.ascx.cs">
       <DependentUpon>EditAllData.ascx</DependentUpon>
@@ -379,6 +355,16 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ucColleges.ascx.designer.cs">
       <DependentUpon>ucColleges.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\AdminModuleRegistry.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ContentAdminListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx.cs">
+      <DependentUpon>ucUnifiedContentAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx.designer.cs">
+      <DependentUpon>ucUnifiedContentAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\DgaAutoTransformer.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\DynamicMenuLoader.ascx.cs">
       <DependentUpon>DynamicMenuLoader.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -393,13 +379,7 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\PageGenerator.ascx.designer.cs">
       <DependentUpon>PageGenerator.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx.cs">
-      <DependentUpon>ucBilingualPageCreator.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx.designer.cs">
-      <DependentUpon>ucBilingualPageCreator.ascx.cs</DependentUpon>
-    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ProgramPagesDgaData.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteHierarchyNavigator.ascx.cs">
       <DependentUpon>SiteHierarchyNavigator.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -420,6 +400,20 @@
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAllSubsites.ascx.designer.cs">
       <DependentUpon>ucAllSubsites.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx.cs">
+      <DependentUpon>ucAutoDgaPageConverter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx.designer.cs">
+      <DependentUpon>ucAutoDgaPageConverter.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx.cs">
+      <DependentUpon>ucBilingualPageCreator.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx.designer.cs">
+      <DependentUpon>ucBilingualPageCreator.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucCheckOutCheckIn.ascx.cs">
       <DependentUpon>ucCheckOutCheckIn.ascx</DependentUpon>
@@ -463,6 +457,21 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucTimerJob.ascx.designer.cs">
       <DependentUpon>ucTimerJob.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx.cs">
+      <DependentUpon>ucUpdatePageLayoutAndContent.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx.designer.cs">
+      <DependentUpon>ucUpdatePageLayoutAndContent.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucWebsitePagesDashboard.ascx.cs">
+      <DependentUpon>ucWebsitePagesDashboard.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucWebsitePagesDashboard.ascx.designer.cs">
+      <DependentUpon>ucWebsitePagesDashboard.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\WebsitePagesReportDal.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Admin\ucAgAdmin.ascx.cs">
       <DependentUpon>ucAgAdmin.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -529,62 +538,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Agency\ucAllDeenShipsAndDepartments.ascx.designer.cs">
       <DependentUpon>ucAllDeenShipsAndDepartments.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\ucServiceDatails.ascx.cs">
-      <DependentUpon>ucServiceDatails.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\ucServiceDatails.ascx.designer.cs">
-      <DependentUpon>ucServiceDatails.ascx.cs</DependentUpon>
-    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\CenterProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterHomeDga.ascx.cs">
-      <DependentUpon>ucCenterHomeDga.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterHomeDga.ascx.designer.cs">
-      <DependentUpon>ucCenterHomeDga.ascx.cs</DependentUpon>
-    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterBeneficiariesDga.ascx.cs">
       <DependentUpon>ucCenterBeneficiariesDga.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterBeneficiariesDga.ascx.designer.cs">
       <DependentUpon>ucCenterBeneficiariesDga.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterRecordDga.ascx.cs">
-      <DependentUpon>ucCenterRecordDga.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterRecordDga.ascx.designer.cs">
-      <DependentUpon>ucCenterRecordDga.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterProgramsDga.ascx.cs">
-      <DependentUpon>ucCenterProgramsDga.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterProgramsDga.ascx.designer.cs">
-      <DependentUpon>ucCenterProgramsDga.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDigitalChannelsDga.ascx.cs">
-      <DependentUpon>ucCenterDigitalChannelsDga.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDigitalChannelsDga.ascx.designer.cs">
-      <DependentUpon>ucCenterDigitalChannelsDga.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterMoreAboutDga.ascx.cs">
-      <DependentUpon>ucCenterMoreAboutDga.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterMoreAboutDga.ascx.designer.cs">
-      <DependentUpon>ucCenterMoreAboutDga.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDepartmentsDga.ascx.cs">
-      <DependentUpon>ucCenterDepartmentsDga.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDepartmentsDga.ascx.designer.cs">
-      <DependentUpon>ucCenterDepartmentsDga.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterContactDga.ascx.cs">
       <DependentUpon>ucCenterContactDga.ascx</DependentUpon>
@@ -593,6 +553,20 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterContactDga.ascx.designer.cs">
       <DependentUpon>ucCenterContactDga.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDepartmentsDga.ascx.cs">
+      <DependentUpon>ucCenterDepartmentsDga.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDepartmentsDga.ascx.designer.cs">
+      <DependentUpon>ucCenterDepartmentsDga.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDigitalChannelsDga.ascx.cs">
+      <DependentUpon>ucCenterDigitalChannelsDga.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDigitalChannelsDga.ascx.designer.cs">
+      <DependentUpon>ucCenterDigitalChannelsDga.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDocumentsDga.ascx.cs">
       <DependentUpon>ucCenterDocumentsDga.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -600,6 +574,145 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDocumentsDga.ascx.designer.cs">
       <DependentUpon>ucCenterDocumentsDga.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterHomeDga.ascx.cs">
+      <DependentUpon>ucCenterHomeDga.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterHomeDga.ascx.designer.cs">
+      <DependentUpon>ucCenterHomeDga.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterMoreAboutDga.ascx.cs">
+      <DependentUpon>ucCenterMoreAboutDga.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterMoreAboutDga.ascx.designer.cs">
+      <DependentUpon>ucCenterMoreAboutDga.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterProgramsDga.ascx.cs">
+      <DependentUpon>ucCenterProgramsDga.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterProgramsDga.ascx.designer.cs">
+      <DependentUpon>ucCenterProgramsDga.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterRecordDga.ascx.cs">
+      <DependentUpon>ucCenterRecordDga.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterRecordDga.ascx.designer.cs">
+      <DependentUpon>ucCenterRecordDga.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\ucServiceDatails.ascx.cs">
+      <DependentUpon>ucServiceDatails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Centers\ucServiceDatails.ascx.designer.cs">
+      <DependentUpon>ucServiceDatails.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Admin\ucClAdmin.ascx.cs">
+      <DependentUpon>ucClAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Admin\ucClAdmin.ascx.designer.cs">
+      <DependentUpon>ucClAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucCentralLibrary.ascx.cs">
+      <DependentUpon>ucCentralLibrary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucCentralLibrary.ascx.designer.cs">
+      <DependentUpon>ucCentralLibrary.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAbout.ascx.cs">
+      <DependentUpon>ucClAbout.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAbout.ascx.designer.cs">
+      <DependentUpon>ucClAbout.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAwards.ascx.cs">
+      <DependentUpon>ucClAwards.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAwards.ascx.designer.cs">
+      <DependentUpon>ucClAwards.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClCollections.ascx.cs">
+      <DependentUpon>ucClCollections.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClCollections.ascx.designer.cs">
+      <DependentUpon>ucClCollections.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClContact.ascx.cs">
+      <DependentUpon>ucClContact.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClContact.ascx.designer.cs">
+      <DependentUpon>ucClContact.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFacilities.ascx.cs">
+      <DependentUpon>ucClFacilities.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFacilities.ascx.designer.cs">
+      <DependentUpon>ucClFacilities.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFaq.ascx.cs">
+      <DependentUpon>ucClFaq.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFaq.ascx.designer.cs">
+      <DependentUpon>ucClFaq.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClHeader.ascx.cs">
+      <DependentUpon>ucClHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClHeader.ascx.designer.cs">
+      <DependentUpon>ucClHeader.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClServices.ascx.cs">
+      <DependentUpon>ucClServices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClServices.ascx.designer.cs">
+      <DependentUpon>ucClServices.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Features\CentralLibraryListsFeatureReceiver.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClSectionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClTargetWeb.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Admin\ucCertAdmin.ascx.cs">
+      <DependentUpon>ucCertAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Admin\ucCertAdmin.ascx.designer.cs">
+      <DependentUpon>ucCertAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Controls\ucCertifications.ascx.cs">
+      <DependentUpon>ucCertifications.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Controls\ucCertifications.ascx.designer.cs">
+      <DependentUpon>ucCertifications.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Features\CertificationsListsFeatureReceiver.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertSeedData.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Infrastructure\CertTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\ActivitiesSummary.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\AICenter\clsAbout.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\AICenter\ucAboutCenter.ascx.cs">
@@ -937,6 +1050,13 @@
       <DependentUpon>ucFacultyHeader.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\clsPrograms.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucAcademicProgramsCards.ascx.cs">
+      <DependentUpon>ucAcademicProgramsCards.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucAcademicProgramsCards.ascx.designer.cs">
+      <DependentUpon>ucAcademicProgramsCards.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucPLANS_ELEC_P.ascx.cs">
       <DependentUpon>ucPLANS_ELEC_P.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -978,13 +1098,6 @@
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucProgramMainData.ascx.designer.cs">
       <DependentUpon>ucProgramMainData.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucAcademicProgramsCards.ascx.cs">
-      <DependentUpon>ucAcademicProgramsCards.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucAcademicProgramsCards.ascx.designer.cs">
-      <DependentUpon>ucAcademicProgramsCards.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucStudyPlan.ascx.cs">
       <DependentUpon>ucStudyPlan.ascx</DependentUpon>
@@ -1111,19 +1224,19 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucAllItems.ascx.designer.cs">
       <DependentUpon>ucAllItems.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonKnowMore.ascx.cs">
-      <DependentUpon>ucCommonKnowMore.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonKnowMore.ascx.designer.cs">
-      <DependentUpon>ucCommonKnowMore.ascx.cs</DependentUpon>
-    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonContactUs.ascx.cs">
       <DependentUpon>ucCommonContactUs.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonContactUs.ascx.designer.cs">
       <DependentUpon>ucCommonContactUs.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonKnowMore.ascx.cs">
+      <DependentUpon>ucCommonKnowMore.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonKnowMore.ascx.designer.cs">
+      <DependentUpon>ucCommonKnowMore.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Common\ucDocumentsList.ascx.cs">
       <DependentUpon>ucDocumentsList.ascx</DependentUpon>
@@ -1167,6 +1280,20 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Departments\ucMissions.ascx.designer.cs">
       <DependentUpon>ucMissions.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Admin\ucAboutPnuAdmin.ascx.cs">
+      <DependentUpon>ucAboutPnuAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Admin\ucAboutPnuAdmin.ascx.designer.cs">
+      <DependentUpon>ucAboutPnuAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\CouncilListProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\FAQClasses.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\MediaCenter\ucAllAdvs.ascx.cs">
@@ -1218,21 +1345,6 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucAboutLinks.ascx.designer.cs">
       <DependentUpon>ucAboutLinks.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Admin\ucAboutPnuAdmin.ascx.cs">
-      <DependentUpon>ucAboutPnuAdmin.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Admin\ucAboutPnuAdmin.ascx.designer.cs">
-      <DependentUpon>ucAboutPnuAdmin.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuHelper.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuListNames.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuListProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuListSchema.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuLog.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuModels.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\AboutPnuTargetWeb.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Classes\CouncilListProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucAboutPNU.ascx.cs">
       <DependentUpon>ucAboutPNU.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1411,6 +1523,72 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Facilities\ucFacultyFacilitiesDga.ascx.designer.cs">
       <DependentUpon>ucFacultyFacilitiesDga.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Admin\ucHerbariumAdmin.ascx.cs">
+      <DependentUpon>ucHerbariumAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Admin\ucHerbariumAdmin.ascx.designer.cs">
+      <DependentUpon>ucHerbariumAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbarium.ascx.cs">
+      <DependentUpon>ucHerbarium.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbarium.ascx.designer.cs">
+      <DependentUpon>ucHerbarium.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumContact.ascx.cs">
+      <DependentUpon>ucHerbariumContact.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumContact.ascx.designer.cs">
+      <DependentUpon>ucHerbariumContact.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumHeader.ascx.cs">
+      <DependentUpon>ucHerbariumHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumHeader.ascx.designer.cs">
+      <DependentUpon>ucHerbariumHeader.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMilestones.ascx.cs">
+      <DependentUpon>ucHerbariumMilestones.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMilestones.ascx.designer.cs">
+      <DependentUpon>ucHerbariumMilestones.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMission.ascx.cs">
+      <DependentUpon>ucHerbariumMission.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMission.ascx.designer.cs">
+      <DependentUpon>ucHerbariumMission.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumOverview.ascx.cs">
+      <DependentUpon>ucHerbariumOverview.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumOverview.ascx.designer.cs">
+      <DependentUpon>ucHerbariumOverview.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumServices.ascx.cs">
+      <DependentUpon>ucHerbariumServices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumServices.ascx.designer.cs">
+      <DependentUpon>ucHerbariumServices.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumSectionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Infrastructure\HerbariumTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Initiatives\InitiativesProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Initiatives\ucFacultyInitiativesDga.ascx.cs">
       <DependentUpon>ucFacultyInitiativesDga.ascx</DependentUpon>
@@ -1512,6 +1690,13 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\HeroImageResizer.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\SEO.ascx.cs">
+      <DependentUpon>SEO.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\SEO.ascx.designer.cs">
+      <DependentUpon>SEO.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeAchievements.ascx.cs">
       <DependentUpon>ucHomeAchievements.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2296,112 +2481,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\NouraStudents\Infrastructure\NsTargetWeb.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Admin\ucClAdmin.ascx.cs">
-      <DependentUpon>ucClAdmin.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Admin\ucClAdmin.ascx.designer.cs">
-      <DependentUpon>ucClAdmin.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucCentralLibrary.ascx.cs">
-      <DependentUpon>ucCentralLibrary.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucCentralLibrary.ascx.designer.cs">
-      <DependentUpon>ucCentralLibrary.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClHeader.ascx.cs">
-      <DependentUpon>ucClHeader.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClHeader.ascx.designer.cs">
-      <DependentUpon>ucClHeader.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAbout.ascx.cs">
-      <DependentUpon>ucClAbout.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAbout.ascx.designer.cs">
-      <DependentUpon>ucClAbout.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAwards.ascx.cs">
-      <DependentUpon>ucClAwards.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAwards.ascx.designer.cs">
-      <DependentUpon>ucClAwards.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClCollections.ascx.cs">
-      <DependentUpon>ucClCollections.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClCollections.ascx.designer.cs">
-      <DependentUpon>ucClCollections.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClContact.ascx.cs">
-      <DependentUpon>ucClContact.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClContact.ascx.designer.cs">
-      <DependentUpon>ucClContact.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFacilities.ascx.cs">
-      <DependentUpon>ucClFacilities.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFacilities.ascx.designer.cs">
-      <DependentUpon>ucClFacilities.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFaq.ascx.cs">
-      <DependentUpon>ucClFaq.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFaq.ascx.designer.cs">
-      <DependentUpon>ucClFaq.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClServices.ascx.cs">
-      <DependentUpon>ucClServices.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClServices.ascx.designer.cs">
-      <DependentUpon>ucClServices.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Features\CentralLibraryListsFeatureReceiver.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClHelper.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClListNames.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClListProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClListSchema.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClLog.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClModels.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClSectionBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Infrastructure\ClTargetWeb.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Admin\ucPcAdmin.ascx.cs">
-      <DependentUpon>ucPcAdmin.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Admin\ucPcAdmin.ascx.designer.cs">
-      <DependentUpon>ucPcAdmin.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcGuide.ascx.cs">
-      <DependentUpon>ucPcGuide.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcGuide.ascx.designer.cs">
-      <DependentUpon>ucPcGuide.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcHeader.ascx.cs">
-      <DependentUpon>ucPcHeader.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcHeader.ascx.designer.cs">
-      <DependentUpon>ucPcHeader.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucProfessionalCertifications.ascx.cs">
-      <DependentUpon>ucProfessionalCertifications.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucProfessionalCertifications.ascx.designer.cs">
-      <DependentUpon>ucProfessionalCertifications.ascx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Features\ProfessionalCertificationsListsFeatureReceiver.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcHelper.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcListNames.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcListProvisioner.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcListSchema.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcLog.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcModels.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcSectionBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\OpenData\ucOpenData.ascx.cs">
       <DependentUpon>ucOpenData.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2477,6 +2556,264 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucNavCards.ascx.designer.cs">
       <DependentUpon>ucNavCards.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Admin\ucPgAdmin.ascx.cs">
+      <DependentUpon>ucPgAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Admin\ucPgAdmin.ascx.designer.cs">
+      <DependentUpon>ucPgAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgContentBlock.ascx.cs">
+      <DependentUpon>ucPgContentBlock.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgContentBlock.ascx.designer.cs">
+      <DependentUpon>ucPgContentBlock.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgDiscounts.ascx.cs">
+      <DependentUpon>ucPgDiscounts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgDiscounts.ascx.designer.cs">
+      <DependentUpon>ucPgDiscounts.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgFaq.ascx.cs">
+      <DependentUpon>ucPgFaq.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgFaq.ascx.designer.cs">
+      <DependentUpon>ucPgFaq.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHeader.ascx.cs">
+      <DependentUpon>ucPgHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHeader.ascx.designer.cs">
+      <DependentUpon>ucPgHeader.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHub.ascx.cs">
+      <DependentUpon>ucPgHub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHub.ascx.designer.cs">
+      <DependentUpon>ucPgHub.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHubCards.ascx.cs">
+      <DependentUpon>ucPgHubCards.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHubCards.ascx.designer.cs">
+      <DependentUpon>ucPgHubCards.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHubHero.ascx.cs">
+      <DependentUpon>ucPgHubHero.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHubHero.ascx.designer.cs">
+      <DependentUpon>ucPgHubHero.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgIntro.ascx.cs">
+      <DependentUpon>ucPgIntro.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgIntro.ascx.designer.cs">
+      <DependentUpon>ucPgIntro.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgJourney.ascx.cs">
+      <DependentUpon>ucPgJourney.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgJourney.ascx.designer.cs">
+      <DependentUpon>ucPgJourney.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgProcedures.ascx.cs">
+      <DependentUpon>ucPgProcedures.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgProcedures.ascx.designer.cs">
+      <DependentUpon>ucPgProcedures.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgQuickLinks.ascx.cs">
+      <DependentUpon>ucPgQuickLinks.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgQuickLinks.ascx.designer.cs">
+      <DependentUpon>ucPgQuickLinks.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgResources.ascx.cs">
+      <DependentUpon>ucPgResources.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgResources.ascx.designer.cs">
+      <DependentUpon>ucPgResources.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgSecondBar.ascx.cs">
+      <DependentUpon>ucPgSecondBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgSecondBar.ascx.designer.cs">
+      <DependentUpon>ucPgSecondBar.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgServices.ascx.cs">
+      <DependentUpon>ucPgServices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgServices.ascx.designer.cs">
+      <DependentUpon>ucPgServices.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgSiteFooter.ascx.cs">
+      <DependentUpon>ucPgSiteFooter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgSiteFooter.ascx.designer.cs">
+      <DependentUpon>ucPgSiteFooter.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgStyles.ascx.cs">
+      <DependentUpon>ucPgStyles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgStyles.ascx.designer.cs">
+      <DependentUpon>ucPgStyles.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPostgraduateKit.ascx.cs">
+      <DependentUpon>ucPostgraduateKit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPostgraduateKit.ascx.designer.cs">
+      <DependentUpon>ucPostgraduateKit.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Admin\ucDgaPgAdmin.ascx.cs">
+      <DependentUpon>ucDgaPgAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Admin\ucDgaPgAdmin.ascx.designer.cs">
+      <DependentUpon>ucDgaPgAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitApplicants.ascx.cs">
+      <DependentUpon>ucDgaAcademicKitApplicants.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitApplicants.ascx.designer.cs">
+      <DependentUpon>ucDgaAcademicKitApplicants.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitEnrolled.ascx.cs">
+      <DependentUpon>ucDgaAcademicKitEnrolled.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitEnrolled.ascx.designer.cs">
+      <DependentUpon>ucDgaAcademicKitEnrolled.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitGraduates.ascx.cs">
+      <DependentUpon>ucDgaAcademicKitGraduates.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitGraduates.ascx.designer.cs">
+      <DependentUpon>ucDgaAcademicKitGraduates.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitHub.ascx.cs">
+      <DependentUpon>ucDgaAcademicKitHub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitHub.ascx.designer.cs">
+      <DependentUpon>ucDgaAcademicKitHub.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaKitFooter.ascx.cs">
+      <DependentUpon>ucDgaKitFooter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaKitFooter.ascx.designer.cs">
+      <DependentUpon>ucDgaKitFooter.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaKitHeader.ascx.cs">
+      <DependentUpon>ucDgaKitHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaKitHeader.ascx.designer.cs">
+      <DependentUpon>ucDgaKitHeader.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaPostgraduateKit.ascx.cs">
+      <DependentUpon>ucDgaPostgraduateKit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaPostgraduateKit.ascx.designer.cs">
+      <DependentUpon>ucDgaPostgraduateKit.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListSchema.Content.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListSchema.Core.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListSchema.Faq.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListSchema.Hub.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgListSchema.Procedures.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgSectionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPgTargetWeb.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Infrastructure\DgaPostgraduateKitPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Features\PostgraduateKitListsFeatureReceiver.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.Chrome.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.Content.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.Core.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.Faq.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.Hub.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgListSchema.Procedures.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgSectionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Infrastructure\PgTargetWeb.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Admin\ucPcAdmin.ascx.cs">
+      <DependentUpon>ucPcAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Admin\ucPcAdmin.ascx.designer.cs">
+      <DependentUpon>ucPcAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcGuide.ascx.cs">
+      <DependentUpon>ucPcGuide.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcGuide.ascx.designer.cs">
+      <DependentUpon>ucPcGuide.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcHeader.ascx.cs">
+      <DependentUpon>ucPcHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcHeader.ascx.designer.cs">
+      <DependentUpon>ucPcHeader.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucProfessionalCertifications.ascx.cs">
+      <DependentUpon>ucProfessionalCertifications.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucProfessionalCertifications.ascx.designer.cs">
+      <DependentUpon>ucProfessionalCertifications.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcListNames.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcListSchema.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcSectionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Infrastructure\PcTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\busclsAdmission.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\HDIP\DiplomaProgramsProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\HDIP\ucDiplomaPrograms.ascx.cs">
@@ -2486,6 +2823,34 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\HDIP\ucDiplomaPrograms.ascx.designer.cs">
       <DependentUpon>ucDiplomaPrograms.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Admin\ucPgCategoryAdmin.ascx.cs">
+      <DependentUpon>ucPgCategoryAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Admin\ucPgCategoryAdmin.ascx.designer.cs">
+      <DependentUpon>ucPgCategoryAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Controls\ucPgCategoryPrograms.ascx.cs">
+      <DependentUpon>ucPgCategoryPrograms.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Controls\ucPgCategoryPrograms.ascx.designer.cs">
+      <DependentUpon>ucPgCategoryPrograms.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Controls\ucPgProgramDetails.ascx.cs">
+      <DependentUpon>ucPgProgramDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Controls\ucPgProgramDetails.ascx.designer.cs">
+      <DependentUpon>ucPgProgramDetails.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Features\PgCategoryProgramsFeatureReceiver.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Infrastructure\PgCategoryModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Infrastructure\PgCategoryProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Infrastructure\PgCategoryRepository.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Infrastructure\PgCategorySeedData.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Infrastructure\PgProgramDetailsModels.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Infrastructure\PgProgramDetailsSeedData.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\PostgraduateProgramsProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\ucHome.ascx.cs">
       <DependentUpon>ucHome.ascx</DependentUpon>
@@ -2842,14 +3207,6 @@
     </Compile>
     <Compile Include="SPFactory.cs" />
     <Compile Include="SQLFactory.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ProgramPagesDgaData.cs" />
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx.cs">
-      <DependentUpon>ucUpdatePageLayoutAndContent.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx.designer.cs">
-      <DependentUpon>ucUpdatePageLayoutAndContent.ascx.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -2861,10 +3218,15 @@
       <SharePointProjectItemId>{334e4c75-317e-4b6b-9151-7f273e62e112}</SharePointProjectItemId>
     </None>
     <None Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\README.md" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\README.md" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\Certifications\README.md" />
     <None Include="CONTROLTEMPLATES\PNU.Internet\ITAdmin\PageCreator\README.md" />
     <None Include="CONTROLTEMPLATES\PNU.Internet\NouraStudents\README.md" />
-    <None Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\README.md" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\README.md" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\README.md" />
     <None Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\README.md" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Provision-PgCategoryPrograms.ps1" />
+    <None Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\README.md" />
     <None Include="CONTROLTEMPLATES\PNU.Internet\Tawasul\README.md" />
     <None Include="CONTROLTEMPLATES\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b323cffd-b016-4324-bad0-76f9281c9430}</SharePointProjectItemId>
@@ -2903,16 +3265,16 @@
     <Content Include="CONTROLTEMPLATES\InternalPortal\ucAllJSFiles.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucAboutStatistics.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucAnnualReports.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucHelpSupport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucPNUInNumbersCountVisits.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucSiteMap.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucUniversityCounsil.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucUniversityPresidents.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucUnivTimeline.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucUnivHistory.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\ucHelpSupport.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\ucUniversityPresidentsAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidentOffice\Admin\ucUpoAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidentOffice\Controls\ucUniversityPresidentOffice.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\AboutUniversity\UniversityPresidents\ucUniversityPresidentsAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\Elements.xml" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\ucOrgStructure.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\About\OrgStructure\ucOrgStructureAdmin.ascx" />
@@ -2925,14 +3287,14 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ManageMemebers\ManageResume.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ManageMemebers\ucFacultyActivationReport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ucColleges.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\DynamicMenuLoader.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\PageGenerator.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteHierarchyNavigator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteListDataEntry.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAllSubsites.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucAutoDgaPageConverter.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucBilingualPageCreator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucCheckOutCheckIn.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucDynamicPages.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucGetsLists.ascx" />
@@ -2940,6 +3302,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucGetUnMatchedPages.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucTimerJob.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucWebsitePagesDashboard.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Admin\ucAgAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgCards.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgDeputyWord.ascx" />
@@ -2948,16 +3311,28 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgObjectives.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgOverview.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\ucAllDeenShipsAndDepartments.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\ucServiceDatails.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterHomeDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterBeneficiariesDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterRecordDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterProgramsDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDigitalChannelsDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterMoreAboutDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDepartmentsDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterContactDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDepartmentsDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDigitalChannelsDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterDocumentsDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterHomeDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterMoreAboutDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterProgramsDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\DGA\ucCenterRecordDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Centers\ucServiceDatails.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Admin\ucClAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucCentralLibrary.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAbout.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAwards.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClCollections.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClContact.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFacilities.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFaq.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClHeader.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClServices.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Admin\ucCertAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Certifications\Controls\ucCertifications.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\AICenter\ucAboutCenter.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\AICenter\ucAICalender.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\AICenter\ucAICalenderNew.ascx" />
@@ -3004,13 +3379,13 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\ListAll\ucAllCollegesView.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\ListAll\ucFacultyMainPage.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\MasterPage\ucFacultyHeader.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucAcademicProgramsCards.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucPLANS_ELEC_P.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucPLANS_ELEC_C.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucObjectivesOutcomes.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucPLANS_ELEC_U.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucProgramMainDataOld.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucProgramMainData.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucAcademicProgramsCards.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\Programs\ucStudyPlan.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\ucCollegeSections.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\Sections\ucProgramDetails.ascx" />
@@ -3029,21 +3404,21 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\ucSearchFacultyMembers.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Colleges\ucViewFacultyMembers.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucAllItems.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonKnowMore.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonContactUs.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucCommonKnowMore.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucDocumentsList.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucGuidelines.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Common\ucSiteKnowMore.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Controls\Common\Captcha.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Deenship\ucDeenshipHome.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Departments\ucMissions.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Admin\ucAboutPnuAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\MediaCenter\ucAllAdvs.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\MediaCenter\ucAllDigitalMedia.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\MediaCenter\ucAllNews.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\MediaCenter\ucNewsDetails1.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\PNUCouncil.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\PNUPartners.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\Admin\ucAboutPnuAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucAboutLinks.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucAboutPNU.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucAllAchievements.ascx" />
@@ -3069,11 +3444,6 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Agencies\ucFacultyAgenciesDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Clubs\ucFacultyClubsDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Facilities\ucFacultyFacilitiesDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Initiatives\ucFacultyInitiativesDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\OrgStructure\ucFacultyOrgStructureDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Research\ucFacultyResearchDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\StudentServices\ucFacultyStudentServicesDga.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Training\ucFacultyTrainingDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Admin\ucHerbariumAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbarium.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumContact.ascx" />
@@ -3082,6 +3452,11 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumMission.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumOverview.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Herbarium\Controls\ucHerbariumServices.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Initiatives\ucFacultyInitiativesDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\OrgStructure\ucFacultyOrgStructureDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Research\ucFacultyResearchDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\StudentServices\ucFacultyStudentServicesDga.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Faculties\DGA\Training\ucFacultyTrainingDga.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Forms\ucDataLeakReport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Forms\ucDataLeakReportsView.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Forms\ucNoraNabtaker.ascx" />
@@ -3090,6 +3465,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\GeneralDest\ucDestCertificates.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\GeneralDest\ucDestDepartments.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\GeneralDest\ucDestSections.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\SEO.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeAchievements.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeAds.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeBanner.ascx" />
@@ -3198,24 +3574,9 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\NouraStudents\Controls\ucNsNumbers.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\NouraStudents\Controls\ucNsQuickLinks.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\NouraStudents\Controls\ucNsStudentServices.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Admin\ucClAdmin.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucCentralLibrary.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClHeader.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAbout.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClAwards.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClCollections.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClContact.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFacilities.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClFaq.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\CentralLibrary\Controls\ucClServices.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Admin\ucPcAdmin.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcGuide.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcHeader.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucProfessionalCertifications.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\OpenData\ucOpenData.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Partners\ucPartnerDisplay.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Partners\usAllPartner.ascx" />
-    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\AddPnuService.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\Admin\EditService.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\Admin\ServicesList.ascx" />
@@ -3223,7 +3584,40 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\PnuEServiceHome.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\PnuEServicesCatalog.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucNavCards.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Admin\ucPgAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgContentBlock.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgDiscounts.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgFaq.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHeader.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHub.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHubCards.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgHubHero.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgIntro.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgJourney.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgProcedures.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgQuickLinks.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgResources.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgSecondBar.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgServices.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgSiteFooter.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgStyles.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPostgraduateKit.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Admin\ucDgaPgAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitApplicants.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitEnrolled.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitGraduates.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaAcademicKitHub.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaKitFooter.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaKitHeader.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\DGA\Controls\ucDgaPostgraduateKit.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Admin\ucPcAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcGuide.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucPcHeader.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\ProfessionalCertifications\Controls\ucProfessionalCertifications.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\HDIP\ucDiplomaPrograms.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Admin\ucPgCategoryAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Controls\ucPgCategoryPrograms.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\Controls\ucPgProgramDetails.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\ucHome.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\ucPostgraduatePrograms.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\RegAdm\PGD\ucProgramsDetails.ascx" />

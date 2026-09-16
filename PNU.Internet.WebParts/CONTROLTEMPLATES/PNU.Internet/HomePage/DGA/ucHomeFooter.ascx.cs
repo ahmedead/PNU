@@ -77,6 +77,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         {
             try
             {
+                string path = Request.Url.AbsolutePath; // e.g. /ar/Pages/Home.aspx
+
+                bool isHome =
+                    path.EndsWith("/ar/Pages/Home.aspx", StringComparison.OrdinalIgnoreCase) ||
+                    path.EndsWith("/en/Pages/Home.aspx", StringComparison.OrdinalIgnoreCase);
+
+                ucSurvey.Visible = !isHome;
+
                 if (!Page.IsPostBack)
                 {
                     // Step 1: ensure the 5 footer lists exist (provisioning runs once per AppDomain)

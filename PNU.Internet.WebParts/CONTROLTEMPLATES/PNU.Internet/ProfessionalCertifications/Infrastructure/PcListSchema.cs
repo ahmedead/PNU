@@ -6,7 +6,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
 {
     public static class PcListNames
     {
-        public const string Header         = "PcHeader";
+        public const string Header = "PcHeader";
         public const string Certifications = "PcCertifications";
 
         public static readonly string[] All = new string[] { Header, Certifications };
@@ -31,12 +31,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
             SPFieldType type = SPFieldType.Text, bool required = false, int numLines = 0, string[] choices = null)
         {
             InternalName = internalName;
-            DisplayAr    = displayAr;
-            DisplayEn    = displayEn;
-            Type         = type;
-            Required     = required;
-            NumLines     = numLines;
-            Choices      = choices;
+            DisplayAr = displayAr;
+            DisplayEn = displayEn;
+            Type = type;
+            Required = required;
+            NumLines = numLines;
+            Choices = choices;
         }
     }
 
@@ -81,10 +81,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
             return All.TryGetValue(listName, out def) ? def : null;
         }
 
-        private static PcFieldDef TitleEn()   { return new PcFieldDef("Title_EN", "العنوان (إنجليزي)", "Title (EN)", SPFieldType.Text, true); }
-        private static PcFieldDef DescAr()    { return new PcFieldDef("Description", "الوصف (عربي)", "Description (AR)", SPFieldType.Note, false, 4); }
-        private static PcFieldDef DescEn()    { return new PcFieldDef("Description_EN", "الوصف (إنجليزي)", "Description (EN)", SPFieldType.Note, false, 4); }
-        private static PcFieldDef Order()     { return new PcFieldDef("ItemOrder", "الترتيب", "Order", SPFieldType.Number, true); }
+        private static PcFieldDef TitleEn() { return new PcFieldDef("Title_EN", "العنوان (إنجليزي)", "Title (EN)", SPFieldType.Text, true); }
+        private static PcFieldDef DescAr() { return new PcFieldDef("Description", "الوصف (عربي)", "Description (AR)", SPFieldType.Note, false, 4); }
+        private static PcFieldDef DescEn() { return new PcFieldDef("Description_EN", "الوصف (إنجليزي)", "Description (EN)", SPFieldType.Note, false, 4); }
+        private static PcFieldDef Order() { return new PcFieldDef("ItemOrder", "الترتيب", "Order", SPFieldType.Number, true); }
 
         private static Dictionary<string, string> Row(params string[] kv)
         {
@@ -101,7 +101,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
             map[PcListNames.Header] = new PcListDef
             {
                 Name = PcListNames.Header,
-                TitleAr = "ترويسة دليل الشهادات الاحترافية", TitleEn = "Certifications Guide Header",
+                TitleAr = "ترويسة دليل الشهادات الاحترافية",
+                TitleEn = "Certifications Guide Header",
                 Description = "Hero header, title, description, buttons and breadcrumbs.",
                 Fields = new List<PcFieldDef>
                 {
@@ -136,7 +137,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
             map[PcListNames.Certifications] = new PcListDef
             {
                 Name = PcListNames.Certifications,
-                TitleAr = "الشهادات الاحترافية", TitleEn = "Professional Certifications",
+                TitleAr = "الشهادات الاحترافية",
+                TitleEn = "Professional Certifications",
                 Description = "Professional certifications with details, requirements, topics, and providers.",
                 Fields = new List<PcFieldDef>
                 {

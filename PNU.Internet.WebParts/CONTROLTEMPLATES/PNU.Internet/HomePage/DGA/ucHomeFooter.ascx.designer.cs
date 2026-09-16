@@ -15,6 +15,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
     {
 
         /// <summary>
+        /// ucSurvey control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl ucSurvey;
+
+        /// <summary>
         /// rptUsefulLinks control.
         /// </summary>
         /// <remarks>

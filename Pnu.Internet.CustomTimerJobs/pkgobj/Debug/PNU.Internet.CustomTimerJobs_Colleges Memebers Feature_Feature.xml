@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" ActivateOnDefault="FALSE" Id="ab8dd9d9-6b58-4faf-a2c1-5b7b29f85154" ReceiverAssembly="Pnu.Internet.CustomTimerJobs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9809dc0502a56d3" ReceiverClass="Pnu.Internet.CustomTimerJobs.Features.Colleges_Memebers_Feature.Colleges_Memebers_FeatureEventReceiver" Scope="WebApplication" Title="Colleges Memebers Feature"></Feature>

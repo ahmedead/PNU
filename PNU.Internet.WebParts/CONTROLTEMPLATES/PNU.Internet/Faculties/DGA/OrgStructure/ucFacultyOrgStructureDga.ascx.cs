@@ -69,7 +69,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA
             {
                 OrgStructureProvisioner.EnsureLists(ItemsListName, ImagesListName);
             }
-            
+
         }
 
         protected void Page_Load(object sender, EventArgs e)

@@ -9,149 +9,7 @@
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-<style type="text/css">
-    .open-data-wrapper {
-        font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
-    }
 
-    .open-data-wrapper h3, 
-    .open-data-wrapper h4, 
-    .open-data-wrapper h5 {
-        font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
-    }
-
-    .open-data-card {
-        background: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        border: 1px solid #eef2f6;
-    }
-
-    .open-data-header-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        background: rgba(0, 122, 135, 0.1);
-        color: #007a87;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        flex-shrink: 0;
-    }
-
-    .open-data-wrapper .form-label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 0.4rem;
-        display: block;
-    }
-
-    .open-data-wrapper .required-star::after {
-        content: " *";
-        color: #dc3545;
-        font-weight: bold;
-    }
-
-    .open-data-wrapper .form-control,
-    .open-data-wrapper .form-select {
-        border-radius: 8px;
-        border: 1px solid #cbd5e1;
-        padding: 0.65rem 0.9rem;
-        font-size: 0.925rem;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .open-data-wrapper .form-control:focus,
-    .open-data-wrapper .form-select:focus {
-        border-color: #007a87;
-        box-shadow: 0 0 0 0.2rem rgba(0, 122, 135, 0.15);
-        outline: none;
-    }
-
-    .open-data-wrapper .invalid-feedback-msg {
-        color: #dc3545;
-        font-size: 0.8125rem;
-        margin-top: 5px;
-        display: block;
-    }
-
-    .open-data-wrapper .invalid-feedback-msg[style*="display: none"],
-    .open-data-wrapper .invalid-feedback-msg[style*="display:none"] {
-        display: none !important;
-    }
-
-    .open-data-group-box {
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 1.25rem;
-    }
-
-    .open-data-checkbox-list {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 8px;
-        margin-bottom: 0;
-    }
-
-    .open-data-checkbox-list td {
-        padding: 6px 12px;
-        vertical-align: middle;
-        border: none;
-    }
-
-    .open-data-checkbox-list input[type="checkbox"],
-    .open-data-role-list input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: #007a87;
-        cursor: pointer;
-        vertical-align: middle;
-        margin-left: 8px;
-    }
-
-    .open-data-checkbox-list label,
-    .open-data-role-list label {
-        cursor: pointer;
-        font-size: 0.925rem;
-        color: #334155;
-        font-weight: 500;
-        margin-bottom: 0;
-        vertical-align: middle;
-    }
-
-    .open-data-role-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        align-items: center;
-    }
-
-    .open-data-role-list span {
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .btn-submit-pnu {
-        background-color: #007a87;
-        border-color: #007a87;
-        color: #ffffff !important;
-        font-weight: 600;
-        padding: 0.75rem 2.75rem;
-        border-radius: 8px;
-        transition: all 0.2s ease-in-out;
-    }
-
-    .btn-submit-pnu:hover,
-    .btn-submit-pnu:focus {
-        background-color: #005c66;
-        border-color: #005c66;
-        color: #ffffff !important;
-        box-shadow: 0 4px 12px rgba(0, 122, 135, 0.25);
-    }
-</style>
 
 <div class="open-data-wrapper py-4">
     <div class="container">
@@ -279,7 +137,7 @@
 
                             <!-- Submit Button -->
                             <div class="col-12 text-start pt-2">
-                                <asp:Button ID="btnSend" runat="server" CssClass="btn btn-submit-pnu" ValidationGroup="AddRequest" Text="<%$ Resources: PNUres, btnSend %>" OnClick="btnSend_Click" />
+                                <asp:Button ID="btnSend" runat="server" CssClass="btn btn-primary" ValidationGroup="AddRequest" Text="<%$ Resources: PNUres, btnSend %>" OnClick="btnSend_Click" />
                             </div>
 
                         </div>

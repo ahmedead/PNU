@@ -7,6 +7,7 @@
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAllAdvertisementsDGA.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advertisements.ucAllAdvertisementsDGA" %>
 
+
 <div class="tab-pane fade active show" id="agency-details-tabs-pane-5" role="tabpanel" aria-labelledby="agency-details-tabs-tab-5" tabindex="0">
     <h2 class="mb-4">الإعلانات</h2>
     

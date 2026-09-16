@@ -353,7 +353,7 @@
         var subtitleElem = document.getElementById('professionalCertificationModalSubtitle');
         if (subtitleElem) subtitleElem.textContent = (titleEn && titleEn !== titleAr) ? titleEn : '';
 
-        var setFact = function(key, attr) {
+        var setFact = function (key, attr) {
             var target = document.querySelector('#professionalCertificationModal [data-certification-field="' + key + '"]');
             if (target) target.textContent = card.getAttribute('data-' + attr) || 'غير محدد';
         };
@@ -365,7 +365,7 @@
         setFact('mode', 'mode');
         setFact('is_supported', 'is-supported');
 
-        var setDetail = function(key, attr, fallback) {
+        var setDetail = function (key, attr, fallback) {
             var block = document.querySelector('#professionalCertificationModal [data-detail-key="' + key + '"]');
             if (block) {
                 var target = block.querySelector('[data-detail-value]');
@@ -383,8 +383,8 @@
         if (topicsList) {
             topicsList.innerHTML = '';
             var rawTopics = card.getAttribute('data-topics') || '';
-            var topics = rawTopics.split(/\r?\n|•|\s+-\s+/).map(function(t) { return t.trim().replace(/^[\d٠-٩]+[./]\s*/, ''); }).filter(Boolean);
-            (topics.length ? topics : ['غير محدد']).forEach(function(topic) {
+            var topics = rawTopics.split(/\r?\n|•|\s+-\s+/).map(function (t) { return t.trim().replace(/^[\d٠-٩]+[./]\s*/, ''); }).filter(Boolean);
+            (topics.length ? topics : ['غير محدد']).forEach(function (topic) {
                 var li = document.createElement('li');
                 li.textContent = topic;
                 topicsList.appendChild(li);
@@ -401,7 +401,7 @@
             var c4 = card.getAttribute('data-course4') || '';
             var courses = [c1, c2, c3, c4].filter(Boolean);
             coursesBlock.hidden = (courses.length === 0);
-            courses.forEach(function(c) {
+            courses.forEach(function (c) {
                 var badge = document.createElement('span');
                 badge.className = 'badge badge-neutral';
                 badge.textContent = c;
@@ -442,8 +442,8 @@
         var header = document.createElement('div');
         header.className = 'text-center border-bottom border-3 pb-3 mb-4';
         header.innerHTML = '<h1 class="h3 mb-2">' + (titleAr || titleEn) + '</h1>' +
-                           '<p class="mb-1" dir="ltr">' + titleEn + '</p>' +
-                           '<p class="small mb-0">' + college + ' - ' + dept + '</p>';
+            '<p class="mb-1" dir="ltr">' + titleEn + '</p>' +
+            '<p class="small mb-0">' + college + ' - ' + dept + '</p>';
 
         printDetail.appendChild(header);
 
@@ -457,10 +457,10 @@
         printDetail.style.display = 'none';
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var exportBtn = document.getElementById('printCertificationListButton');
         if (exportBtn) {
-            exportBtn.addEventListener('click', function() {
+            exportBtn.addEventListener('click', function () {
                 var visibleCards = document.querySelectorAll('.certification-card-item:not([style*="display: none"])');
                 var tbody = document.getElementById('certificationsPrintBody');
                 if (!tbody) return;
@@ -470,10 +470,10 @@
                     var card = visibleCards[i];
                     var tr = document.createElement('tr');
                     tr.innerHTML = '<td>' + (card.getAttribute('data-college') || '-') + '</td>' +
-                                   '<td>' + (card.getAttribute('data-department') || '-') + '</td>' +
-                                   '<td>' + (card.getAttribute('data-title-ar') || card.getAttribute('data-title-en') || '-') + '</td>' +
-                                   '<td>' + (card.getAttribute('data-provider') || '-') + '</td>' +
-                                   '<td>' + (card.getAttribute('data-level') || '-') + '</td>';
+                        '<td>' + (card.getAttribute('data-department') || '-') + '</td>' +
+                        '<td>' + (card.getAttribute('data-title-ar') || card.getAttribute('data-title-en') || '-') + '</td>' +
+                        '<td>' + (card.getAttribute('data-provider') || '-') + '</td>' +
+                        '<td>' + (card.getAttribute('data-level') || '-') + '</td>';
                     tbody.appendChild(tr);
                 }
 

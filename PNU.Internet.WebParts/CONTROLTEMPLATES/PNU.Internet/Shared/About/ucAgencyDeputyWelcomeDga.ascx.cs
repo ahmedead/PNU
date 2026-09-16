@@ -39,9 +39,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
             try
             {
                 var titles = SharedTitleReader.Load(IsArabic);
-                string heading      = SharedTitleReader.Get(titles, SharedTitles.DeputyHeading);
-                string body         = SharedTitleReader.Get(titles, SharedTitles.DeputyBody);
-                string roleTitle    = SharedTitleReader.Get(titles, SharedTitles.DeputyRoleTitle);
+                string heading = SharedTitleReader.Get(titles, SharedTitles.DeputyHeading);
+                string body = SharedTitleReader.Get(titles, SharedTitles.DeputyBody);
+                string roleTitle = SharedTitleReader.Get(titles, SharedTitles.DeputyRoleTitle);
                 string roleSubtitle = SharedTitleReader.Get(titles, SharedTitles.DeputyRoleSubtitle);
 
                 bool hasData = !string.IsNullOrWhiteSpace(heading) ||
@@ -54,9 +54,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared.About
 
                 if (hasData)
                 {
-                    litDeputyHeading.Text      = heading;
-                    litDeputyBody.Text         = body;
-                    litDeputyRoleTitle.Text    = roleTitle;
+                    litDeputyHeading.Text = heading;
+                    litDeputyBody.Text = body;
+                    litDeputyRoleTitle.Text = roleTitle;
                     litDeputyRoleSubtitle.Text = roleSubtitle;
                 }
             }

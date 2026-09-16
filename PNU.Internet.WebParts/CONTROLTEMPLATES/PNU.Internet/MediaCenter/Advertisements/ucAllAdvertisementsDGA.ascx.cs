@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advertisements
 {
+
     public partial class ucAllAdvertisementsDGA : UserControl
     {
         protected void Page_Load(object sender, EventArgs e)

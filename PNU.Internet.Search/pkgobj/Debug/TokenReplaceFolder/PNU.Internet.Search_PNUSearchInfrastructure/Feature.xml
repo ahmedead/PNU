@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="a5fa5b97-6773-47b7-b394-791b52c5e3a6" ReceiverAssembly="PNU.Internet.Search, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1cd33aaf8f249ad7" ReceiverClass="PNU.Internet.Search.Features.PNUSearchInfrastructure.PNUSearchInfrastructureEventReceiver" Scope="Web" Title="PNU Custom Search Infrastructure"></Feature>

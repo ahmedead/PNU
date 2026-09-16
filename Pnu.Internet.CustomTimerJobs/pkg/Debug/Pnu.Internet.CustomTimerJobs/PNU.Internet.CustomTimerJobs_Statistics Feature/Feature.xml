@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" ActivateOnDefault="FALSE" AlwaysForceInstall="TRUE" Id="b8ba42bd-378c-49e7-866c-d5af9076fe24" ReceiverAssembly="Pnu.Internet.CustomTimerJobs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9809dc0502a56d3" ReceiverClass="Pnu.Internet.CustomTimerJobs.Features.Statistics_Feature.Statistics_FeatureEventReceiver" Scope="Web" Title="Statistics Feature"></Feature>

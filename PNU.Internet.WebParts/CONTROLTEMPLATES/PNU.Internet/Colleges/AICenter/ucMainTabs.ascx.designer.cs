@@ -51,6 +51,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
         protected global::System.Web.UI.UserControl ucResearchPaths;
 
         /// <summary>
+        /// ucAICenterNews control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl ucAICenterNews;
+
+        /// <summary>
         /// ucNewsLetter control.
         /// </summary>
         /// <remarks>
@@ -76,15 +85,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UserControl ucCenterMembers;
-
-        /// <summary>
-        /// ucAICenterNews control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UserControl ucAICenterNews;
 
         /// <summary>
         /// ucAIContactUS control.

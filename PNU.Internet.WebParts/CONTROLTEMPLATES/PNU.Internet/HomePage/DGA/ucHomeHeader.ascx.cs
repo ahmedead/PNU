@@ -645,28 +645,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             {
                 if (SPContext.Current == null || Page.Header == null) return;
 
-                // 1. Hide SharePoint's built-in SeoCanonicalLink (renders :443)
+                // Hide SharePoint's built-in SeoCanonicalLink (handled centrally by SEO.ascx)
                 HideCanonicalControls(Page.Header);
-
-                // 2. Build clean canonical from AAM public URL (no port)
-                var request = HttpContext.Current.Request;
-                string authority = new Uri(SPContext.Current.Site.Url)
-                                       .GetLeftPart(UriPartial.Authority);
-                string canonical = authority + request.Url.AbsolutePath;
-
-                if (request.Url.AbsolutePath.EndsWith("MediaDetails.aspx",
-                        StringComparison.OrdinalIgnoreCase)
-                    && !string.IsNullOrEmpty(request.QueryString["Id"]))
-                {
-                    canonical += "?Id=" + HttpUtility.UrlEncode(request.QueryString["Id"]);
-                }
-
-                Page.Header.Controls.Add(new LiteralControl(
-                    string.Format("<link rel=\"canonical\" href=\"{0}\" />", canonical)));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //Publics.WriteToLog("ucHomeHeader.FixCanonicalLink", ex);
             }
         }
 

@@ -170,11 +170,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const collCode = (card.getAttribute("data-college-code") || "").toLowerCase();
 
             // Text search match
-            const matchesText = !query || 
-                progName.includes(query) || 
-                progDesc.includes(query) || 
-                major.includes(query) || 
-                dept.includes(query) || 
+            const matchesText = !query ||
+                progName.includes(query) ||
+                progDesc.includes(query) ||
+                major.includes(query) ||
+                dept.includes(query) ||
                 collName.includes(query);
 
             // College filter match
@@ -202,8 +202,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (countDisplay) {
-            countDisplay.textContent = isArabic 
-                ? `${totalItems} برنامج معروض` 
+            countDisplay.textContent = isArabic
+                ? `${totalItems} برنامج معروض`
                 : `${totalItems} programs displayed`;
         }
 
@@ -222,33 +222,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (totalPages <= 1) return;
 
-        // 1. First Page button (<<)
-        const firstLi = document.createElement("li");
-        firstLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
-        const firstLink = document.createElement("a");
-        firstLink.className = "page-link btn btn-secondary icon-btn navigation-link";
-        firstLink.href = "#";
-        firstLink.setAttribute("aria-label", isArabic ? "الصفحة الأولى" : "First Page");
-        firstLink.innerHTML = `<span class="d-inline-flex fs-5 align-items-center"><i class="hgi hgi-stroke hgi-arrow-left-01 rtl-flip" aria-hidden="true"></i><i class="hgi hgi-stroke hgi-arrow-left-01 rtl-flip" style="margin-inline-start: -8px;" aria-hidden="true"></i></span>`;
-        firstLink.addEventListener("click", function (e) {
-            e.preventDefault();
-            if (currentPage > 1) {
-                currentPage = 1;
-                updateView();
-                const grid = document.getElementById("programsGrid");
-                if (grid) window.scrollTo({ top: grid.offsetTop - 120, behavior: "smooth" });
-            }
-        });
-        firstLi.appendChild(firstLink);
-        paginationContainer.appendChild(firstLi);
-
-        // 2. Previous button (<)
+        // Previous button
         const prevLi = document.createElement("li");
         prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
         const prevLink = document.createElement("a");
         prevLink.className = "page-link btn btn-secondary icon-btn navigation-link";
         prevLink.href = "#";
-        prevLink.setAttribute("aria-label", isArabic ? "الصفحة السابقة" : "Previous");
+        prevLink.setAttribute("aria-label", "Previous");
         prevLink.innerHTML = `<span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-arrow-left-01 rtl-flip" aria-hidden="true"></i></span>`;
         prevLink.addEventListener("click", function (e) {
             e.preventDefault();
@@ -262,14 +242,8 @@ document.addEventListener("DOMContentLoaded", function () {
         prevLi.appendChild(prevLink);
         paginationContainer.appendChild(prevLi);
 
-        // 3. Numbered Pages (with smart windowing)
-        let startPage = Math.max(1, currentPage - 2);
-        let endPage = Math.min(totalPages, startPage + 4);
-        if (endPage - startPage < 4) {
-            startPage = Math.max(1, endPage - 4);
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
+        // Numbered Pages
+        for (let i = 1; i <= totalPages; i++) {
             const li = document.createElement("li");
             li.className = "page-item";
             const a = document.createElement("a");
@@ -287,13 +261,13 @@ document.addEventListener("DOMContentLoaded", function () {
             paginationContainer.appendChild(li);
         }
 
-        // 4. Next button (>)
+        // Next button
         const nextLi = document.createElement("li");
         nextLi.className = `page-item ${currentPage === totalPages ? "disabled" : ""}`;
         const nextLink = document.createElement("a");
         nextLink.className = "page-link btn btn-secondary icon-btn navigation-link";
         nextLink.href = "#";
-        nextLink.setAttribute("aria-label", isArabic ? "الصفحة التالية" : "Next");
+        nextLink.setAttribute("aria-label", "Next");
         nextLink.innerHTML = `<span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-arrow-right-01 rtl-flip" aria-hidden="true"></i></span>`;
         nextLink.addEventListener("click", function (e) {
             e.preventDefault();
@@ -306,26 +280,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         nextLi.appendChild(nextLink);
         paginationContainer.appendChild(nextLi);
-
-        // 5. Last Page button (>>)
-        const lastLi = document.createElement("li");
-        lastLi.className = `page-item ${currentPage === totalPages ? "disabled" : ""}`;
-        const lastLink = document.createElement("a");
-        lastLink.className = "page-link btn btn-secondary icon-btn navigation-link";
-        lastLink.href = "#";
-        lastLink.setAttribute("aria-label", isArabic ? "الصفحة الأخيرة" : "Last Page");
-        lastLink.innerHTML = `<span class="d-inline-flex fs-5 align-items-center"><i class="hgi hgi-stroke hgi-arrow-right-01 rtl-flip" aria-hidden="true"></i><i class="hgi hgi-stroke hgi-arrow-right-01 rtl-flip" style="margin-inline-start: -8px;" aria-hidden="true"></i></span>`;
-        lastLink.addEventListener("click", function (e) {
-            e.preventDefault();
-            if (currentPage < totalPages) {
-                currentPage = totalPages;
-                updateView();
-                const grid = document.getElementById("programsGrid");
-                if (grid) window.scrollTo({ top: grid.offsetTop - 120, behavior: "smooth" });
-            }
-        });
-        lastLi.appendChild(lastLink);
-        paginationContainer.appendChild(lastLi);
     }
 
     // Event listeners

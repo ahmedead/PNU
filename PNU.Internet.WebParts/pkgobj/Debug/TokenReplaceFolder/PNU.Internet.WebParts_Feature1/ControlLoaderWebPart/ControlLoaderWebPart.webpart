@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<webParts>
+  <webPart xmlns="http://schemas.microsoft.com/WebPart/v3">
+    <metaData>
+      <type name="PNU.Internet.WebParts.ControlLoaderWebPart.ControlLoaderWebPart, PNU.Internet.WebParts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bbc777e63fab09a3" />
+      <importErrorMessage>$Resources:core,ImportErrorMessage;</importErrorMessage>
+    </metaData>
+    <data>
+      <properties>
+        <property name="Title" type="string">PNU.Internet.WebParts - ControlLoaderWebPart</property>
+        <property name="Description" type="string">My Web Part</property>
+      </properties>
+    </data>
+  </webPart>
+</webParts>

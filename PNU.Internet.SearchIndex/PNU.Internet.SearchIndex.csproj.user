@@ -3,6 +3,6 @@
   <PropertyGroup>
     <SharePointSiteUrl>https://newportal.pnu.edu.sa/</SharePointSiteUrl>
     <ProjectView>ShowAllFiles</ProjectView>
-    <PublishToFileSystemTargetLocation>E:\AESharaf\Publish\Portal\UAT\20260812-2</PublishToFileSystemTargetLocation>
+    <PublishToFileSystemTargetLocation>E:\AESharaf\Publish\Portal\UAT\20260909-1</PublishToFileSystemTargetLocation>
   </PropertyGroup>
 </Project>

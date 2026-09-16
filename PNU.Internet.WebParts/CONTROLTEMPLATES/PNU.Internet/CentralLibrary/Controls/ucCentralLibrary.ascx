@@ -9,6 +9,12 @@
 <%@ Register TagPrefix="pnu" TagName="ClFaq" Src="~/_controltemplates/15/PNU.Internet/CentralLibrary/Controls/ucClFaq.ascx" %>
 <%@ Register TagPrefix="pnu" TagName="ClContact" Src="~/_controltemplates/15/PNU.Internet/CentralLibrary/Controls/ucClContact.ascx" %>
 
+<style>
+    input[type=button], input[type=reset], input[type=submit], button 
+{
+    min-width: unset
+}
+</style>
 <asp:PlaceHolder ID="phHeader" runat="server">
     <pnu:ClHeader ID="ucHeader" runat="server" />
 </asp:PlaceHolder>

@@ -10,7 +10,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
             try
             {
                 string msg = string.Format("[ProfessionalCertifications] {0}: {1}", context, ex != null ? ex.ToString() : "Unknown error");
-                Publics.WriteToLog(msg);
+                //Publics.WriteToLog(msg);
             }
             catch { }
         }
@@ -20,7 +20,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.ProfessionalCertif
             try
             {
                 string msg = string.Format("[ProfessionalCertifications] {0}: {1}", context, message);
-                Publics.WriteToLog(msg);
+                //Publics.WriteToLog(msg);
             }
             catch { }
         }

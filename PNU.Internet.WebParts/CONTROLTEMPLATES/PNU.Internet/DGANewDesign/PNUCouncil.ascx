@@ -16,7 +16,7 @@
 <section class="mb-5" data-aos="fade-up" aria-labelledby="council-leadership-title">
     <div class="mb-4">
         <h2 id="council-leadership-title" class="mb-2"><%= Publics.IsArabic ? "قيادة المجلس" : "Council Leadership" %></h2>
-        <p class="mb-0"><%= Publics.IsArabic ? "الرئاسة ونائبة الرئيس كما وردت في صفحة مجلس الجامعة." : "The Chair and Vice Chair of the University Council, as presented on the official Council page." %></p>
+        <p class="mb-0" style="display:none"><%= Publics.IsArabic ? "الرئاسة ونائبة الرئيس كما وردت في صفحة مجلس الجامعة." : "The Chair and Vice Chair of the University Council, as presented on the official Council page." %></p>
     </div>
     <div class="row g-4">
         <asp:Repeater ID="rptLeadership" runat="server" OnItemDataBound="rptLeadership_ItemDataBound">

@@ -28,7 +28,7 @@
 <main id="main-content" class="dga-main-body" tabindex="-1">
     <asp:Repeater ID="rptMainData" runat="server">
         <ItemTemplate>
-            <div class="bg-primary-25 py-5" id="program-main-hero" data-aos="fade-up">
+            <div class="bg-primary-25 py-5" data-aos="fade-up">
                 <div class="container">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-2">
@@ -182,7 +182,7 @@
     <!-- تفاصيل البرنامج (Tabs Section) -->
     <section class="py-5" data-aos="fade-up" aria-labelledby="program-v2-details-title">
         <div class="container">
-            <h2 id="program-v2-details-title" class="mb-4"><asp:Literal runat="server" Text="<%$ Resources: PNUres, ProgramDetails %>" /></h2>
+            <h2 id="program-v2-details-title" class="mb-4"><asp:Literal runat="server" Text="<%$ Resources: PNUres, ProgramDetails-1 %>" /></h2>
             
             <ul class="nav nav-tabs nav-underline nav-flush flex-nowrap overflow-x-auto overflow-y-hidden w-100 mb-4" id="academicProgramV2Tabs" role="tablist" aria-label="التنقل بين تفاصيل البرنامج">
                 <li class="nav-item" role="presentation">
@@ -228,67 +228,10 @@
 </main>
 
 <script>
-    function overridePageBreadcrumbAndTitle() {
-        try {
-            const heroBanner = document.getElementById("program-main-hero");
-            if (!heroBanner) return;
-
-            // 1. Hide the department link if code is 0000
-            const secLink = heroBanner.querySelector('a[href*="SecCode=0000"]');
-            if (secLink && secLink.closest("li")) {
-                secLink.closest("li").style.display = "none";
-            }
-
-            // 2. Find any outer breadcrumb or page hero outside our control
-            const outerBreadcrumbs = Array.from(document.querySelectorAll('nav[aria-label="breadcrumb"], .breadcrumb'))
-                .filter(el => !heroBanner.contains(el));
-
-            const outerHeroes = Array.from(document.querySelectorAll('.bg-primary-25, .page-header, .page-header-container, .breadcrumb-container'))
-                .filter(el => !heroBanner.contains(el) && el !== heroBanner);
-
-            // 3. Find outer page titles containing "بيانات البرنامج"
-            const outerTitles = Array.from(document.querySelectorAll('h1, h2, .h1, .h2, .page-title, #pageTitle'))
-                .filter(el => !heroBanner.contains(el) && el.textContent.trim().includes("بيانات البرنامج"));
-
-            // If an outer hero container exists (above the side-menu + main body), replace it with our hero banner
-            if (outerHeroes.length > 0) {
-                const targetOuterHero = outerHeroes[0];
-                targetOuterHero.parentNode.replaceChild(heroBanner, targetOuterHero);
-                heroBanner.style.display = "";
-            } else if (outerBreadcrumbs.length > 0) {
-                const outerBreadcrumb = outerBreadcrumbs[0];
-                const outerWrapper = outerBreadcrumb.closest('.bg-primary-25') || outerBreadcrumb.closest('.container') || outerBreadcrumb.parentElement;
-                if (outerWrapper && !heroBanner.contains(outerWrapper) && outerWrapper !== document.body) {
-                    outerWrapper.parentNode.insertBefore(heroBanner, outerWrapper);
-                    outerWrapper.style.display = "none";
-                    heroBanner.style.display = "";
-                }
-            } else {
-                // Check if main-body or container has an outer section before the 2-column layout
-                const mainBody = document.querySelector('.dga-main-body, #main-content');
-                if (mainBody && mainBody.parentElement && !mainBody.contains(heroBanner)) {
-                    mainBody.parentElement.insertBefore(heroBanner, mainBody);
-                    heroBanner.style.display = "";
-                }
-            }
-
-            // 4. Hide any duplicate outer breadcrumbs and titles
-            outerBreadcrumbs.forEach(el => el.style.display = "none");
-            outerTitles.forEach(el => {
-                el.style.display = "none";
-                if (el.parentElement && el.parentElement.children.length <= 1) {
-                    el.parentElement.style.display = "none";
-                }
-            });
-        } catch (e) {
-            console.warn("Error overriding page breadcrumb:", e);
+    document.addEventListener("DOMContentLoaded", function () {
+        const secLink = document.querySelector('a[href*="SecCode=0000"]');
+        if (secLink) {
+            secLink.closest("li").style.display = "none";
         }
-    }
-
-    // Execute immediately and on DOMContentLoaded
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", overridePageBreadcrumbAndTitle);
-    } else {
-        overridePageBreadcrumbAndTitle();
-    }
+    });
 </script>

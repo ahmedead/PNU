@@ -241,27 +241,85 @@ onkeydown="if(event.keyCode===13||event.key==='Enter'){event.preventDefault();do
 </dga-header>
 
 
-<%--<script>
-    document.querySelectorAll('#languagesDropdownMenu a[lang]').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const targetLang = this.getAttribute('lang'); // 'ar' or 'en'
-            const currentUrl = window.location.href;
-            let newUrl;
-
-            if (targetLang === 'ar') {
-                // Replace /en/ with /ar/
-                newUrl = currentUrl.replace(/\/en(\/|$)/, '/ar$1');
-            } else if (targetLang === 'en') {
-                // Replace /ar/ with /en/
-                newUrl = currentUrl.replace(/\/ar(\/|$)/, '/en$1');
+    <script type="text/javascript">
+        (function () {
+            function isAuthenticatedOrAdminUser() {
+                if (typeof _spPageContextInfo !== 'undefined') {
+                    if (_spPageContextInfo.isAnonymousGuestUser === true) {
+                        return false;
+                    }
+                    if (typeof _spPageContextInfo.userId !== 'undefined' && _spPageContextInfo.userId !== null && _spPageContextInfo.userId > 0) {
+                        return true;
+                    }
+                    if (_spPageContextInfo.userLoginName || _spPageContextInfo.systemUserKey) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
-            // Only redirect if the URL actually changed to prevent loops
-            if (newUrl && newUrl !== currentUrl) {
-                window.location.href = newUrl;
+            function ensureCoreCssLoaded() {
+                var hasCore = document.querySelector('link[href*="corev15"]');
+                if (!hasCore) {
+                    var lcid = (typeof _spPageContextInfo !== 'undefined' && _spPageContextInfo.currentLanguage) ? _spPageContextInfo.currentLanguage : '1025';
+                    var link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.type = 'text/css';
+                    link.href = '/_layouts/15/' + lcid + '/styles/Themable/corev15.css';
+                    document.head.insertBefore(link, document.head.firstChild);
+                }
             }
-        });
-    });
-</script>--%>
+
+            if (isAuthenticatedOrAdminUser()) {
+                ensureCoreCssLoaded();
+                return;
+            }
+
+            function purgeCoreCss() {
+                if (isAuthenticatedOrAdminUser()) {
+                    return;
+                }
+                var links = document.querySelectorAll('link[href*="corev15"], link[href*="corev14"]');
+                for (var i = 0; i < links.length; i++) {
+                    links[i].disabled = true;
+                    if (links[i].parentNode) {
+                        links[i].parentNode.removeChild(links[i]);
+                    }
+                }
+                if (document.styleSheets) {
+                    for (var j = 0; j < document.styleSheets.length; j++) {
+                        try {
+                            var sheet = document.styleSheets[j];
+                            if (sheet && sheet.href && (sheet.href.indexOf('corev15') !== -1 || sheet.href.indexOf('corev14') !== -1)) {
+                                sheet.disabled = true;
+                            }
+                        } catch (e) { }
+                    }
+                }
+            }
+
+            purgeCoreCss();
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', purgeCoreCss);
+            }
+            window.addEventListener('load', purgeCoreCss);
+            if (window.MutationObserver && document.head) {
+                var observer = new MutationObserver(function (mutations) {
+                    if (isAuthenticatedOrAdminUser()) {
+                        observer.disconnect();
+                        return;
+                    }
+                    mutations.forEach(function (mutation) {
+                        for (var k = 0; k < mutation.addedNodes.length; k++) {
+                            var node = mutation.addedNodes[k];
+                            if (node.tagName === 'LINK' && node.href && (node.href.indexOf('corev15') !== -1 || node.href.indexOf('corev14') !== -1)) {
+                                node.disabled = true;
+                                if (node.parentNode) node.parentNode.removeChild(node);
+                            }
+                        }
+                    });
+                });
+                observer.observe(document.head, { childList: true, subtree: true });
+            }
+        })();
+    </script>

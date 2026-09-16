@@ -75,6 +75,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkAutoApprove;
+
+        /// <summary>
+        /// chkAutoSaveToSql control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkAutoSaveToSql;
         
         /// <summary>
         /// ddlSubsites control.
@@ -93,6 +102,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnScanDropdownSite;
+
+        /// <summary>
+        /// btnLoadSqlDropdownSite control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLoadSqlDropdownSite;
         
         /// <summary>
         /// txtSiteUrl control.
@@ -111,7 +129,52 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnScanUrlSite;
-        
+
+        /// <summary>
+        /// btnLoadSqlUrlSite control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLoadSqlUrlSite;
+
+        /// <summary>
+        /// hfActiveTab control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfActiveTab;
+
+        /// <summary>
+        /// txtRecursiveSiteUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtRecursiveSiteUrl;
+
+        /// <summary>
+        /// btnScanRecursiveSite control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnScanRecursiveSite;
+
+        /// <summary>
+        /// btnLoadSqlRecursiveSite control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLoadSqlRecursiveSite;
+
         /// <summary>
         /// txtDirectPages control.
         /// </summary>
@@ -129,6 +192,42 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnProcessDirectPages;
+
+        /// <summary>
+        /// txtSqlSearchUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSqlSearchUrl;
+
+        /// <summary>
+        /// ddlSqlStatusFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlSqlStatusFilter;
+
+        /// <summary>
+        /// btnSearchSqlDatabase control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSearchSqlDatabase;
+
+        /// <summary>
+        /// btnLoadAllMissingFromSql control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLoadAllMissingFromSql;
         
         /// <summary>
         /// pnlMissingPages control.
@@ -156,6 +255,24 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnExportMissingPages;
+
+        /// <summary>
+        /// btnSaveMissingToSql control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveMissingToSql;
+
+        /// <summary>
+        /// btnSyncCreatedStatusSql control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSyncCreatedStatusSql;
 
         /// <summary>
         /// btnCreateSelectedPages control.

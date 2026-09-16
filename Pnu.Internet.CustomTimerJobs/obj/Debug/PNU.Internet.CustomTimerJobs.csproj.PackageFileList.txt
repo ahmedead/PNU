@@ -1,0 +1,1 @@
+bin\Debug\Pnu.Internet.CustomTimerJobs.wsp

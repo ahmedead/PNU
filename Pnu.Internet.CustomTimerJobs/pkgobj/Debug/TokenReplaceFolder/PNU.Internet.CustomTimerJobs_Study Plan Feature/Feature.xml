@@ -1,0 +1,2 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" ActivateOnDefault="FALSE" AlwaysForceInstall="TRUE" Id="c06e1f38-89a6-4994-8e36-0195d6c2a608" ReceiverAssembly="Pnu.Internet.CustomTimerJobs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9809dc0502a56d3" ReceiverClass="Pnu.Internet.CustomTimerJobs.Features.Study_Plan_Feature.Study_Plan_FeatureEventReceiver" Scope="WebApplication" Title="Study Plan Feature"></Feature>

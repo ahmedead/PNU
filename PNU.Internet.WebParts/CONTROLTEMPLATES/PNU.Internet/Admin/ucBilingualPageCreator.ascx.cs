@@ -10,6 +10,7 @@ using System.Xml;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Publishing;
 using Microsoft.SharePoint.WebPartPages;
+using PNU.Internet.SearchIndex.DAL;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 {
@@ -28,12 +29,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
         public class MissingPageItem
         {
             public string SourceWebUrl { get; set; }
+            public string SourceWebFullUrl { get; set; }
             public string TargetWebUrl { get; set; }
+            public string TargetWebFullUrl { get; set; }
             public string PageFileName { get; set; }
             public string SourcePageTitle { get; set; }
             public string TargetPageTitle { get; set; }
             public string SourcePageUrl { get; set; }
+            public string SourcePageFullUrl { get; set; }
             public string TargetPageUrl { get; set; }
+            public string TargetPageFullUrl { get; set; }
             public string PageLayoutUrl { get; set; }
             public string PageLayoutFileName { get; set; }
 
@@ -53,6 +58,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             public string PublishingPageContentHtml { get; set; }
 
             public string Direction { get; set; } // "ArToEn" or "EnToAr"
+            public bool IsCreated { get; set; }
+            public string Status { get; internal set; }
         }
 
         private List<MissingPageItem> CurrentMissingPages
@@ -226,6 +233,19 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             ScanAndDisplayMissingPages(selectedUrl);
         }
 
+        protected void btnLoadSqlDropdownSite_Click(object sender, EventArgs e)
+        {
+            string selectedUrl = ddlSubsites.SelectedValue;
+            if (string.IsNullOrWhiteSpace(selectedUrl))
+            {
+                LogMessage("يرجى اختيار موقع فرعي من القائمة أولاً.", "warning");
+                RenderExecutionResults(0, 0, 0);
+                return;
+            }
+
+            LoadMissingPagesFromSql(selectedUrl, selectedUrl, "All", string.Format("الموقع المحدد: <code>{0}</code>", selectedUrl));
+        }
+
         protected void btnScanUrlSite_Click(object sender, EventArgs e)
         {
             string rawUrl = txtSiteUrl.Text.Trim();
@@ -237,6 +257,20 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             }
 
             ScanAndDisplayMissingPages(rawUrl);
+        }
+
+        protected void btnLoadSqlUrlSite_Click(object sender, EventArgs e)
+        {
+            string rawUrl = txtSiteUrl.Text.Trim();
+            if (string.IsNullOrWhiteSpace(rawUrl))
+            {
+                LogMessage("يرجى إدخال رابط الموقع للبحث عنه في قاعدة البيانات.", "warning");
+                RenderExecutionResults(0, 0, 0);
+                return;
+            }
+
+            string normalizedUrl = NormalizeWebUrl(rawUrl);
+            LoadMissingPagesFromSql(normalizedUrl, normalizedUrl, "All", string.Format("رابط الموقع: <code>{0}</code>", rawUrl));
         }
 
         protected void btnCompareExistingDropdown_Click(object sender, EventArgs e)
@@ -263,6 +297,286 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             }
 
             CompareExistingPages(rawUrl);
+        }
+
+        protected void btnScanRecursiveSite_Click(object sender, EventArgs e)
+        {
+            string rawUrl = txtRecursiveSiteUrl.Text.Trim();
+            if (string.IsNullOrWhiteSpace(rawUrl))
+            {
+                LogMessage("يرجى إدخال رابط الموقع المراد فحص شجرته بالكامل.", "warning");
+                RenderExecutionResults(0, 0, 0);
+                return;
+            }
+
+            ScanRecursiveMissingPages(rawUrl);
+        }
+
+        protected void btnLoadSqlRecursiveSite_Click(object sender, EventArgs e)
+        {
+            string rawUrl = txtRecursiveSiteUrl.Text.Trim();
+            if (string.IsNullOrWhiteSpace(rawUrl))
+            {
+                LogMessage("يرجى إدخال رابط الموقع أو القسم للبحث عنه في قاعدة البيانات.", "warning");
+                RenderExecutionResults(0, 0, 0);
+                return;
+            }
+
+            string normalizedUrl = NormalizeWebUrl(rawUrl);
+            LoadMissingPagesFromSql(normalizedUrl, normalizedUrl, "All", string.Format("الشجرة الهرمية للموقع: <code>{0}</code>", rawUrl));
+        }
+
+        protected void btnSearchSqlDatabase_Click(object sender, EventArgs e)
+        {
+            string query = txtSqlSearchUrl.Text.Trim();
+            string status = ddlSqlStatusFilter.SelectedValue;
+
+            string desc = string.Format("استعلام قاعدة البيانات (النص/الرابط: <code>{0}</code> | الحالة: <code>{1}</code>)",
+                string.IsNullOrEmpty(query) ? "الكل" : query,
+                status == "Pending" ? "مفقودة فقط" : (status == "Created" ? "تم إنشاؤها" : "الكل"));
+
+            LoadMissingPagesFromSql(query, query, status, desc);
+        }
+
+        protected void btnLoadAllMissingFromSql_Click(object sender, EventArgs e)
+        {
+            LoadMissingPagesFromSql(null, null, "All", "كافة الصفحات المسجلة في قاعدة البيانات (dbo.MissingPagesOnEN)");
+        }
+
+        private void LoadMissingPagesFromSql(string urlFilter, string keyword, string statusFilter, string sourceDescription)
+        {
+            ResetUi();
+            LogMessage(string.Format("جاري الاستعلام من قاعدة البيانات <code>dbo.MissingPagesOnEN</code> ({0})...", sourceDescription), "info");
+
+            try
+            {
+                List<MissingPageOnEnDto> dtos = null;
+                if (string.IsNullOrEmpty(urlFilter) && string.IsNullOrEmpty(keyword) && (string.IsNullOrEmpty(statusFilter) || statusFilter == "All"))
+                {
+                    dtos = MissingPagesOnEnDal.GetAllMissingPages(false);
+                }
+                else
+                {
+                    dtos = MissingPagesOnEnDal.SearchMissingPages(urlFilter, keyword, statusFilter);
+                }
+
+                if (dtos == null || dtos.Count == 0)
+                {
+                    pnlMissingPages.Visible = false;
+                    LogMessage(string.Format("لم يتم العثور على أية سجلات مطابقة في قاعدة البيانات لـ ({0}).", sourceDescription), "warning");
+                    RenderExecutionResults(0, 0, 0);
+                    return;
+                }
+
+                var missingList = dtos.Select(d => new MissingPageItem
+                {
+                    PageFileName = d.PageFileName,
+                    SourcePageTitle = !string.IsNullOrEmpty(d.PageTitleAr) ? d.PageTitleAr : (!string.IsNullOrEmpty(d.PageTitleEn) ? d.PageTitleEn : Path.GetFileNameWithoutExtension(d.PageFileName)),
+                    TargetPageTitle = !string.IsNullOrEmpty(d.PageTitleEn) ? d.PageTitleEn : (!string.IsNullOrEmpty(d.PageTitleAr) ? d.PageTitleAr : Path.GetFileNameWithoutExtension(d.PageFileName)),
+                    SourcePageUrl = d.SourcePageUrl,
+                    SourcePageFullUrl = d.SourcePageFullUrl,
+                    TargetPageUrl = d.TargetPageUrl,
+                    TargetPageFullUrl = d.TargetPageFullUrl,
+                    SourceWebUrl = d.SourceWebUrl,
+                    SourceWebFullUrl = d.SourceWebFullUrl,
+                    TargetWebUrl = d.TargetWebUrl,
+                    TargetWebFullUrl = d.TargetWebFullUrl,
+                    PageLayoutUrl = d.PageLayout,
+                    PageLayoutFileName = !string.IsNullOrEmpty(d.PageLayoutFileName) ? d.PageLayoutFileName : Path.GetFileName(d.PageLayout),
+                    HasControlLoader = d.HasControlLoader,
+                    UserControlPath = d.UserControlPath,
+                    UserControlProperties = d.UserControlProperties,
+                    HasContentEditor = d.HasContentEditor,
+                    HasPageContent = d.HasPageContent,
+                    Direction = !string.IsNullOrEmpty(d.Direction) ? d.Direction : "ArToEn",
+                    IsCreated = d.IsCreated
+                }).ToList();
+
+                int createdCount = missingList.Count(m => m.IsCreated);
+                int pendingCount = missingList.Count(m => !m.IsCreated);
+
+                CurrentMissingPages = missingList;
+                litMissingCount.Text = missingList.Count.ToString();
+                pnlMissingPages.Visible = true;
+                rptMissingPages.DataSource = missingList;
+                rptMissingPages.DataBind();
+
+                LogMessage(string.Format("تم استرجاع عدد <b>{0}</b> صفحة من قاعدة البيانات (<b>{1}</b> صفحة مفقودة جاهزة للإنشاء، <b>{2}</b> صفحة تم إنشاؤها مسبقاً).",
+                    missingList.Count, pendingCount, createdCount), "success");
+
+                RenderExecutionResults(missingList.Count, createdCount, 0);
+            }
+            catch (Exception ex)
+            {
+                LogMessage("خطأ أثناء الاستعلام من قاعدة البيانات: " + ex.Message, "danger");
+                RenderExecutionResults(0, 0, 0);
+            }
+        }
+
+        private void ScanRecursiveMissingPages(string inputUrl)
+        {
+            ResetUi();
+            string normalizedWebUrl = NormalizeWebUrl(inputUrl);
+            string pairedWebUrl = GetPairedWebUrl(normalizedWebUrl);
+
+            if (string.IsNullOrEmpty(pairedWebUrl))
+            {
+                LogMessage(string.Format("تعذر اشتقاق الرابط المقابل (/ar/ أو /en/) للرابط المدخل: {0}", inputUrl), "danger");
+                RenderExecutionResults(0, 0, 0);
+                return;
+            }
+
+            string arRootUrl = normalizedWebUrl.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase) || normalizedWebUrl.Equals("/ar", StringComparison.OrdinalIgnoreCase)
+                ? normalizedWebUrl
+                : pairedWebUrl;
+            string enRootUrl = normalizedWebUrl.StartsWith("/en/", StringComparison.OrdinalIgnoreCase) || normalizedWebUrl.Equals("/en", StringComparison.OrdinalIgnoreCase)
+                ? normalizedWebUrl
+                : pairedWebUrl;
+
+            bool onlyArToEn = ddlSyncDirection.SelectedValue == "ArToEn";
+
+            LogMessage(string.Format("بدء الفحص الشامل والمتكرر للشجرة (الموقع المصدر: <code>{0}</code> والمواقع المتفرعة منه)...", arRootUrl), "info");
+
+            List<MissingPageItem> missingList = new List<MissingPageItem>();
+
+            SPSecurity.RunWithElevatedPrivileges(() =>
+            {
+                string siteUrl = SPContext.Current != null && SPContext.Current.Site != null
+                    ? SPContext.Current.Site.Url
+                    : "https://pnu.edu.sa";
+
+                using (SPSite site = new SPSite(siteUrl))
+                {
+                    using (SPWeb arRootWeb = site.OpenWeb(arRootUrl, false))
+                    {
+                        if (arRootWeb == null || !arRootWeb.Exists)
+                        {
+                            LogMessage(string.Format("الموقع العربي الرئيسي غير موجود: {0}", arRootUrl), "danger");
+                            return;
+                        }
+
+                        List<string> arWebUrls = new List<string>();
+                        CollectAllSubwebUrls(arRootWeb, arWebUrls);
+
+                        LogMessage(string.Format("تم اكتشاف عدد <b>{0}</b> موقع في الشجرة الهرمية تحت (<code>{1}</code>). جاري فحص ومقارنة صفحات النشر عبر جميع المواقع الفرعية...", arWebUrls.Count, arRootUrl), "info");
+
+                        int totalSitesScanned = 0;
+                        int totalPagesFound = 0;
+
+                        foreach (string currentArUrl in arWebUrls)
+                        {
+                            totalSitesScanned++;
+                            string currentEnUrl = GetPairedWebUrl(currentArUrl);
+                            if (string.IsNullOrEmpty(currentEnUrl))
+                            {
+                                continue;
+                            }
+
+                            using (SPWeb currentArWeb = site.OpenWeb(currentArUrl, false))
+                            using (SPWeb currentEnWeb = site.OpenWeb(currentEnUrl, false))
+                            {
+                                if (currentArWeb == null || !currentArWeb.Exists)
+                                {
+                                    LogMessage(string.Format("تعذر فتح الموقع العربي: {0}", currentArUrl), "warning");
+                                    continue;
+                                }
+
+                                if (currentEnWeb == null || !currentEnWeb.Exists)
+                                {
+                                    var arOnlyPages = GetPagesDict(currentArWeb);
+                                    if (arOnlyPages.Count > 0)
+                                    {
+                                        LogMessage(string.Format("الموقع الإنجليزي المقابل غير موجود: <code>{0}</code> (الموقع العربي <code>{1}</code> يحتوي على {2} صفحة نشر بحاجة لموقع فرعي مقابل).", currentEnUrl, currentArUrl, arOnlyPages.Count), "warning");
+                                    }
+                                    continue;
+                                }
+
+                                var arPages = GetPagesDict(currentArWeb);
+                                var enPages = GetPagesDict(currentEnWeb);
+                                totalPagesFound += arPages.Count + enPages.Count;
+
+                                int subMissingCount = 0;
+
+                                // 1. Pages in AR missing in EN
+                                foreach (var kvp in arPages)
+                                {
+                                    string fileName = kvp.Key;
+                                    if (!enPages.ContainsKey(fileName))
+                                    {
+                                        var item = InspectSourcePage(site, currentArWeb, currentEnWeb, kvp.Value, fileName, "ArToEn");
+                                        if (item != null)
+                                        {
+                                            missingList.Add(item);
+                                            subMissingCount++;
+                                        }
+                                    }
+                                }
+
+                                // 2. Pages in EN missing in AR (if Both directions selected)
+                                if (!onlyArToEn)
+                                {
+                                    foreach (var kvp in enPages)
+                                    {
+                                        string fileName = kvp.Key;
+                                        if (!arPages.ContainsKey(fileName))
+                                        {
+                                            var item = InspectSourcePage(site, currentEnWeb, currentArWeb, kvp.Value, fileName, "EnToAr");
+                                            if (item != null)
+                                            {
+                                                missingList.Add(item);
+                                                subMissingCount++;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (subMissingCount > 0)
+                                {
+                                    LogMessage(string.Format("&bull; الموقع <code>{0}</code>: تم العثور على <b>{1}</b> صفحة مفقودة (إجمالي صفحات عربي: {2}، إنجليزي: {3})",
+                                        currentArUrl, subMissingCount, arPages.Count, enPages.Count), "warning");
+                                }
+                            }
+                        }
+
+                        LogMessage(string.Format("اكتمل الفحص الشامل بنجاح: تم فحص <b>{0}</b> موقع فرعي وإجمالي <b>{1}</b> صفحة نشر، واكتشاف <b>{2}</b> صفحة مفقودة.",
+                            totalSitesScanned, totalPagesFound, missingList.Count), "success");
+                    }
+                }
+            });
+
+            BindMissingPagesList(missingList);
+        }
+
+        private void CollectAllSubwebUrls(SPWeb rootWeb, List<string> collectedUrls)
+        {
+            if (rootWeb == null || !rootWeb.Exists) return;
+
+            string currentUrl = rootWeb.ServerRelativeUrl.TrimEnd('/');
+            if (string.IsNullOrEmpty(currentUrl)) currentUrl = "/";
+
+            if (!collectedUrls.Contains(currentUrl, StringComparer.OrdinalIgnoreCase))
+            {
+                collectedUrls.Add(currentUrl);
+            }
+
+            try
+            {
+                foreach (SPWeb childWeb in rootWeb.Webs)
+                {
+                    try
+                    {
+                        CollectAllSubwebUrls(childWeb, collectedUrls);
+                    }
+                    finally
+                    {
+                        childWeb.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage(string.Format("تحذير عند قراءة المواقع الفرعية تحت ({0}): {1}", rootWeb.ServerRelativeUrl, ex.Message), "warning");
+            }
         }
 
         protected void btnProcessDirectPages_Click(object sender, EventArgs e)
@@ -386,11 +700,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 
                         // Since Arabic site is the master content source:
                         // Ensure source is read from the Arabic web, and target is English web
-                        string arWebPath = webPath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase) 
-                            ? webPath 
+                        string arWebPath = webPath.StartsWith("/ar/", StringComparison.OrdinalIgnoreCase)
+                            ? webPath
                             : GetPairedWebUrl(webPath);
-                        string enWebPath = webPath.StartsWith("/en/", StringComparison.OrdinalIgnoreCase) 
-                            ? webPath 
+                        string enWebPath = webPath.StartsWith("/en/", StringComparison.OrdinalIgnoreCase)
+                            ? webPath
                             : GetPairedWebUrl(webPath);
 
                         if (string.IsNullOrEmpty(arWebPath) || string.IsNullOrEmpty(enWebPath))
@@ -484,15 +798,33 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                     ? srcPubPage.Title
                     : (srcFile.Title ?? Path.GetFileNameWithoutExtension(fileName));
 
+                string srcRelUrl = srcFile.ServerRelativeUrl;
+                string tgtRelUrl = tgtWeb.ServerRelativeUrl.TrimEnd('/') + "/" + targetPagesListName + "/" + fileName;
+
+                string srcFullUrl = null;
+                string tgtFullUrl = null;
+                string srcWebFullUrl = null;
+                string tgtWebFullUrl = null;
+
+                try { srcFullUrl = site.MakeFullUrl(srcRelUrl); } catch { }
+                try { tgtFullUrl = site.MakeFullUrl(tgtRelUrl); } catch { }
+                try { srcWebFullUrl = site.MakeFullUrl(srcWeb.ServerRelativeUrl); } catch { }
+                try { tgtWebFullUrl = site.MakeFullUrl(tgtWeb.ServerRelativeUrl); } catch { }
+
                 var item = new MissingPageItem
                 {
                     SourceWebUrl = srcWeb.ServerRelativeUrl,
+                    SourceWebFullUrl = srcWebFullUrl ?? srcWeb.ServerRelativeUrl,
                     TargetWebUrl = tgtWeb.ServerRelativeUrl,
+                    TargetWebFullUrl = tgtWebFullUrl ?? tgtWeb.ServerRelativeUrl,
                     PageFileName = fileName,
                     SourcePageTitle = pageTitle,
-                    SourcePageUrl = srcFile.ServerRelativeUrl,
-                    TargetPageUrl = tgtWeb.ServerRelativeUrl.TrimEnd('/') + "/" + targetPagesListName + "/" + fileName,
-                    Direction = direction
+                    SourcePageUrl = srcRelUrl,
+                    SourcePageFullUrl = srcFullUrl ?? srcRelUrl,
+                    TargetPageUrl = tgtRelUrl,
+                    TargetPageFullUrl = tgtFullUrl ?? tgtRelUrl,
+                    Direction = direction,
+                    IsCreated = false
                 };
 
                 // Page Layout
@@ -614,9 +946,135 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                 rptMissingPages.DataSource = missingList;
                 rptMissingPages.DataBind();
                 LogMessage(string.Format("تم العثور على ({0}) صفحة مفقودة جاهزة للإنشاء والمزامنة.", missingList.Count), "info");
+
+                // Auto-save to SQL if enabled
+                if (chkAutoSaveToSql.Checked)
+                {
+                    SaveMissingPagesToSql(missingList, true);
+                }
             }
 
             RenderExecutionResults(missingList.Count, 0, 0);
+        }
+
+        protected void btnSaveMissingToSql_Click(object sender, EventArgs e)
+        {
+            var list = CurrentMissingPages;
+            if (list == null || list.Count == 0)
+            {
+                LogMessage("لا توجد صفحات مفقودة مسجلة لحفظها في قاعدة البيانات.", "warning");
+                return;
+            }
+
+            SaveMissingPagesToSql(list, false);
+            RenderExecutionResults(list.Count, list.Count, 0);
+        }
+
+        private void SaveMissingPagesToSql(List<MissingPageItem> missingList, bool silent)
+        {
+            if (missingList == null || missingList.Count == 0) return;
+
+            try
+            {
+                var dtos = missingList.Select(m => new MissingPageOnEnDto
+                {
+                    PageFileName = m.PageFileName,
+                    PageTitleAr = m.Direction == "ArToEn" ? m.SourcePageTitle : m.TargetPageTitle,
+                    PageTitleEn = m.Direction == "ArToEn" ? m.TargetPageTitle : m.SourcePageTitle,
+                    SourcePageUrl = m.SourcePageUrl,
+                    SourcePageFullUrl = m.SourcePageFullUrl,
+                    TargetPageUrl = m.TargetPageUrl,
+                    TargetPageFullUrl = m.TargetPageFullUrl,
+                    SourceWebUrl = m.SourceWebUrl,
+                    SourceWebFullUrl = m.SourceWebFullUrl,
+                    TargetWebUrl = m.TargetWebUrl,
+                    TargetWebFullUrl = m.TargetWebFullUrl,
+                    PageLayout = m.PageLayoutUrl,
+                    PageLayoutFileName = m.PageLayoutFileName,
+                    HasControlLoader = m.HasControlLoader,
+                    UserControlPath = m.UserControlPath,
+                    UserControlProperties = m.UserControlProperties,
+                    HasContentEditor = m.HasContentEditor,
+                    HasPageContent = m.HasPageContent,
+                    Direction = m.Direction,
+                    IsCreated = m.IsCreated,
+                    Status = m.IsCreated ? "Created" : "Missing"
+                }).ToList();
+
+                string err;
+                int savedCount = MissingPagesOnEnDal.BulkUpsertMissingPages(dtos, out err);
+
+                if (!string.IsNullOrEmpty(err))
+                {
+                    LogMessage("تنبيه عند حفظ البيانات في جدول SQL (MissingPagesOnEN): " + err, "warning");
+                }
+                else
+                {
+                    if (!silent)
+                    {
+                        LogMessage(string.Format("تم حفظ وتحديث عدد ({0}) صفحة بنجاح في جدول قاعدة البيانات <code>dbo.MissingPagesOnEN</code>.", savedCount), "success");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage("خطأ أثناء الاتصال بقاعدة البيانات لحفظ الصفحات: " + ex.Message, "danger");
+            }
+        }
+
+        protected void btnSyncCreatedStatusSql_Click(object sender, EventArgs e)
+        {
+            ResetUi();
+            int updatedCount = 0;
+            int totalChecked = 0;
+
+            SPSecurity.RunWithElevatedPrivileges(() =>
+            {
+                string siteUrl = SPContext.Current != null && SPContext.Current.Site != null
+                    ? SPContext.Current.Site.Url
+                    : "https://pnu.edu.sa";
+
+                var missingDbPages = MissingPagesOnEnDal.GetAllMissingPages(false);
+                totalChecked = missingDbPages.Count;
+
+                using (SPSite site = new SPSite(siteUrl))
+                {
+                    foreach (var page in missingDbPages)
+                    {
+                        try
+                        {
+                            bool exists = false;
+                            using (SPWeb web = site.OpenWeb(page.TargetWebUrl, false))
+                            {
+                                if (web != null && web.Exists)
+                                {
+                                    SPFile file = GetPageFileInWeb(web, page.PageFileName);
+                                    if (file != null && file.Exists)
+                                    {
+                                        exists = true;
+                                    }
+                                }
+                            }
+
+                            if (exists && !page.IsCreated)
+                            {
+                                string err;
+                                MissingPagesOnEnDal.MarkPageAsCreated(page.TargetPageUrl, DateTime.Now, out err);
+                                if (!string.IsNullOrEmpty(page.TargetPageFullUrl))
+                                {
+                                    MissingPagesOnEnDal.MarkPageAsCreated(page.TargetPageFullUrl, DateTime.Now, out err);
+                                }
+                                updatedCount++;
+                                LogMessage(string.Format("تم تحديث حالة الصفحة إلى (تم إنشاؤها) في SQL: <code>{0}</code>", page.TargetPageFullUrl ?? page.TargetPageUrl), "success");
+                            }
+                        }
+                        catch { }
+                    }
+                }
+            });
+
+            LogMessage(string.Format("اكتملت مزامنة حالة الصفحات: تم فحص عدد ({0}) صفحة مسجلة في SQL، وتحديث ({1}) صفحة تم إنشاؤها حديثاً.", totalChecked, updatedCount), "info");
+            RenderExecutionResults(totalChecked, updatedCount, 0);
         }
 
         #endregion
@@ -1262,6 +1720,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 
             RenderExecutionResults(selectedItems.Count, _successCount, _failCount);
 
+            // Re-bind the table to reflect updated 'IsCreated' badges immediately in the UI
+            try
+            {
+                rptMissingPages.DataSource = allItems;
+                rptMissingPages.DataBind();
+            }
+            catch { }
+
             if (_createdUrls.Count > 0)
             {
                 pnlCreatedUrls.Visible = true;
@@ -1378,8 +1844,23 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                         }
 
                         _successCount++;
+                        item.IsCreated = true;
+                        item.Status = "Created";
+
                         string fullCreatedUrl = site.MakeFullUrl(pageServerRelUrl);
                         _createdUrls.Add(fullCreatedUrl);
+
+                        // Update SQL database (dbo.MissingPagesOnEN)
+                        try
+                        {
+                            string markErr;
+                            MissingPagesOnEnDal.MarkPageAsCreated(pageServerRelUrl, DateTime.Now, out markErr);
+                            if (!string.IsNullOrEmpty(fullCreatedUrl))
+                            {
+                                MissingPagesOnEnDal.MarkPageAsCreated(fullCreatedUrl, DateTime.Now, out markErr);
+                            }
+                        }
+                        catch { }
 
                         LogMessage(string.Format("نجاح: تم إنشاء الصفحة بنجاح: <a href='{0}' target='_blank' class='fw-bold text-success text-decoration-none'>{1}</a> ({2})",
                             fullCreatedUrl, newPage.Title, pageServerRelUrl), "success");

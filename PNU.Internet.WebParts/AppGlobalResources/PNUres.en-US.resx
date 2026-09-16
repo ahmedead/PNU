@@ -463,7 +463,7 @@
     <value>Name</value>
   </data>
   <data name="News" xml:space="preserve">
-    <value>AllNews</value>
+    <value>All News</value>
   </data>
   <data name="NewsArticles" xml:space="preserve">
     <value>Newsletters</value>
@@ -538,7 +538,7 @@
     <value>Language of instruction</value>
   </data>
   <data name="ProgramDetails" xml:space="preserve">
-    <value>Program Details</value>
+    <value>Program Information</value>
   </data>
   <data name="ProgramNature" xml:space="preserve">
     <value>Nature and Goals of the Program</value>
@@ -845,5 +845,8 @@
   </data>
   <data name="CollegeOverviewPrefix" xml:space="preserve">
     <value>Overview of </value>
+  </data>
+  <data name="ProgramDetails-1" xml:space="preserve">
+    <value>Program Details</value>
   </data>
 </root>

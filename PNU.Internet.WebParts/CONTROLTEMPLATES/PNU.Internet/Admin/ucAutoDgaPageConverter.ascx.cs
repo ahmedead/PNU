@@ -5,8 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Publishing;
+using Microsoft.SharePoint.WebPartPages;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
 {

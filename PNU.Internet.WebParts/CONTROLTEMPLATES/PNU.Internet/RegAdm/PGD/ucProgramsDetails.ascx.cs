@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AboutUniversity;
 using System;
 using System.Collections.Generic;
@@ -54,16 +54,36 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.RegAdm.PGD
                                 SPList lstServices = web.Lists["scholarships"];
                                 if (lstServices != null)
                                 {
-                                    SPListItem collitem = lstServices.GetItemById(ID);
+                                    //SPListItem collitem = lstServices.GetItemById(ID);
 
-                                    if (collitem != null )
+                                    SPListItem collitem = null; ;
+                                    SPQuery query = new SPQuery();
+                                    query.Query = $@"<Where>
+                                                      <Eq>
+                                                         <FieldRef Name='CatID' />
+                                                         <Value Type='Number'>{ID}</Value>
+                                                      </Eq>
+                                                   </Where>
+                                                  ";
+
+                                    SPListItemCollection sercollitems = lstServices.GetItems(query);
+
+                                    if (sercollitems != null && sercollitems.Count > 0)
+                                    {
+                                        collitem = sercollitems[0];
+
+                                    }
+
+
+
+                                    if (collitem != null)
                                     {
                                         _scholarships = SPFactory.MapListItemsToClass<clsAdmissionServices>(collitem);
                                         lblscholarships.Text = _scholarships.Title;
                                         SPList lstScholarshipsPrograms = web.Lists["scholarshipsPrograms"];
                                         if (lstScholarshipsPrograms != null)
                                         {
-                                            SPQuery query = new SPQuery();
+                                            query = new SPQuery();
                                             query.Query = $@"<Where>
                                                       <Eq>
                                                          <FieldRef Name='scholarships' />

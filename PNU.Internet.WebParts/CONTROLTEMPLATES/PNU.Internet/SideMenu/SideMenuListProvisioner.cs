@@ -477,14 +477,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 AddLevel1(level1, "الرئيسية", "Main", webPath + "Pages/" + PAGE_SharedAbout, 1);
                 int MoreAboutCenterItemId = AddLevel1(level1, "المزيد عن المركز", "More About " + _PrefixEntity, "", 2);
 
-                
-                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "الفئات المستفيدة", "Beneficiaries", webPath + "Pages/" + _Prefix + "Beneficiaries.aspx", 1);
-                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "سجل سموق المهاري", "Smoc Record", webPath + "Pages/" + _Prefix + "SmocRecord.aspx", 2);
-                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "البرامج", "Programs", webPath + "Pages/" + _Prefix + "Programs.aspx", 3);
-                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "المنصات والخدمات المرتبطة", "Linked Services", webPath + "Pages/" + _Prefix + "LinkedServices.aspx", 4);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "الهيكل التنظيمي", "Hierarchy", webPath + "Pages/" + _Prefix + "Hierarchy.aspx" , 1);
+
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "الفئات المستفيدة", "Beneficiaries", webPath + "Pages/" + _Prefix + "Beneficiaries.aspx", 2);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "سجل سموق المهاري", "Smoc Record", webPath + "Pages/" + _Prefix + "SmocRecord.aspx", 3);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "البرامج", "Programs", webPath + "Pages/" + _Prefix + "Programs.aspx", 4);
+                AddLevel2MoreAbout(level2, MoreAboutCenterItemId, "المزيد عن " + _PrefixEntity_Ar, "المنصات والخدمات المرتبطة", "Linked Services", webPath + "Pages/" + _Prefix + "LinkedServices.aspx", 5);
 
                 AddLevel1(level1, "الإدارات", _Prefix + "Departments", webPath + "Pages/" + "CenterDepartments.aspx", 5);
-                AddLevel1(level1, "تواصل مع المركز", "Contact Us", webPath + "Pages/" + PAGE_SharedCONTACT, 5);
+                AddLevel1(level1, "المستندات والنماذج والأدلة", "Documents, Forms and Guides", webPath + "Pages/" + _Prefix + "Documents.aspx", 6);
+                AddLevel1(level1, "تواصل مع المركز", "Contact Us", webPath + "Pages/" + PAGE_SharedCONTACT, 7);
 
 
 
@@ -492,7 +494,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
 
                 // Create the pages the Level1 and Level2 items point at
                 EnsurePage(web, PAGE_SharedAbout, "الرئيسية ", "About", CTRL_SharedAbout);
-                
+
+                EnsurePage(web, _Prefix + "Documents.aspx", "المستندات والنماذج والأدلة", "Documents, Forms and Guides", CTRL_DOCUMENTS, "LIST_NAME#" + _Prefix + "Documents");
+
+                EnsurePage(web, PAGE_Hierarchy, "الهيكل التنظيمي للكلية", "Hierarchy", CTRL_Hierarchy, "ItemsListName#CenterOrgStructure;ImagesListName#CenterOrgStructureImages");
                 EnsurePage(web, _Prefix + "Beneficiaries.aspx", "الفئات المستفيدة", "Beneficiaries", CTRL_CTREntitySection);
                 EnsurePage(web, _Prefix + "SmocRecord.aspx", "سجل سموق المهاري", "Smoc Record", CTRL_CTRERecord);
                 EnsurePage(web, _Prefix + "Programs.aspx", "البرامج", "Services", CTRL_CTREPrograms);
@@ -501,8 +506,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SideMenu
                 EnsurePage(web, _Prefix + "Departments.aspx", "الإدارات", "Center Departments", CTRL_CTREDepartments);
                 EnsurePage(web, PAGE_SharedCONTACT, "تواصل مع المركز ", "Contact Us", CTRL_SharedCONTACT);
 
-                // Ensure and seed all Center lists
-                PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA.CenterProvisioner.EnsureAllLists(web);
             }
             catch (Exception ex)
             {

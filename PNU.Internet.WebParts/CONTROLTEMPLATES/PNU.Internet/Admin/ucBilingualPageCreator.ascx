@@ -24,6 +24,7 @@
     </div>
 
     <!-- Mode Tabs Navigation -->
+    <asp:HiddenField ID="hfActiveTab" runat="server" Value="tab-select-site" />
     <ul class="nav nav-tabs mb-4" id="bilingualTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active fw-semibold" id="tab-select-site" data-bs-toggle="tab" data-bs-target="#pane-select-site" type="button" role="tab">
@@ -36,8 +37,18 @@
             </button>
         </li>
         <li class="nav-item" role="presentation">
+            <button class="nav-link fw-semibold" id="tab-recursive-site" data-bs-toggle="tab" data-bs-target="#pane-recursive-site" type="button" role="tab">
+                <i class="hgi hgi-stroke hgi-git-fork me-1"></i> فحص شامل للموقع وكافة مواقعه الفرعية (Recursive Subsites)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
             <button class="nav-link fw-semibold" id="tab-direct-pages" data-bs-toggle="tab" data-bs-target="#pane-direct-pages" type="button" role="tab">
                 <i class="hgi hgi-stroke hgi-file-edit me-1"></i> إدخال روابط الصفحات المفقودة (Multiline Textbox)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-semibold" id="tab-sql-search" data-bs-toggle="tab" data-bs-target="#pane-sql-search" type="button" role="tab">
+                <i class="hgi hgi-stroke hgi-database me-1"></i> استعلام وقاعدة البيانات (SQL Database)
             </button>
         </li>
     </ul>
@@ -78,6 +89,7 @@
             </div>
         </div>
         <div class="row g-3 mt-1">
+            <div class="col-md-4">
                 <div class="form-check">
                     <asp:CheckBox ID="chkMajorCheckIn" runat="server" Checked="true" Text="عمل Major Check-in بإصدار رئيسي" CssClass="form-check-label text-dark small" />
                 </div>
@@ -93,6 +105,13 @@
                 </div>
             </div>
         </div>
+        <div class="row g-3 mt-1">
+            <div class="col-md-12">
+                <div class="form-check">
+                    <asp:CheckBox ID="chkAutoSaveToSql" runat="server" Checked="true" Text="حفظ وتحديث الصفحات المفقودة في قاعدة البيانات تلقائياً (MissingPagesOnEN)" CssClass="form-check-label text-primary small fw-semibold" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Tab Panes -->
@@ -101,12 +120,15 @@
         <!-- PANE 1: SELECT SUBSITE -->
         <div class="tab-pane fade show active" id="pane-select-site" role="tabpanel">
             <div class="row g-3 align-items-end mb-4">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <label class="form-label fw-semibold text-dark small">اختر الموقع المطلوب فحصه ومقارنة صفحاته بين /ar/ و /en/:</label>
                     <asp:DropDownList ID="ddlSubsites" runat="server" CssClass="form-select text-start" dir="ltr" />
                 </div>
-                <div class="col-md-3">
-                    <asp:Button ID="btnScanDropdownSite" runat="server" Text="فحص الصفحات المفقودة" CssClass="btn btn-outline-primary w-100 fw-semibold" OnClick="btnScanDropdownSite_Click" />
+                <div class="col-md-2">
+                    <asp:Button ID="btnScanDropdownSite" runat="server" Text="فحص SharePoint المباشر" CssClass="btn btn-outline-primary w-100 fw-semibold" OnClick="btnScanDropdownSite_Click" />
+                </div>
+                <div class="col-md-2">
+                    <asp:Button ID="btnLoadSqlDropdownSite" runat="server" Text="عرض المسجل في SQL" CssClass="btn btn-primary w-100 fw-semibold" OnClick="btnLoadSqlDropdownSite_Click" ToolTip="جلب وعرض الصفحات المسجلة في قاعدة البيانات لهذا الموقع الفرعي" />
                 </div>
                 <div class="col-md-3">
                     <asp:Button ID="btnCompareExistingDropdown" runat="server" Text="مقارنة الصفحات الموجودة (/ar/ &amp; /en/)" CssClass="btn btn-success w-100 fw-semibold" OnClick="btnCompareExistingDropdown_Click" />
@@ -117,12 +139,15 @@
         <!-- PANE 2: ENTER SITE URL -->
         <div class="tab-pane fade" id="pane-url-site" role="tabpanel">
             <div class="row g-3 align-items-end mb-4">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <label class="form-label fw-semibold text-dark small">أدخل رابط الموقع الفرعي (Server Relative أو Absolute URL):</label>
                     <asp:TextBox ID="txtSiteUrl" runat="server" CssClass="form-control font-monospace text-start" placeholder="/ar/Faculties/CS أو https://pnu.edu.sa/ar/Deanship/Admission" />
                 </div>
-                <div class="col-md-3">
-                    <asp:Button ID="btnScanUrlSite" runat="server" Text="فحص الصفحات المفقودة" CssClass="btn btn-outline-primary w-100 fw-semibold" OnClick="btnScanUrlSite_Click" />
+                <div class="col-md-2">
+                    <asp:Button ID="btnScanUrlSite" runat="server" Text="فحص SharePoint المباشر" CssClass="btn btn-outline-primary w-100 fw-semibold" OnClick="btnScanUrlSite_Click" />
+                </div>
+                <div class="col-md-2">
+                    <asp:Button ID="btnLoadSqlUrlSite" runat="server" Text="عرض المسجل في SQL" CssClass="btn btn-primary w-100 fw-semibold" OnClick="btnLoadSqlUrlSite_Click" ToolTip="جلب وعرض الصفحات المسجلة في قاعدة البيانات لهذا الرابط" />
                 </div>
                 <div class="col-md-3">
                     <asp:Button ID="btnCompareExistingUrl" runat="server" Text="مقارنة الصفحات الموجودة (/ar/ &amp; /en/)" CssClass="btn btn-success w-100 fw-semibold" OnClick="btnCompareExistingUrl_Click" />
@@ -130,7 +155,32 @@
             </div>
         </div>
 
-        <!-- PANE 3: MULTILINE TEXTBOX DIRECT INPUT -->
+        <!-- PANE 3: RECURSIVE TREE SCAN (SITE + ALL SUBSITES) -->
+        <div class="tab-pane fade" id="pane-recursive-site" role="tabpanel">
+            <div class="alert alert-primary bg-primary-subtle border-primary-subtle py-2 px-3 small mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="hgi hgi-stroke hgi-information-circle fs-5 text-primary"></i>
+                    <div>
+                        <strong>الفحص الشامل والمتكرر للشجرة (Recursive Subsites Scan):</strong> 
+                        أدخل رابط الموقع، وسيقوم النظام بفحص الموقع والنزول تلقائياً إلى كافة المواقع الفرعية المتفرعة منه (Subsites &amp; Nested Subsites) بجميع المستويات لاكتشاف ومطابقة جميع صفحات النشر المفقودة في الشجرة بالكامل.
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-end mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark small">رابط الموقع الرئيسي أو القسم المراد فحص شجرته بالكامل:</label>
+                    <asp:TextBox ID="txtRecursiveSiteUrl" runat="server" CssClass="form-control font-monospace text-start" placeholder="/ar/Faculties أو /ar أو https://pnu.edu.sa/ar/Deanship" />
+                </div>
+                <div class="col-md-3">
+                    <asp:Button ID="btnScanRecursiveSite" runat="server" Text="فحص شجرة المواقع (Live)" CssClass="btn btn-outline-primary w-100 fw-semibold" OnClick="btnScanRecursiveSite_Click" />
+                </div>
+                <div class="col-md-3">
+                    <asp:Button ID="btnLoadSqlRecursiveSite" runat="server" Text="عرض مسجل SQL للشجرة" CssClass="btn btn-primary w-100 fw-semibold" OnClick="btnLoadSqlRecursiveSite_Click" ToolTip="جلب وعرض كافة الصفحات المسجلة في SQL لهذا المسار وفروعه" />
+                </div>
+            </div>
+        </div>
+
+        <!-- PANE 4: MULTILINE TEXTBOX DIRECT INPUT -->
         <div class="tab-pane fade" id="pane-direct-pages" role="tabpanel">
             <div class="alert alert-secondary py-2 px-3 small mb-3">
                 <strong>تنسيق الإدخال:</strong> الصق روابط الصفحات المراد إنشاؤها في الجهة المقابلة (سطر لكل صفحة).
@@ -145,6 +195,39 @@
             </div>
         </div>
 
+        <!-- PANE 5: SQL DATABASE DIRECT SEARCH & QUERY -->
+        <div class="tab-pane fade" id="pane-sql-search" role="tabpanel">
+            <div class="alert alert-info bg-info-subtle border-info-subtle py-2 px-3 small mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="hgi hgi-stroke hgi-database fs-5 text-info-emphasis"></i>
+                    <div>
+                        <strong>البحث والاستعلام المباشر في قاعدة البيانات (<code>dbo.MissingPagesOnEN</code>):</strong>
+                        يمكنك البحث برابط الموقع (أو جزء منه)، اسم الصفحة، أو أي كلمة دلالية، وتصفية النتائج بحسب حالة الإنشاء دون الحاجة لإعادة فحص SharePoint الحي.
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-end mb-4">
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold text-dark small">رابط الموقع أو الكلمة الدلالية أو اسم الصفحة:</label>
+                    <asp:TextBox ID="txtSqlSearchUrl" runat="server" CssClass="form-control font-monospace text-start" placeholder="مثال: /ar/Faculties/CS أو About.aspx أو Admissions" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-dark small">تصفية حسب الحالة:</label>
+                    <asp:DropDownList ID="ddlSqlStatusFilter" runat="server" CssClass="form-select text-start">
+                        <asp:ListItem Value="All" Selected="True">جميع الحالات (الكل)</asp:ListItem>
+                        <asp:ListItem Value="Pending">الصفحات المفقودة فقط (Pending)</asp:ListItem>
+                        <asp:ListItem Value="Created">الصفحات التي تم إنشاؤها (Created)</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <div class="col-md-2">
+                    <asp:Button ID="btnSearchSqlDatabase" runat="server" Text="بحث في SQL" CssClass="btn btn-primary w-100 fw-semibold" OnClick="btnSearchSqlDatabase_Click" />
+                </div>
+                <div class="col-md-2">
+                    <asp:Button ID="btnLoadAllMissingFromSql" runat="server" Text="عرض كل المسجل" CssClass="btn btn-outline-secondary w-100 fw-semibold" OnClick="btnLoadAllMissingFromSql_Click" />
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- MISSING PAGES REVIEW GRID PANEL -->
@@ -152,14 +235,16 @@
         <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
             <div>
                 <h3 class="h5 fw-bold text-dark mb-1">
-                    <i class="hgi hgi-stroke hgi-checklist me-1 text-primary"></i> الصفحات المفقودة المكتشفة (<asp:Literal ID="litMissingCount" runat="server" Text="0" /> صفحة)
+                    <i class="hgi hgi-stroke hgi-checklist me-1 text-primary"></i> الصفحات المكتشفة / المستعلم عنها (<asp:Literal ID="litMissingCount" runat="server" Text="0" /> صفحة)
                 </h3>
-                <p class="text-muted small mb-0">راجع الصفحات المكتشفة وتفاصيلها قبل البدء في إنشائها.</p>
+                <p class="text-muted small mb-0">راجع الصفحات وتفاصيلها وحالتها في قاعدة البيانات قبل البدء في إنشائها.</p>
             </div>
             <div class="d-flex gap-2 flex-wrap align-items-center">
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleSelectAllBilingual(true)">تحديد الكل</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleSelectAllBilingual(false)">إلغاء التحديد</button>
                 <asp:Button ID="btnExportMissingPages" runat="server" Text="تصدير الصفحات (Excel / CSV)" CssClass="btn btn-outline-success fw-semibold" OnClick="btnExportMissingPages_Click" />
+                <asp:Button ID="btnSaveMissingToSql" runat="server" Text="حفظ في SQL (MissingPagesOnEN)" CssClass="btn btn-outline-primary fw-semibold" OnClick="btnSaveMissingToSql_Click" />
+                <asp:Button ID="btnSyncCreatedStatusSql" runat="server" Text="مزامنة حالة الصفحات المنشأة" CssClass="btn btn-outline-info fw-semibold" OnClick="btnSyncCreatedStatusSql_Click" />
                 <asp:Button ID="btnCreateSelectedPages" runat="server" Text="إنشاء ومزامنة الصفحات المحددة" CssClass="btn btn-success fw-semibold px-4" OnClick="btnCreateSelectedPages_Click" />
             </div>
         </div>
@@ -170,6 +255,7 @@
                     <tr>
                         <th style="width: 40px;" class="text-center">#</th>
                         <th style="width: 40px;" class="text-center">تحديد</th>
+                        <th style="width: 100px;" class="text-center">الحالة</th>
                         <th>الصفحة والموقع المصدر (الموجودة)</th>
                         <th>الموقع المستهدف (المفقودة)</th>
                         <th>تخطيط الصفحة (Page Layout)</th>
@@ -183,15 +269,20 @@
                             <tr>
                                 <td class="text-center text-muted small"><%# Container.ItemIndex + 1 %></td>
                                 <td class="text-center">
-                                    <asp:CheckBox ID="chkSelectPage" runat="server" Checked="true" />
+                                    <asp:CheckBox ID="chkSelectPage" runat="server" Checked='<%# !(bool)Eval("IsCreated") %>' />
                                     <asp:HiddenField ID="hfItemIndex" runat="server" Value="<%# Container.ItemIndex %>" />
+                                </td>
+                                <td class="text-center">
+                                    <%# (bool)Eval("IsCreated") ? "<span class='badge bg-success text-white'><i class='hgi hgi-stroke hgi-tick-double-02 me-1'></i>تم إنشاؤها</span>" : "<span class='badge bg-danger text-white'><i class='hgi hgi-stroke hgi-alert-circle me-1'></i>مفقودة</span>" %>
                                 </td>
                                 <td>
                                     <div class="fw-bold text-dark"><%# Eval("SourcePageTitle") %></div>
                                     <div class="font-monospace small text-primary text-start" dir="ltr"><%# Eval("SourcePageUrl") %></div>
+                                    <%# !string.IsNullOrEmpty((string)Eval("SourcePageFullUrl")) ? "<div class='font-monospace text-muted small text-start' style='font-size:0.75rem;' dir='ltr'>" + Eval("SourcePageFullUrl") + "</div>" : "" %>
                                 </td>
                                 <td>
                                     <div class="font-monospace small text-success text-start fw-semibold" dir="ltr"><%# Eval("TargetPageUrl") %></div>
+                                    <%# !string.IsNullOrEmpty((string)Eval("TargetPageFullUrl")) ? "<div class='font-monospace text-muted small text-start' style='font-size:0.75rem;' dir='ltr'>" + Eval("TargetPageFullUrl") + "</div>" : "" %>
                                     <div class="small text-muted">عنوان الصفحة: <%# Eval("SourcePageTitle") %></div>
                                 </td>
                                 <td>
@@ -425,4 +516,35 @@
             }, 3000);
         }
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var hfTab = document.getElementById('<%= hfActiveTab.ClientID %>');
+        if (hfTab && hfTab.value) {
+            var tabBtn = document.getElementById(hfTab.value);
+            if (tabBtn) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+                    var tab = bootstrap.Tab.getInstance(tabBtn) || new bootstrap.Tab(tabBtn);
+                    tab.show();
+                } else if (typeof jQuery !== 'undefined' && jQuery.fn.tab) {
+                    jQuery(tabBtn).tab('show');
+                } else {
+                    tabBtn.click();
+                }
+            }
+        }
+
+        var tabButtons = document.querySelectorAll('#bilingualTabs button[data-bs-toggle="tab"], #bilingualTabs button[data-toggle="tab"]');
+        tabButtons.forEach(function (btn) {
+            btn.addEventListener('shown.bs.tab', function (e) {
+                if (hfTab) {
+                    hfTab.value = e.target.id;
+                }
+            });
+            btn.addEventListener('click', function (e) {
+                if (hfTab) {
+                    hfTab.value = this.id;
+                }
+            });
+        });
+    });
 </script>

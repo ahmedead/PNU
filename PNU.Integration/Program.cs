@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,26 +41,23 @@ namespace PNU.Integration
             // 2. Help message if no arguments are provided
             if (args.Length == 0)
             {
-                //OracleDBContext.LogToFile("PNU Integration Console - Usage:");
-                //OracleDBContext.LogToFile("PNU.Integration.exe [jobname]");
-                //OracleDBContext.LogToFile("\nAvailable Jobs:");
-                //OracleDBContext.LogToFile(" - all               : Runs everything in sequence");
-                //OracleDBContext.LogToFile(" - members           : CollMembersListName");
-                //OracleDBContext.LogToFile(" - stats             : Statistics");
-                //OracleDBContext.LogToFile(" - programs          : AllPrograms & Colleges");
-                //OracleDBContext.LogToFile(" - studyplan         : NewStudyPlan");
-                //OracleDBContext.LogToFile(" - credits           : AcademicCredits & Requisites");
-                //OracleDBContext.LogToFile(" - courses           : Member Courses (AR & EN)");
-                //OracleDBContext.LogToFile(" - gadeer            : Gadeer API Sync (AR & EN)");
-                //OracleDBContext.LogToFile("=== Starting AllPrograms & Colleges ===");
-                //OracleDBContext.AddProgramsForFirstTime("AllPrograms");
-                //OracleDBContext.AddColleges("CollDeptListName");
-                //OracleDBContext.AddCollegesNew("CollegeCategory");
+                OracleDBContext.LogToFile("PNU Integration Console - Usage:");
+                OracleDBContext.LogToFile("PNU.Integration.exe [jobname] [optional params]");
+                OracleDBContext.LogToFile("\nAvailable Jobs:");
+                OracleDBContext.LogToFile(" - missing-pages     : Create missing pages from SQL (50 at a time)");
+                OracleDBContext.LogToFile("                       Usage: PNU.Integration.exe missing-pages [batchSize=50] [maxPages=0] [urlFilter]");
+                OracleDBContext.LogToFile(" - all               : Runs everything in sequence");
+                OracleDBContext.LogToFile(" - members           : CollMembersListName");
+                OracleDBContext.LogToFile(" - stats             : Statistics");
+                OracleDBContext.LogToFile(" - programs          : AllPrograms & Colleges");
+                OracleDBContext.LogToFile(" - studyplan         : NewStudyPlan");
+                OracleDBContext.LogToFile(" - credits           : AcademicCredits & Requisites");
+                OracleDBContext.LogToFile(" - courses           : Member Courses (AR & EN)");
+                OracleDBContext.LogToFile(" - gadeer            : Gadeer API Sync (AR & EN)");
+                OracleDBContext.LogToFile(" - export-all-ui     : Export Master Pages + Page Layouts");
+                OracleDBContext.LogToFile(" - import-all-ui     : Import Master Pages + Page Layouts");
 
-                //OracleDBContext.LogToFile("=== Deploying Master Pages: UAT → Production ===");
-                //MasterPageDeployment.DeployMasterPages();
-
-
+                Console.WriteLine("\nPress Enter to exit...");
                 Console.ReadLine();
                 return;
             }
@@ -74,6 +71,26 @@ namespace PNU.Integration
                 {
                     switch (job)
                     {
+                        case "missing-pages":
+                        case "create-missing-pages":
+                        case "missingpages":
+                        case "create-pages":
+                            OracleDBContext.LogToFile("=== Starting Missing Pages Creation Job (from SQL dbo.MissingPagesOnEN) ===");
+                            int batchSize = 50;
+                            int maxPages = 0;
+                            string urlFilter = null;
+
+                            if (args.Length > 1 && int.TryParse(args[1], out int parsedBatch) && parsedBatch > 0)
+                                batchSize = parsedBatch;
+
+                            if (args.Length > 2 && int.TryParse(args[2], out int parsedMax) && parsedMax > 0)
+                                maxPages = parsedMax;
+
+                            if (args.Length > 3 && !string.IsNullOrWhiteSpace(args[3]))
+                                urlFilter = args[3];
+
+                            MissingPagesJob.CreateMissingPagesFromSql(batchSize, maxPages, urlFilter);
+                            break;
 
                         case "export-masterpages":
                             OracleDBContext.LogToFile("=== Exporting Master Pages from this farm ===");

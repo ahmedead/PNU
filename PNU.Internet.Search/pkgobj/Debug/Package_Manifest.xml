@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="28f26d19-54c0-4918-8f5d-44b7c0717059" SharePointProductVersion="19.0">
+  <Assemblies>
+    <Assembly Location="PNU.Internet.Search.dll" DeploymentTarget="GlobalAssemblyCache" />
+  </Assemblies>
+  <FeatureManifests>
+    <FeatureManifest Location="PNU.Internet.Search_PNUSearchInfrastructure\Feature.xml" />
+  </FeatureManifests>
+</Solution>

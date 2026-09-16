@@ -15,15 +15,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
     {
 
         /// <summary>
-        /// lblSuccessMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSuccessMessage;
-
-        /// <summary>
         /// lblException control.
         /// </summary>
         /// <remarks>
@@ -31,6 +22,24 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblException;
+
+        /// <summary>
+        /// pnlSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSuccess;
+
+        /// <summary>
+        /// lblSuccessMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSuccessMessage;
 
         /// <summary>
         /// pnlData control.
@@ -139,15 +148,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtSuggest;
-
-        /// <summary>
-        /// pnlSuccess control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSuccess;
 
         /// <summary>
         /// btnSend control.

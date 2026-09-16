@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" AlwaysForceInstall="TRUE" Id="f16ddc75-44cc-4d4f-8be1-fd8d7aebaa8a" ReceiverAssembly="PNU.Internet.EventReceivers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b856fb48ccbea121" ReceiverClass="PNU.Internet.EventReceivers.Features.Feature1.Feature1EventReceiver" Scope="Web" Title="PNU.Internet.EventReceivers Feature1">
+  <ElementManifests>
+    <ElementManifest Location="PagesLibraryEventReceiver\Elements.xml" />
+  </ElementManifests>
+</Feature>

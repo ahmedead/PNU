@@ -184,7 +184,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             SetLiteral(e, "litFaqTitle", GetRes("res_FAQ", "الأسئلة الشائعة", "FAQs"));
             SetLiteral(e, "litFaqPage", GetRes("res_FAQPage", "صفحة الأسئلة الشائعة", "FAQs Page"));
             HtmlAnchor lnkFaq = (HtmlAnchor)e.Item.FindControl("lnkFaq");
-            lnkFaq.HRef = langPrefix + "/Pages/FAQs.aspx";
+            lnkFaq.HRef = langPrefix + "/FAQs/Pages/default.aspx";
 
             SetLiteral(e, "litTelephone", GetRes("res_Telephone", "الهاتف", "Telephone"));
             SetLiteral(e, "litEmail", GetRes("res_Email", "البريد الإلكتروني", "E-mail"));

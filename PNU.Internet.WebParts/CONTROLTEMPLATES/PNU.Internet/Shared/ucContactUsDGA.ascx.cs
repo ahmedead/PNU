@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA;
 using System;
 using System.Collections.Generic;
@@ -123,8 +123,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared
             ltrFormText.Text = T("FormText",
                 "أرسل استفسارك أو مقترحك إلى الكلية من خلال نموذج التواصل.",
                 "Send your inquiry or suggestion to the college through the contact form.");
-            lnkForm.Attributes["aria-label"] = T("FormAriaLabel", "فتح نموذج التواصل الموحد", "Open the unified contact form");
-            lnkForm.HRef = IsArabic ? "/ar/Pages/ContactUsForm.aspx" : "/en/Pages/ContactUsForm.aspx";
+            //lnkForm.Attributes["aria-label"] = T("FormAriaLabel", "فتح نموذج التواصل الموحد", "Open the unified contact form");
+            //lnkForm.HRef = IsArabic ? "/ar/Pages/ContactUsForm.aspx" : "/en/Pages/ContactUsForm.aspx";
         }
 
         private void BindInfo(SPWeb web)

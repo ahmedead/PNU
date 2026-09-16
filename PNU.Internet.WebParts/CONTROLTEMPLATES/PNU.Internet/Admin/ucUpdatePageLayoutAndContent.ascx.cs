@@ -215,8 +215,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                 }
 
                 // Resolve Site URL from current context or full URL
-                string siteUrl = SPContext.Current != null && SPContext.Current.Site != null 
-                    ? SPContext.Current.Site.Url 
+                string siteUrl = SPContext.Current != null && SPContext.Current.Site != null
+                    ? SPContext.Current.Site.Url
                     : "https://pnu.edu.sa";
 
                 using (SPSite site = new SPSite(siteUrl))
@@ -286,8 +286,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                             }
 
                             // 3. Update Page Layout if specified
-                            string targetLayoutUrl = string.IsNullOrEmpty(item.PageLayoutUrl) 
-                                ? ProgramPagesDgaData.DefaultLayout 
+                            string targetLayoutUrl = string.IsNullOrEmpty(item.PageLayoutUrl)
+                                ? ProgramPagesDgaData.DefaultLayout
                                 : item.PageLayoutUrl;
 
                             PageLayout targetLayout = ResolvePageLayout(site, pubWeb, targetLayoutUrl);
@@ -328,8 +328,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                             // 6. Check In
                             if (file.CheckOutType != SPFile.SPCheckOutType.None)
                             {
-                                var checkinType = chkMajorCheckIn.Checked 
-                                    ? SPCheckinType.MajorCheckIn 
+                                var checkinType = chkMajorCheckIn.Checked
+                                    ? SPCheckinType.MajorCheckIn
                                     : SPCheckinType.MinorCheckIn;
                                 file.CheckIn("تم تحديث تخطيط ومحتوى الصفحة إلى DGA بنجاح", checkinType);
                             }
@@ -347,7 +347,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
                             }
 
                             _successCount++;
-                            LogMessage(string.Format("نجح: تم تحديث ونشر الصفحة بنجاح: <a href='{0}' target='_blank' class='fw-bold text-decoration-none'>{1}</a> ({2})", 
+                            LogMessage(string.Format("نجح: تم تحديث ونشر الصفحة بنجاح: <a href='{0}' target='_blank' class='fw-bold text-decoration-none'>{1}</a> ({2})",
                                 pageUrl, pubPage.Title ?? file.Name, pageUrl), "success");
                         }
                         finally

@@ -15,12 +15,12 @@
               <div class="d-flex align-items-center gap-2">
                 <img src="/Style%20Library/DGA/public/images/saudi-flag.svg" width="20" height="14" alt="" aria-hidden="true"
                   class="flex-shrink-0" loading="eager" decoding="async">
-                <p class="mb-0 small fw-medium"> موقع حكومي رسمي تابع لحكومة المملكة العربية السعودية </p>
+                <p class="mb-0 small fw-medium"><%= IsArabic ? "موقع حكومي رسمي تابع لحكومة المملكة العربية السعودية" : "Government site registered with Digital Government Authority" %></p>
               </div>
               <a type="button" data-bs-toggle="collapse" data-bs-target="#digitalContentCollapse" aria-expanded="false"
                 aria-controls="digitalContentCollapse"
                 class="small d-flex align-items-center px-0 verify-btn collapsed">
-                <span>كيف تتحقق</span>
+                <span><%= IsArabic ? "كيف تتحقق" : "How to verify?" %></span>
                 <span class="d-inline-flex fs-6">
                   <i class="verify-icon hgi hgi-stroke hgi-arrow-down-01" aria-hidden="true"></i>
                 </span>
@@ -34,12 +34,11 @@
                   <i class="hgi-stroke hgi-rounded hgi-link-04 text-primary fs-5" aria-hidden="true"></i>
                 </div>
                 <div>
-                  <h3 class="fw-semibold h5"> روابط المواقع الالكترونية الرسمية السعودية تنتهي بـ <span
-                      class="text-primary">.edu.sa</span>
+                  <h3 class="fw-semibold h5">
+                    <%= IsArabic ? "روابط المواقع الالكترونية الرسمية السعودية تنتهي بـ <span class=\"text-primary\">.edu.sa</span>" : "Official Saudi websites end with <span class=\"text-primary\">edu.sa</span>" %>
                   </h3>
-                  <p class="mb-0"> جميع روابط المواقع الرسمية التعليمية في المملكة العربية السعودية تنتهي بـ sch.sa أو
-                    edu.sa
-
+                  <p class="mb-0">
+                    <%= IsArabic ? "جميع روابط المواقع الرسمية التعليمية في المملكة العربية السعودية تنتهي بـ sch.sa أو edu.sa" : "All official government websites in Saudi Arabia end with sch.sa or edu.sa" %>
                   </p>
                 </div>
               </div>
@@ -48,21 +47,23 @@
                   <i class="hgi-stroke hgi-rounded hgi-square-lock-password text-primary fs-5" aria-hidden="true"></i>
                 </div>
                 <div>
-                  <h3 class="fw-semibold h5"> المواقع الالكترونية الحكومية تستخدم بروتوكول <span
-                      class="text-primary">HTTPS</span> للتشفير و الأمان. </h3>
-                  <p class="mb-0"> المواقع الالكترونية الآمنة في المملكة العربية السعودية تستخدم بروتوكول HTTPS للتشفير.
+                  <h3 class="fw-semibold h5">
+                    <%= IsArabic ? "المواقع الالكترونية الحكومية تستخدم بروتوكول <span class=\"text-primary\">HTTPS</span> للتشفير و الأمان." : "Government websites use <span class=\"text-primary\">HTTPS</span> for encryption and security." %>
+                  </h3>
+                  <p class="mb-0">
+                    <%= IsArabic ? "المواقع الالكترونية الآمنة في المملكة العربية السعودية تستخدم بروتوكول HTTPS للتشفير." : "Saudi government websites use HTTPS protocol to ensure encryption." %>
                   </p>
                 </div>
               </div>
             </div>
             <div class="bg-white p-2 mt-4 rounded d-flex align-items-center gap-3">
-              <img alt="شعار هيئة الحكومة الرقمية" width="32" height="32" loading="lazy" fetchpriority="auto"
+              <img alt="<%= IsArabic ? "شعار هيئة الحكومة الرقمية" : "Digital Government Authority logo" %>" width="32" height="32" loading="lazy" fetchpriority="auto"
                 src="/Style%20Library/DGA/public/images/dga-logo.svg" decoding="async">
               <div class="flex-grow-1 d-flex flex-column flex-lg-row align-items-lg-center gap-2">
-                <p class="mb-0">مسجل لدى هيئة الحكومة الرقمية برقم:</p>
+                <p class="mb-0"><%= IsArabic ? "مسجل لدى هيئة الحكومة الرقمية برقم:" : "Registered with Digital Government Authority No:" %></p>
                 <a class="external-link"
                   href="https://raqmi.dga.gov.sa/platforms/platforms/82920d00-7973-42b5-e1c6-08dd66df7e11/platform-license"
-                  target="_blank" rel="external noopener noreferrer">20250417424</a>
+                  target="_blank" rel="external noopener noreferrer">20260723112</a>
               </div>
             </div>
           </div>

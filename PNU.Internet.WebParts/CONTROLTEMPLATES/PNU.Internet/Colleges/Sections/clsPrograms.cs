@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using PNU.Internet.WebParts;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
 using Portal.Main.Helper;
@@ -38,10 +38,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"busclsPrograms - GetNAllProgramMainDataByProgramCode", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "busclsPrograms - GetNAllProgramMainDataByProgramCode", ex.Message);
             }
 
-            
+
             return null;
 
 
@@ -119,7 +119,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
                 }
 
 
-                return  _description;
+                return _description;
             }
             set
             {
@@ -141,7 +141,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
                 }
 
 
-                return  _description_EN;
+                return _description_EN;
             }
             set
             {
@@ -152,7 +152,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
 
 
 
-  
+
 
         public string LinkUrl { get; set; }
         public string ItemOrder { get; set; }
@@ -188,7 +188,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
 
         }
 
-        
+
 
     }
 
@@ -383,7 +383,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
                         _Title = "Master's degree";
                     else if (Title == "الدكتوراه")
                         _Title = "Ph.D.";
-                    else 
+                    else
                         _Title = Title;
 
                 }
@@ -397,7 +397,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
     {
         public string LevelCode { get; set; }
         public string LevelDesc { get; set; }
-        
+
         public List<PLANS_ELEC_U> StudyPlan { get; set; }
         public List<PLANS_ELEC_C> StudyPlanC { get; set; }
         public List<PLANS_ELEC_P> StudyPlanP { get; set; }
@@ -422,7 +422,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
         public string DepartmentName { get; set; }
         public string DepartmentCode { get; set; }
         public string DepartmentName_EN { get; set; }
-        public string ProgramCode { get; set; }        
+        public string ProgramCode { get; set; }
         public string ProgramName { get; set; }
         public string ProgramName_EN { get; set; }
         public string ProgramNature_EN { get; set; }
@@ -448,9 +448,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
             {
                 if (LevelCode != null && LevelCode != "")
                 {
-                    if(!string.IsNullOrEmpty(COLL_CODE))
+                    if (!string.IsNullOrEmpty(COLL_CODE))
                     {
-                        if(COLL_CODE == "MD" || COLL_CODE == "DN")
+                        if (COLL_CODE == "MD" || COLL_CODE == "DN")
                         {
                             switch (LevelCode)
                             {
@@ -459,7 +459,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
                                     return SPFactory.GetPNUresResource("FirstYear-1");
                                 case "-2":
                                     return SPFactory.GetPNUresResource("SecondYear-2");
-                                case "1":    
+                                case "1":
                                     return SPFactory.GetPNUresResource("FirstYear");
                                 case "2":
                                     return SPFactory.GetPNUresResource("SecondYear");
@@ -537,11 +537,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
 
 
 
-        
-    }
 
-    public class busclsNewStudyPlan
-    {
+}
+
+public class busclsNewStudyPlan
+{
     public static List<NewStudyPlanDto> GetNewStudyPlanByProgramCode(string ProgramCode)
     {
         try
@@ -565,9 +565,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
 
         catch (Exception ex)
         {
-            Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"busclsNewStudyPlan - GetNewStudyPlanByProgramCode", ex.Message);
+            Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "busclsNewStudyPlan - GetNewStudyPlanByProgramCode", ex.Message);
         }
-        
+
 
         return null;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls.WebParts;
 using Microsoft.SharePoint;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers.DGA

@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +33,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Shared
                                            || web.Lists.TryGetList(DirectoryListName) != null
                                            || web.Lists.TryGetList(HoursListName) != null
                                            || web.Lists.TryGetList(TitlesListName) != null;
-
                             if (hasAnyList)
                             {
                                 return;
