@@ -1,7 +1,6 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
-using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Controls.Common;
 using Portal.Main.Helper;
 using System;
 using System.Collections.Generic;
@@ -11,10 +10,10 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
 {
@@ -22,11 +21,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //btnSend.Visible = false;
-            if (IsPostBack)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('2');", true);
-            }
         }
 
         protected void cvRole_ServerValidate(object source, ServerValidateEventArgs args)
@@ -52,11 +46,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
             {
                 if (Page.IsValid)
                 {
-                    Captcha CaptchaControl = FindControl("CaptchaControl") as Captcha;
-                    // First validate the CAPTCHA
-                    if (!CaptchaControl.ValidateCaptcha())
+                    string PrivateKey = "6Leg0vAsAAAAAKpQnA7rq6ZE97EkXRVhSiI45iLj";
+                    string EncodedResponse = Request.Form["g-Recaptcha-Response"];
+
+                    if (string.IsNullOrEmpty(EncodedResponse))
                     {
-                        lblException.Text = "Invalid CAPTCHA code. Please try again.";
+                        lblException.Text = "يرجى التحقق من رمز التحقق (reCAPTCHA).";
+                        lblException.Visible = true;
+                        lblSuccessMessage.Visible = false;
+                        return;
+                    }
+
+                    var client = new System.Net.WebClient();
+                    var GoogleReply = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", PrivateKey, EncodedResponse));
+                    var serializer = new JavaScriptSerializer();
+
+                    dynamic j = serializer.Deserialize<dynamic>(GoogleReply.ToString());
+                    var dictionary = j as Dictionary<string, object>;
+
+                    if (dictionary == null || !dictionary.ContainsKey("success") || dictionary["success"].ToString().ToLower() != "true")
+                    {
+                        lblException.Text = "رمز التحقق (reCAPTCHA) غير صحيح، يرجى المحاولة مرة أخرى.";
                         lblException.Visible = true;
                         lblSuccessMessage.Visible = false;
                         return;
@@ -212,6 +222,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
 
 
                                     pnlData.Visible = false;
+                                    if (pnlSuccess != null)
+                                    {
+                                        pnlSuccess.Visible = true;
+                                    }
                                     lblSuccessMessage.Text = SPFactory.GetPNUresResource("SavedSuccessfully");
                                     lblSuccessMessage.Visible = true;  // Make the success message visible
                                     lblException.Visible = false;
@@ -233,6 +247,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Forms
 
             catch (Exception ex)
             {
+                lblException.Text = "حدث خطأ أثناء إرسال الطلب، يرجى المحاولة لاحقاً: " + ex.Message;
+                lblException.Visible = true;
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
         }
