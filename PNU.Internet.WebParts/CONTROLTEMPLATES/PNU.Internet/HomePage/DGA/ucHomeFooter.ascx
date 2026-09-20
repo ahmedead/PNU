@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -69,6 +69,31 @@
             arTime.innerText = arDate;
             arTime.setAttribute('datetime', isoString);
         }
+
+        // Global Security Sanitizer: Enforce rel="noopener noreferrer" on all external & target="_blank" links
+        function sanitizeBlankLinks() {
+            try {
+                var links = document.querySelectorAll('a[target="_blank"]');
+                for (var i = 0; i < links.length; i++) {
+                    var link = links[i];
+                    var rel = link.getAttribute('rel') || '';
+                    var relList = rel.split(/\s+/).filter(Boolean);
+                    var changed = false;
+                    if (relList.indexOf('noopener') === -1) { relList.push('noopener'); changed = true; }
+                    if (relList.indexOf('noreferrer') === -1) { relList.push('noreferrer'); changed = true; }
+                    if (changed) {
+                        link.setAttribute('rel', relList.join(' '));
+                    }
+                }
+            } catch (e) { }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', sanitizeBlankLinks);
+        } else {
+            sanitizeBlankLinks();
+        }
+        window.addEventListener('load', sanitizeBlankLinks);
     })();
 </script>
 

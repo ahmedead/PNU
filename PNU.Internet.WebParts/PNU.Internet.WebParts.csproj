@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -62,7 +62,8 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.4, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.10.0.4\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Services" />
     <Reference Include="Microsoft.Office.Server, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Server.UserProfiles, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -472,6 +473,15 @@
       <DependentUpon>ucWebsitePagesDashboard.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\WebsitePagesReportDal.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SiteAudit\ExcelAuditDal.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SiteAudit\SiteAuditRuleVerifier.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SiteAudit\ucExcelAuditVerifier.ascx.cs">
+      <DependentUpon>ucExcelAuditVerifier.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\SiteAudit\ucExcelAuditVerifier.ascx.designer.cs">
+      <DependentUpon>ucExcelAuditVerifier.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Admin\ucAgAdmin.ascx.cs">
       <DependentUpon>ucAgAdmin.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3207,6 +3217,23 @@
     </Compile>
     <Compile Include="SPFactory.cs" />
     <Compile Include="SQLFactory.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteAuditReportDal.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteAuditScannerEngine.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucSiteQualityAuditor.ascx.cs">
+      <DependentUpon>ucSiteQualityAuditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucSiteQualityAuditor.ascx.designer.cs">
+      <DependentUpon>ucSiteQualityAuditor.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteAuditSitemapGenerator.cs" />
+    <Compile Include="Layouts\PNU.Internet\Sitemap.aspx.cs">
+      <DependentUpon>Sitemap.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\PNU.Internet\Sitemap.aspx.designer.cs">
+      <DependentUpon>Sitemap.aspx.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -3303,6 +3330,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucTimerJob.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucWebsitePagesDashboard.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\SiteAudit\ucExcelAuditVerifier.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Admin\ucAgAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgCards.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgDeputyWord.ascx" />
@@ -3658,6 +3686,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\UniversityLife\ucFacilityServiceDetails.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\UniversityLife\ucFacilitesDetails.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\UserControl1.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ucSiteQualityAuditor.ascx" />
     <Content Include="DLL\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
     <Content Include="DLL\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
     <Content Include="DLL\Microsoft.Practices.ServiceLocation.dll" />
@@ -3677,6 +3706,7 @@
     <Content Include="Layouts\PNU.Internet\404\error.aspx" />
     <Content Include="Layouts\PNU.Internet\404\style.css" />
     <Content Include="Layouts\PNU.Internet\CaptchaImage.aspx" />
+    <Content Include="Layouts\PNU.Internet\Sitemap.aspx" />
     <Content Include="Layouts\PNU.Internet\Search\PageIndexAdmin.aspx" />
     <Content Include="Layouts\PNU.Internet\Search\SearchAdmin.aspx" />
     <Content Include="Layouts\PNU.Internet\TimerJobsManual.aspx" />

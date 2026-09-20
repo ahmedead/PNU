@@ -170,15 +170,15 @@
                                             <div class="d-flex flex-wrap gap-2 mt-2 share-buttons"
                                                  data-share-title='<%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %>'>
                                                 <a href="#" class="btn btn-secondary icon-btn share-btn" data-share="twitter"
-                                                   aria-label="Twitter" target="_blank" rel="noopener">
+                                                   aria-label="Twitter" target="_blank" rel="noopener noreferrer">
                                                     <i class="hgi hgi-stroke hgi-new-twitter" aria-hidden="true"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-secondary icon-btn share-btn" data-share="linkedin"
-                                                   aria-label="LinkedIn" target="_blank" rel="noopener">
+                                                   aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                                                     <i class="hgi hgi-stroke hgi-linkedin-01" aria-hidden="true"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-secondary icon-btn share-btn" data-share="whatsapp"
-                                                   aria-label="WhatsApp" target="_blank" rel="noopener">
+                                                   aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
                                                     <i class="hgi hgi-stroke hgi-whatsapp" aria-hidden="true"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-secondary icon-btn share-btn"

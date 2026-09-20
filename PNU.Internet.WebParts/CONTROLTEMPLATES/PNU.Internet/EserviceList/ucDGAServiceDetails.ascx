@@ -39,7 +39,7 @@
                                 <h1 class="mb-0 fw-semibold h2">
                                     <%# SPFactory.GetLocalizedTitle(Eval("ARServiceName"), Eval("ENServiceName")) %>
                                 </h1>
-                                <a id="lnkStart" runat="server" target="_blank" rel="noopener" class="btn btn-primary"
+                                <a id="lnkStart" runat="server" target="_blank" rel="noopener noreferrer" class="btn btn-primary"
                                     href='<%# Eval("URL") %>'></a>
                             </div>
                             <div class="mt-3 d-flex flex-wrap gap-2">

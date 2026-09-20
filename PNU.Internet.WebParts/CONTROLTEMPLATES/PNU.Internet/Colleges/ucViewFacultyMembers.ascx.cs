@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.FacultyMembers;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
@@ -19,6 +19,7 @@ using System.Net.Security;
 using System.Web.Services;
 using System.Threading;
 using System.Web;
+using System.Web.UI.HtmlControls;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 {
@@ -330,6 +331,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                         _AllMainData.Add(Data);
                         rptMainData.DataSource = _AllMainData;
                         rptMainData.DataBind();
+
+                        // SEO Fix: Near Duplicates (#21), Dynamic Title (#12), Meta Description (#13), Canonicals (#8)
+                        ApplyMemberSeoMetadata(_FacultyMember, email);
                     }
 
                 });
@@ -340,8 +344,153 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
+        }
 
+        private void ApplyMemberSeoMetadata(clsCollMembersListName member, string email)
+        {
+            try
+            {
+                if (this.Page == null || member == null)
+                    return;
 
+                string memberName = SPFactory.GetLocalizedTitle(member.FULL_NAME, member.ENGLISH_NAME);
+                if (string.IsNullOrEmpty(memberName))
+                    memberName = member.FULL_NAME ?? member.ENGLISH_NAME ?? "عضو هيئة التدريس";
+
+                string profession = member.PROFESSION ?? "";
+                string section = member.SECTION ?? "";
+                string college = member.COLLEGE ?? "";
+                string spec = member.SPECIALIZATION ?? "";
+                string minor = member.SPECIAL_CPECIALIZATION ?? "";
+                string qual = member.QUALIFICATION_NAME ?? "";
+
+                // 1. Dynamic Page Title (Updates SharePoint PlaceHolderPageTitle so HTML <title> is modified)
+                string fullTitle = string.Format("{0} - {1}{2} | جامعة الأميرة نورة بنت عبدالرحمن",
+                    memberName,
+                    profession,
+                    (!string.IsNullOrEmpty(college) ? " (" + college + ")" : "")).Trim();
+
+                SetSharePointPageTitle(fullTitle);
+
+                if (this.Page.Header != null)
+                {
+                    // 2. Self-Referencing Canonical URL (Collapses millions of query string variations to one official URL)
+                    string rawUrl = Request.Url.GetLeftPart(UriPartial.Path);
+                    string cleanCanonicalUrl = string.Format("{0}?view={1}", rawUrl, HttpUtility.UrlEncode(email.ToLower().Trim()));
+
+                    for (int i = this.Page.Header.Controls.Count - 1; i >= 0; i--)
+                    {
+                        var link = this.Page.Header.Controls[i] as HtmlLink;
+                        if (link != null && link.Attributes["rel"] == "canonical")
+                        {
+                            this.Page.Header.Controls.RemoveAt(i);
+                        }
+                    }
+
+                    HtmlLink canonicalLink = new HtmlLink();
+                    canonicalLink.Attributes.Add("rel", "canonical");
+                    canonicalLink.Attributes.Add("href", cleanCanonicalUrl);
+                    this.Page.Header.Controls.Add(canonicalLink);
+
+                    // 3. Distinct Academic Meta Description (Combines rank, qual, department, and sub-specialization to prevent duplicate description warnings)
+                    List<string> details = new List<string>();
+                    if (!string.IsNullOrEmpty(profession)) details.Add(profession);
+                    if (!string.IsNullOrEmpty(qual)) details.Add(qual);
+                    if (!string.IsNullOrEmpty(section)) details.Add("قسم " + section);
+                    if (!string.IsNullOrEmpty(college)) details.Add(college);
+                    if (!string.IsNullOrEmpty(spec)) details.Add("تخصص " + spec);
+                    if (!string.IsNullOrEmpty(minor)) details.Add("التخصص الدقيق: " + minor);
+
+                    string detailsStr = details.Count > 0 ? " (" + string.Join("، ", details) + ")" : "";
+                    string desc = string.Format("الصفحة الأكاديمية والإنتاج العلمي لـ {0}{1} بجامعة الأميرة نورة بنت عبدالرحمن. المقررات الدراسية، الأبحاث المنشورة، والتواصل الأكاديمي.",
+                        memberName, detailsStr);
+
+                    if (desc.Length > 250) desc = desc.Substring(0, 247) + "...";
+
+                    for (int i = this.Page.Header.Controls.Count - 1; i >= 0; i--)
+                    {
+                        var meta = this.Page.Header.Controls[i] as HtmlMeta;
+                        if (meta != null && string.Equals(meta.Name, "description", StringComparison.OrdinalIgnoreCase))
+                        {
+                            this.Page.Header.Controls.RemoveAt(i);
+                        }
+                    }
+
+                    HtmlMeta descMeta = new HtmlMeta();
+                    descMeta.Name = "description";
+                    descMeta.Content = desc;
+                    this.Page.Header.Controls.Add(descMeta);
+
+                    // 4. Schema.org Person JSON-LD
+                    string safeName = HttpUtility.JavaScriptStringEncode(memberName);
+                    string safeProf = HttpUtility.JavaScriptStringEncode(profession);
+                    string safeColl = HttpUtility.JavaScriptStringEncode(college);
+                    string safeEmail = HttpUtility.JavaScriptStringEncode(member.EMAIL_ADDRESS ?? email);
+
+                    string jsonLd = string.Format(@"
+<script type=""application/ld+json"">
+{{
+  ""@context"": ""https://schema.org"",
+  ""@type"": ""Person"",
+  ""name"": ""{0}"",
+  ""jobTitle"": ""{1}"",
+  ""email"": ""{2}"",
+  ""worksFor"": {{
+    ""@type"": ""CollegeOrUniversity"",
+    ""name"": ""جامعة الأميرة نورة بنت عبدالرحمن - {3}""
+  }},
+  ""url"": ""{4}""
+}}
+</script>", safeName, safeProf, safeEmail, safeColl, cleanCanonicalUrl);
+
+                    this.Page.Header.Controls.Add(new LiteralControl(jsonLd));
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "ApplyMemberSeoMetadata", ex.Message);
+            }
+        }
+
+        private void SetSharePointPageTitle(string fullTitle)
+        {
+            try
+            {
+                this.Page.Title = fullTitle;
+
+                if (this.Page.Master != null)
+                {
+                    var phTitle = FindPlaceHolder(this.Page.Master, "PlaceHolderPageTitle");
+                    if (phTitle != null)
+                    {
+                        phTitle.Controls.Clear();
+                        phTitle.Controls.Add(new LiteralControl(HttpUtility.HtmlEncode(fullTitle)));
+                    }
+
+                    var phTitleArea = FindPlaceHolder(this.Page.Master, "PlaceHolderPageTitleInTitleArea");
+                    if (phTitleArea != null)
+                    {
+                        phTitleArea.Controls.Clear();
+                        phTitleArea.Controls.Add(new LiteralControl(HttpUtility.HtmlEncode(fullTitle)));
+                    }
+                }
+
+                // Client-side fallback to guarantee browser tab title updates
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "UpdateDocTitle",
+                    $"document.title = {HttpUtility.JavaScriptStringEncode(fullTitle, true)};", true);
+            }
+            catch { }
+        }
+
+        private ContentPlaceHolder FindPlaceHolder(System.Web.UI.MasterPage master, string id)
+        {
+            while (master != null)
+            {
+                var ph = master.FindControl(id) as ContentPlaceHolder;
+                if (ph != null) return ph;
+                master = master.Master;
+            }
+            return null;
         }
 
         protected void college2tab_Click(object sender, EventArgs e)

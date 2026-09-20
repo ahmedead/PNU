@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Web;
+using System.IdentityModel.Services;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.ApplicationPages.Calendar.Exchange;
 using Microsoft.SharePoint.Client;

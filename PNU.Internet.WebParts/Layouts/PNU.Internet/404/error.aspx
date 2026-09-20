@@ -1,8 +1,18 @@
-﻿<!DOCTYPE html>
+﻿<%@ Page Language="C#" %>
+<%
+    // خطأ خادم حقيقي: يجب أن يبقى 500 حتى يفهم Googlebot أنه عارض مؤقت.
+    // إعادة 404 هنا تعني شطب الصفحة من الفهرس عند أي انقطاع مؤقت.
+    Response.StatusCode = 500;
+    Response.StatusDescription = "Internal Server Error";
+    Response.TrySkipIisCustomErrors = true;
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+%>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-    <title>جامعة الأميرة نورة بنت عبد الرحمن | PNU</title>
+    <title>خطأ غير متوقع (500) | جامعة الأميرة نورة بنت عبد الرحمن</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex, follow" />
     <link rel="shortcut icon" href="/Style%20Library/Portal/images/favicon.ico" type="image/vnd.microsoft.icon" id="favicon">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.7, maximum-scale=1">
     <link href="style.css" rel="stylesheet" type="text/css" />

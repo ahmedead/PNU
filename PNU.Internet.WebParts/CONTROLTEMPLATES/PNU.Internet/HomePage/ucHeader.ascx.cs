@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Web;
+﻿using System.IdentityModel.Services;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.ApplicationPages.Calendar.Exchange;
 using Microsoft.SharePoint.Client;
@@ -80,7 +80,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
         {
             base.OnPreRender(e);
             FixCanonicalLink();
-            InjectMetaDescription();
+            // Meta description is centrally managed by SEO.ascx to avoid duplicate <meta name="description"> tags
+            // InjectMetaDescription();
         }
         private void InjectMetaDescription()
         {
@@ -185,24 +186,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
             {
                 if (SPContext.Current == null || Page.Header == null) return;
 
-                // 1. Hide SharePoint's built-in SeoCanonicalLink (renders :443)
+                // إخفاء وسم SharePoint المدمج SeoCanonicalLink (يصدر المنفذ :443).
                 HideCanonicalControls(Page.Header);
 
-                // 2. Build clean canonical from AAM public URL (no port)
-                var request = HttpContext.Current.Request;
-                string authority = new Uri(SPContext.Current.Site.Url)
-                                       .GetLeftPart(UriPartial.Authority);
-                string canonical = authority + request.Url.AbsolutePath;
-
-                if (request.Url.AbsolutePath.EndsWith("MediaDetails.aspx",
-                        StringComparison.OrdinalIgnoreCase)
-                    && !string.IsNullOrEmpty(request.QueryString["Id"]))
-                {
-                    canonical += "?Id=" + HttpUtility.UrlEncode(request.QueryString["Id"]);
-                }
-
-                Page.Header.Controls.Add(new LiteralControl(
-                    string.Format("<link rel=\"canonical\" href=\"{0}\" />", canonical)));
+                // لا نصدر canonical من هنا. المصدر الوحيد للـ canonical هو SEO.ascx،
+                // الذي يبني الرابط من نفس السلسلة النصية المستخدمة في hreflang فيضمن تطابقهما.
+                // إصدار وسم ثانٍ هنا كان ينتج canonical متنافساً على Portal_Home.master
+                // (بمسار بلا query string) فيتعارض مع وسوم hreflang الصادرة من SEO.ascx.
             }
             catch (Exception ex)
             {

@@ -96,6 +96,7 @@
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Admin\ucTimerJob.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Admin\ucUpdatePageLayoutAndContent.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Admin\ucWebsitePagesDashboard.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\SiteAudit\ucExcelAuditVerifier.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Admin\ucAgAdmin.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgCards.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Agency\DGA\Controls\ucAgDeputyWord.ascx" />
@@ -451,11 +452,13 @@
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\UniversityLife\ucFacilityServiceDetails.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\UniversityLife\ucFacilitesDetails.ascx" />
     <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\UserControl1.ascx" />
+    <TemplateFile Location="CONTROLTEMPLATES\PNU.Internet\Admin\ucSiteQualityAuditor.ascx" />
     <TemplateFile Location="Layouts\PNU.Internet\404\401.aspx" />
     <TemplateFile Location="Layouts\PNU.Internet\404\404.aspx" />
     <TemplateFile Location="Layouts\PNU.Internet\404\error.aspx" />
     <TemplateFile Location="Layouts\PNU.Internet\404\style.css" />
     <TemplateFile Location="Layouts\PNU.Internet\CaptchaImage.aspx" />
+    <TemplateFile Location="Layouts\PNU.Internet\Sitemap.aspx" />
     <TemplateFile Location="Layouts\PNU.Internet\Search\PageIndexAdmin.aspx" />
     <TemplateFile Location="Layouts\PNU.Internet\Search\SearchAdmin.aspx" />
     <TemplateFile Location="Layouts\PNU.Internet\TimerJobsManual.aspx" />

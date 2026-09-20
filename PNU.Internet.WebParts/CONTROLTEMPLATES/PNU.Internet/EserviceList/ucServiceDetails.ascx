@@ -37,7 +37,7 @@
                                     <div class="text-end">
 
 
-                                        <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") %>  " class="btn btn-primary  px-3 py-2">
+                                        <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") % rel="noopener noreferrer">  " class="btn btn-primary  px-3 py-2">
                                             <asp:Literal ID="lit_startService" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal>
                                         </a>
                                     </div>

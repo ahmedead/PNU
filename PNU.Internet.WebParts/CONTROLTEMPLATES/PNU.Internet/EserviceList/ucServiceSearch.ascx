@@ -98,8 +98,8 @@
                             إخلاء الطرف، آليا عبر بوابة الخدمات الإلكترونية.--%>
                                 </p>
                                 <div class="service-btn-wrapper">
-                                    <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") %>" class="serv-btn  serv-link">تفاصيل الخدمة</a>
-                                    <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") %>  " class="serv-btn ">إبدأ الخدمة</a>
+                                    <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") % rel="noopener noreferrer">" class="serv-btn  serv-link">تفاصيل الخدمة</a>
+                                    <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") % rel="noopener noreferrer">  " class="serv-btn ">إبدأ الخدمة</a>
                                 </div>
                             </div>
                         </div>

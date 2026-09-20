@@ -1,8 +1,17 @@
-﻿<!DOCTYPE html>
+﻿<%@ Page Language="C#" %>
+<%
+    Response.StatusCode = 404;
+    Response.StatusDescription = "Not Found";
+    Response.TrySkipIisCustomErrors = true;
+    // لا تُخزَّن صفحات الخطأ في الوسطاء ولا في المتصفح
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+%>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-    <title>جامعة الأميرة نورة بنت عبد الرحمن | PNU</title>
+    <title>الصفحة غير موجودة (404) | جامعة الأميرة نورة بنت عبد الرحمن</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex, follow" />
     <link rel="shortcut icon" href="/Style%20Library/Portal/images/favicon.ico" type="image/vnd.microsoft.icon" id="favicon">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.7, maximum-scale=1">
     <link href="style.css" rel="stylesheet" type="text/css" />

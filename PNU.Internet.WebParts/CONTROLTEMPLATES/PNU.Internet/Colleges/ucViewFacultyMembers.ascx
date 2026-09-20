@@ -52,7 +52,7 @@
                     </ol>
                 </nav>
                 <div class="content">
-                    <h2 class="mb-0"><%# SPFactory.GetLocalizedTitle(Eval("full_name"), Eval("english_name")) %></h2>
+                    <h1 id="faculty-member-title" class="h2 mb-0"><%# SPFactory.GetLocalizedTitle(Eval("full_name"), Eval("english_name")) %></h1>
                     <div class="text mt-4"><%# DataBinder.Eval(Container.DataItem, "profession") %></div>
                 </div>
             </div>

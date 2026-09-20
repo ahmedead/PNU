@@ -334,7 +334,7 @@
 
 
                     <div id="divSignOut" runat="server">
-                        <%--<a href="/ar/_layouts/15/SignOut.aspx"  rel="nofollow" target="_blank"
+                        <%--<a href="/ar/_layouts/15/SignOut.aspx"  rel="nofollow noopener noreferrer" target="_blank"
                             class="btn btn-primary btn-ms p-1 px-2 m-1 d-inline-flex align-items-center justify-content-end">
                             <svg class="bi d-block " width="24" height="24">
                                 <use xlink:href="#login" />

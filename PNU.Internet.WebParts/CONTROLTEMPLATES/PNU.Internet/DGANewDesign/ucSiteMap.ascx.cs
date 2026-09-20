@@ -1,4 +1,3 @@
-﻿using Microsoft.IdentityModel.Web;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Client;
 using Org.BouncyCastle.Ocsp;

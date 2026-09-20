@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Web;
+using System.IdentityModel.Services;
 using Microsoft.SharePoint;
 using Portal.Main.Helper;
 using Portal.Main.Helper.Utils;
@@ -21,7 +21,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         {
             base.OnPreRender(e);
             FixCanonicalLink();
-            InjectMetaDescription();
+            // Meta description is centrally managed by SEO.ascx to avoid duplicate <meta name="description"> tags
+            // InjectMetaDescription();
         }
         private void InjectMetaDescription()
         {

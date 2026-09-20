@@ -5,6 +5,7 @@
         url('/Style%20Library/Portal/fonts/JFFlat-Medium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -14,6 +15,7 @@
         url('/Style%20Library/Portal/fonts/JFFlat-Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -23,6 +25,7 @@
         url('/Style%20Library/Portal/fonts/JFFlat-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 *, *:before, *:after{-webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box}

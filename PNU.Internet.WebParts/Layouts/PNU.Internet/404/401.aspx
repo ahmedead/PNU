@@ -1,8 +1,20 @@
-﻿<!DOCTYPE html>
+﻿<%@ Page Language="C#" %>
+<%
+    // صفحة "غير مصرح" مرئية للمستخدم: الدلالة الصحيحة 403 وليست 401،
+    // لأن 401 الحقيقي يتطلب ترويسة WWW-Authenticate ولا يعرض HTML.
+    // ملاحظة للنشر: إن كانت هذه الصفحة موصولة كمعالج 401 في IIS فراجع مسار
+    // المصادقة قبل الاعتماد، وأعِد الحالة إلى 401 عند الحاجة.
+    Response.StatusCode = 403;
+    Response.StatusDescription = "Forbidden";
+    Response.TrySkipIisCustomErrors = true;
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+%>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-    <title>جامعة الأميرة نورة بنت عبد الرحمن | PNU</title>
+    <title>غير مصرح بالوصول (403) | جامعة الأميرة نورة بنت عبد الرحمن</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex, follow" />
     <link rel="shortcut icon" href="/Style%20Library/Portal/images/favicon.ico" type="image/vnd.microsoft.icon" id="favicon">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.7, maximum-scale=1">
     <link href="style.css" rel="stylesheet" type="text/css" />

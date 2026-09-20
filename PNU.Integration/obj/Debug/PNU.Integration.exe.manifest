@@ -54,6 +54,54 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EntityFramework.dll" size="5196496">
+      <assemblyIdentity name="EntityFramework" version="6.0.0.0" publicKeyToken="B77A5C561934E089" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>7W69dJBS+QGPZplnGuVGmt7fCGz4sb1CVrvpxOf2/wU=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HtmlAgilityPack.dll" size="170496">
+      <assemblyIdentity name="HtmlAgilityPack" version="1.11.53.0" publicKeyToken="BD319B19EAF3B43A" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>mwWwoc1zi/geo0GzTEU7Cw+LgvNtunnjcYsz5pH5kUw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Magick.NET.Core.dll" size="1535784">
+      <assemblyIdentity name="Magick.NET.Core" version="14.10.0.0" publicKeyToken="2004825BADFA91EC" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>wdJcPGy+9mKk9XYxcy/pQwspt3ZikQVSliBZ+wYDRSM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Magick.NET-Q8-AnyCPU.dll" size="1124648">
+      <assemblyIdentity name="Magick.NET-Q8-AnyCPU" version="14.10.0.0" publicKeyToken="2004825BADFA91EC" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>TI1uhNwNlXpZ2U1N87bTVd/5UrbVJEh20jZEPgHhpHE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.AnalysisServices.AdomdClient.dll" size="539352">
       <assemblyIdentity name="Microsoft.AnalysisServices.AdomdClient" version="9.0.242.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -126,18 +174,6 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Office.SecureStoreService.Server.Security.dll" size="26408">
-      <assemblyIdentity name="Microsoft.Office.SecureStoreService.Server.Security" version="16.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>tflrJ3hogoDA2jHaJNZX5dL7wkkmdJ3k/2QNj2RRR/Y=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Office.Server.dll" size="3045856">
       <assemblyIdentity name="Microsoft.Office.Server" version="16.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -198,6 +234,66 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Practices.EnterpriseLibrary.Common.dll" size="334648">
+      <assemblyIdentity name="Microsoft.Practices.EnterpriseLibrary.Common" version="5.0.414.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>ywFTSVCSyrm7gIA8UbJfAKVQ3q4os1AHxgiI28FSlnM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Practices.EnterpriseLibrary.Data.dll" size="166712">
+      <assemblyIdentity name="Microsoft.Practices.EnterpriseLibrary.Data" version="5.0.414.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>q2z79IZfFk4vupPYGHKT8kkn4mfKmWDlGz32NGG9/9s=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Practices.ServiceLocation.dll" size="29760">
+      <assemblyIdentity name="Microsoft.Practices.ServiceLocation" version="1.0.0.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>eee+a+dQmhpSY/ApLxRipXdEp8UsTaZHXHClBU0Iwyc=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Practices.Unity.dll" size="133944">
+      <assemblyIdentity name="Microsoft.Practices.Unity" version="2.0.414.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>IBZVzS9kGsBeRQ+wPOdjr7xehZ1s4aJa5/7zwnou45o=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Practices.Unity.Interception.dll" size="125752">
+      <assemblyIdentity name="Microsoft.Practices.Unity.Interception" version="2.0.414.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>eewLm5dS/mPAw3vEIXwufZ6jMBYQfjhw1eYYieuMw+M=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.SharePoint.dll" size="38598048">
       <assemblyIdentity name="Microsoft.SharePoint" version="16.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -218,18 +314,6 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>ZRDp+Kd4DdQKrTKOMxow7AyXkJXnFYKiks0dVJPt5nE=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.SharePoint.Client.Directory.dll" size="56640">
-      <assemblyIdentity name="Microsoft.SharePoint.Client.Directory" version="16.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>IbgJhIIsrwah6SXYZtWmA6nKkVmntYUDQMPa7UK9MBc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -414,6 +498,18 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NLog.dll" size="532480">
+      <assemblyIdentity name="NLog" version="4.0.0.0" publicKeyToken="5120E14C03D0593C" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>JRHfc2VucatsmGsiz3NXviwU+3x/R4Mrr8x12jNCrxU=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Oracle.ManagedDataAccess.dll" size="4725352">
       <assemblyIdentity name="Oracle.ManagedDataAccess" version="4.122.21.1" publicKeyToken="89B483F429C47342" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -433,17 +529,101 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>gA22gDypL2Lg1pu1NC4sWc4u3VNmp3gWqFMUxcdfbcM=</dsig:DigestValue>
+        <dsig:DigestValue>49JwKh4tZyP5t2P9Iigf4CagEnA/ThigjJMWmhLgsQw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="PNU.Integration.exe.config" size="3362">
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PNU.Internet.SearchIndex.dll" size="155648">
+      <assemblyIdentity name="PNU.Internet.SearchIndex" version="1.0.0.0" publicKeyToken="C3EFCC65BD63271F" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>krRttec1ieR09ilWwx4rnhe0HrO7o0F1BWsVcdOjrJ4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PNU.Internet.WebParts.dll" size="4328960">
+      <assemblyIdentity name="PNU.Internet.WebParts" version="1.0.0.0" publicKeyToken="BBC777E63FAB09A3" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>fGfuP61Oeo6sUsaL9kz6bqYCMkHpNYyuNllQk2risHM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="en-US\PNU.Internet.WebParts.resources.dll" size="12800">
+      <assemblyIdentity name="PNU.Internet.WebParts.resources" version="1.0.0.0" publicKeyToken="BBC777E63FAB09A3" language="en-US" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>9k+9l3tGgBlLbYh8rkPIpGp/rEzw/hdeAC7HjCnBsks=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Portal.Main.Helper.dll" size="131072">
+      <assemblyIdentity name="Portal.Main.Helper" version="1.0.0.0" publicKeyToken="FDBB2E422F3F263D" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>aLixirsDImDo/UhrX/+WUv/iXdjoQPPCyV9RUiIeUC4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="QRCoder.dll" size="144384">
+      <assemblyIdentity name="QRCoder" version="1.4.3.0" publicKeyToken="C4ED5B9AE8358A28" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>VhrP5LGhTIN7GJ+5/FxtPoJEAYS73mGRLecj1i1jaLM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SharedSQL.dll" size="12800">
+      <assemblyIdentity name="SharedSQL" version="1.0.0.0" publicKeyToken="DDAC2A82253CFD3E" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>j6sq3GfCdsX5SAQqDHR70GLHDAFqe4t8VXqT7fLnawQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Net.Http.Formatting.dll" size="178808">
+      <assemblyIdentity name="System.Net.Http.Formatting" version="5.2.7.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>e1itxuI7JM1mFbNehIoAK9oFOibUj53a+s/ICY6XxJw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="PNU.Integration.exe.config" size="1697">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>HojtdxUQLaQbu/ZvHlFMyMnA/+bygQN4SZJco7PZEYk=</dsig:DigestValue>
+      <dsig:DigestValue>YX3nywgew6SL0lsH5OX+rBorUrCdnFkGvGOh9nCiKm8=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
