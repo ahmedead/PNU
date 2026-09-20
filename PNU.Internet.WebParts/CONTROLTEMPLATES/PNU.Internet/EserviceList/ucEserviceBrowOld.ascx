@@ -354,8 +354,8 @@ section.breadcrumb {
 
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") % rel="noopener noreferrer">" class="serv-btn  serv-link"> <asp:Literal ID="lit_serviceDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal> </a>
-                            <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") % rel="noopener noreferrer">  " class="serv-btn "> <asp:Literal ID="lit_startService" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal> </a>
+                            <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") %>" class="serv-btn  serv-link"> <asp:Literal ID="lit_serviceDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal> </a>
+                            <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") %>  " class="serv-btn "> <asp:Literal ID="lit_startService" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal> </a>
                         </div>
                     </div>
                 </div>
@@ -409,8 +409,8 @@ section.breadcrumb {
 
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") % rel="noopener noreferrer">" class="serv-btn  serv-link"> <asp:Literal ID="lit_srvDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal>  </a>
-                            <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") % rel="noopener noreferrer">  " class="serv-btn "> <asp:Literal ID="Literal1" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal> </a>
+                            <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") %>" class="serv-btn  serv-link"> <asp:Literal ID="lit_srvDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal>  </a>
+                            <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") %>  " class="serv-btn "> <asp:Literal ID="Literal1" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal> </a>
                         </div>
                     </div>
                 </div>
@@ -462,8 +462,8 @@ section.breadcrumb {
 
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") % rel="noopener noreferrer">" class="serv-btn  serv-link"> <asp:Literal ID="lit_srvDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal></a>
-                            <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") % rel="noopener noreferrer">  " class="serv-btn "> <asp:Literal ID="Literal1" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal></a>
+                            <a target="_blank" href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") %>" class="serv-btn  serv-link"> <asp:Literal ID="lit_srvDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal></a>
+                            <a target="_blank" href="<%#DataBinder.Eval(Container.DataItem,"URL") %>  " class="serv-btn "> <asp:Literal ID="Literal1" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal></a>
                         </div>
                     </div>
                 </div>

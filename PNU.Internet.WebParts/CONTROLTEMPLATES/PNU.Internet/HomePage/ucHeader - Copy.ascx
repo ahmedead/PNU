@@ -57,7 +57,7 @@ a.nav-link.px-2.text-white {
                     
                     <li><a href="<%=  GetDynamicURL("AcademicCalendar/Pages/default.aspx") %>" class="nav-link px-2 text-white"><asp:Literal runat="server" Text="<%$ Resources: PNUres, UniversityCalender %>" /></a></li>
                     <%--<li><a href="<%= GetDynamicURL("Pages/AllServices.aspx") %>" class="nav-link px-2 text-white"><asp:Literal runat="server" Text="<%$ Resources: PNUres, EServices %>" /></a></li>--%>
-					<li><a href="https://graduates.pnu.edu.sa/ar/Pages/default.aspx" class="nav-link px-2 text-white"  target="_blank" rel="noopener noreferrer"><asp:Literal runat="server" Text="<%$ Resources: CommonGlobalResources, GradutesLink %>" /></a></li>
+					<li><a href="https://graduates.pnu.edu.sa/ar/Pages/default.aspx" class="nav-link px-2 text-white"  target="_blank"><asp:Literal runat="server" Text="<%$ Resources: CommonGlobalResources, GradutesLink %>" /></a></li>
                 </ul>
                 <div class=" col-12 col-lg-auto d-flex justify-content-sm-center justify-content-between" id="leftSideHeader">
                     <ul class="nav justify-content-center align-items-center  text-small  px-sm-3 px-0 lh-base d-sm-flex">
@@ -137,7 +137,7 @@ a.nav-link.px-2.text-white {
                     
                     <div id="divSignOut" runat="server">
                         <a href="/ar/_layouts/15/SignOut.aspx" target="_blank" style="min-width: 9.6rem;"
-                            class="nav-link link-white text-white  p-sm-3 p-0  d-inline-flex align-items-center justify-content-end" rel="noopener noreferrer">
+                            class="nav-link link-white text-white  p-sm-3 p-0  d-inline-flex align-items-center justify-content-end">
                             <svg class="bi d-block " width="24" height="24">
                                 <use xlink:href="#login" />
                             </svg>

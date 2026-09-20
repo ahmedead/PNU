@@ -228,7 +228,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
                 }
                 //divSignIn.Visible = false;
                 //divSignOut.Visible = false;
-               
+
                 //if (SPContext.Current.Web.CurrentUser == null)
                 //{
                 //    divSignIn.Visible = true;
@@ -291,7 +291,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
                                         List<TopMenuLevel3> _Level3 = new List<TopMenuLevel3>();
                                         _Level1 = SPFactory.MapListItemsToClass<TopMenuLevel1>(sPListItemCollection);
 
-                                        for (int i=0; i<_Level1.Count;i++)
+                                        for (int i = 0; i < _Level1.Count; i++)
                                         {
 
                                             TopMenuLevel1 _item1 = new TopMenuLevel1();
@@ -323,13 +323,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
                                             _Level2 = new List<TopMenuLevel2>();
                                             _Level2 = SPFactory.MapListItemsToClass<TopMenuLevel2>(sPListItemCollectionLVL2);
                                             _Level1[i].LVL2 = new List<TopMenuLevel2>();
-                                            
+
                                             if (_Level2 != null && _Level2.Count > 0)
                                             {
                                                 _Level1[i].LVL2 = new List<TopMenuLevel2>();
                                                 _Level1[i].LVL2 = _Level2;
                                                 //Adding level3
-                                                for (int j = 0;j< _Level2.Count;j++)
+                                                for (int j = 0; j < _Level2.Count; j++)
                                                 {
 
                                                     var sub = new Dictionary<string, object>();
@@ -423,17 +423,17 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
                                         Get_MenuHTML_NewDesign(menuList);
                                         Get_MenuHTML(_Level1);
                                     }
-                                       
-                                    Parentweb = Pweb.ParentWeb.Url + "/";   
-                                    if (Parentweb.Contains(site.Url))   
-                                    {    
-                                        Parentweb = Parentweb.Replace(site.Url, ""); 
+
+                                    Parentweb = Pweb.ParentWeb.Url + "/";
+                                    if (Parentweb.Contains(site.Url))
+                                    {
+                                        Parentweb = Parentweb.Replace(site.Url, "");
                                     }
-                                    }
-
-
-
                                 }
+
+
+
+                            }
                             catch (Exception ex)
                             {
                                 break;
@@ -477,7 +477,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
 
         }
 
-        
+
 
         public void Get_MenuHTML_NewDesign(List<MenuLevel1> _AllData)
         {
@@ -518,7 +518,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
                                 List<MenuLevel3> itemsLVL3 = item.LVL3.Where(e => e != null && e.ParentTitle == item2.Title).ToList();
                                 if (itemsLVL3 != null && itemsLVL3.Count > 0)
                                 {
-                                   
+
 
                                     LVL2 += $@"<li class=""flex-fill list-unstyled"">
                                                 <div>
@@ -580,8 +580,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
 
                         else
                         {
-                            
- 
+
+
                             LVL1 = $@"<li class=""nav-item dropdown my-2 my-md-0"">
                 <a class=""nav-link dropdown-toggle py-0 align-content-around h-100 h-sm-30px position-relative font-ehsan-semibold d-flex align-items-center justify-content-center"" href=""#"" id=""navbarDropdownResearch"" role=""button"" data-bs-toggle=""dropdown"" aria-expanded=""false"">
                   <div class=""align-items-baseline d-flex d-md-block"">
@@ -958,9 +958,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),this.Page.Title, ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
-            
+
         }
 
         protected void btnSignIn_Click(object sender, EventArgs e)
@@ -969,9 +969,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
         }
     }
 
-   
 
-    
 
-   
+
+
+
 }

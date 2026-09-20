@@ -195,7 +195,7 @@
                     <div class="-cH-104">
                         <div>
                             <button class="-da-111" tabindex="0" role="link">Microsoft Forms</button><span> | </span><span>AI-Powered surveys, quizzes and polls</span><span class="-oO-108"><a class="css-112" tabindex="0" role="link">Create my own form</a></span></div>
-                        <div class="-rs-109"><span>The owner of this form has not provided a privacy statement as to how they will use your response data. Do not provide personal or sensitive information.</span><span role="presentation"> | </span><a rel="noreferrer noopener" target="_blank" class="-gB-110 css-112" tabindex="0" role="link" href="https://go.microsoft.com/fwlink/?linkid=866263">Terms of use</a></div>
+                        <div class="-rs-109"><span>The owner of this form has not provided a privacy statement as to how they will use your response data. Do not provide personal or sensitive information.</span><span role="presentation"> | </span><a rel="noreferrer" target="_blank" class="-gB-110 css-112" tabindex="0" role="link" href="https://go.microsoft.com/fwlink/?linkid=866263">Terms of use</a></div>
                     </div>
                 </div>
             </div>

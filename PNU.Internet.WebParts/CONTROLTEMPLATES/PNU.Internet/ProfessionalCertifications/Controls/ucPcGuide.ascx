@@ -243,7 +243,7 @@
                     <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-printer" aria-hidden="true"></i></span>
                     <span>تصدير تفاصيل الشهادة</span>
                 </button>
-                <a class="btn btn-primary" id="professionalCertificationOfficialLink" href="#" target="_blank" rel="noopener noreferrer" hidden>
+                <a class="btn btn-primary" id="professionalCertificationOfficialLink" href="#" target="_blank" rel="noopener" hidden>
                     <span>زيارة الموقع الرسمي</span>
                     <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-link-square-01" aria-hidden="true"></i></span>
                 </a>

@@ -58,7 +58,7 @@ string DataLeakReportURL = (currentLanguage == 1025) ? "/ar/Departments/DM/Pages
                 <p class="mb-0 mx-3 d-none d-xl-block"> <%= DigitalPlatforms %></p>
                 <ul class="nav col-12 col-lg-auto  justify-content-center  align-items-center   mt-3  mt-xl-0 text-small">
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                        <a href="https://www.facebook.com/PNUKSA0/" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.facebook.com/PNUKSA0/" class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#facebook" />
                             </svg>
@@ -68,25 +68,25 @@ string DataLeakReportURL = (currentLanguage == 1025) ? "/ar/Departments/DM/Pages
 
 
                     <li class=" rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1 dropup">
-                        <a type="button" class="btn nav-link  p-2  text-white " data-bs-toggle="dropdown" aria-expanded="false" target="_blank" rel="noopener noreferrer">
+                        <a type="button" class="btn nav-link  p-2  text-white " data-bs-toggle="dropdown" aria-expanded="false" target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#twitterX" />
                             </svg>
                         </a>
                         <ul class="dropdown-menu py-0">
-                            <li><a class="dropdown-item " href="https://twitter.com/_PNU_KSA" target="_blank" rel="noopener noreferrer">
+                            <li><a class="dropdown-item " href="https://twitter.com/_PNU_KSA" target="_blank">
                                 <asp:Literal runat="server" Text="<%$ Resources: PNUres, PNU_KSA %>" /></a></li>
-                            <li><a class="dropdown-item " href="https://twitter.com/pnu_live" target="_blank" rel="noopener noreferrer">
+                            <li><a class="dropdown-item " href="https://twitter.com/pnu_live" target="_blank">
                                 <asp:Literal runat="server" Text="<%$ Resources: PNUres, pnu_live %>" />
                             </a></li>
-                            <li><a class="dropdown-item " href="https://twitter.com/pnu_events" target="_blank" rel="noopener noreferrer">
+                            <li><a class="dropdown-item " href="https://twitter.com/pnu_events" target="_blank">
                                 <asp:Literal runat="server" Text="<%$ Resources: PNUres, pnu_events %>" /></a></li>
                         </ul>
                     </li>
 
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
                         <a href="https://www.linkedin.com/school/princess-nourah-bint-abdulrahman-university/"
-                            class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                            class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#linkedin" />
                             </svg>
@@ -94,21 +94,21 @@ string DataLeakReportURL = (currentLanguage == 1025) ? "/ar/Departments/DM/Pages
                     </li>
 
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                        <a href="https://www.snapchat.com/add/pnu_ksa" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.snapchat.com/add/pnu_ksa" class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#snapchat" />
                             </svg>
                         </a>
                     </li>
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                        <a href="https://www.tiktok.com/@_pnu_ksa" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.tiktok.com/@_pnu_ksa" class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#tiktok" />
                             </svg>
                         </a>
                     </li>
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                        <a href="https://medium.com/@pnu-ksa" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                        <a href="https://medium.com/@pnu-ksa" class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#medium" />
                             </svg>
@@ -118,21 +118,21 @@ string DataLeakReportURL = (currentLanguage == 1025) ? "/ar/Departments/DM/Pages
 
 
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                        <a href="https://www.instagram.com/_PNU_KSA/" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.instagram.com/_PNU_KSA/" class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18">
                                 <use xlink:href="#instagram" />
                             </svg>
                         </a>
                     </li>
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                        <a href="https://www.youtube.com/channel/UC-0BTuZ46ApPXt6dWONTyGg" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.youtube.com/channel/UC-0BTuZ46ApPXt6dWONTyGg" class="nav-link text-white p-2 " target="_blank">
                             <svg class="bi d-block m-1" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
                                 <use xlink:href="#youtube" />
                             </svg>
                         </a>
                     </li>
                     <li class="rounded-circle bg-white  bg-opacity-10 d-flex justify-content-center flex-column mx-1">
-                      <a href="https://whatsapp.com/channel/0029VabX2wDKGGGN07X1c80f" class="nav-link text-white p-2 " target="_blank" rel="noopener noreferrer">
+                      <a href="https://whatsapp.com/channel/0029VabX2wDKGGGN07X1c80f" class="nav-link text-white p-2 " target="_blank">
                         <svg class="bi d-block m-1" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
                           <use xlink:href="#whatsapp" />
                         </svg>
@@ -410,16 +410,16 @@ string DataLeakReportURL = (currentLanguage == 1025) ? "/ar/Departments/DM/Pages
                     <span class=" mx-1 p-1  " href="#">| </span>
                     <a class="  text-decoration-none mx-1 p-1 link-light " href="<%= OpenDataURL %>" target="_blank"><%= OpenDataTitle %></a>
                     <span class=" mx-1 p-1  " href="#">| </span>
-                    <a class="  text-decoration-none mx-1 p-1 link-light " href="https://eparticipation.my.gov.sa/" target="_blank" rel="noopener noreferrer"><%= ElectronicShare %> </a>
+                    <a class="  text-decoration-none mx-1 p-1 link-light " href="https://eparticipation.my.gov.sa/" target="_blank"><%= ElectronicShare %> </a>
                     <span class=" mx-1 p-1  " href="#">| </span>
                     
-					<a class=" btn text-decoration-none mx-1 p-1 link-light" href="https://www.moe.gov.sa/ar/Pages/default.aspx" dir="ltr" target="_blank" rel="noopener noreferrer"><%= MOE %>
+					<a class=" btn text-decoration-none mx-1 p-1 link-light" href="https://www.moe.gov.sa/ar/Pages/default.aspx" dir="ltr" target="_blank"><%= MOE %>
                     </a>
                     <span class=" mx-1 p-1  " href="#">| </span>
-                    <a class=" btn text-decoration-none mx-1 p-1 link-light" href="https://www.vision2030.gov.sa/ar" dir="ltr" target="_blank" rel="noopener noreferrer"><%= SaudiVision2030 %>
+                    <a class=" btn text-decoration-none mx-1 p-1 link-light" href="https://www.vision2030.gov.sa/ar" dir="ltr" target="_blank"><%= SaudiVision2030 %>
                     </a>
                     <span class=" mx-1 p-1  " href="#">| </span>
-                    <a class=" btn text-decoration-none mx-1 p-1 link-light" href="https://my.gov.sa/ar" dir="ltr" target="_blank" rel="noopener noreferrer"><%= NationalPortal %>
+                    <a class=" btn text-decoration-none mx-1 p-1 link-light" href="https://my.gov.sa/ar" dir="ltr" target="_blank"><%= NationalPortal %>
                     </a>
 					<span class=" mx-1 p-1  " href="#"> | </span>
 					<a class=" btn text-decoration-none mx-1 p-1 link-light" href="<%= PoliciesURL %>" dir="ltr" target="_blank"> <%= Policies %> ​</a>

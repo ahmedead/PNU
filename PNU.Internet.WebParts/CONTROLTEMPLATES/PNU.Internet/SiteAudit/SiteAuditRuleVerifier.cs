@@ -1010,19 +1010,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.SiteAudit
                                     if (Uri.TryCreate(canonicalHref, UriKind.Absolute, out canUri))
                                     {
                                         string canPath = canUri.AbsolutePath;
-                                        // Language prefix must be normalized lowercase (/ar/, /en/) and must not be blindly pointing to homepage /ar/
-                                        bool isLanguagePrefixClean = canPath.StartsWith("/ar/", StringComparison.Ordinal) ||
-                                                                     canPath.StartsWith("/en/", StringComparison.Ordinal) ||
-                                                                     canPath.StartsWith("/ar-sa/", StringComparison.Ordinal) ||
-                                                                     canPath.StartsWith("/en-us/", StringComparison.Ordinal) ||
-                                                                     canPath.Equals(canPath.ToLowerInvariant(), StringComparison.Ordinal);
+                                        // Canonical path must be lowercase and must not be blindly pointing to the homepage /ar/ (unless the tested page itself is homepage)
+                                        bool isCleanLowercase = canPath.Equals(canPath.ToLowerInvariant(), StringComparison.Ordinal);
                                         bool isNotStuckAtHome = !canPath.TrimEnd('/').Equals("/ar", StringComparison.OrdinalIgnoreCase) || url.ToLowerInvariant().Contains("/pages/home.aspx") || url.TrimEnd('/').EndsWith("/ar", StringComparison.OrdinalIgnoreCase);
 
-                                        if (isLanguagePrefixClean && isNotStuckAtHome)
+                                        if (isCleanLowercase && isNotStuckAtHome)
                                         {
                                             result.IsResolved = true;
                                             result.Status = "Resolved";
-                                            result.Details = $"تم حل المشكلة: وسم Canonical محدد بشكل صحيح وموحد ({canonicalHref}) مما يمنع احتساب المحتوى المكرر.";
+                                            result.Details = $"تم حل المشكلة: وسم Canonical محدد بحروف صغيرة موحدة ({canonicalHref}) مما يمنع احتساب المحتوى المكرر.";
                                         }
                                         else if (!isNotStuckAtHome)
                                         {

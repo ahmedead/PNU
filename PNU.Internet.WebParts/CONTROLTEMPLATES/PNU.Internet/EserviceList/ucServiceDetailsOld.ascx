@@ -617,7 +617,7 @@ a.btn.disabled,fieldset:disabled a.btn {
                             </p>
                             <div class="service-btn-wrapper mt-3">
                                 <a id="hrefUManual" style="color:white;" class="btn btn-md btn-block py-2 main-btn" runat="server">تحميل دليل الاستخدام</a>
-                               <%-- <a title="download" href="http://portal.pnudstst.edu.sa/Lists/EservicesList/AllItems.aspx" runat="server" class="btn btn-md btn-block py-2 main-btn" target="_blank" rel="noopener noreferrer"></a>
+                               <%-- <a title="download" href="http://portal.pnudstst.edu.sa/Lists/EservicesList/AllItems.aspx" runat="server" class="btn btn-md btn-block py-2 main-btn" target="_blank"></a>
                                 <button id="btnUserMan" value="http://portal.pnudstst.edu.sa/Lists/EservicesList/AllItems.aspx"  target="_blank" runat="server"  class="btn btn-md btn-block py-2 main-btn"> تحميل دليل الاستخدام</button>--%>
                             </div>
 

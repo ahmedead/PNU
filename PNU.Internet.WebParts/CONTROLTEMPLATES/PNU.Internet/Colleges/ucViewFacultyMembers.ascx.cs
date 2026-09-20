@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.FacultyMembers;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
@@ -177,10 +177,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),this.Page.Title, ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
 
-            
+
         }
 
         private void LoadCollegeTabFunctions()
@@ -193,18 +193,18 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 
                 //ucGoogleScolar ucGoogleScolar = FindControl("ucGoogleScolar") as ucGoogleScolar;
 
-                
+
                 //ucMemberLibrary ucMemberLibrary = FindControl("ucMemberLibrary") as ucMemberLibrary;
 
 
 
-                
+
                 //ucMemberTweets ucMemberTweets = FindControl("ucMemberTweets") as ucMemberTweets;
 
-                
+
                 //ucORCIDData ucORCIDData = FindControl("ucORCIDData") as ucORCIDData;
 
-                
+
 
                 // Create tasks for each tab function and run them in parallel
                 Task[] tabTasks = new Task[]
@@ -232,7 +232,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             catch (Exception ex)
             {
                 // Handle exceptions
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"LoadCollegeTabFunctions", ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "LoadCollegeTabFunctions", ex.Message);
             }
         }
 
@@ -262,14 +262,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             try
             {
                 string email = Request.QueryString["view"].ToString();
-            
+
                 email.ToLower().Trim();
                 clsCollMembersListName _FacultyMember = busclsFacultyMembers.GetFacultyMemberByEmail(email);
 
                 List<AllDataCollMembersListName> _AllMainData = new List<AllDataCollMembersListName>();
 
                 //List<lstCourses> _AllCourses = busclsCourses.GetCoursesByEmail(email);
-            
+
                 SPSecurity.RunWithElevatedPrivileges(delegate () {
 
                     if (_FacultyMember != null)
@@ -495,7 +495,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 
         protected void college2tab_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 string email = Request.QueryString["view"].ToString();
                 ucMemberCourses ucMemberCoursesl = FindControl("ucMemberCourses") as ucMemberCourses;
@@ -514,10 +514,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
             }
-    
-            
+
+
 
 
 
@@ -541,9 +541,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
             }
-            
+
         }
 
         protected void college4tab_Click(object sender, EventArgs e)
@@ -563,7 +563,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
             }
 
         }
@@ -607,7 +607,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
             }
 
         }
@@ -616,25 +616,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
         {
             try
             {
-            string email = Request.QueryString["view"].ToString();
-            ucORCIDData ucORCIDData = FindControl("ucORCIDData") as ucORCIDData;
+                string email = Request.QueryString["view"].ToString();
+                ucORCIDData ucORCIDData = FindControl("ucORCIDData") as ucORCIDData;
 
-            if (ucORCIDData != null)
-            {
-                ucORCIDData.BindDataIntoRepeater(email);
-            }
-            college77tab.Attributes["onclick"] = "return false;";
+                if (ucORCIDData != null)
+                {
+                    ucORCIDData.BindDataIntoRepeater(email);
+                }
+                college77tab.Attributes["onclick"] = "return false;";
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z7-tab-pane');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z7-tab-pane');", true);
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
             }
-            
+
         }
-    
+
     }
 
-   
+
 }

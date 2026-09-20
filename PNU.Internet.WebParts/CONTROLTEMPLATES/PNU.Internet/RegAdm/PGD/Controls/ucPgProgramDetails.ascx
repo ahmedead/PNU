@@ -175,7 +175,7 @@
                             <i class="hgi hgi-stroke hgi-book-open-02 fs-4" style="color: #006848;"></i>
                             <h2 class="h5 fw-bold text-dark mb-0"><asp:Literal ID="litLblStudyPlan" runat="server" Text="الخطة الدراسية" /></h2>
                         </div>
-                        <a id="btnDownloadPlan" runat="server" visible="false" class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-2" target="_blank" style="border-radius: 6px;" rel="noopener noreferrer">
+                        <a id="btnDownloadPlan" runat="server" visible="false" class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-2" target="_blank" style="border-radius: 6px;">
                             <i class="hgi hgi-stroke hgi-file-download"></i>
                             <span><asp:Literal ID="litBtnDownloadText" runat="server" Text="تحميل الخطة الدراسية (PDF)" /></span>
                         </a>

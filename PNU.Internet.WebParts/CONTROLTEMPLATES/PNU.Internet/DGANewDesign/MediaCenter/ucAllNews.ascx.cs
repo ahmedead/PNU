@@ -22,7 +22,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.Media
             {
                 if (!IsPostBack)
                 {
-                    List<clsRequestsList> allData = busclsRequestsList.GetAllItems();
+                    List<clsRequestsList> allData = busclsRequestsList.GetAllItemsIsHome();
                     if (allData == null) allData = new List<clsRequestsList>();
 
                     // NEWS ONLY — Digital Media has CatID == "2"

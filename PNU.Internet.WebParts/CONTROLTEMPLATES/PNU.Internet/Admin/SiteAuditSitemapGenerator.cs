@@ -259,15 +259,6 @@ END";
             if (url.IndexOf("/_layouts/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
             if (url.IndexOf("/_catalogs/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
             if (url.IndexOf("/Forms/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
-
-            // Exclude administrative and internal portals
-            if (url.IndexOf("/ITAdmin/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
-            if (url.IndexOf("/ContentAdmin/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
-
-            // Exclude archived news and announcements
-            if (url.IndexOf("/Announcements/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
-            if (url.IndexOf("/NewsActivities/", StringComparison.OrdinalIgnoreCase) >= 0) return false;
-
             return true;
         }
 

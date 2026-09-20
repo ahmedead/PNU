@@ -172,9 +172,9 @@
                         <p> تمكن هذه الخدمة الإلكترونية كافة طالبات جامعة الأميرة نورة بنت عبدالرحمن من إتمام إجراءات
                             إخلاء الطرف، آليا عبر بوابة الخدمات الإلكترونية. </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -188,9 +188,9 @@
                             وتقدم العون القانوني للفئات المستحقة وذلك عن طريق إتاحة التقدم لحجز موعد
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -204,9 +204,9 @@
                             للطالبة متابعة طلب التقديم والتعديل عليه
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -220,9 +220,9 @@
                             الجامعي في حال لم تصلها الرسالة النصية ببياناتها الاكاديمية, كما تتيح لها طلب الحصول على
                             كلمة المرور للبريد الجامعي </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -243,9 +243,9 @@
                         <p> تمكن هذه الخدمة الإلكترونية كافة طالبات جامعة الأميرة نورة بنت عبدالرحمن من إتمام إجراءات
                             إخلاء الطرف، آليا عبر بوابة الخدمات الإلكترونية. </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -259,9 +259,9 @@
                             وتقدم العون القانوني للفئات المستحقة وذلك عن طريق إتاحة التقدم لحجز موعد
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -275,9 +275,9 @@
                             للطالبة متابعة طلب التقديم والتعديل عليه
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -299,9 +299,9 @@
                         <p> تمكن هذه الخدمة الإلكترونية كافة طالبات جامعة الأميرة نورة بنت عبدالرحمن من إتمام إجراءات
                             إخلاء الطرف، آليا عبر بوابة الخدمات الإلكترونية. </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
                         </div>
                     </div>
                 </div>
@@ -315,9 +315,9 @@
                             وتقدم العون القانوني للفئات المستحقة وذلك عن طريق إتاحة التقدم لحجز موعد
                         </p>
                         <div class="service-btn-wrapper">
-                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link" rel="noopener noreferrer"> تفاصيل
+                            <a target="_blank" href="service-details.html" class="serv-btn  serv-link"> تفاصيل
                                 الخدمة</a>
-                            <a target="_blank" class="serv-btn " rel="noopener noreferrer"> إبدأ الخدمة</a>
+                            <a target="_blank" class="serv-btn "> إبدأ الخدمة</a>
 
                         </div>
                     </div>

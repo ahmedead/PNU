@@ -15,16 +15,20 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
         {
             try
             {
+                // 1. منع شيربوينت و IIS من تقديم نفس الكاش للأخبار المختلفة
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["RequestID"] = true;
+
                 if (!IsPostBack)
                 {
                     if (Page.Request.QueryString["RequestID"] != null)
                     {
                         var ID = Page.Request.QueryString["RequestID"].ToString();
 
-                        //clsRequestsList _CurrentNew = busclsRequestsList.GetItemByID(ID);
-                        ////clsRequestsList _CurrentNew = new clsRequestsList();
                         clsRequestsList _CurrentNew = new clsRequestsList();
-                        AllMCNews.HRef = "https://" + HttpContext.Current.Request.Url.Host.ToString() + "/ar/MediaCenter/Pages/AllNews.aspx";//?Id=" + _CurrentNew.CatID;
+
+                        // 2. تصحيح رابط "جميع الأخبار" ليدعم اللغة الحالية (ar / en) بدلاً من تثبيت /ar/
+                        AllMCNews.HRef = SPFactory.GetSiteURL() + "/MediaCenter/Pages/AllNews.aspx";
 
                         SPSecurity.RunWithElevatedPrivileges(delegate ()
                         {
@@ -33,51 +37,44 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
                                 using (SPWeb web = site.OpenWeb("/ar/MediaCenter/News/"))
                                 {
                                     SPList reqList = web.Lists["RequestsList"];
-
                                     SPListItem sPListItem = reqList.GetItemById(Convert.ToInt32(ID));
                                     _CurrentNew = SPFactory.MapListItemsToClass<clsRequestsList>(sPListItem);
 
+                                    // جلب الأخبار ذات الصلة
                                     SPQuery query = new SPQuery();
                                     query.Query = $@"<Where>
-                                  <And>
-                                     <Eq>
-                                        <FieldRef Name='RequestStatus' />
-                                        <Value Type='Choice'>Approved</Value>
-                                     </Eq>
-                                     <And>
-                                        <Neq>
-                                           <FieldRef Name='ID' />
-                                           <Value Type='Counter'>{ID}</Value>
-                                        </Neq>
-                                        <Eq>
-                                           <FieldRef Name='MainCategory' />
-                                           <Value Type='Text'>{_CurrentNew.MainCategory}</Value>
-                                        </Eq>
-                                     </And>
-                                  </And>
-                               </Where>
-                               <OrderBy>
-                                  <FieldRef Name='MediaDate' Ascending='False' />
-                               </OrderBy>";
+                                          <And>
+                                             <Eq>
+                                                <FieldRef Name='RequestStatus' />
+                                                <Value Type='Choice'>Approved</Value>
+                                             </Eq>
+                                             <And>
+                                                <Neq>
+                                                   <FieldRef Name='ID' />
+                                                   <Value Type='Counter'>{ID}</Value>
+                                                </Neq>
+                                                <Eq>
+                                                   <FieldRef Name='MainCategory' />
+                                                   <Value Type='Text'>{_CurrentNew.MainCategory}</Value>
+                                                </Eq>
+                                             </And>
+                                          </And>
+                                       </Where>
+                                       <OrderBy>
+                                          <FieldRef Name='MediaDate' Ascending='False' />
+                                       </OrderBy>";
 
-
-                                    query.RowLimit = Convert.ToUInt32(3);
+                                    query.RowLimit = 3;
                                     SPListItemCollection _AllData = reqList.GetItems(query);
                                     if (_AllData != null && _AllData.Count > 0)
                                     {
-                                        List<clsRequestsList> _AllItems = new List<clsRequestsList>();
-                                        _AllItems = SPFactory.MapListItemsToClass<clsRequestsList>(_AllData);
+                                        List<clsRequestsList> _AllItems = SPFactory.MapListItemsToClass<clsRequestsList>(_AllData);
                                         rptNews.DataSource = _AllItems;
                                         rptNews.DataBind();
-
                                     }
-
-
-
                                 }
                             }
                         });
-
 
                         if (_CurrentNew != null)
                         {
@@ -89,12 +86,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
                     }
                 }
             }
-
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
-
         }
 
     }

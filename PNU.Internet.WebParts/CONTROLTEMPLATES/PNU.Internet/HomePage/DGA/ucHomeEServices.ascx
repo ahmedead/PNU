@@ -58,13 +58,13 @@
                                     </div>
                                     <div class="d-flex gap-3">
 
-                                        <a target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary"
+                                        <a target="_blank" rel="noopener" class="btn btn-outline-secondary"
                                             href="service-details.aspx?eti=<%#DataBinder.Eval(Container.DataItem,"ID") %>">
 
                                             <asp:Literal ID="lit_serviceDetails" runat="server" Text="<%$Resources:PnuInternetResources, res_ServiceDetails%>"></asp:Literal>
                                         </a>
 
-                                        <a target="_blank" rel="noopener noreferrer" class="btn btn-primary"
+                                        <a target="_blank" rel="noopener" class="btn btn-primary"
                                             href="<%#DataBinder.Eval(Container.DataItem,"URL") %>  ">
                                             <asp:Literal ID="lit_startService" runat="server" Text="<%$Resources:PnuInternetResources, res_StartService%>"></asp:Literal>
                                         </a>

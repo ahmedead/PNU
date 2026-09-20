@@ -16,7 +16,7 @@
                 <ItemTemplate>
                     <div class="card">
                         <div class="card-body d-flex justify-content-center align-items-center p-4" style="height: 100px; min-width: 160px;">
-                            <img src="<%# Eval("PRG_CRED_SPN") %>" class="img-fluid" style="max-height: 60px;" alt="" loading="lazy" decoding="async">
+                            <img src="<%# Eval("PRG_CRED_SPN_IMGSRC") %>" class="img-fluid" style="max-height: 60px;" alt="" loading="lazy" decoding="async">
                         </div>
                     </div>
                 </ItemTemplate>
