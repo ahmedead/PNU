@@ -1719,6 +1719,7 @@
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\DGAPageLayoutBase.cs">
       <SubType>ASPXCodeBehind</SubType>
+      
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\HeroImageResizer.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\SEO.ascx.cs">
