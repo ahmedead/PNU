@@ -191,8 +191,23 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
 
             if (!isAuthorized)
             {
-                ltrAdminListName.Text = AdminListName;
-                ltrAdminWebPath.Text = EffectiveAdminWebUrl;
+                if (!ContentAdm.IsAuthenticated())
+                {
+                    phDenied.Controls.Clear();
+                    phDenied.Controls.Add(new LiteralControl(
+                        "<div class=\"alert alert-warning shadow-sm border-0 rounded-4 p-4 text-center my-4\">" +
+                        "<i class=\"bi bi-person-lock text-warning fs-1 mb-2 d-block\"></i>" +
+                        "<h4 class=\"fw-bold mb-2\">تسجيل الدخول مطلوب</h4>" +
+                        "<p class=\"mb-3 text-muted\">يجب تسجيل الدخول بحساب المشرف للوصول إلى لوحة التحكم الموحدة.</p>" +
+                        "<a href=\"javascript:void(0)\" onclick=\"openAdminLoginPopup(); return false;\" class=\"btn btn-primary px-4 py-2\">تسجيل الدخول / Login</a>" +
+                        "</div>"
+                    ));
+                }
+                else
+                {
+                    ltrAdminListName.Text = AdminListName;
+                    ltrAdminWebPath.Text = EffectiveAdminWebUrl;
+                }
                 return;
             }
 
@@ -202,6 +217,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["detail"] = true;
+            Response.Cache.VaryByParams["layout"] = true;
+            Response.Cache.VaryByParams["module"] = true;
+            Response.Cache.VaryByParams["target"] = true;
             if (!phMain.Visible) return;
 
             if (!IsPostBack)
@@ -230,6 +251,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
 
         private bool CheckUserAuthorization()
         {
+            if (!ContentAdm.IsAuthenticated())
+            {
+                ContentAdm.PromptLogin(Page);
+                return false;
+            }
+
             try
             {
                 if (SPContext.Current == null || SPContext.Current.Web == null) return false;

@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -16,6 +16,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.FacultyMe
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["view"] = true;
                 SetTitles();
 
                 if (Page.Request.QueryString["view"] == null)

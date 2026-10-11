@@ -38,30 +38,97 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign
     {
         public string ID { get; set; }
         public string Title { get; set; }         // Category display name (Ar)
+        public string TitleEn { get; set; }       // Category display name (En)
         public string IconClass { get; set; }     // e.g. hgi-validation-approval
         public int SortOrder { get; set; }
+
+        public string DisplayTitle
+        {
+            get
+            {
+                if (IsEnglishCulture() && !string.IsNullOrEmpty(TitleEn))
+                    return TitleEn;
+                return Title;
+            }
+        }
+
+        private static bool IsEnglishCulture()
+        {
+            try
+            {
+                return string.Equals(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        }
     }
 
     public class FAQQuestionItem
     {
         public string ID { get; set; }
-        public string Title { get; set; }          // mirror of the question
+        public string Title { get; set; }          // mirror of the question (Ar)
+        public string TitleEn { get; set; }        // mirror of the question (En)
         public string CategoryName { get; set; }   // FK by name -> FAQCategoryItem.Title
-        public string QuestionTextAr { get; set; } // Note field (because name contains "Text")
+        public string CategoryNameEn { get; set; } // FK by name -> FAQCategoryItem.TitleEn
+        public string QuestionTextAr { get; set; } // Note field
+        public string QuestionTextEn { get; set; } // Note field
         public int SortOrder { get; set; }
 
         // Not persisted — filled after loading answer rows and grouping them
         public List<FAQAnswerItem> AnswerItems { get; set; }
+
+        public string DisplayQuestionText
+        {
+            get
+            {
+                if (IsEnglishCulture())
+                {
+                    if (!string.IsNullOrEmpty(QuestionTextEn)) return QuestionTextEn;
+                    if (!string.IsNullOrEmpty(TitleEn)) return TitleEn;
+                }
+                return !string.IsNullOrEmpty(QuestionTextAr) ? QuestionTextAr : Title;
+            }
+        }
+
+        private static bool IsEnglishCulture()
+        {
+            try
+            {
+                return string.Equals(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        }
     }
 
     public class FAQAnswerItem
     {
         public string ID { get; set; }
         public string Title { get; set; }         // short label (can mirror content)
+        public string TitleEn { get; set; }       // short label (En)
         public string QuestionTitle { get; set; } // FK by title -> FAQQuestionItem.Title
+        public string QuestionTitleEn { get; set; }
         public string ItemType { get; set; }      // paragraph | bullet | intro
         public string ContentTextAr { get; set; } // Note field (HTML allowed, e.g. <a>, <span>)
+        public string ContentTextEn { get; set; } // Note field
         public int SortOrder { get; set; }
+
+        public string DisplayContentText
+        {
+            get
+            {
+                if (IsEnglishCulture() && !string.IsNullOrEmpty(ContentTextEn))
+                    return ContentTextEn;
+                return ContentTextAr ?? string.Empty;
+            }
+        }
+
+        private static bool IsEnglishCulture()
+        {
+            try
+            {
+                return string.Equals(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        }
     }
 
     #endregion
@@ -178,6 +245,76 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign
 
     public class FAQListInitializer
     {
+        public const string DEFAULT_FAQ_WEB = "/ar/FAQs/";
+
+        public static SPWeb OpenTargetWeb(SPSite site, string path = DEFAULT_FAQ_WEB)
+        {
+            if (site == null) return null;
+            string target = !string.IsNullOrEmpty(path) ? path : DEFAULT_FAQ_WEB;
+
+            try
+            {
+                string serverRelative = target.Replace('\\', '/').Trim();
+                if (!serverRelative.StartsWith("/", StringComparison.Ordinal))
+                    serverRelative = "/" + serverRelative;
+
+                string root = (site.ServerRelativeUrl ?? "/").TrimEnd('/');
+                if (root.Length > 0 && !serverRelative.StartsWith(root + "/", StringComparison.OrdinalIgnoreCase) && !serverRelative.Equals(root, StringComparison.OrdinalIgnoreCase))
+                {
+                    serverRelative = root + serverRelative;
+                }
+
+                SPWeb web = site.OpenWeb(serverRelative, true);
+                if (web != null && web.Exists) return web;
+                if (web != null) web.Dispose();
+            }
+            catch { }
+
+            try
+            {
+                string relative = target.TrimStart('/').TrimEnd('/');
+                SPWeb web = site.OpenWeb(relative);
+                if (web != null && web.Exists) return web;
+                if (web != null) web.Dispose();
+            }
+            catch { }
+
+            if (SPContext.Current != null && SPContext.Current.Web != null)
+            {
+                try { return site.OpenWeb(SPContext.Current.Web.ID); }
+                catch { }
+            }
+
+            return site.OpenWeb();
+        }
+
+        public static void EnsureAllListsExist(string targetWebUrl = DEFAULT_FAQ_WEB)
+        {
+            try
+            {
+                if (SPContext.Current == null) return;
+                Guid siteId = SPContext.Current.Site.ID;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    using (SPSite site = new SPSite(siteId))
+                    {
+                        using (SPWeb web = OpenTargetWeb(site, targetWebUrl))
+                        {
+                            if (web != null && web.Exists)
+                            {
+                                new FAQListInitializer().EnsureLists(web);
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current != null && HttpContext.Current.Request != null ? HttpContext.Current.Request.Url.ToString() : "", "FAQListInitializer.EnsureAllListsExist", ex.Message);
+            }
+        }
+
         public SPList MapListFieldsFromClass<T>(SPList list)
         {
             try
@@ -195,12 +332,20 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign
                     // Skip complex/navigation properties (e.g. AnswerItems on FAQQuestionItem)
                     if (!IsSimpleType(prop.PropertyType)) continue;
 
-                    if (prop.Name.Contains("Text"))
-                        list.Fields.Add(prop.Name, SPFieldType.Note, false);
-                    else
-                        list.Fields.Add(prop.Name, SPFieldType.Text, false);
+                    if (!list.Fields.ContainsField(prop.Name))
+                    {
+                        if (prop.Name.Contains("Text"))
+                            list.Fields.Add(prop.Name, SPFieldType.Note, false);
+                        else if (prop.PropertyType == typeof(int))
+                            list.Fields.Add(prop.Name, SPFieldType.Number, false); // numeric sort in CAML
+                        else
+                            list.Fields.Add(prop.Name, SPFieldType.Text, false);
+                    }
 
-                    view.ViewFields.Add(prop.Name);
+                    if (view != null && !view.ViewFields.Exists(prop.Name))
+                    {
+                        view.ViewFields.Add(prop.Name);
+                    }
                 }
 
                 view.Update();
@@ -240,6 +385,76 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign
             if (categoriesCreated)  SeedCategories(web);
             if (questionsCreated)   SeedQuestions(web);
             if (answerItemsCreated) SeedAnswerItems(web);
+
+            // Check for missing EN fields on existing or created lists and add them
+            EnsureEnFieldsExist(web);
+        }
+
+        private void EnsureEnFieldsExist(SPWeb web)
+        {
+            try
+            {
+                SPList catList = web.Lists.TryGetList(FAQListNames.FAQCategories);
+                if (catList != null)
+                {
+                    bool chg = false;
+                    chg |= EnsureField(catList, "TitleEn", "Title (EN)", SPFieldType.Text, false);
+                    if (chg) catList.Update();
+                }
+
+                SPList qList = web.Lists.TryGetList(FAQListNames.FAQQuestions);
+                if (qList != null)
+                {
+                    bool chg = false;
+                    chg |= EnsureField(qList, "TitleEn", "Title (EN)", SPFieldType.Text, false);
+                    chg |= EnsureField(qList, "CategoryNameEn", "Category Name (EN)", SPFieldType.Text, false);
+                    chg |= EnsureField(qList, "QuestionTextEn", "Question Text (EN)", SPFieldType.Note, false);
+                    if (chg) qList.Update();
+                }
+
+                SPList aList = web.Lists.TryGetList(FAQListNames.FAQAnswerItems);
+                if (aList != null)
+                {
+                    bool chg = false;
+                    chg |= EnsureField(aList, "TitleEn", "Title (EN)", SPFieldType.Text, false);
+                    chg |= EnsureField(aList, "QuestionTitleEn", "Question Title (EN)", SPFieldType.Text, false);
+                    chg |= EnsureField(aList, "ContentTextEn", "Content Text (EN)", SPFieldType.Note, false);
+                    if (chg) aList.Update();
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current != null && HttpContext.Current.Request != null ? HttpContext.Current.Request.Url.ToString() : "", "FAQListInitializer.EnsureEnFieldsExist", ex.Message);
+            }
+        }
+
+        private static bool EnsureField(SPList list, string internalName, string displayName, SPFieldType fieldType, bool required = false)
+        {
+            if (list == null) return false;
+            if (list.Fields.ContainsField(internalName)) return false;
+
+            try
+            {
+                string fieldName = list.Fields.Add(internalName, fieldType, required);
+                SPField field = list.Fields.GetFieldByInternalName(fieldName);
+                if (field != null)
+                {
+                    field.Title = displayName;
+                    field.Update();
+                }
+
+                SPView view = list.DefaultView;
+                if (view != null && !view.ViewFields.Exists(internalName))
+                {
+                    view.ViewFields.Add(internalName);
+                    view.Update();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool EnsureFAQCategoriesList(SPWeb web)

@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["COLL_CODE"] = true;
                 if (!Page.IsPostBack && !string.IsNullOrEmpty(Request.QueryString["COLL_CODE"]))
                 {
                     BindDataU(Request.QueryString["COLL_CODE"].ToString());

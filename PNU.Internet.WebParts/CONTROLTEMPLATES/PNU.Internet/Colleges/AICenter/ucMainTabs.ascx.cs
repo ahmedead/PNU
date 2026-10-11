@@ -12,6 +12,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["ChildResearchTrack"] = true;
+            Response.Cache.VaryByParams["ResearchTrack"] = true;
             if (!IsPostBack)
             {
 

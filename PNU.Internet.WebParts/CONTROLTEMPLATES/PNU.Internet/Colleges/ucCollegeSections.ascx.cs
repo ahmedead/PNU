@@ -19,6 +19,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["Source"] = true;
                 string CollegeCode = "";
                 if (Page.Request.QueryString["Source"] != null)
                 {

@@ -30,8 +30,8 @@
                 <div class="card-body d-flex flex-column placeholder-glow h-100">
                   <img width="400" height="250" class="w-100 rounded-2"
                     alt="<%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %>" loading="lazy" fetchpriority="low"
-                    src="<%# Eval("AttachmentURL") %>"
-                    srcset="<%# Eval("AttachmentURL") %> 2x"
+                    src="<%# GetThumbSrc(Eval("AttachmentURL")) %>"
+                    srcset="<%# GetThumbSrcSet(Eval("AttachmentURL")) %>"
                     sizes="(min-width: 1200px) 360px, (min-width: 768px) 45vw, 90vw" decoding="async">
                   <div class="flex-grow-1">
                     <h3 class="card-title"><%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %></h3>

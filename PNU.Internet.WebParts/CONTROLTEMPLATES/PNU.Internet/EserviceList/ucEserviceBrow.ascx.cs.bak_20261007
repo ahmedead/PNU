@@ -1,0 +1,568 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using Microsoft.SharePoint;
+using Portal.Main.Helper;
+
+namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
+{
+    public partial class ucEserviceBrow : UserControl
+    {
+        #region Properties (Configured via ControlLoaderWebPart or Parent Page)
+
+        /// <summary>
+        /// Property to show all items except items with TargetGroup = Visitor.
+        /// </summary>
+        public bool ExcludeVisitor
+        {
+            get { return ViewState["ExcludeVisitor"] != null && (bool)ViewState["ExcludeVisitor"]; }
+            set { ViewState["ExcludeVisitor"] = value; }
+        }
+
+        /// <summary>
+        /// Flag / Property to show all items with TargetGroup = Visitor.
+        /// </summary>
+        public bool ShowVisitorOnly
+        {
+            get { return ViewState["ShowVisitorOnly"] != null && (bool)ViewState["ShowVisitorOnly"]; }
+            set { ViewState["ShowVisitorOnly"] = value; }
+        }
+
+        /// <summary>
+        /// Flag / Property to show only items that require Nafath login (NafathLogin = true).
+        /// </summary>
+        public bool NafathLogin
+        {
+            get { return ViewState["NafathLogin"] != null && (bool)ViewState["NafathLogin"]; }
+            set { ViewState["NafathLogin"] = value; }
+        }
+
+        #region Aliases for ControlLoaderWebPart reflection and flexibility
+
+        public bool ExcludeVisitors
+        {
+            get { return ExcludeVisitor; }
+            set { ExcludeVisitor = value; }
+        }
+
+        public bool ShowAllExceptVisitor
+        {
+            get { return ExcludeVisitor; }
+            set { ExcludeVisitor = value; }
+        }
+
+        public bool ShowVisitor
+        {
+            get { return ShowVisitorOnly; }
+            set { ShowVisitorOnly = value; }
+        }
+
+        public bool VisitorOnly
+        {
+            get { return ShowVisitorOnly; }
+            set { ShowVisitorOnly = value; }
+        }
+
+        public bool IsVisitor
+        {
+            get { return ShowVisitorOnly; }
+            set { ShowVisitorOnly = value; }
+        }
+
+        public bool ShowNafathOnly
+        {
+            get { return NafathLogin; }
+            set { NafathLogin = value; }
+        }
+
+        public bool IsNafath
+        {
+            get { return NafathLogin; }
+            set { NafathLogin = value; }
+        }
+
+        public bool NafathOnly
+        {
+            get { return NafathLogin; }
+            set { NafathLogin = value; }
+        }
+
+        /// <summary>
+        /// String filter property for target group mode (e.g. "Visitor", "ExcludeVisitor", "All").
+        /// </summary>
+        public string TargetGroupFilter
+        {
+            get
+            {
+                if (ShowVisitorOnly) return "Visitor";
+                if (ExcludeVisitor) return "ExcludeVisitor";
+                return string.Empty;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string val = value.Trim().ToLowerInvariant();
+                if (val == "visitor" || val == "visitoronly" || val == "showvisitor" || val == "isvisitor")
+                {
+                    ShowVisitorOnly = true;
+                    ExcludeVisitor = false;
+                }
+                else if (val == "excludevisitor" || val == "excludevisitors" || val == "showallexceptvisitor" || val == "notvisitor")
+                {
+                    ExcludeVisitor = true;
+                    ShowVisitorOnly = false;
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["page"] = true;
+            if (!IsPostBack)
+            {
+                int pageNumber = 1;
+                bool hasPageParam = false;
+
+                if (Request.QueryString["page"] != null)
+                {
+                    if (int.TryParse(Request.QueryString["page"], out pageNumber) && pageNumber >= 1)
+                    {
+                        hasPageParam = true;
+                    }
+                    else
+                    {
+                        pageNumber = 1;
+                    }
+                }
+
+                FillDropDownList();
+                LoadCollegeServices();
+                BindServices(pageNumber);
+
+                ApplySeoMetadata(pageNumber, hasPageParam);
+            }
+            else
+            {
+                ddlFilterSelectedValue.Value = string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// ينشر عنواناً ووصفاً يحملان رقم الصفحة.
+        ///
+        /// قاعدة الأولوية لعنوان الصفحة:
+        /// 1) عنوان الصفحة الحالية من SharePoint (SPContext.Current.ListItem["Title"]).
+        /// 2) عنوان الصفحة من Page.Title إذا وُجد.
+        /// 3) الاحتياط العام "الخدمات الإلكترونية" / "E-Services".
+        /// هذا يضمن ألا تُستبدل عناوين الصفحات الفرعية (مثل صفحة خدمات المستفيد الخارجي
+        /// أو خدمات المستفيد الداخلي) بعنوان مضلل عند وجود pagination.
+        /// </summary>
+        private void ApplySeoMetadata(int pageNumber, bool hasPageParam)
+        {
+            try
+            {
+                if (HttpContext.Current == null) return;
+
+                bool isArabic = Publics.IsArabic;
+                string baseTitle = string.Empty;
+
+                try
+                {
+                    if (SPContext.Current != null && SPContext.Current.ListItem != null &&
+                        SPContext.Current.ListItem.Fields.ContainsField("Title") &&
+                        SPContext.Current.ListItem["Title"] != null)
+                    {
+                        baseTitle = SPContext.Current.ListItem["Title"].ToString().Trim();
+                    }
+                }
+                catch { }
+
+                if (string.IsNullOrWhiteSpace(baseTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                {
+                    baseTitle = Page.Title.Trim();
+                }
+
+                if (string.IsNullOrWhiteSpace(baseTitle))
+                {
+                    baseTitle = isArabic ? "الخدمات الإلكترونية" : "E-Services";
+                }
+
+                string title = baseTitle;
+                string identifier = string.Empty;
+
+                if (hasPageParam)
+                {
+                    title = isArabic
+                        ? baseTitle + " - صفحة " + pageNumber
+                        : baseTitle + " - Page " + pageNumber;
+
+                    identifier = isArabic ? "صفحة " + pageNumber : "Page " + pageNumber;
+                }
+
+                HttpContext.Current.Items["PNU_BrowserTitle"] = title;
+                HttpContext.Current.Items["PNU_BrowserDescription"] =
+                    Publics.BuildSeoDescription(Publics.BuildSeoSiteChain(), baseTitle, identifier);
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
+                                   "ucEserviceBrow.ApplySeoMetadata", ex.Message);
+            }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            BindServices(1); // Reset to the first page when searching
+        }
+
+        protected void Filter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlFilter.SelectedValue == "All")
+            {
+                ddlFilterSelectedValue.Value = string.Empty;
+            }
+            else
+            {
+                ddlFilterSelectedValue.Value = ddlFilter.SelectedValue;
+            }
+            BindServices(1); // Reset to the first page when filtering
+        }
+
+        private string GetVisitorCamlCondition()
+        {
+            if (ShowVisitorOnly)
+            {
+                return "<Or><Eq><FieldRef Name='TargetGroup' /><Value Type='Choice'>Visitor</Value></Eq><Eq><FieldRef Name='TargetGroup' /><Value Type='Text'>Visitor</Value></Eq></Or>";
+            }
+            else if (ExcludeVisitor)
+            {
+                return "<Or><Neq><FieldRef Name='TargetGroup' /><Value Type='Choice'>Visitor</Value></Neq><IsNull><FieldRef Name='TargetGroup' /></IsNull></Or>";
+            }
+            return string.Empty;
+        }
+
+        private string GetNafathCamlCondition()
+        {
+            return string.Empty;
+        }
+
+        private bool HasTargetGroup(EServicesList item)
+        {
+            if (item == null) return false;
+            return !string.IsNullOrWhiteSpace(item.TargetGroup) ||
+                   !string.IsNullOrWhiteSpace(item.TargetGroup_EN) ||
+                   !string.IsNullOrWhiteSpace(item.DP_TargetGroup) ||
+                   !string.IsNullOrWhiteSpace(item.DP_TargetGroup_EN);
+        }
+
+        private bool IsVisitorGroup(EServicesList item)
+        {
+            if (item == null) return false;
+            return string.Equals(item.TargetGroup, "Visitor", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(item.TargetGroup_EN, "Visitor", StringComparison.OrdinalIgnoreCase)
+                || (!string.IsNullOrEmpty(item.TargetGroup) && item.TargetGroup.IndexOf("زائر", StringComparison.OrdinalIgnoreCase) >= 0)
+                || (!string.IsNullOrEmpty(item.DP_TargetGroup) && item.DP_TargetGroup.IndexOf("زائر", StringComparison.OrdinalIgnoreCase) >= 0)
+                || (!string.IsNullOrEmpty(item.DP_TargetGroup_EN) && item.DP_TargetGroup_EN.IndexOf("Visitor", StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        private bool IsNafathService(EServicesList item)
+        {
+            if (item == null) return false;
+            string val = (item.NafathLogin ?? "").Trim().ToLowerInvariant();
+            return val == "1" || 
+                   val == "true" || 
+                   val == "yes" || 
+                   val == "نعم" || 
+                   val == "نفاذ" || 
+                   val == "nafath";
+        }
+
+        private bool MatchesNafath(EServicesList item)
+        {
+            if (NafathLogin)
+            {
+                // On ucInternalNafathEservices: ONLY show items where NafathLogin == true
+                return IsNafathService(item);
+            }
+            else if (ExcludeVisitor)
+            {
+                // On Internal Services page: MUST have TargetGroup, MUST NOT be visitor, MUST NOT be Nafath
+                return HasTargetGroup(item) && !IsVisitorGroup(item) && !IsNafathService(item);
+            }
+            else if (ShowVisitorOnly)
+            {
+                // On External Services page: MUST have TargetGroup and MUST be visitor (Nafath services included if visitor)
+                return HasTargetGroup(item) && IsVisitorGroup(item);
+            }
+
+            return true;
+        }
+
+        private string CombineAnd(params string[] conditions)
+        {
+            var validConditions = conditions.Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
+            if (validConditions.Count == 0) return string.Empty;
+            if (validConditions.Count == 1) return validConditions[0];
+
+            string combined = validConditions[0];
+            for (int i = 1; i < validConditions.Count; i++)
+            {
+                combined = $"<And>{combined}{validConditions[i]}</And>";
+            }
+            return combined;
+        }
+
+        private void BindServices(int pageNumber)
+        {
+            try
+            {
+                using (SPSite site = new SPSite(SPContext.Current.Site.Url))
+                {
+                    using (SPWeb web = site.OpenWeb())
+                    {
+                        SPList list = web.Lists["EservicesList"];
+                        if (list != null)
+                        {
+                            SPQuery query = new SPQuery();
+
+                            string activeCond = "<Eq><FieldRef Name='Active' /><Value Type='Boolean'>1</Value></Eq>";
+
+                            // Search condition
+                            string searchQuery = txtSearch.Value != null ? txtSearch.Value.Trim() : string.Empty;
+                            string searchCond = string.Empty;
+                            if (!string.IsNullOrEmpty(searchQuery))
+                            {
+                                searchCond = $@"<Or>
+                                                  <Contains>
+                                                     <FieldRef Name='ARServiceName' />
+                                                     <Value Type='Text'>{searchQuery}</Value>
+                                                  </Contains>
+                                                  <Contains>
+                                                     <FieldRef Name='ENServiceName' />
+                                                     <Value Type='Text'>{searchQuery}</Value>
+                                                  </Contains>
+                                               </Or>";
+                            }
+
+                            // Filter dropdown condition
+                            string filterQuery = ddlFilterSelectedValue.Value;
+                            string filterCond = string.Empty;
+                            if (!string.IsNullOrEmpty(filterQuery) && filterQuery != "All")
+                            {
+                                string targetGroupField = PortalHelper.IsArabic ? "TargetGroup_EN" : "TargetGroup";
+                                filterCond = $@"<Contains>
+                                                  <FieldRef Name='{targetGroupField}' />
+                                                  <Value Type='Text'>{filterQuery}</Value>
+                                               </Contains>";
+                            }
+
+                            string whereClause = CombineAnd(activeCond, searchCond, filterCond);
+                            string orderByClause = "<OrderBy><FieldRef Name='ItemOrder' Ascending='TRUE' /><FieldRef Name='Title' Ascending='TRUE' /></OrderBy>";
+                            if (!string.IsNullOrEmpty(whereClause))
+                            {
+                                query.Query = $"<Where>{whereClause}</Where>{orderByClause}";
+                            }
+                            else
+                            {
+                                query.Query = orderByClause;
+                            }
+
+                            // Fetch items matching the query
+                            SPListItemCollection collitem = list.GetItems(query);
+
+                            if (collitem != null)
+                            {
+                                // Map items to custom class
+                                List<EServicesList> eserviceList = SPFactory.MapListItemsToClass<EServicesList>(collitem);
+
+                                // In-memory filtering for TargetGroup and Nafath logic
+                                eserviceList = eserviceList.Where(s => MatchesNafath(s)).ToList();
+
+                                // In-memory numeric sorting by ItemOrder
+                                eserviceList = eserviceList
+                                    .OrderBy(s => s.OrderValue)
+                                    .ThenBy(s => s.ARServiceName)
+                                    .ToList();
+
+                                // Pagination logic
+                                int pageSize = 6; // Number of items per page
+                                int totalItems = eserviceList.Count;
+                                int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+                                // Calculate the items to display for the current page
+                                int skip = (pageNumber - 1) * pageSize;
+                                if (skip < 0) skip = 0;
+                                var pagedItems = eserviceList.Skip(skip).Take(pageSize).ToList();
+
+                                // Bind data to the repeater
+                                rptAllData.DataSource = pagedItems;
+                                rptAllData.DataBind();
+
+                                // Generate pagination links
+                                GeneratePagination(totalPages, pageNumber);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
+            }
+        }
+
+        private void FilterServices(int pageNumber)
+        {
+            BindServices(pageNumber);
+        }
+
+        private void FillDropDownList()
+        {
+            try
+            {
+                using (SPSite site = new SPSite(SPContext.Current.Site.Url))
+                {
+                    using (SPWeb web = site.OpenWeb())
+                    {
+                        SPList list = web.Lists["EservicesList"];
+                        if (list != null)
+                        {
+                            SPQuery query = new SPQuery();
+                            string activeCond = "<Eq><FieldRef Name='Active' /><Value Type='Boolean'>1</Value></Eq>";
+
+                            query.Query = $"<Where>{activeCond}</Where>";
+
+                            // Fetch all items matching the query
+                            SPListItemCollection collitem = list.GetItems(query);
+
+                            if (collitem != null)
+                            {
+                                List<EServicesList> eserviceList = SPFactory.MapListItemsToClass<EServicesList>(collitem);
+
+                                eserviceList = eserviceList.Where(s => MatchesNafath(s)).ToList();
+
+                                var distinctTargetGroups = eserviceList
+                                    .Where(s => !string.IsNullOrEmpty(s.TargetGroup))
+                                    .GroupBy(service => service.TargetGroup)  // Group by TargetGroup
+                                    .Select(group => group.First())           // Select the first item from each group
+                                    .ToList();
+
+                                for (int i = 0; i < distinctTargetGroups.Count; i++)
+                                {
+                                    distinctTargetGroups[i].TargetGroup = SPFactory.GetLocalizedTitle(distinctTargetGroups[i].TargetGroup_EN, distinctTargetGroups[i].TargetGroup);
+                                }
+                                ddlFilter.DataSource = distinctTargetGroups;
+                                ddlFilter.DataTextField = "TargetGroup";
+                                ddlFilter.DataValueField = "TargetGroup";
+                                ddlFilter.DataBind();
+                                if (PortalHelper.IsArabic)
+                                    ddlFilter.Items.Insert(0, new ListItem("الكل", "All"));
+                                else
+                                    ddlFilter.Items.Insert(0, new ListItem("All", "All"));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
+            }
+        }
+
+        private void GeneratePagination(int totalPages, int currentPage)
+        {
+            // Clear existing pagination
+            pagination.Controls.Clear();
+
+            // Add "Previous" button
+            var prevButton = new HtmlGenericControl("li");
+            prevButton.Attributes["class"] = "page-item" + (currentPage == 1 ? " disabled" : "");
+            prevButton.InnerHtml = $"<a class='page-link' href='?page={currentPage - 1}' tabindex='-1' aria-disabled='true'>&laquo;</a>";
+            pagination.Controls.Add(prevButton);
+
+            // Add page numbers
+            for (int i = 1; i <= totalPages; i++)
+            {
+                var pageItem = new HtmlGenericControl("li");
+                pageItem.Attributes["class"] = "page-item" + (i == currentPage ? " active" : "");
+                pageItem.InnerHtml = $"<a class='page-link' href='?page={i}'>{i}</a>";
+                pagination.Controls.Add(pageItem);
+            }
+
+            // Add "Next" button
+            var nextButton = new HtmlGenericControl("li");
+            nextButton.Attributes["class"] = "page-item" + (currentPage == totalPages ? " disabled" : "");
+            nextButton.InnerHtml = $"<a class='page-link' href='?page={currentPage + 1}'>&raquo;</a>";
+            pagination.Controls.Add(nextButton);
+        }
+
+        protected void btnClear_Click(object sender, EventArgs e)
+        {
+            txtSearch.Value = "";
+            ddlFilterSelectedValue.Value = "";
+            if (ddlFilter.Items.Count > 0)
+            {
+                ddlFilter.SelectedIndex = 0;
+            }
+            BindServices(1);
+            FillDropDownList();
+            LoadCollegeServices();
+        }
+
+        private void LoadCollegeServices()
+        {
+            try
+            {
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    using (SPSite site = new SPSite(SPContext.Current.Site.ID))
+                    {
+                        using (SPWeb web = site.OpenWeb("Admin"))
+                        {
+                            SPList list = web.Lists["ESystems"];
+                            if (list != null)
+                            {
+                                SPQuery query = new SPQuery();
+                                query.Query = @"<Where>
+                                                   <Eq>
+                                                      <FieldRef Name='Visibility' />
+                                                      <Value Type='Boolean'>1</Value>
+                                                   </Eq>
+                                                </Where>
+                                                <OrderBy>
+                                                   <FieldRef Name='ItemOrder' Ascending='True' />
+                                                </OrderBy>";
+                                query.RowLimit = 6;
+                                SPListItemCollection collitem = list.GetItems(query);
+
+                                if (collitem != null && collitem.Count > 0)
+                                {
+                                    List<ESystems> _AllData = new List<ESystems>();
+                                    _AllData = SPFactory.MapListItemsToClass<ESystems>(collitem);
+
+                                    rptSystems.DataSource = _AllData;
+                                    rptSystems.DataBind();
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
+            }
+        }
+    }
+}

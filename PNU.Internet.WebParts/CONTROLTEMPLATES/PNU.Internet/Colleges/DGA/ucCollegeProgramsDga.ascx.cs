@@ -73,6 +73,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["Source"] = true;
                 ltrHeading.Text = IsArabic ? "البرامج" : "Programs";
 
                 if (!IsPostBack)

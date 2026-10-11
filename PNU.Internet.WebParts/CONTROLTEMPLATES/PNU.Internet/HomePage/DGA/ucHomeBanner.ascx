@@ -22,6 +22,7 @@
             ? "<a href=\"" + Server.HtmlEncode(Convert.ToString(Eval("BtnURL"))) + "\" class=\"carousel-image-link\" aria-label=\"" + Server.HtmlEncode(Convert.ToString(Eval("Desc"))) + "\">" 
             : "" %>
 
+        <%-- PERF 2026-10-06: only the first slide is the LCP image. Marking all 8 eager/high made them all download at once and compete with it. --%>
         <picture class="carousel-media">
             <source type="image/avif" media="(min-width: 1200px)" srcset="/ar/SliderImages/<%# Eval("ID") %>/hero-lg.avif">
             <source type="image/avif" media="(min-width: 768px)" srcset="/ar/SliderImages/<%# Eval("ID") %>/hero-md.avif">
@@ -30,7 +31,7 @@
             <source type="image/webp" media="(min-width: 768px)" srcset="/ar/SliderImages/<%# Eval("ID") %>/hero-md.webp">
             <source type="image/webp" srcset="/ar/SliderImages/<%# Eval("ID") %>/hero-sm.webp">
             <img width="1920" height="492" class="carousel-image" alt="الخدمات الرقمية في جامعة الأميرة نورة"
-                loading="eager" fetchpriority="high" decoding="async" src='<%# Eval("ResizedImageUrl") %>'>
+                loading='<%# Container.ItemIndex == 0 ? "eager" : "lazy" %>' fetchpriority='<%# Container.ItemIndex == 0 ? "high" : "low" %>' decoding='<%# Container.ItemIndex == 0 ? "sync" : "async" %>' src='<%# Eval("ResizedImageUrl") %>'>
         </picture>
 
         <%# string.IsNullOrWhiteSpace(Convert.ToString(Eval("Title"))) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("BtnURL"))) 

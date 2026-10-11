@@ -20,6 +20,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["Source"] = true;
                 if (!Page.IsPostBack)
                 {
                     LoadCollegePrograms();

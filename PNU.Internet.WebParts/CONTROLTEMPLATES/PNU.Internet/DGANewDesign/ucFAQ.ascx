@@ -25,7 +25,7 @@
                                 aria-controls='<%# "faq-tabs-pane-" + Container.ItemIndex %>'
                                 aria-selected='<%# Container.ItemIndex == 0 ? "true" : "false" %>'>
                                 <i class='<%# "hgi hgi-stroke " + Eval("IconClass") + " fs-5 fw-light" %>' aria-hidden="true"></i>
-                                <span><%# Eval("Title") %></span>
+                                <span><%# Eval("DisplayTitle") %></span>
                             </button>
                         </li>
                     </ItemTemplate>
@@ -52,7 +52,7 @@
                                                     data-bs-target='<%# "#faqCollapse_" + Eval("ID") %>'
                                                     data-bs-toggle="collapse"
                                                     type="button">
-                                                    <%# Eval("QuestionTextAr") %>
+                                                    <%# Eval("DisplayQuestionText") %>
                                                 </button>
                                             </p>
                                             <div class="accordion-collapse collapse"

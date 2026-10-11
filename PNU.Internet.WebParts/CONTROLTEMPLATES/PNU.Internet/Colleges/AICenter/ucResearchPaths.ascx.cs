@@ -24,6 +24,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["ChildResearchTrack"] = true;
+                Response.Cache.VaryByParams["ResearchTrack"] = true;
 
                 if (!Page.IsPostBack)
                 {
@@ -99,6 +103,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
                         if(_itemData != null)
                         {
                             ltr2.Text = _itemData.Title;
+                            SetTrackSeo(_itemData.Title, "ResearchTrack", researchTrack);
                         }
                         SPList _CollegesList = web.Lists["ResearchTracksLevelTwo"];
                         SPQuery query = new SPQuery();
@@ -158,6 +163,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
                         if (_itemData != null)
                         {
                             ltr3.Text = _itemData.Title;
+                            SetTrackSeo(_itemData.Title, "ChildResearchTrack", researchTrack);
                         }
 
                         SPList _CollegesList = web.Lists["ResearchTracksLevelThree"];
@@ -195,6 +201,69 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.AICenter
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
+        }
+
+        /// <summary>
+        /// عنوان ووصف فريدان لكل مسار بحثي.
+        ///
+        /// المشكلة المرصودة (Semrush - Duplicate title tags):
+        ///     /en/Faculties/IT/AICentre/Pages/default.aspx?ResearchTrack=2 و 4 و 6 ...
+        /// كلها صفحة default.aspx واحدة يتغيّر محتواها بالاستعلام، والضابط لم يكن ينشر
+        /// عنواناً ولا وصفاً، فتحمل كلها:
+        ///     title       = "Artificial Intelligence Center Home"
+        ///     description = "Home page within Artificial Intelligence Center services ..."
+        ///     og:title    = "Artificial Intelligence Center - - - Princess Nourah ..."
+        ///
+        /// على نهج ucSectionHome:
+        ///   PlaceHolderPageTitle  = الموقع - المسار   (وسم title يعرض هذا الـ placeholder وحده)
+        ///   PNU_BrowserTitle      = المسار وحده       (SEO.ascx تضيف الموقع والجامعة حوله)
+        ///   PNU_BrowserDescription= سلسلة المواقع - المسار - المعرّف (المعرّف يضمن التفرّد)
+        /// </summary>
+        private void SetTrackSeo(string trackTitle, string queryKey, int trackId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(trackTitle) || HttpContext.Current == null) return;
+
+                string webTitle = SPContext.Current != null && SPContext.Current.Web != null
+                    ? SPContext.Current.Web.Title
+                    : string.Empty;
+
+                HttpContext.Current.Items["PNU_BrowserTitle"] = trackTitle.Trim();
+
+                string identifier = PortalHelper.IsArabic
+                    ? (queryKey == "ChildResearchTrack" ? "مسار فرعي " : "مسار بحثي ") + trackId
+                    : (queryKey == "ChildResearchTrack" ? "Sub-track " : "Research track ") + trackId;
+                HttpContext.Current.Items["PNU_BrowserDescription"] =
+                    Publics.BuildSeoDescription(Publics.BuildSeoSiteChain(), trackTitle, identifier);
+
+                string pageTitle = Publics.JoinNonEmpty(" - ", webTitle, trackTitle);
+                var placeholder = FindPlaceHolder(Page.Master, "PlaceHolderPageTitle");
+                if (placeholder != null)
+                {
+                    placeholder.Controls.Clear();
+                    placeholder.Controls.Add(new LiteralControl(HttpUtility.HtmlEncode(pageTitle)));
+                }
+                else
+                {
+                    Page.Title = pageTitle;
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
+            }
+        }
+
+        private ContentPlaceHolder FindPlaceHolder(System.Web.UI.MasterPage master, string id)
+        {
+            while (master != null)
+            {
+                var ph = master.FindControl(id) as ContentPlaceHolder;
+                if (ph != null) return ph;
+                master = master.Master;
+            }
+            return null;
         }
 
         private void BindResearchTracks()

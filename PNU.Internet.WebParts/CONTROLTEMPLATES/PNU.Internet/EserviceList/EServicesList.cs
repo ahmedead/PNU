@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,10 +60,23 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         public string Badge2 { get; set; }
 
         public string Badge2_EN { get; set; }
-
         public string Badge3 { get; set; }
         public string Badge3_EN { get; set; }
+        public string NafathLogin { get; set; } = "";
+        public string ItemOrder { get; set; } = "";
+        public string Item_x0020_Order { get; set; } = "";
+        public string Order { get; set; } = "";
 
-
+        public int OrderValue
+        {
+            get
+            {
+                string raw = !string.IsNullOrWhiteSpace(ItemOrder) ? ItemOrder :
+                            (!string.IsNullOrWhiteSpace(Item_x0020_Order) ? Item_x0020_Order : Order);
+                int val;
+                return int.TryParse(raw, out val) ? val : int.MaxValue;
+            }
+        }
     }
 }
+

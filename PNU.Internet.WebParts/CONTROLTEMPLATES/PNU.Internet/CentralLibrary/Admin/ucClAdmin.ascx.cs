@@ -34,7 +34,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.CentralLibrary.Con
 
                 pnlDenied.Visible = !_isAdmin;
                 pnlMain.Visible = _isAdmin;
-                if (!_isAdmin) return;
+                if (!_isAdmin)
+                {
+                    if (!ContentAdm.IsAuthenticated())
+                    {
+                        ltDenied.Text = "يجب تسجيل الدخول أولاً للوصول إلى لوحة التحكم. <a href=\"javascript:void(0)\" onclick=\"openAdminLoginPopup(); return false;\" class=\"btn btn-sm btn-primary ms-2 me-2\">تسجيل الدخول / Login</a>";
+                    }
+                    return;
+                }
 
                 ClListProvisioner.EnsureAllListsExist();
                 FillListPicker();
@@ -50,6 +57,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.CentralLibrary.Con
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["list"] = true;
             if (!_isAdmin) return;
 
             try
@@ -146,18 +156,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.CentralLibrary.Con
 
         private bool IsAdmin()
         {
-            try
-            {
-                return ContentAdm.IsAdmin();
-                //if (SPContext.Current != null && SPContext.Current.Web != null)
-                //{
-                //    return SPContext.Current.Web.CurrentUser.IsSiteAdmin ||
-                //           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.ManageWeb) ||
-                //           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.EditListItems);
-                //}
-            }
-            catch { }
-            return true;
+            return ContentAdm.EnsureAdminOrPromptLogin(Page);
         }
 
         protected void ddlList_SelectedIndexChanged(object sender, EventArgs e)

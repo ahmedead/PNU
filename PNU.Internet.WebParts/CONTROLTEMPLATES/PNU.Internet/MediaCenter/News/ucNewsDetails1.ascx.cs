@@ -15,11 +15,20 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["RequestID"] = true;
                 if (!IsPostBack)
                 {
                     if (Page.Request.QueryString["RequestID"] != null)
                     {
-                        var ID = Page.Request.QueryString["RequestID"].ToString();
+                        // رقم الخبر يجب أن يثبت أنه رقم قبل أن يدخل في CAML — نفس الإصلاح
+                        // في ucNewsDetails و ucCollegeNewsDetails و ucAdvertisementDetails.
+                        int ID;
+                        if (!int.TryParse(Page.Request.QueryString["RequestID"].Trim(), out ID))
+                        {
+                            return;
+                        }
 
                         //clsRequestsList _CurrentNew = busclsRequestsList.GetItemByID(ID);
                         ////clsRequestsList _CurrentNew = new clsRequestsList();
@@ -34,12 +43,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
                                 {
                                     SPList reqList = web.Lists["RequestsList"];
 
-                                    SPListItem sPListItem = reqList.GetItemById(Convert.ToInt32(ID));
+                                    SPListItem sPListItem = reqList.GetItemById(ID);
                                     _CurrentNew = SPFactory.MapListItemsToClass<clsRequestsList>(sPListItem);
                                     
                                     string localizedTitle = SPFactory.GetLocalizedTitle(_CurrentNew.Title, _CurrentNew.Title_EN);
                                     SetBrowserTitle(localizedTitle);
+
+                                    // العنوان وحده لا يكفي: بلا PNU_BrowserDescription تسقط
+                                    // SEO.ascx إلى وصف عام مبني على عنوان الصفحة القالبية
+                                    // فيتقاسمه كل الأخبار. رقم الطلب في آخر الوصف يضمن التفرّد.
+                                    if (!string.IsNullOrWhiteSpace(localizedTitle))
+                                    {
+                                        HttpContext.Current.Items["PNU_BrowserDescription"] =
+                                            Publics.BuildSeoDescription(Publics.BuildSeoSiteChain(), localizedTitle, ID.ToString());
+                                    }
                                     
+
+                                    // MainCategory يأتي من القائمة لا من الرابط، لكن تصنيفاً
+                                    // يحوي & أو < يكسر الاستعلام — فالترميز صواب في الحالتين.
+                                    string safeCategory = System.Security.SecurityElement.Escape(_CurrentNew.MainCategory) ?? string.Empty;
 
                                     SPQuery query = new SPQuery();
                                //     query.Query = $@"<Where>
@@ -79,7 +101,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
                                                         <And>
                                                            <Eq>
                                                               <FieldRef Name='MainCategory' />
-                                                              <Value Type='Text'>{_CurrentNew.MainCategory}</Value>
+                                                              <Value Type='Text'>{safeCategory}</Value>
                                                            </Eq>
                                                            <Eq>
                                                               <FieldRef Name='IsHome' />

@@ -14,6 +14,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["ID"] = true;
                 if (!IsPostBack)
                 {
                     if (Page.Request.QueryString["ID"] != null)

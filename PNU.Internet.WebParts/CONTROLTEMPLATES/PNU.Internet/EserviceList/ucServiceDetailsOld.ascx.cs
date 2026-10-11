@@ -17,6 +17,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["eti"] = true;
                 string testParameter = Request.QueryString["eti"];
                 uid = Convert.ToInt32(testParameter);
                 //   lblquerys.Text = testParameter;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -41,6 +41,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Search
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["p"] = true;
+                Response.Cache.VaryByParams["q"] = true;
                 if (!IsPostBack)
                 {
                     Keyword = (Request.QueryString["q"] ?? "").Trim();

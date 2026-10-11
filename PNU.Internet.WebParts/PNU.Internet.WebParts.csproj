@@ -365,6 +365,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx.designer.cs">
       <DependentUpon>ucUnifiedContentAdmin.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucFaqAdmin.ascx.cs">
+      <DependentUpon>ucFaqAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucFaqAdmin.ascx.designer.cs">
+      <DependentUpon>ucFaqAdmin.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\DgaAutoTransformer.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Admin\DynamicMenuLoader.ascx.cs">
       <DependentUpon>DynamicMenuLoader.ascx</DependentUpon>
@@ -1449,6 +1456,20 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceBrow.ascx.designer.cs">
       <DependentUpon>ucEserviceBrow.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceSections.ascx.cs">
+      <DependentUpon>ucEserviceSections.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceSections.ascx.designer.cs">
+      <DependentUpon>ucEserviceSections.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucInternalNafathEservices.ascx.cs">
+      <DependentUpon>ucInternalNafathEservices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucInternalNafathEservices.ascx.designer.cs">
+      <DependentUpon>ucInternalNafathEservices.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceBrow2.ascx.cs">
       <DependentUpon>ucEserviceBrow2.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1769,6 +1790,14 @@
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeNoraFuture.ascx.designer.cs">
       <DependentUpon>ucHomeNoraFuture.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\HomeNoraFutureProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeNoraFutureAdmin.ascx.cs">
+      <DependentUpon>ucHomeNoraFutureAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeNoraFutureAdmin.ascx.designer.cs">
+      <DependentUpon>ucHomeNoraFutureAdmin.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomePage.ascx.cs">
       <DependentUpon>ucHomePage.ascx</DependentUpon>
@@ -3196,6 +3225,20 @@
     <Compile Include="Layouts\PNU.Internet\Search\SearchAdmin.aspx.designer.cs">
       <DependentUpon>SearchAdmin.aspx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ContentManagement\ucGenericPageContentEditor.ascx.cs">
+      <DependentUpon>ucGenericPageContentEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\ContentManagement\ucGenericPageContentEditor.ascx.designer.cs">
+      <DependentUpon>ucGenericPageContentEditor.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Layouts\PNU.Internet\ContentManagement\PageContentEditor.aspx.cs">
+      <DependentUpon>PageContentEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\PNU.Internet\ContentManagement\PageContentEditor.aspx.designer.cs">
+      <DependentUpon>PageContentEditor.aspx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Layouts\PNU.Internet\TimerJobsManual.aspx.cs">
       <DependentUpon>TimerJobsManual.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3315,6 +3358,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ManageMemebers\ucFacultyActivationReport.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\Colleges\ucColleges.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucUnifiedContentAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\ContentAdmin\ucFaqAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\DynamicMenuLoader.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\PageGenerator.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Admin\SiteHierarchyNavigator.ascx" />
@@ -3461,6 +3505,8 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucServiceDetails2.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucSystemsBrow.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceBrow.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceSections.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucInternalNafathEservices.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceBrow2.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucSearchList.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucServiceDetails.ascx" />
@@ -3503,6 +3549,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeHeader.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeNews.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeNoraFuture.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeNoraFutureAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomePage.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeStatistics.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeWhy.ascx" />
@@ -3709,6 +3756,8 @@
     <Content Include="Layouts\PNU.Internet\Sitemap.aspx" />
     <Content Include="Layouts\PNU.Internet\Search\PageIndexAdmin.aspx" />
     <Content Include="Layouts\PNU.Internet\Search\SearchAdmin.aspx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\ContentManagement\ucGenericPageContentEditor.ascx" />
+    <Content Include="Layouts\PNU.Internet\ContentManagement\PageContentEditor.aspx" />
     <Content Include="Layouts\PNU.Internet\TimerJobsManual.aspx" />
     <Content Include="Layouts\PNU.NewEvents.WebParts\404\404.aspx" />
     <Content Include="Layouts\PNU.NewEvents.WebParts\404\404.css" />

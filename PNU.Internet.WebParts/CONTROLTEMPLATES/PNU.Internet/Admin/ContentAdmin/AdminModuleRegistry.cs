@@ -1,5 +1,6 @@
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AcademicCalendar.Controls;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.CentralLibrary.Controls;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA.Herbarium;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.International.Controls;
 using System;
@@ -227,6 +228,39 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                     Description = "إدارة محتوى وخدمات مكتب رئيس الجامعة.",
                     ProvisionerTypeName = "",
                     ProvisionAction = null
+                },
+                new AdminModuleItem
+                {
+                    Key = "FAQ",
+                    TitleAr = "الأسئلة الشائعة",
+                    TitleEn = "FAQ Management",
+                    Category = "المحتوى الرئيسي",
+                    Icon = "bi-question-circle",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/Admin/ContentAdmin/ucFaqAdmin.ascx",
+                    DefaultTargetWeb = "/ar/FAQs",
+                    Description = "إدارة تصنيفات وأسئلة وإجابات الأسئلة الشائعة للبوابة.",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.FAQListInitializer",
+                    ProvisionAction = () =>
+                    {
+                        FAQListInitializer.EnsureAllListsExist();
+                    }
+                },
+                new AdminModuleItem
+                {
+                    Key = "HomeNoraFuture",
+                    TitleAr = "برامج ومستقبل نورة (الصفحة الرئيسية)",
+                    TitleEn = "Home Nora Future & Programs",
+                    Category = "الصفحة الرئيسية",
+                    Icon = "bi-mortarboard",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/HomePage/DGA/Admin/ucHomeNoraFutureAdmin.ascx",
+                    DefaultTargetWeb = "/ar/ContentAdmin",
+                    Description = "إدارة عنوان وبطاقات وأيقونات وروابط قسم برامج ومستقبل نورة في الصفحة الرئيسية.",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA.HomeNoraFutureProvisioner",
+                    ProvisionAction = () =>
+                    {
+                        // ForceProvision ignores the once-per-request/process guard so the button always runs
+                        HomePage.DGA.HomeNoraFutureProvisioner.ForceProvision();
+                    }
                 }
             };
         }

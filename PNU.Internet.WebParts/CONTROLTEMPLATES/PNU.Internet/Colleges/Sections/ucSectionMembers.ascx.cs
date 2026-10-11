@@ -19,6 +19,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["SecCode"] = true;
                 if (!Page.IsPostBack)
                 {
                     LoadSectionMembers();

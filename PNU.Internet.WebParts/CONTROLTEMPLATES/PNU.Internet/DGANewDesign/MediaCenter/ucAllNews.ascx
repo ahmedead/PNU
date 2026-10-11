@@ -1,11 +1,11 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="asp" Namespace="System.Web.UI" Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 <%@ Import Namespace="Microsoft.SharePoint" %> 
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAllNews.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.MediaCenter.ucAllNews" %>
+<%@ Control Language="C#" AutoEventWireup="true" EnableViewState="false" CodeBehind="ucAllNews.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.MediaCenter.ucAllNews" %>
 
 
 <%@ Import Namespace="PNU.Internet.WebParts" %>
@@ -17,7 +17,7 @@
 
         <%-- Search + filter bar --%>
         <dga-search-input>
-            <div class="d-flex gap-3 mb-4" role="search" aria-label="ابحث في الأخبار">
+            <div class="d-flex gap-3 mb-4" role="search" aria-label='<%# SPFactory.GetLocalizedTitle("ابحث في الأخبار", "Search news") %>'>
                 <div class="form-control-container has-icon">
                     <span class="d-inline-flex fs-6 form-input-icon text-body-secondary">
                         <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
@@ -25,13 +25,13 @@
                     <input type="search" id="newsSearchInput" autocomplete="off" class="form-control"
                         placeholder='<%# SPFactory.GetLocalizedTitle("ابحث في الأخبار", "Search news") %>' value="" />
                 </div>
-                <button type="button" class="btn btn-primary" id="btnNewsSearch" aria-label="بحث">بحث</button>
+                <button type="button" class="btn btn-primary" id="btnNewsSearch" aria-label='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>'><%# SPFactory.GetLocalizedTitle("بحث", "Search") %></button>
                 <dga-filter-dropdown class="flex-shrink-0">
                     <div class="dropdown flex-shrink-0">
                         <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
                             data-bs-auto-close="outside" class="btn btn-dark gap-1" id="newsFilterToggle">
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-filter" aria-hidden="true"></i></span>
-                            <span>تصفية</span>
+                            <span><%# SPFactory.GetLocalizedTitle("تصفية", "Filter") %></span>
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-arrow-down-01" aria-hidden="true"></i></span>
                         </button>
                         <div class="dropdown-menu p-2" style="width: 20rem;">
@@ -47,7 +47,7 @@
                                             <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
                                         </span>
                                         <input type="text" autocomplete="off" class="form-control"
-                                               id="newsFacultyBoxSearch" placeholder="بحث" />
+                                               id="newsFacultyBoxSearch" placeholder='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>' />
                                     </div>
                                     <div class="d-flex flex-column gap-2 mt-4 px-2 py-2 overflow-auto"
                                          style="max-height: 12.5rem;" id="newsFacultyBox">
@@ -70,8 +70,8 @@
                                 <hr />
 
                                 <div class="d-flex justify-content-between align-content-stretch align-items-stretch gap-2">
-                                    <button type="button" class="btn btn-primary" id="btnApplyNewsFilter">تطبيق الاختيارات</button>
-                                    <button type="button" class="btn btn-secondary" id="btnResetNewsFilter">إعادة تعيين</button>
+                                    <button type="button" class="btn btn-primary" id="btnApplyNewsFilter"><%# SPFactory.GetLocalizedTitle("تطبيق الاختيارات", "Apply filters") %></button>
+                                    <button type="button" class="btn btn-secondary" id="btnResetNewsFilter"><%# SPFactory.GetLocalizedTitle("إعادة تعيين", "Reset") %></button>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
         <%-- Pagination --%>
         <dga-paginator>
             <div class="mt-5 p-2 d-flex justify-content-center pagination-container">
-                <nav aria-label="قائمة التنقل في الصفحات">
+                <nav aria-label='<%# SPFactory.GetLocalizedTitle("قائمة التنقل في الصفحات", "Pagination Navigation") %>'>
                     <ul class="pagination"></ul>
                 </nav>
             </div>

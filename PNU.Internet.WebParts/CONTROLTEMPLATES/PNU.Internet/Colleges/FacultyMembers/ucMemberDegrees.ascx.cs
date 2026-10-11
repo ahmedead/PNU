@@ -13,6 +13,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.FacultyMe
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["view"] = true;
                 SetTitles();
 
                 if (Page.Request.QueryString["view"] == null)

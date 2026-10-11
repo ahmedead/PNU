@@ -34,6 +34,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.FacultyMe
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["view"] = true;
             //if (Page.Request.QueryString["view"] == null)
             //    return;
             //string email = Request.QueryString["view"].ToString();

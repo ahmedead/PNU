@@ -23,6 +23,24 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA
             get { return SPContext.Current.Web.Language == 1025; }
         }
 
+        /// <summary>
+        /// رابط نموذج التواصل الموحد.
+        ///
+        /// كان في العلامة href="ContactUs.aspx" ولا يُضبط في الكود إطلاقاً، فيُحَل
+        /// نسبةً إلى مجلد الصفحة المستضيفة — ووجهته تختلف باختلاف مكان الضابط:
+        ///     /ar/Faculties/AP/Pages/ContactUs.aspx  -> 200 لكنها صفحة تواصل الكلية
+        ///                                               لا النموذج الموحد
+        ///     /ar/Faculties/Pages/ContactUs.aspx     -> 404
+        ///
+        /// المسار هنا مُجذَّر لا مطلق عن قصد: الضابط نفسه يعمل على بيئات الاختبار
+        /// والتطوير، ووضع https://pnu.edu.sa فيه يرسل مستخدمي تلك البيئات إلى
+        /// الإنتاج. على الإنتاج يُحَل إلى العنوان المطلوب حرفياً.
+        /// </summary>
+        private string UnifiedContactFormUrl
+        {
+            get { return IsArabic ? "/ar/Pages/ContactUsForm.aspx" : "/en/Pages/ContactUsForm.aspx"; }
+        }
+
         public class InfoDto
         {
             public string Label { get; set; }
@@ -114,6 +132,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA
             ltrFormText.Text = IsArabic
                 ? "أرسل استفسارك أو مقترحك إلى الكلية من خلال نموذج التواصل."
                 : "Send your inquiry or suggestion to the college through the contact form.";
+            lnkForm.HRef = UnifiedContactFormUrl;
             lnkForm.Attributes["aria-label"] = IsArabic
                 ? "فتح نموذج التواصل الموحد"
                 : "Open the unified contact form";
@@ -141,6 +160,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA
             ltrFormText.Text = IsArabic
                 ? "أرسل استفسارك أو مقترحك إلى الكلية من خلال نموذج التواصل."
                 : "Send your inquiry or suggestion to the college through the contact form.";
+            lnkForm.HRef = UnifiedContactFormUrl;
             lnkForm.Attributes["aria-label"] = IsArabic
                 ? "فتح نموذج التواصل الموحد"
                 : "Open the unified contact form";

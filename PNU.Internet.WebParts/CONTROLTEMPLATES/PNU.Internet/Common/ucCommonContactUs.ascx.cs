@@ -1,4 +1,4 @@
-using Microsoft.SharePoint;
+﻿using Microsoft.SharePoint;
 using Portal.Main.Helper;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Common
                     if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null)
                     {
                         string url = HttpContext.Current.Request.Url.AbsolutePath.ToLower();
-                        if (url.Contains("/en/") || url.EndsWith("/en")) return false;
+                        // مقطع المسار الأول لا البحث في المسار كله: Contains("/en/") كانت
+                        // تُطابق رمز كلية الهندسة في /ar/Faculties/EN/... و EndsWith("/en") تُطابق
+                        // أي مسار ينتهي بمجلد اسمه EN. نفس الإصلاح في SEO.ascx.cs.
+                        if (url.StartsWith("/en/") || url.Equals("/en")) return false;
                     }
                     if (SPContext.Current != null && SPContext.Current.Web != null)
                     {

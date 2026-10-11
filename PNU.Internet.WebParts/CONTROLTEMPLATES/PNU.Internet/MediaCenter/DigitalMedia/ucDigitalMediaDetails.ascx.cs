@@ -16,6 +16,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Digita
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["RequestID"] = true;
                 if (!IsPostBack)
                 {
                     if (Page.Request.QueryString["RequestID"] != null)

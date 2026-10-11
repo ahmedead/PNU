@@ -20,6 +20,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["eti"] = true;
                 string testParameter = Request.QueryString["eti"];
                 uid = Convert.ToInt32(testParameter);
                 //   lblquerys.Text = testParameter;
@@ -140,6 +143,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                 if (string.IsNullOrWhiteSpace(title)) return;
                 // make the dynamic title available to ucHomeHeader
                 HttpContext.Current.Items["PNU_BrowserTitle"] = title;
+
+                // وبلا وصف كانت SEO.ascx تسقط إلى نص عام يتقاسمه كل الخدمات.
+                // رقم الخدمة (eti) في آخر الوصف يضمن التفرّد.
+                string eti = HttpContext.Current.Request.QueryString["eti"];
+                HttpContext.Current.Items["PNU_BrowserDescription"] =
+                    Publics.BuildSeoDescription(Publics.BuildSeoSiteChain(), title, eti);
                 var placeholder = FindPlaceHolder(Page.Master, "PlaceHolderPageTitle");
                 if (placeholder != null)
                 {

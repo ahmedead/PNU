@@ -25,6 +25,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Search
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["cat"] = true;
+            Response.Cache.VaryByParams["p"] = true;
+            Response.Cache.VaryByParams["q"] = true;
+            Response.Cache.VaryByParams["sort"] = true;
             IsArabic = DetectArabic();
 
             txtKeyword.Attributes["type"] = "search";

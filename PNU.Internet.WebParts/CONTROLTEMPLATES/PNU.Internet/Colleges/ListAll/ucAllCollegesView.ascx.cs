@@ -23,6 +23,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.ListAll
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["Id"] = true;
                 if (!Page.IsPostBack)
                 {
                     BindColleges();

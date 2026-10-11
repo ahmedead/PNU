@@ -1,4 +1,5 @@
 using Microsoft.SharePoint;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,7 +40,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.PostgraduateKit.Co
 
                 pnlDenied.Visible = !_isAdmin;
                 pnlMain.Visible = _isAdmin;
-                if (!_isAdmin) return;
+                if (!_isAdmin)
+                {
+                    if (!ContentAdm.IsAuthenticated())
+                    {
+                        ltDenied.Text = "يجب تسجيل الدخول أولاً للوصول إلى لوحة التحكم. <a href=\"javascript:void(0)\" onclick=\"openAdminLoginPopup(); return false;\" class=\"btn btn-sm btn-primary ms-2 me-2\">تسجيل الدخول / Login</a>";
+                    }
+                    return;
+                }
 
                 PgListProvisioner.EnsureAllListsExist();
                 FillListPicker();
@@ -56,6 +64,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.PostgraduateKit.Co
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["list"] = true;
+            Response.Cache.VaryByParams["phase"] = true;
             if (!_isAdmin) return;
 
             try
@@ -199,17 +211,28 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.PostgraduateKit.Co
 
         private bool IsAdmin()
         {
+            if (!ContentAdm.IsAuthenticated())
+            {
+                ContentAdm.PromptLogin(Page);
+                return false;
+            }
+
             try
             {
                 if (SPContext.Current != null && SPContext.Current.Web != null)
                 {
-                    return SPContext.Current.Web.CurrentUser.IsSiteAdmin ||
+                    SPUser user = SPContext.Current.Web.CurrentUser;
+                    if (user != null && (user.IsSiteAdmin ||
                            SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.ManageWeb) ||
-                           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.EditListItems);
+                           SPContext.Current.Web.DoesUserHavePermissions(SPBasePermissions.EditListItems)))
+                    {
+                        return true;
+                    }
                 }
             }
             catch { }
-            return true;
+
+            return ContentAdm.IsAdmin();
         }
 
         protected void ddlList_SelectedIndexChanged(object sender, EventArgs e)

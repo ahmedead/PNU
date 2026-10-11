@@ -18,6 +18,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["ProgramCode"] = true;
                 if (!Page.IsPostBack)
                     BindData();
 
@@ -76,6 +79,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                     return;
                 string ProgramCode = Request.QueryString["ProgramCode"].ToString();
 
+                // رمز البرنامج يأتي من الرابط ويدخل في CAML كقيمة نصية.
+                // int.TryParse لا ينفع هنا — الرمز نصي مشروع مثل AP-ASD-MARKD —
+                // فالحل ترميز XML. بدونه يمكن إغلاق وسم <Value> وإعادة كتابة
+                // شرط <Where> كاملاً.
+                string safeProgramCode = System.Security.SecurityElement.Escape(ProgramCode) ?? string.Empty;
+
                 List<ProgramsPageMain> _AllData = new List<ProgramsPageMain>();
 
 
@@ -96,7 +105,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                                           
                                              <Eq>
                                                 <FieldRef Name='Code' />
-                                                <Value Type='Text'>{ProgramCode}</Value>
+                                                <Value Type='Text'>{safeProgramCode}</Value>
                                              </Eq>
                                        </Where>";
 
@@ -127,7 +136,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                                              @"<Where>
                               <Eq>
                                  <FieldRef Name='PROGRAM' />
-                                 <Value Type='Text'>" + ProgramCode + @"</Value>
+                                 <Value Type='Text'>" + safeProgramCode + @"</Value>
                               </Eq>
                            </Where>");
                             SPList reqList = web.Lists[ListName];
@@ -178,6 +187,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
                     //string localizedTitle = SPFactory.GetLocalizedTitle(_CurrentItem.CollegeName + " - " + _CurrentItem.DepartmentName + " - " + _CurrentItem.ProgramName, _CurrentItem.CollegeName_EN + " - " + _CurrentItem.DepartmentName_EN + " - " + _CurrentItem.ProgramName_EN);
                     string localizedTitle = SPFactory.GetLocalizedTitle( _CurrentItem.ProgramName,  _CurrentItem.ProgramName_EN);
                     SetBrowserTitle(localizedTitle);
+
+                    // العنوان وحده كان يُنشَر، فتسقط SEO.ascx إلى وصف عام مبني على
+                    // عنوان الصفحة القالبية "بيانات البرنامج" / "ProgramDetails"
+                    // فيتقاسمه كل البرامج — ٤٠ صفحة في تقرير Semrush.
+                    // رمز البرنامج في آخر الوصف يضمن التفرّد.
+                    if (!string.IsNullOrWhiteSpace(localizedTitle))
+                    {
+                        HttpContext.Current.Items["PNU_BrowserDescription"] =
+                            Publics.BuildSeoDescription(Publics.BuildSeoSiteChain(), localizedTitle, ProgramCode);
+                    }
                     //var head = FindPlaceHolder(Page.Master, "PlaceHolderAdditionalPageHead");
                     //if (head != null)
                     //{

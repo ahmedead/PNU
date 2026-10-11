@@ -12,6 +12,9 @@ namespace EserviceList.SearchList
         private string testParameter;
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["eti"] = true;
              testParameter = Request.QueryString["eti"];
             Bind();
         }

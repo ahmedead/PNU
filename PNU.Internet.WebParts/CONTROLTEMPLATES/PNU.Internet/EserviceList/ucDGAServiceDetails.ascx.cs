@@ -39,6 +39,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["eti"] = true;
                 string testParameter = Request.QueryString["eti"];
                 uid = Convert.ToInt32(testParameter);
                 if (!IsPostBack)
@@ -232,6 +235,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             {
                 if (string.IsNullOrWhiteSpace(title)) return;
                 HttpContext.Current.Items["PNU_BrowserTitle"] = title;
+
+                // العنوان وحده كان يُنشَر، فتسقط SEO.ascx إلى وصف عام مبني على عنوان
+                // الصفحة القالبية "تفاصيل الخدمة" — يتقاسمه كل الخدمات:
+                //     "صفحة تفاصيل الخدمة ضمن خدمات ومعلومات ..."
+                // رقم الخدمة (eti) في آخر الوصف يضمن التفرّد.
+                string eti = HttpContext.Current.Request.QueryString["eti"];
+                HttpContext.Current.Items["PNU_BrowserDescription"] =
+                    Publics.BuildSeoDescription(Publics.BuildSeoSiteChain(), title, eti);
                 var placeholder = FindPlaceHolder(Page.Master, "PlaceHolderPageTitle");
                 if (placeholder != null)
                 {

@@ -13,6 +13,9 @@ namespace PNU_SP.webparts.MoreRecentReleases_WP
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["ItemId"] = true;
             if (Page.Request.QueryString["ItemId"] == null)
                 return;
             if (!Page.IsPostBack)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -77,6 +77,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.RegAdm.PGD.Control
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["Cat"] = true;
+            Response.Cache.VaryByParams["Category"] = true;
             _repository = new PgCategoryRepository(SPContext.Current != null ? SPContext.Current.Web : null);
 
             if (!_isCategorySetExplicitly)

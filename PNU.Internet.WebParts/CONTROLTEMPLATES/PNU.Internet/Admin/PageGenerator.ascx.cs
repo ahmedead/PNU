@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint.Publishing;
+using Microsoft.SharePoint.Publishing;
 using Microsoft.SharePoint.WebPartPages;
 using Microsoft.SharePoint;
 using System;
@@ -95,7 +95,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             {
                 // Validate required fields
                 if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(webUrl)
-                    || string.IsNullOrEmpty(userControlPath) || string.IsNullOrEmpty(pageLayoutUrl))
+                    || string.IsNullOrEmpty(pageLayoutUrl))
                 {
                     Log("حقول مطلوبة مفقودة للعنصر: " + title, "error");
                     return;
@@ -187,8 +187,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin
             newPage.Title = title;
             newPage.Update();
 
-            // Add ControlLoader WebPart and set UserControlPath property
-            AddControlLoaderWebPart(web, newPage, userControlPath);
+            // Add ControlLoader WebPart and set UserControlPath property if provided
+            if (!string.IsNullOrEmpty(userControlPath))
+            {
+                AddControlLoaderWebPart(web, newPage, userControlPath);
+            }
 
             // Check in, publish, approve
             SPFile pageFile = newPage.ListItem.File;

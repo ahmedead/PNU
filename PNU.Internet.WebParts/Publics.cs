@@ -251,8 +251,16 @@ namespace PNU.Internet.WebParts
             
             
         }
+        // PERF 2026-10-07: disabled. Every page view ran an elevated query + Item.Update() + list.Update() + web.Update()
+        // on Admin/VisitorsCount. Each write changes the site collection, which invalidates the SharePoint publishing
+        // output cache for EVERY page - so the home page was rebuilt on every request (~950 ms server time instead of
+        // ~4 ms from cache). Nothing reads this list (the only reader, ucPNUInNumbersCountVisits, is commented out) and
+        // visits are already measured by Microsoft Clarity. Set VisitorsCountEnabled = true to re-enable.
+        private const bool VisitorsCountEnabled = false;
+
         public static void AddVisitorsCount(string URL, string Page)
         {
+            if (!VisitorsCountEnabled) return;
             try
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
@@ -484,6 +492,135 @@ namespace PNU.Internet.WebParts
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "Publics.TruncateText", ex.Message);
                 return string.Empty;
             }
+        }
+
+        // =====================================================================
+        //  أدوات الوصف التعريفي (meta description) المشتركة بين ضوابط التفاصيل
+        //
+        //  رصد Semrush ١٬٨٦٥ صفحة بوصف مكرَّر. السبب واحد في كل الحالات: ضابط
+        //  التفاصيل لا ينشر وصفاً، فتسقط SEO.ascx إلى وصف عام مبني على عنوان
+        //  الصفحة القالبية — "الأخبار" أو "بيانات القسم" — فيتقاسمه كل عناصر
+        //  القسم الواحد.
+        //
+        //  الحل الموحَّد: سلسلة المواقع - عنوان العنصر - معرّفه.
+        //  المعرّف في آخر الوصف هو ضمان التفرّد، ولا يُقتطع أبداً.
+        // =====================================================================
+
+        /// <summary>
+        /// سلسلة عناوين المواقع من جذر اللغة (/ar أو /en) نزولاً إلى الموقع الحالي:
+        ///
+        ///     /ar/Faculties/AP/News/  ->  جميع الكليات - الكلية التطبيقية - أخبار الكلية
+        ///
+        /// جذر اللغة نفسه مستثنىً؛ عنوانه "الصفحة الرئيسية" ولا يضيف معنىً.
+        ///
+        /// لا يُستدعى Dispose على SPWeb.ParentWeb: الكائن مملوك للأب ويُتخلَّص منه معه،
+        /// والتخلّص اليدوي يُعطب سياق الطلب. النتيجة مخزَّنة ست ساعات لأن المشي في
+        /// الشجرة يفتح موقعاً لكل مستوى وهذه السلسلة ثابتة بين الطلبات.
+        /// </summary>
+        public static List<string> BuildSeoSiteChain()
+        {
+            var names = new List<string>();
+
+            if (SPContext.Current == null || SPContext.Current.Web == null) return names;
+
+            string cacheKey = "PNU_SiteChain::" +
+                              (SPContext.Current.Web.ServerRelativeUrl ?? string.Empty).ToLowerInvariant();
+
+            var cached = HttpRuntime.Cache[cacheKey] as string;
+            if (cached != null)
+            {
+                if (cached.Length > 0) names.AddRange(cached.Split(''));
+                return names;
+            }
+
+            SPWeb w = SPContext.Current.Web;
+            int guard = 0;  // حارس ضد أي دورة غير متوقّعة في الشجرة
+
+            while (w != null && guard++ < 12)
+            {
+                string wUrl = (w.ServerRelativeUrl ?? string.Empty).TrimEnd('/');
+
+                if (wUrl.Length == 0) break;              // جذر مجموعة المواقع
+                if (IsSeoLanguageRoot(wUrl)) break;       // /ar أو /en أو /ar-sa أو /en-us
+
+                if (!string.IsNullOrWhiteSpace(w.Title)) names.Insert(0, w.Title.Trim());
+
+                w = w.ParentWeb;                          // بلا Dispose — انظر أعلاه
+            }
+
+            HttpRuntime.Cache.Insert(
+                cacheKey,
+                string.Join("", names.ToArray()),
+                null,
+                DateTime.UtcNow.AddHours(6),
+                System.Web.Caching.Cache.NoSlidingExpiration);
+
+            return names;
+        }
+
+        private static bool IsSeoLanguageRoot(string serverRelativeUrl)
+        {
+            return serverRelativeUrl.Equals("/ar", StringComparison.OrdinalIgnoreCase)
+                || serverRelativeUrl.Equals("/en", StringComparison.OrdinalIgnoreCase)
+                || serverRelativeUrl.Equals("/ar-sa", StringComparison.OrdinalIgnoreCase)
+                || serverRelativeUrl.Equals("/en-us", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// يبني الوصف: سلسلة المواقع - عنوان العنصر - المعرّف.
+        ///
+        /// ترتيب التنازل عند تجاوز ١٦٠ حرفاً:
+        ///   ١) تُسقَط المواقع الأعلى أولاً (الأعمق أدلّ على الصفحة)
+        ///   ٢) ثم يُقتطع عنوان العنصر
+        ///   ٣) المعرّف لا يُمَس — هو سبب وجود هذه الصيغة أصلاً
+        /// </summary>
+        public static string BuildSeoDescription(List<string> siteChain, string itemTitle, string identifier)
+        {
+            const int MaxLen = 160;
+            const int MinTitleRoom = 40;
+
+            itemTitle = (itemTitle ?? string.Empty).Trim();
+            identifier = (identifier ?? string.Empty).Trim();
+
+            var chain = siteChain == null ? new List<string>() : new List<string>(siteChain);
+            string tail = identifier.Length > 0 ? " - " + identifier : string.Empty;
+
+            while (chain.Count > 0 &&
+                   (string.Join(" - ", chain.ToArray()) + " - ").Length + tail.Length > MaxLen - MinTitleRoom)
+            {
+                chain.RemoveAt(0);
+            }
+
+            string sitePath = string.Join(" - ", chain.ToArray());
+            string head = sitePath.Length > 0 ? sitePath + " - " : string.Empty;
+
+            int room = MaxLen - head.Length - tail.Length;
+            string titlePart = itemTitle;
+            if (room > 1 && titlePart.Length > room)
+            {
+                // room - 1 يترك موضعاً لعلامة الحذف نفسها، وإلا خرج الوصف ١٦١ حرفاً.
+                titlePart = titlePart.Substring(0, room - 1).TrimEnd() + "…";
+            }
+
+            return head + titlePart + tail;
+        }
+
+        /// <summary>
+        /// يصل الأجزاء غير الفارغة فقط بفاصل واحد.
+        ///
+        /// الوصل المباشر بـ a + " - " + b يُنتج " - " معلّقة حين يكون أحد الطرفين
+        /// فارغاً، وهو مصدر عناوين مثل:
+        ///     كلية التمريض - كلية التمريض - - - جامعة الأميرة نورة
+        /// </summary>
+        public static string JoinNonEmpty(string separator, params string[] parts)
+        {
+            if (parts == null) return string.Empty;
+            var kept = new List<string>();
+            foreach (var p in parts)
+            {
+                if (!string.IsNullOrWhiteSpace(p)) kept.Add(p.Trim());
+            }
+            return string.Join(separator, kept.ToArray());
         }
     }
 

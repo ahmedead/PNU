@@ -16,6 +16,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["eti"] = true;
                 testParameter = Request.QueryString["eti"];
                 Bind();
             }

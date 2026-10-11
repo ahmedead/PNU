@@ -10,7 +10,8 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucHomeHeader.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA.ucHomeHeader" %>
 
 <%@ Import Namespace="PNU.Internet.WebParts" %>
-<script src="/Style%20Library/Portal/js/seoScripts.js" type="text/javascript"></script>
+<%-- PERF 2026-10-07: defer - the script is a self-contained IIFE that waits for DOMContentLoaded anyway; synchronous it blocked rendering of everything below the header. --%>
+<script src="/Style%20Library/Portal/js/seoScripts.js" type="text/javascript" defer></script>
 <script type="text/javascript">
     (function (c, l, a, r, i, t, y) {
         c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };

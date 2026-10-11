@@ -141,15 +141,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             {
                 if (!Page.IsPostBack)
                 {
-                    string currentPath = Request.Url.PathAndQuery;
-
-                    // Generate the new URLs
-                    string arabicUrl = currentPath.Replace("/en/", "/ar/");
-                    string englishUrl = currentPath.Replace("/ar/", "/en/");
-
-                    // Assign to your buttons (add ID to your tags in HTML)
-                    ArabicLink.HRef = arabicUrl;
-                    EnglishLink.HRef = englishUrl;
+                    ArabicLink.HRef = BuildLanguageSwitchUrl("ar");
+                    EnglishLink.HRef = BuildLanguageSwitchUrl("en");
 
 
                     img2.Attributes["src"] = SPFactory.GetPNUresResource("LogoOnly");
@@ -277,7 +270,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                             MenuLevel1 menu1 = new MenuLevel1
                                             {
                                                 Title = level1.Title,
-                                                URL = level1.URL,
+                                                URL = RootMenuUrl(level1.URL, Pweb),
                                                 LVL2 = new List<MenuLevel2>(),
                                                 LVL3 = new List<MenuLevel3>()
                                             };
@@ -288,7 +281,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                                     MenuLevel2 menu2 = new MenuLevel2
                                                     {
                                                         Title = level2.Title,
-                                                        URL = level2.URL
+                                                        URL = RootMenuUrl(level2.URL, Pweb)
                                                     };
                                                     menu1.LVL2.Add(menu2);
 
@@ -299,7 +292,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                                             MenuLevel3 menu3 = new MenuLevel3
                                                             {
                                                                 Title = level3.Title,
-                                                                URL = level3.URL,
+                                                                URL = RootMenuUrl(level3.URL, Pweb),
                                                                 ParentTitle = level2.Title
                                                             };
                                                             menu1.LVL3.Add(menu3);
@@ -337,6 +330,172 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
+        }
+
+        /// <summary>
+        /// يجعل رابط عنصر القائمة مُجذَّراً إن كان مخزَّناً نسبياً.
+        ///
+        /// المشكلة المرصودة (Semrush 2026-09-29، ٢٢٥ رابطاً معطوباً):
+        /// بعض عناصر قوائم TopMenuLevel* مخزَّنة بروابط نسبية مثل
+        /// "Sections.aspx?SecCode=AP-01". الرابط النسبي يُحَل حسب مجلد الصفحة
+        /// المعروضة لا حسب الموقع صاحب القائمة، فينتج:
+        ///
+        ///   من /ar/Faculties/AP/Pages/               -> 200  صحيح
+        ///   من /ar/Faculties/AP/Announcements/Pages/ -> 404
+        ///   من /ar/Faculties/AP/News/Pages/          -> 404
+        ///
+        /// والقائمة تُقرأ من Pweb — الموقع الأب الذي يملك القائمة — فهو المرجع
+        /// الصحيح للتجذير، لا الصفحة الحالية.
+        ///
+        /// اسم صفحة مجرَّد بلا شرطة مائلة يعني <الموقع>/Pages/<الاسم>: هي الصيغة
+        /// التي يكتبها SideMenuListProvisioner أصلاً (webPath + "Pages/" + ...).
+        ///
+        /// ملاحظة: الإصلاح الجذري هو تصحيح البيانات المخزَّنة في القوائم. هذا
+        /// تحصين وقت العرض يعالج العناصر القديمة ويمنع تكرار العطل مع أي عنصر
+        /// يُدخَل نسبياً مستقبلاً.
+        /// </summary>
+        private static string RootMenuUrl(string url, SPWeb menuWeb)
+        {
+            if (string.IsNullOrWhiteSpace(url)) return url;
+
+            string u = url.Trim();
+
+            // مُجذَّر أو مطلق أو مرساة أو بروتوكول خاص: يُترك كما هو
+            if (u.StartsWith("/")
+                || u.StartsWith("#")
+                || u.IndexOf("://", StringComparison.Ordinal) >= 0
+                || u.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase)
+                || u.StartsWith("tel:", StringComparison.OrdinalIgnoreCase)
+                || u.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+            {
+                return u;
+            }
+
+            string webUrl = "/";
+            try
+            {
+                if (menuWeb != null && !string.IsNullOrEmpty(menuWeb.ServerRelativeUrl))
+                {
+                    webUrl = menuWeb.ServerRelativeUrl;
+                }
+            }
+            catch { }
+
+            webUrl = webUrl.TrimEnd('/');
+
+            return u.IndexOf('/') < 0
+                ? webUrl + "/Pages/" + u
+                : webUrl + "/" + u;
+        }
+
+        /// <summary>
+        /// رابط زر تبديل اللغة إلى targetLang ("ar" أو "en").
+        ///
+        /// المشكلة المرصودة (Semrush 2026-09-29): كان الرابط يُبنى بـ
+        /// PathAndQuery.Replace("/ar/", "/en/") فيظهر عطلان:
+        ///   1. الاستبدال يطال كل تطابق في المسار والاستعلام لا البادئة وحدها
+        ///      (مثل ?Source=/ar/... داخل الاستعلام).
+        ///   2. لا فحص لوجود الصفحة المقابلة، فصفحات عربية بلا نسخة إنجليزية
+        ///      (مثل /ar/Faculties/HR/Pages/ResearchandInnovationAgency.aspx)
+        ///      تحمل رابطاً داخلياً إلى 404.
+        ///
+        /// الحل على نهج SEO.ascx.cs (AlternateUrlExists) - التعريف نفسه للمقابل:
+        ///   الصفحة المقابلة موجودة          -> هي نفسها مع الاستعلام
+        ///   غير موجودة والموقع المقابل موجود -> جذر الموقع المقابل (صفحته الترحيبية)
+        ///   ولا هذا ولا ذاك                 -> الصفحة الرئيسية للّغة الهدف
+        /// </summary>
+        private string BuildLanguageSwitchUrl(string targetLang)
+        {
+            string languageHome = "/" + targetLang + "/Pages/home.aspx";
+            try
+            {
+                string path = Request.Url.AbsolutePath;
+                string query = Request.Url.Query;
+
+                string sourceLang = targetLang == "ar" ? "en" : "ar";
+                string sourcePrefix = "/" + sourceLang + "/";
+                string targetPrefix = "/" + targetLang + "/";
+
+                // الصفحة أصلاً بلغة الهدف: الرابط يشير إليها نفسها
+                if (path.StartsWith(targetPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    return path + query;
+                }
+
+                // مسار بلا بادئة لغة معروفة (صفحات _layouts وغيرها): لا مقابل يمكن إثباته
+                if (!path.StartsWith(sourcePrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    return languageHome;
+                }
+
+                string targetPath = targetPrefix + path.Substring(sourcePrefix.Length);
+                // AbsolutePath مُرمَّز (%20 والأحرف العربية)، و GetFile يريد المسار المفكوك
+                if (CounterpartExists("file", Uri.UnescapeDataString(targetPath)))
+                {
+                    return targetPath + query;
+                }
+
+                string webPath = SPContext.Current != null && SPContext.Current.Web != null
+                    ? SPContext.Current.Web.ServerRelativeUrl.TrimEnd('/') + "/"
+                    : string.Empty;
+                if (webPath.StartsWith(sourcePrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    string targetWeb = targetPrefix + webPath.Substring(sourcePrefix.Length);
+                    if (CounterpartExists("web", targetWeb))
+                    {
+                        return targetWeb;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
+            }
+            return languageHome;
+        }
+
+        /// <summary>
+        /// هل الملف أو الموقع الفرعي المقابل موجود؟ النتيجة مخزَّنة ٦ ساعات لأن الفحص
+        /// يمس قاعدة بيانات المحتوى في كل طلب. عند الفشل يُفترض الوجود (fail-open)
+        /// كما في SEO.ascx.cs - رابط قد يكون معطوباً أهون من إخفاء مقابل صحيح.
+        /// </summary>
+        private static bool CounterpartExists(string kind, string serverRelativeUrl)
+        {
+            string cacheKey = "PNU_LangSwitch::" + kind + "::" + serverRelativeUrl.ToLowerInvariant();
+            object cached = HttpRuntime.Cache[cacheKey];
+            if (cached is bool) return (bool)cached;
+
+            bool exists = true; // fail-open
+            try
+            {
+                if (SPContext.Current != null && SPContext.Current.Site != null)
+                {
+                    if (kind == "web")
+                    {
+                        // OpenWeb(url) بلا requireExactUrl يعيد موقعاً Exists=false للمسار المفقود؛
+                        // صيغة requireExactUrl=true ترمي استثناءً فيبتلعه fail-open ويُعلَن المفقود موجوداً.
+                        using (SPWeb w = SPContext.Current.Site.OpenWeb(serverRelativeUrl.TrimEnd('/')))
+                        {
+                            exists = w != null && w.Exists;
+                        }
+                    }
+                    else
+                    {
+                        SPFile file = SPContext.Current.Site.RootWeb.GetFile(serverRelativeUrl);
+                        exists = file != null && file.Exists;
+                    }
+                }
+            }
+            catch
+            {
+                exists = true;
+            }
+
+            HttpRuntime.Cache.Insert(
+                cacheKey, exists, null,
+                DateTime.UtcNow.AddHours(6), System.Web.Caching.Cache.NoSlidingExpiration);
+
+            return exists;
         }
 
         public string GetDynamicURL1(string URL)

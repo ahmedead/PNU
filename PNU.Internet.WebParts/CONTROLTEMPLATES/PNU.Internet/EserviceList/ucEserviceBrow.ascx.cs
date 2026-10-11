@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,6 +18,72 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
 {
     public partial class ucEserviceBrow : UserControl
     {
+        public bool ExcludeVisitor
+        {
+            get { return ViewState["ExcludeVisitor"] != null && (bool)ViewState["ExcludeVisitor"]; }
+            set { ViewState["ExcludeVisitor"] = value; }
+        }
+
+        public bool ShowVisitorOnly
+        {
+            get { return ViewState["ShowVisitorOnly"] != null && (bool)ViewState["ShowVisitorOnly"]; }
+            set { ViewState["ShowVisitorOnly"] = value; }
+        }
+
+        public bool NafathLogin
+        {
+            get { return ViewState["NafathLogin"] != null && (bool)ViewState["NafathLogin"]; }
+            set { ViewState["NafathLogin"] = value; }
+        }
+
+        public bool ExcludeVisitors
+        {
+            get { return ExcludeVisitor; }
+            set { ExcludeVisitor = value; }
+        }
+
+        public bool ShowAllExceptVisitor
+        {
+            get { return ExcludeVisitor; }
+            set { ExcludeVisitor = value; }
+        }
+
+        public bool ShowVisitor
+        {
+            get { return ShowVisitorOnly; }
+            set { ShowVisitorOnly = value; }
+        }
+
+        public bool VisitorOnly
+        {
+            get { return ShowVisitorOnly; }
+            set { ShowVisitorOnly = value; }
+        }
+
+        public bool IsVisitor
+        {
+            get { return ShowVisitorOnly; }
+            set { ShowVisitorOnly = value; }
+        }
+
+        public bool ShowNafathOnly
+        {
+            get { return NafathLogin; }
+            set { NafathLogin = value; }
+        }
+
+        public bool IsNafath
+        {
+            get { return NafathLogin; }
+            set { NafathLogin = value; }
+        }
+
+        public bool NafathOnly
+        {
+            get { return NafathLogin; }
+            set { NafathLogin = value; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)

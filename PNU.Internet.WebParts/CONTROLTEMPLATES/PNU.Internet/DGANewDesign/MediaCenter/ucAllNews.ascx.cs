@@ -1,4 +1,4 @@
-﻿using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -62,6 +62,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.Media
                         rptFacultyFilter.DataSource = facultiesWithNews;
                         rptFacultyFilter.DataBind();
                     }
+
+                    this.DataBind();
                 }
             }
             catch (Exception ex)

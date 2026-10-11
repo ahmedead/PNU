@@ -29,6 +29,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.DGA
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["Source"] = true;
                 if (!IsPostBack || ltrSections.Text.Length == 0)
                     RenderDepartments();
             }

@@ -66,3 +66,6 @@ d:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\Share
 d:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.csproj.Up2Date
 d:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.dll
 d:\MyWorkSpaces\AI\Antigravity\PNU\PNU.Internet.SP\PNU\SharedSQL\obj\Debug\SharedSQL.pdb
+C:\Users\Ahmed Sharaf\AppData\Local\Temp\claude\d--MyWorkSpaces-AI-Antigravity-PNU-PNU-Internet-SP\9fba8053-b487-486e-bed8-e351d3f6b3e3\scratchpad\build\SharedSQL.dll.config
+C:\Users\Ahmed Sharaf\AppData\Local\Temp\claude\d--MyWorkSpaces-AI-Antigravity-PNU-PNU-Internet-SP\9fba8053-b487-486e-bed8-e351d3f6b3e3\scratchpad\build\SharedSQL.dll
+C:\Users\Ahmed Sharaf\AppData\Local\Temp\claude\d--MyWorkSpaces-AI-Antigravity-PNU-PNU-Internet-SP\9fba8053-b487-486e-bed8-e351d3f6b3e3\scratchpad\build\SharedSQL.pdb

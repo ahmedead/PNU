@@ -100,6 +100,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.Colleges.Man
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["email"] = true;
+                Response.Cache.VaryByParams["IsAdmin"] = true;
                 if (!IsCollegeMemebers())
                 {
                     // ShowMessage((Control)Resume_alert_container,Helper.GetCustomFormsGlobalResourceValue("PnuInternetResources", "res_Unauthorized"), MessageType.Unauthorized);

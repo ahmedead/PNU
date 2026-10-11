@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل فريق إدارة المحتوى - الحقيبة الأكاديمية التفاعلية لطلبة الدراسات العليا</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+        :root {
+            --pnu-green: #056839;
+            --pnu-green-dark: #034b28;
+            --pnu-green-light: #e8f5e9;
+            --primary: #005a70;
+            --primary-dark: #003a48;
+            --primary-light: #e6f4f7;
+            --secondary: #8c7343;
+            --secondary-light: #fbf7ee;
+            --text-dark: #212529;
+            --text-muted: #596570;
+            --border-color: #d1dde3;
+            --bg-light: #f8fafb;
+            --danger: #d9534f;
+            --success: #28a745;
+            --warning: #f0ad4e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background-color: #edf2f4;
+            line-height: 1.7;
+            font-size: 14px;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.07);
+        }
+
+        /* Header */
+        .doc-header {
+            background: linear-gradient(135deg, var(--pnu-green), var(--pnu-green-dark));
+            color: #fff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .doc-header .title-area h1 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .doc-header .title-area h2 {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .doc-badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* Titles */
+        h2.section-title {
+            color: var(--pnu-green-dark);
+            font-size: 18px;
+            font-weight: 800;
+            border-right: 6px solid var(--pnu-green);
+            padding-right: 14px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            background-color: #f1f8f4;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        h3.page-heading {
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 800;
+            margin-top: 35px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Section Cards */
+        .section-card {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 35px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            page-break-inside: avoid;
+        }
+
+        .section-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eef3f5;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-card-header h4 {
+            color: var(--pnu-green-dark);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .section-card-meta {
+            font-size: 12px;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .screenshot-box {
+            background: #fafbfc;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .screenshot-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #d1dde3;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .screenshot-caption {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Tables inside cards */
+        table.meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        table.meta-table th, table.meta-table td {
+            border: 1px solid #e3ebef;
+            padding: 10px 14px;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        table.meta-table th {
+            width: 28%;
+            background: #f4f8fa;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        /* Code syntax */
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            direction: ltr;
+            display: inline-block;
+            background-color: #f0f4f8;
+            color: #0b5394;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Badges */
+        .badge-pill {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .badge-green { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .badge-blue  { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+        .badge-amber { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+        /* Print formatting */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+                font-size: 11px;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-print {
+                display: none;
+            }
+            .doc-header {
+                background: #056839 !important;
+                color: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            h3.page-heading {
+                background: #005a70 !important;
+                color: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .section-card {
+                border: 1px solid #bbb;
+                page-break-inside: avoid;
+                margin-bottom: 25px;
+            }
+        }
+
+        .btn-print {
+            background: var(--pnu-green);
+            color: #fff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 800;
+            font-family: inherit;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .btn-print:hover {
+            background: var(--pnu-green-dark);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Print Button -->
+    <div class="no-print" style="text-align: left; margin-bottom: 20px;">
+        <button class="btn-print" onclick="window.print()">🖨️ طباعة الدليل المصور / حفظ كـ PDF</button>
+    </div>
+
+    <!-- Header -->
+    <div class="doc-header">
+        <div class="title-area">
+            <h1>دليل فريق إدارة المحتوى لصفحات الحقيبة الأكاديمية التفاعلية</h1>
+            <h2>Postgraduate Academic Kit Content Management Guide (v4.0)</h2>
+        </div>
+        <div class="doc-badge">
+            جامعة الأميرة نورة بنت عبدالرحمن<br>
+            عمادة الدراسات العليا
+        </div>
+    </div>
+
+    <p>
+        يوثق هذا الدليل المصور جميع الأقسام والمحاور في صفحات الحقيبة الأكاديمية التفاعلية الثلاث (المتقدمون، المقيدون، الخريجون) المعتمدة في التصميم (<code>v4.0</code>)، مع صورة كل قسم ملتقطة مباشرة من الصفحة الفعلية، واسم القائمة المنسدلة المسؤولة عنه في شاشة الإدارة (<code>ucPgAdmin.ascx</code>)، وكيفية إدخال محتواه باللغتين العربية والإنجليزية.
+    </p>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: APPLICANTS PAGE -->
+    <!-- ========================================================================= -->
+    <h3 class="page-heading">
+        <span>١. محطة المتقدمين (Applicants Page - academic-kit-applicants.html)</span>
+        <span class="badge-pill badge-green">Phase = Applicants</span>
+    </h3>
+
+    <!-- 1.1 Applicants Intro -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.١ النبذة التعريفية لمحطة المتقدمين (Overview)</h4>
+            <span class="section-card-meta">القائمة: النبذة التعريفية (DgaPgIntro)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-intro.png" alt="النبذة التعريفية للمتقدمين" />
+            <div class="screenshot-caption">صورة قسم النبذة التعريفية في أعلى صفحة المتقدمين (academic-kit-applicants.html)</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>النبذة التعريفية (DgaPgIntro) (DGA)</code> (السجل: <code>Phase = Applicants</code>)</td>
+            </tr>
+            <tr>
+                <th>الحقول بالعربية</th>
+                <td><code>Title (AR)</code>: النبذة التعريفية | <code>Description</code>: النص الافتتاحي الموجه للراغبين بالتقديم للبرامج</td>
+            </tr>
+            <tr>
+                <th>الحقول بالإنجليزية</th>
+                <td><code>Title (EN)</code>: Overview | <code>Description_EN</code>: The English introduction for applicants</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.2 Applicants Axis 1: Journey -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٢ المحور الأول: خريطة رحلة القبول (Admission Journey Map)</h4>
+            <span class="section-card-meta">القائمة: خريطة الرحلة (DgaPgJourney)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-1.png" alt="خريطة رحلة القبول" />
+            <div class="screenshot-caption">خطوات رحلة القبول الـ 5 للمتقدمين</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>خريطة الرحلة (DgaPgJourney) (DGA)</code> (فلترة: <code>Phase = Applicants</code>)</td>
+            </tr>
+            <tr>
+                <th>الخطوات المعتمدة (٥ خطوات)</th>
+                <td>١. متابعة الإعلان | ٢. اختيار البرنامج والتحقق من شروطه | ٣. تجهيز المستندات | ٤. التقديم عبر البوابة | ٥. المفاضلة والنتيجة</td>
+            </tr>
+            <tr>
+                <th>الحقول لكل خطوة</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: عنوان الخطوة | <code>StepLabel</code>: المرحلة الأولى/الثانية... | <code>Description</code> / <code>Description_EN</code>: الشرح والتوجيهات | <code>Item Order</code>: 1 إلى 5</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.3 Applicants Axis 2: Programs -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٣ المحور الثاني: البرامج وشروط القبول والرسوم (Programs & Fees)</h4>
+            <span class="section-card-meta">القائمة: المصادر واللوائح والأدلة (DgaPgResources)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-2.png" alt="البرامج وشروط القبول والرسوم" />
+            <div class="screenshot-caption">بطاقات برامج الدراسات العليا وشروط القبول وبوابة التقديم</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>المصادر واللوائح والأدلة (DgaPgResources) (DGA)</code></td>
+            </tr>
+            <tr>
+                <th>المحددات</th>
+                <td><code>Phase = Applicants</code> | <code>Group Key = Programs</code></td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: اسم البرنامج أو الخدمة | <code>Description</code> / <code>Description_EN</code>: نبذة تعريفية | <code>Link URL</code>: رابط الصفحة الرسمية</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.4 Applicants Axis 3: English Course -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٤ المحور الثالث: الدورة التأهيلية للغة الإنجليزية (English Course)</h4>
+            <span class="section-card-meta">القائمة: البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-3.png" alt="الدورة التأهيلية للغة الإنجليزية" />
+            <div class="screenshot-caption">بطاقة الدورة التأهيلية ومساراتها ونقاطها الأكاديمية</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>البطاقات والمحتوى المتخصص (DgaPgContentBlocks) (DGA)</code></td>
+            </tr>
+            <tr>
+                <th>المحددات</th>
+                <td><code>Phase = Applicants</code> | <code>BlockKey = EnglishCourse</code></td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Paragraphs</code>: الفقرة التعريفية | <code>Bullets</code>: نقاط مميزات ومسارات الدورة (سطر لكل نقطة)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.5 Applicants Axis 4: FAQ -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٥ المحور الرابع: الأسئلة الأكثر شيوعاً للمتقدمين (Applicants FAQ)</h4>
+            <span class="section-card-meta">القائمة: الأسئلة الشائعة (DgaPgFaq)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-4.png" alt="الأسئلة الأكثر شيوعا للمتقدمين" />
+            <div class="screenshot-caption">بنك الأسئلة الشائعة للمتقدمين (Accordion)</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>الأسئلة الشائعة (DgaPgFaq) (DGA)</code> (فلترة: <code>Phase = Applicants</code> — ٣٨ سؤالاً)</td>
+            </tr>
+            <tr>
+                <th>الحقول لكل سؤال</th>
+                <td><code>Title (AR)</code>: نص السؤال | <code>Title (EN)</code>: Question (EN) | <code>Description</code>: نص الإجابة بالعربية | <code>Description_EN</code>: Answer (EN) | <code>Item Order</code>: ترتيب ظهور السؤال</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.6 Applicants Axis 5: Guides -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٦ المحور الخامس: الحقوق والواجبات / اللوائح النظامية والأدلة</h4>
+            <span class="section-card-meta">القائمة: المصادر واللوائح والأدلة (DgaPgResources)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-5.png" alt="الأدلة الرسمية للمتقدمين" />
+            <div class="screenshot-caption">بطاقات الأدلة الرسمية المعتمدة (دليل البوابة، الدليل الإرشادي، دليل خطة البحث...)</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>المصادر واللوائح والأدلة (DgaPgResources) (DGA)</code></td>
+            </tr>
+            <tr>
+                <th>المحددات</th>
+                <td><code>Phase = Applicants</code> | <code>Group Key = Guides</code></td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: اسم الدليل | <code>Link URL</code>: رابط ملف الـ PDF | <code>ShowDownload = Yes</code> لإظهار زر التحميل</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.7 Applicants Axis 6: Discounts -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٧ المحور السادس: جدول إعفاء وتخفيض الرسوم وملاحظاته (Discounts)</h4>
+            <span class="section-card-meta">القوائم: DgaPgDiscounts + DgaPgDiscountNotes</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-6.png" alt="جدول الإعفاء والتخفيض" />
+            <div class="screenshot-caption">جدول فئات الإعفاء والتخفيض ونسب الخصم والشروط التابعة له</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>جدول الفئات والنسب</th>
+                <td>قائمة <code>جدول الإعفاء والتخفيض (DgaPgDiscounts)</code> ⟵ <code>Title (AR)</code> / <code>Title (EN)</code>: الفئة المستحقة | <code>DiscountValue</code>: نسبة الخصم (٪٢٥ / 25%)</td>
+            </tr>
+            <tr>
+                <th>ملاحظات وشروط الجدول</th>
+                <td>قائمة <code>ملاحظات الإعفاء والتخفيض (DgaPgDiscountNotes)</code> ⟵ <code>Title (AR)</code> / <code>Title (EN)</code>: نص الشرط أو الملاحظة أسفل الجدول</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.8 Applicants Axis 7: Services -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٨ المحور السابع: الخدمات والمراكز (Services & Centres)</h4>
+            <span class="section-card-meta">القائمة: الخدمات والمراكز (DgaPgServices)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-7.png" alt="الخدمات والمراكز" />
+            <div class="screenshot-caption">روابط الخدمات والمراكز مصنفة ضمن مجموعات</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>الخدمات والمراكز (DgaPgServices) (DGA)</code></td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: اسم الخدمة أو المركز | <code>GroupName</code>: اسم المجموعة (خدمات بحثية / مهنية / طلابية) | <code>Link URL</code>: رابط الصفحة</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.9 Applicants Axis 8 & 9: Housing & Contact -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.٩ المحور الثامن والتاسع: السكن الجامعي وتواصلي معنا (Housing & Contact)</h4>
+            <span class="section-card-meta">القائمة: الروابط السريعة والتواصل (DgaPgQuickLinks)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-section-8.png" alt="السكن الجامعي" style="margin-bottom: 10px;" />
+            <img src="screenshots/applicants-applicant-section-9.png" alt="تواصلي معنا" />
+            <div class="screenshot-caption">بطاقة السكن الجامعي وبطاقة تواصلي معنا في صفحة المتقدمين</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>عناوين ونصوص المحاور</th>
+                <td>قائمة <code>محاور الحقيبة الأكاديمية (DgaPgSections)</code> (المفاتيح: <code>Housing</code> و <code>Contact</code>)</td>
+            </tr>
+            <tr>
+                <th>الروابط والبريد</th>
+                <td>قائمة <code>الروابط السريعة والتواصل (DgaPgQuickLinks)</code> (السكن: رابط التقديم | التواصل: بريد وحدة خدمة المستفيدين <code>dgs-aa@pnu.edu.sa</code>)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1.10 Applicants Reference -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>١.١٠ الأساس النظامي والمرجعي (Reference Footer)</h4>
+            <span class="section-card-meta">القائمة: البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/applicants-applicant-reference.png" alt="الأساس النظامي والمرجعي" />
+            <div class="screenshot-caption">الشريط المرجعي في ختام صفحة المتقدمين</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>المحددات</th>
+                <td>قائمة <code>البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</code> (المفتاح: <code>Footer</code> | <code>Phase = Applicants</code>)</td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Paragraphs</code> / <code>Paragraphs_EN</code>: نصوص المراجع واللوائح المعتمدة (سطر لكل مرجع)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: ENROLLED STUDENTS PAGE -->
+    <!-- ========================================================================= -->
+    <h3 class="page-heading">
+        <span>٢. محطة المقيدين (Enrolled Students - academic-kit-enrolled-students.html)</span>
+        <span class="badge-pill badge-green">Phase = Enrolled</span>
+    </h3>
+
+    <!-- 2.1 Enrolled Intro & Journey -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٢.١ النبذة ومحور خريطة الرحلة الأكاديمية (Academic Journey)</h4>
+            <span class="section-card-meta">القوائم: DgaPgIntro + DgaPgJourney</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/enrolled-enrolled-intro.png" alt="نبذة المقيدين" style="margin-bottom: 10px;" />
+            <img src="screenshots/enrolled-enrolled-section-1.png" alt="خريطة الرحلة الأكاديمية" />
+            <div class="screenshot-caption">نبذة المقيدين وخريطة الرحلة الأكاديمية في 5 مراحل</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>النبذة التعريفية</th>
+                <td>قائمة <code>النبذة التعريفية (DgaPgIntro)</code> ⟵ <code>Phase = Enrolled</code></td>
+            </tr>
+            <tr>
+                <th>خطوات الرحلة الأكاديمية</th>
+                <td>قائمة <code>خريطة الرحلة (DgaPgJourney)</code> (٥ مراحل: ١. تسجيل الجدول، ٢. دراسة المقررات، ٣. تسجيل الخطة، ٤. تشكيل اللجنة، ٥. منح الدرجة)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 2.2 Enrolled Axis 2: Regulations, Identity, Financial -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٢.٢ المحور الثاني: اللوائح، هوية الخريجة، والتنظيمات المالية</h4>
+            <span class="section-card-meta">القوائم: DgaPgResources + DgaPgContentBlocks</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/enrolled-enrolled-section-2.png" alt="اللوائح وهوية الخريجة والتنظيمات المالية" />
+            <div class="screenshot-caption">بطاقات اللوائح النظامية + كرت هوية الخريجة + كرت التنظيمات المالية</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>وثائق اللوائح الرسمية</th>
+                <td>قائمة <code>المصادر واللوائح والأدلة (DgaPgResources)</code> (المجموعة: <code>Regulations</code> | <code>Phase = Enrolled</code>)</td>
+            </tr>
+            <tr>
+                <th>وثيقة هوية الخريجة</th>
+                <td>قائمة <code>البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</code> (المفتاح: <code>GraduateIdentity</code> ⟵ الخصائص التسع في <code>Bullets</code>)</td>
+            </tr>
+            <tr>
+                <th>التنظيمات المالية للإجراءات</th>
+                <td>قائمة <code>البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</code> (المفتاح: <code>FinancialRules</code> ⟵ الحالات السبع في <code>Bullets</code>)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 2.3 Enrolled Axis 3: Procedures -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٢.٣ المحور الثالث: الإجراءات الأكاديمية (Academic Procedures - 15 إجراء)</h4>
+            <span class="section-card-meta">القائمة: الإجراءات الأكاديمية التفاعلية (DgaPgProcedures)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/enrolled-enrolled-section-3.png" alt="الإجراءات الأكاديمية للمقيدين" />
+            <div class="screenshot-caption">بطاقات الإجراءات الأكاديمية الـ 15 القابلة للتوسيع (شروط، نص المادة، والنماذج)</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>الإجراءات الأكاديمية التفاعلية (DgaPgProcedures) (DGA)</code> (فلترة: <code>Phase = Enrolled</code>)</td>
+            </tr>
+            <tr>
+                <th>الحقول لكل إجراء</th>
+                <td>
+                    • <code>Title (AR)</code> / <code>Title (EN)</code>: اسم الإجراء.<br>
+                    • <code>Badge</code> / <code>Badge_EN</code>: رقم المادة (مثال: مادة (١٥)).<br>
+                    • <code>GroupLabel</code>: تصنيف الإجراء (٣.١ إجراءات تبدأ من الكلية / ٣.٢ إجراءات تبدأ من الطالبة).<br>
+                    • <code>Conditions</code>: الشروط والمتطلبات (سطر لكل شرط).<br>
+                    • <code>ArticleText</code>: النص الكامل للمادة من اللائحة التنفيذية.<br>
+                    • <code>Forms</code>: النماذج بصيغة <code>اسم النموذج|رابط الملف</code> (سطر لكل نموذج).
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 2.4 Enrolled Axis 4: FAQ -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٢.٤ المحور الرابع: الأسئلة الأكثر شيوعاً للمقيدين (Enrolled FAQ)</h4>
+            <span class="section-card-meta">القائمة: الأسئلة الشائعة (DgaPgFaq)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/enrolled-enrolled-section-4.png" alt="الأسئلة الشائعة للمقيدين" />
+            <div class="screenshot-caption">بنك الأسئلة الشائعة للمقيدات (41 سؤالاً وجواباً)</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>الأسئلة الشائعة (DgaPgFaq) (DGA)</code> (فلترة: <code>Phase = Enrolled</code>)</td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: السؤال | <code>Description</code> / <code>Description_EN</code>: الجواب بالتفصيل</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 2.5 Enrolled Axis 5: Research Incentive -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٢.٥ المحور الخامس: حافز النشر العلمي وخصم الـ 10% (Research Incentive)</h4>
+            <span class="section-card-meta">القائمة: البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/enrolled-enrolled-section-5.png" alt="حافز النشر العلمي" />
+            <div class="screenshot-caption">بطاقة حافز النشر العلمي، نسبة الخصم، والملاحظات المميزة بالأيقونة</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>المحددات</th>
+                <td>قائمة <code>البطاقات والمحتوى المتخصص (DgaPgContentBlocks)</code> (المفتاح: <code>PublishIncentive</code> | <code>Phase = Enrolled</code>)</td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td>
+                    • <code>StatValue</code>: <code>10%</code> | <code>SubTitle</code>: العنوان الفرعي للخصم.<br>
+                    • <code>Paragraphs</code>: نص قرار مجلس الجامعة وضوابط الحصول على الخصم.<br>
+                    • <code>Highlights</code>: الملاحظات المميزة بصيغة <code>النص|اسم_الأيقونة.png</code>.<br>
+                    • <code>FooterTitle</code> و <code>FooterParagraphs</code>: فقرة المشاركة في المؤتمرات العلمية.
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 2.6 Enrolled Axis 6, 7, 8, 9, 10 -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٢.٦ باقي محاور المقيدين (الخصومات، الأدلة، الخدمات، السكن، والتواصل)</h4>
+            <span class="section-card-meta">القوائم المشتركة</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/enrolled-enrolled-section-7.png" alt="الأدلة الرسمية للمقيدين" style="margin-bottom: 8px;" />
+            <img src="screenshots/enrolled-enrolled-section-8.png" alt="الخدمات والمراكز" style="margin-bottom: 8px;" />
+            <img src="screenshots/enrolled-enrolled-section-9.png" alt="السكن الجامعي" style="margin-bottom: 8px;" />
+            <img src="screenshots/enrolled-enrolled-section-10.png" alt="تواصلي معنا" />
+            <div class="screenshot-caption">الأدلة الرسمية، الخدمات والمراكز، السكن وتواصلي معنا للمقيدات</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>المحور السادس (الخصومات)</th>
+                <td><code>DgaPgDiscounts</code> + <code>DgaPgDiscountNotes</code></td>
+            </tr>
+            <tr>
+                <th>المحور السابع (الأدلة الرسمية)</th>
+                <td><code>DgaPgResources</code> (المجموعة: <code>Guides</code> | <code>Phase = Enrolled</code>)</td>
+            </tr>
+            <tr>
+                <th>المحور الثامن (الخدمات والمراكز)</th>
+                <td><code>DgaPgServices</code></td>
+            </tr>
+            <tr>
+                <th>المحور التاسع والعاشر (السكن والتواصل)</th>
+                <td><code>DgaPgQuickLinks</code> (المفاتيح: <code>Housing</code> و <code>Contact</code>)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 3: GRADUATES PAGE -->
+    <!-- ========================================================================= -->
+    <h3 class="page-heading">
+        <span>٣. محطة الخريجين (Graduates Page - academic-kit-graduates.html)</span>
+        <span class="badge-pill badge-green">Phase = Graduates</span>
+    </h3>
+
+    <!-- 3.1 Graduates Intro & Journey -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٣.١ النبذة ومحور خريطة رحلة التخرج (Graduation Journey)</h4>
+            <span class="section-card-meta">القوائم: DgaPgIntro + DgaPgJourney</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/graduates-graduate-intro.png" alt="نبذة الخريجين" style="margin-bottom: 10px;" />
+            <img src="screenshots/graduates-graduate-section-1.png" alt="خريطة رحلة التخرج" />
+            <div class="screenshot-caption">نبذة الخريجين وخريطة رحلة التخرج في 6 خطوات متتابعة</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>النبذة التعريفية</th>
+                <td>قائمة <code>النبذة التعريفية (DgaPgIntro)</code> ⟵ <code>Phase = Graduates</code></td>
+            </tr>
+            <tr>
+                <th>خطوات رحلة التخرج</th>
+                <td>قائمة <code>خريطة الرحلة (DgaPgJourney)</code> (٦ خطوات: ١. اكتمال المناقشة والتعديلات، ٢. تسليم الرسالة، ٣. إخلاء الطرف، ٤. تدقيق الوثيقة، ٥. منح الدرجة، ٦. استلام الوثيقة)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 3.2 Graduates Axis 2: Requirements -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٣.٢ المحور الثاني: متطلبات التخرج (Graduation Requirements)</h4>
+            <span class="section-card-meta">القائمة: المصادر واللوائح والأدلة (DgaPgResources)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/graduates-graduate-section-2.png" alt="متطلبات التخرج" />
+            <div class="screenshot-caption">بطاقات متطلبات التخرج الثلاثة: تسليم إلكتروني، تسليم نسختين، وإخلاء الطرف</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>المصادر واللوائح والأدلة (DgaPgResources) (DGA)</code></td>
+            </tr>
+            <tr>
+                <th>المحددات</th>
+                <td><code>Phase = Graduates</code> | <code>Group Key = GradRequirements</code> (3 بطاقات)</td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: اسم المتطلب | <code>Description</code> / <code>Description_EN</code>: الشرح والجهات المعنية بالتسليم والاعتماد</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 3.3 Graduates Axis 3: Graduation Procedures -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٣.٣ المحور الثالث: إجراءات التخرج (Graduation Procedures)</h4>
+            <span class="section-card-meta">القائمة: الإجراءات الأكاديمية التفاعلية (DgaPgProcedures)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/graduates-graduate-section-3.png" alt="إجراءات التخرج" />
+            <div class="screenshot-caption">إجراءات التخرج التفاعلية (تسليم الرسالة ومنح الدرجة وإخلاء الطرف)</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>الإجراءات الأكاديمية التفاعلية (DgaPgProcedures) (DGA)</code> (فلترة: <code>Phase = Graduates</code>)</td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td>إجراءان مفصلان بشروطهما، موادهما النظامية، ونماذج إخلاء الطرف وإقرار التعديلات المعتمدة</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 3.4 Graduates Axis 4: FAQ -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٣.٤ المحور الرابع: الأسئلة الأكثر شيوعاً للخريجين (Graduates FAQ)</h4>
+            <span class="section-card-meta">القائمة: الأسئلة الشائعة (DgaPgFaq)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/graduates-graduate-section-4.png" alt="أسئلة الخريجين الشائعة" />
+            <div class="screenshot-caption">بنك الأسئلة الأكثر شيوعاً لمرحلة التخرج واستلام الوثائق</div>
+        </div>
+        <table class="meta-table">
+            <tr>
+                <th>اسم القائمة في الإدارة</th>
+                <td><code>الأسئلة الشائعة (DgaPgFaq) (DGA)</code> (فلترة: <code>Phase = Graduates</code> — 9 أسئلة)</td>
+            </tr>
+            <tr>
+                <th>الحقول</th>
+                <td><code>Title (AR)</code> / <code>Title (EN)</code>: السؤال | <code>Description</code> / <code>Description_EN</code>: الإجابة الشاملة</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 3.5 Graduates Reference -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h4>٣.٥ الأساس النظامي والمرجعي لمحطة الخريجين</h4>
+            <span class="section-card-meta">القائمة: DgaPgContentBlocks (Footer)</span>
+        </div>
+        <div class="screenshot-box">
+            <img src="screenshots/graduates-graduate-reference.png" alt="المرجع النظامي للخريجين" />
+            <div class="screenshot-caption">الشريط المرجعي في أسفل صفحة الخريجين</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding-top: 15px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px;">
+        دليل إدارة محتوى الحقيبة الأكاديمية التفاعلية (DGA v4.0) — عمادة الدراسات العليا © جامعة الأميرة نورة بنت عبدالرحمن
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -13,6 +13,9 @@ namespace EserviceList.ServiceDetails
         private int uid;
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["eti"] = true;
             string testParameter = Request.QueryString["eti"];
            uid = Convert.ToInt32(testParameter);
          //   lblquerys.Text = testParameter;

@@ -134,7 +134,10 @@
                         <p class="card-text"><asp:Literal ID="ltrFormText" runat="server" /></p>
                     </div>
                     <div class="d-flex justify-content-end mt-auto">
-                        <a id="lnkForm" runat="server" class="btn btn-secondary stretched-link" href="ContactUs.aspx">
+                        <%-- المسار مُجذَّر لا نسبي: href="ContactUs.aspx" كان يُحَل حسب مجلد
+                             الصفحة المستضيفة فيصل إلى صفحة أخرى أو إلى 404. الكود يضبط
+                             HRef حسب اللغة، وهذه القيمة احتياط إن لم يُنفَّذ. --%>
+                        <a id="lnkForm" runat="server" class="btn btn-secondary stretched-link" href="/ar/Pages/ContactUsForm.aspx">
                             <i class="hgi hgi-stroke hgi-arrow-left-02 fs-4" aria-hidden="true"></i>
                         </a>
                     </div>

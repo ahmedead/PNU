@@ -160,6 +160,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["view"] = true;
                 if (!IsPostBack)
                 {
                     if (!IsCollegeMemebers())
@@ -374,25 +377,30 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 
                 if (this.Page.Header != null)
                 {
-                    // 2. Self-Referencing Canonical URL (Collapses millions of query string variations to one official URL)
+                    // ملاحظة على ما كان هنا (سبب ١٬١٠٦ صفحة بوصف مكرَّر):
+                    //
+                    // كان هذا الضابط يحذف أي canonical أو description موجود ثم يضيف
+                    // نسخته، بحلقة تبحث عن HtmlLink / HtmlMeta بين أبناء Page.Header.
+                    // الحلقة لا تجد شيئاً أبداً: SEO.ascx لا تُصدر كائنات تحكّم، بل
+                    // تكتب وسومها نصاً خاماً داخل litSeoTags (LiteralControl)، فيفشل
+                    // التحويل as HtmlMeta ويبقى الوسمان معاً. والنتيجة على الصفحة الحيّة
+                    // وسما description ووسما canonical — يقرأ Semrush أولهما، وهو
+                    // الوصف العام الذي لا يحمل اسم عضو هيئة التدريس.
+                    //
+                    // وحتى لو نجح الحذف لما نفع: هذا الضابط يعمل في Page_Load بينما
+                    // SEO.ascx تُصدر وسومها في OnPreRender، أي بعده.
+                    //
+                    // الصواب ألّا يتنازع ضابطان على نفس الوسم: يُنشَر المحتوى في
+                    // HttpContext.Items وتتولّى SEO.ascx الإصدار وحدها. الـ canonical
+                    // الذي تبنيه صحيح أصلاً ويحفظ معامل view (ليس ضمن IgnoredQueryKeys)،
+                    // فلا حاجة لنسخة ثانية هنا.
+
+                    // العنوان القانوني ما زال محسوباً هنا: كتلة JSON-LD أدناه تستخدمه
+                    // في خاصية url، ويجب أن يطابق canonical الذي تُصدره SEO.ascx.
                     string rawUrl = Request.Url.GetLeftPart(UriPartial.Path);
                     string cleanCanonicalUrl = string.Format("{0}?view={1}", rawUrl, HttpUtility.UrlEncode(email.ToLower().Trim()));
 
-                    for (int i = this.Page.Header.Controls.Count - 1; i >= 0; i--)
-                    {
-                        var link = this.Page.Header.Controls[i] as HtmlLink;
-                        if (link != null && link.Attributes["rel"] == "canonical")
-                        {
-                            this.Page.Header.Controls.RemoveAt(i);
-                        }
-                    }
-
-                    HtmlLink canonicalLink = new HtmlLink();
-                    canonicalLink.Attributes.Add("rel", "canonical");
-                    canonicalLink.Attributes.Add("href", cleanCanonicalUrl);
-                    this.Page.Header.Controls.Add(canonicalLink);
-
-                    // 3. Distinct Academic Meta Description (Combines rank, qual, department, and sub-specialization to prevent duplicate description warnings)
+                    // 3. وصف أكاديمي مميّز لكل عضو (الرتبة والمؤهل والقسم والتخصص)
                     List<string> details = new List<string>();
                     if (!string.IsNullOrEmpty(profession)) details.Add(profession);
                     if (!string.IsNullOrEmpty(qual)) details.Add(qual);
@@ -405,21 +413,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                     string desc = string.Format("الصفحة الأكاديمية والإنتاج العلمي لـ {0}{1} بجامعة الأميرة نورة بنت عبدالرحمن. المقررات الدراسية، الأبحاث المنشورة، والتواصل الأكاديمي.",
                         memberName, detailsStr);
 
-                    if (desc.Length > 250) desc = desc.Substring(0, 247) + "...";
+                    // ١٦٠ حرفاً لا ٢٥٠: ما بعدها يُقتطع في نتائج البحث فلا يُقرأ.
+                    if (desc.Length > 160) desc = desc.Substring(0, 159).TrimEnd() + "…";
 
-                    for (int i = this.Page.Header.Controls.Count - 1; i >= 0; i--)
-                    {
-                        var meta = this.Page.Header.Controls[i] as HtmlMeta;
-                        if (meta != null && string.Equals(meta.Name, "description", StringComparison.OrdinalIgnoreCase))
-                        {
-                            this.Page.Header.Controls.RemoveAt(i);
-                        }
-                    }
+                    // يُنشَر ليلتقطه SEO.ascx ويُصدره مرة واحدة — بدل إضافة وسم ثانٍ هنا.
+                    HttpContext.Current.Items["PNU_BrowserDescription"] = desc;
 
-                    HtmlMeta descMeta = new HtmlMeta();
-                    descMeta.Name = "description";
-                    descMeta.Content = desc;
-                    this.Page.Header.Controls.Add(descMeta);
+                    // واسم العضو ليبني SEO.ascx منه og:title و twitter:title.
+                    // بدونه كان يسقط إلى عنوان الصفحة القالبية فينتج
+                    // "Faculties - Faculties - - - Princess Nourah" وما شابهه.
+                    HttpContext.Current.Items["PNU_BrowserTitle"] = memberName;
 
                     // 4. Schema.org Person JSON-LD
                     string safeName = HttpUtility.JavaScriptStringEncode(memberName);

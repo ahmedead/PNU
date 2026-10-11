@@ -26,7 +26,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advert
                 if (!Page.IsPostBack)
                 {
                     BindNews();
-
+                    ApplySeoDescription();
                 }
             }
 
@@ -179,6 +179,51 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advert
         }
 
 
+
+        /// <summary>
+        /// ينشر وصفاً مميّزاً مبنياً على سلسلة المواقع.
+        ///
+        /// هذه الصفحة تتكرّر تحت كل كلية/جهة بعنوان قالبي واحد — "الصفحة الرئيسية"
+        /// أو "Home" — فكانت SEO.ascx تسقط إلى وصف عام يتقاسمه الجميع.
+        /// لا يوجد معامل في الرابط يميّزها، والمميِّز الحقيقي هو الموقع نفسه،
+        /// وسلسلة المواقع تحمله:
+        ///     جميع الكليات - كلية طب الأسنان - الإعلانات
+        /// </summary>
+        private void ApplySeoDescription()
+        {
+            try
+            {
+                if (HttpContext.Current == null) return;
+
+                string pageTitle = string.Empty;
+                try
+                {
+                    if (SPContext.Current != null && SPContext.Current.ListItem != null &&
+                        SPContext.Current.ListItem.Fields.ContainsField("Title") &&
+                        SPContext.Current.ListItem["Title"] != null)
+                    {
+                        pageTitle = SPContext.Current.ListItem["Title"].ToString().Trim();
+                    }
+                }
+                catch { }
+
+                if (string.IsNullOrWhiteSpace(pageTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                {
+                    pageTitle = Page.Title.Trim();
+                }
+
+                var chain = Publics.BuildSeoSiteChain();
+                if (chain.Count == 0 && string.IsNullOrWhiteSpace(pageTitle)) return;
+
+                HttpContext.Current.Items["PNU_BrowserDescription"] =
+                    Publics.BuildSeoDescription(chain, pageTitle, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),
+                                   "ApplySeoDescription", ex.Message);
+            }
+        }
     }
 
 

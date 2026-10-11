@@ -14,6 +14,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["ProgramCode"] = true;
+                Response.Cache.VaryByParams["SecCode"] = true;
+                Response.Cache.VaryByParams["Source"] = true;
                 if (!Page.IsPostBack)
                 {
                     string Code = "";

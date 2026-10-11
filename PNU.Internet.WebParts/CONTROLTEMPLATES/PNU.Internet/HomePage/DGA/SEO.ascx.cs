@@ -18,6 +18,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         public string PageDescription { get; set; }
         public string PageTitle { get; set; }
 
+        // عنوان الصفحة كما كان قبل أن تكتب عليه SEO.ascx، وآخر قيمة كتبتها هي.
+        // تُقيَّم الوسوم مرتين (Page_Load ثم PreRenderComplete)، فلو قُرئ Page.Title
+        // في المرة الثانية لعاد بما كتبته الأولى وتضاعفت البادئة:
+        // "الكليات - الكليات - صفحة عضو هيئة التدريس - جامعة ... - جامعة ...".
+        private string _originalPageTitle;
+        private string _lastWrittenTitle;
+
         private static readonly HashSet<string> IgnoredQueryKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
@@ -26,10 +33,59 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             "guestaccesstoken", "folderid"
         };
 
+        /// <summary>
+        /// يُرفع العلم في OnInit لا في Page_Load عن قصد.
+        /// دورة حياة ASP.NET تُنهي Init لكل الضوابط قبل أن يبدأ أي Page_Load، فيرى
+        /// كل ضابط فرعي - مثل ucAdvertisementDetails - العلم مرفوعاً مهما كان موضعه
+        /// في شجرة الضوابط. لو بقي في Page_Load لاعتمد الحارس على ترتيب الوسوم داخل
+        /// الماستر بيج: ماستر واحد يضع SEO.ascx بعد PlaceHolderMain يقلب الترتيب
+        /// فتُصدَر description و og:* و twitter:* مرتين على كل صفحة.
+        /// </summary>
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.Items["PNU_SEO_Active"] = true;
+            }
+            if (Page != null)
+            {
+                Page.PreRenderComplete += Page_PreRenderComplete;
+            }
+        }
+
+        private static bool HasMeaningfulQueryString(HttpRequest request)
+        {
+            if (request == null || request.QueryString.Count == 0) return false;
+            foreach (string key in request.QueryString.AllKeys)
+            {
+                // A null key is a bare value (?abc) - treat it as meaningful to stay on the safe side.
+                if (key == null || !IgnoredQueryKeys.Contains(key)) return true;
+            }
+            return false;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                // PERF 2026-10-07: only when the URL carries a real query parameter. Calling SetNoServerCaching()
+                // unconditionally made EVERY page on the DGA masters uncacheable - the home page went from ~4 ms
+                // (output cache) to ~950 ms per request. Detail controls that read ItemId/RequestID/... already
+                // call SetNoServerCaching() themselves (QueryString_CacheFix_20260920, 106 files).
+                if (HasMeaningfulQueryString(Request))
+                {
+                    Response.Cache.SetNoServerCaching();
+                }
+                Response.Cache.VaryByParams["ItemId"] = true;
+                Response.Cache.VaryByParams["ProgramCode"] = true;
+                Response.Cache.VaryByParams["view"] = true;
+                Response.Cache.VaryByParams["RequestId"] = true;
+                Response.Cache.VaryByParams["RequestID"] = true;
+
+                // PNU_SEO_Active يُرفع في OnInit أعلاه - لا هنا - حتى لا يعتمد على ترتيب الضوابط.
+
                 // 1. Suppress SharePoint's built-in SeoCanonicalLink to avoid duplicate/inconsistent canonicals
                 if (Page != null && Page.Header != null)
                 {
@@ -37,6 +93,34 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 }
 
                 // 2. Initialize SEO attributes & URLs
+                InitializePageTitle();
+                InitializePageDescription();
+                InitializeHreflangAndCanonicalUrls();
+                RenderSeoTags();
+            }
+            catch (Exception)
+            {
+                EnsureFallbackUrls();
+                RenderSeoTags();
+            }
+        }
+
+        /// <summary>
+        /// إعادة التقييم في PreRenderComplete لا في OnPreRender.
+        ///
+        /// SEO.ascx في الـ head، وضوابط المحتوى (ucViewFacultyMembers و ucNewsDetails
+        /// و ucCollegeNewsDetails ...) تُحمَّل داخل Web Parts في الـ body. الـ Web Part
+        /// لا يبني أبناءه إلا عند EnsureChildControls، وASP.NET تستدعيها في PreRender
+        /// الخاص بالـ Web Part نفسه — أي بعد OnPreRender الخاص بـ SEO.ascx لأنها أسبق
+        /// في الشجرة. فكانت HttpContext.Items["PNU_BrowserTitle"/"PNU_BrowserDescription"]
+        /// تُنشَر بعد إصدار الوسوم، ويخرج وصف عام واحد لآلاف الصفحات (Semrush: 1,730 صفحة).
+        ///
+        /// PreRenderComplete يُطلَق بعد انتهاء PreRender لكل الضوابط في الصفحة.
+        /// </summary>
+        private void Page_PreRenderComplete(object sender, EventArgs e)
+        {
+            try
+            {
                 InitializePageTitle();
                 InitializePageDescription();
                 InitializeHreflangAndCanonicalUrls();
@@ -58,8 +142,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 bool isEnglish = IsCurrentRequestEnglish();
                 string desc = string.Empty;
 
+                // Priority 0: Explicit dynamic description set by child user controls (e.g., ucAdvertisementDetails)
+                string dynamicDesc = HttpContext.Current != null ? HttpContext.Current.Items["PNU_BrowserDescription"] as string : null;
+                if (!string.IsNullOrWhiteSpace(dynamicDesc))
+                {
+                    desc = CleanPlainText(dynamicDesc);
+                }
+
                 // 1. Author-defined Explicit SEO / Comments metadata
-                if (SPContext.Current != null && SPContext.Current.ListItem != null)
+                if (string.IsNullOrEmpty(desc) && SPContext.Current != null && SPContext.Current.ListItem != null)
                 {
                     SPListItem item = SPContext.Current.ListItem;
 
@@ -89,9 +180,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                         string progIdentifier = !string.IsNullOrEmpty(progCode) ? progCode.Trim() : (!string.IsNullOrEmpty(itemId) ? itemId.Trim() : string.Empty);
 
                         string dynamicTitle = HttpContext.Current.Items["PNU_BrowserTitle"] as string;
-                        if (string.IsNullOrWhiteSpace(dynamicTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                        if (string.IsNullOrWhiteSpace(dynamicTitle) && !string.IsNullOrWhiteSpace(GetSourcePageTitle()))
                         {
-                            dynamicTitle = Page.Title;
+                            dynamicTitle = GetSourcePageTitle();
                         }
 
                         string webTitle = SPContext.Current != null && SPContext.Current.Web != null ? SPContext.Current.Web.Title : string.Empty;
@@ -117,9 +208,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                     {
                         string memberEmail = request.QueryString["view"];
                         string dynamicTitle = HttpContext.Current.Items["PNU_BrowserTitle"] as string;
-                        if (string.IsNullOrWhiteSpace(dynamicTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                        if (string.IsNullOrWhiteSpace(dynamicTitle) && !string.IsNullOrWhiteSpace(GetSourcePageTitle()))
                         {
-                            dynamicTitle = Page.Title;
+                            dynamicTitle = GetSourcePageTitle();
                         }
 
                         string memberLabel = !string.IsNullOrEmpty(dynamicTitle) && !dynamicTitle.Contains("FacultyMemberDetails")
@@ -135,24 +226,38 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                 : $"الصفحة الأكاديمية والسيرة الذاتية والأبحاث العلمية لعضو هيئة التدريس ({memberLabel}) في {webTitle} بجامعة الأميرة نورة بنت عبد الرحمن.";
                         }
                     }
-                    // Case C: News, Events, and Media Details
+                    // Case C: News, Events, Announcements and Advertisement Details
                     else if (path.IndexOf("newsdetails", StringComparison.OrdinalIgnoreCase) >= 0 ||
                              path.IndexOf("eventdetails", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                             path.IndexOf("announcementdetails", StringComparison.OrdinalIgnoreCase) >= 0)
+                             path.IndexOf("announcementdetails", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                             path.IndexOf("advertisementdetails", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
                         string dynamicTitle = HttpContext.Current.Items["PNU_BrowserTitle"] as string;
-                        if (string.IsNullOrWhiteSpace(dynamicTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                        if (string.IsNullOrWhiteSpace(dynamicTitle) && !string.IsNullOrWhiteSpace(GetSourcePageTitle()))
                         {
-                            dynamicTitle = Page.Title;
+                            dynamicTitle = GetSourcePageTitle();
                         }
 
                         string webTitle = SPContext.Current != null && SPContext.Current.Web != null ? SPContext.Current.Web.Title : string.Empty;
 
-                        if (!string.IsNullOrEmpty(dynamicTitle))
+                        if (!string.IsNullOrEmpty(dynamicTitle) &&
+                            !dynamicTitle.Equals("تفاصيل الإعلان", StringComparison.OrdinalIgnoreCase) &&
+                            !dynamicTitle.Equals("AdvertisementDetails", StringComparison.OrdinalIgnoreCase) &&
+                            !dynamicTitle.Equals("تفاصيل الاعلان", StringComparison.OrdinalIgnoreCase))
                         {
                             desc = isEnglish
                                 ? $"Coverage and details of: {dynamicTitle} - {webTitle}, Princess Nourah bint Abdulrahman University."
                                 : $"تغطية وتفاصيل: {dynamicTitle} - {webTitle} - جامعة الأميرة نورة بنت عبد الرحمن.";
+                        }
+                        else
+                        {
+                            string reqId = request.QueryString["RequestId"] ?? request.QueryString["RequestID"];
+                            if (!string.IsNullOrEmpty(reqId))
+                            {
+                                desc = isEnglish
+                                    ? $"Details of advertisement no. {reqId} at {webTitle}, Princess Nourah bint Abdulrahman University."
+                                    : $"تفاصيل الإعلان رقم {reqId} في {webTitle} بجامعة الأميرة نورة بنت عبد الرحمن.";
+                            }
                         }
                     }
                 }
@@ -180,9 +285,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                     {
                         pageTitle = SPContext.Current.ListItem["Title"].ToString().Trim();
                     }
-                    if (string.IsNullOrEmpty(pageTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                    if (string.IsNullOrEmpty(pageTitle) && !string.IsNullOrWhiteSpace(GetSourcePageTitle()))
                     {
-                        pageTitle = Page.Title.Trim();
+                        pageTitle = GetSourcePageTitle();
                     }
                     if (string.IsNullOrEmpty(pageTitle) && !string.IsNullOrEmpty(path))
                     {
@@ -245,9 +350,42 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.Url != null)
             {
                 string path = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
-                return path.Contains("/en/") || path.Contains("/en-us/");
+
+                // اللغة تُحدَّد من مقطع المسار الأول لا بالبحث في المسار كله.
+                // كانت Contains("/en/") تُطابق رمز كلية الهندسة في
+                // /ar/Faculties/EN/Pages/... فتُعامَل ٣٨ صفحة عربية على أنها
+                // إنجليزية: وصف ولقب بقالب إنجليزي وقيم عربية داخله، مثل
+                // "بيانات القسم page within كلية الهندسة".
+                // StartsWith هنا يطابق ما يفعله InitializeHreflangAndCanonicalUrls
+                // أصلاً، فيتوافق الملفان على تعريف واحد للغة.
+                return path.StartsWith("/en/", StringComparison.Ordinal)
+                    || path.StartsWith("/en-us/", StringComparison.Ordinal)
+                    || path.Equals("/en", StringComparison.Ordinal)
+                    || path.Equals("/en-us", StringComparison.Ordinal);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Page.Title كما وضعه شيربوينت أو ضابط محتوى — لا كما كتبته SEO.ascx نفسها.
+        /// إن كان العنوان الحالي هو ما كتبناه في التقييم السابق عُدنا إلى الأصلي،
+        /// وإن غيّره ضابط آخر بعدنا (مثل ucViewFacultyMembers) أُخذ بقيمته الجديدة.
+        /// </summary>
+        private string GetSourcePageTitle()
+        {
+            string current = Page != null && Page.Title != null ? Page.Title.Trim() : string.Empty;
+
+            if (_originalPageTitle == null)
+            {
+                _originalPageTitle = current;
+            }
+
+            if (_lastWrittenTitle != null && string.Equals(current, _lastWrittenTitle, StringComparison.Ordinal))
+            {
+                return _originalPageTitle;
+            }
+
+            return current;
         }
 
         private string CleanPlainText(string text)
@@ -284,9 +422,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                  webTitle.Equals("PNU", StringComparison.OrdinalIgnoreCase);
 
                 string dynamicTitle = HttpContext.Current.Items["PNU_BrowserTitle"] as string;
-                if (string.IsNullOrWhiteSpace(dynamicTitle) && Page != null && !string.IsNullOrWhiteSpace(Page.Title))
+                if (string.IsNullOrWhiteSpace(dynamicTitle) && !string.IsNullOrWhiteSpace(GetSourcePageTitle()))
                 {
-                    dynamicTitle = Page.Title.Trim();
+                    dynamicTitle = GetSourcePageTitle();
                 }
 
                 string itemTitle = string.Empty;
@@ -318,13 +456,26 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 // Case 2: Announcements & Advertisements (AdvertisementDetails.aspx / AnnouncementDetails.aspx)
                 else if ((path.IndexOf("advertisementdetails", StringComparison.OrdinalIgnoreCase) >= 0 || path.IndexOf("announcementdetails", StringComparison.OrdinalIgnoreCase) >= 0) && request != null)
                 {
-                    string adTitle = !string.IsNullOrEmpty(basePageTitle) ? basePageTitle : (isEnglish ? "Announcement Details" : "تفاصيل الإعلان");
+                    string reqId = request.QueryString["RequestId"] ?? request.QueryString["RequestID"];
+                    string adTitle = (!string.IsNullOrEmpty(basePageTitle) &&
+                                      !basePageTitle.Equals("تفاصيل الإعلان", StringComparison.OrdinalIgnoreCase) &&
+                                      !basePageTitle.Equals("AdvertisementDetails", StringComparison.OrdinalIgnoreCase) &&
+                                      !basePageTitle.Equals("تفاصيل الاعلان", StringComparison.OrdinalIgnoreCase))
+                        ? basePageTitle
+                        : (!string.IsNullOrEmpty(reqId) ? (isEnglish ? $"Advertisement #{reqId}" : $"إعلان رقم {reqId}") : (isEnglish ? "Announcement Details" : "تفاصيل الإعلان"));
                     PageTitle = $"{prefix}{adTitle} - {universityName}";
                 }
                 // Case 3: News & Events
                 else if ((path.IndexOf("newsdetails", StringComparison.OrdinalIgnoreCase) >= 0 || path.IndexOf("eventdetails", StringComparison.OrdinalIgnoreCase) >= 0) && request != null)
                 {
-                    string itemLabel = !string.IsNullOrEmpty(basePageTitle) ? basePageTitle : (isEnglish ? "Details" : "التفاصيل");
+                    string reqId = request.QueryString["RequestId"] ?? request.QueryString["RequestID"] ?? request.QueryString["ItemId"] ?? request.QueryString["ID"];
+                    string itemLabel = (!string.IsNullOrEmpty(basePageTitle) &&
+                                        !basePageTitle.Equals("تفاصيل الخبر", StringComparison.OrdinalIgnoreCase) &&
+                                        !basePageTitle.Equals("تفاصيل الفعالية", StringComparison.OrdinalIgnoreCase) &&
+                                        !basePageTitle.Equals("NewsDetails", StringComparison.OrdinalIgnoreCase) &&
+                                        !basePageTitle.Equals("EventDetails", StringComparison.OrdinalIgnoreCase))
+                        ? basePageTitle
+                        : (!string.IsNullOrEmpty(reqId) ? (isEnglish ? $"Details #{reqId}" : $"تفاصيل رقم {reqId}") : (isEnglish ? "Details" : "التفاصيل"));
                     PageTitle = $"{prefix}{itemLabel} - {universityName}";
                 }
                 // Case 4: Faculty Member Details
@@ -357,6 +508,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 if (Page != null && !string.IsNullOrWhiteSpace(PageTitle))
                 {
                     Page.Title = PageTitle;
+                    _lastWrittenTitle = PageTitle.Trim();
                 }
             }
             catch
@@ -382,7 +534,34 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             string standardAuthority = GetStandardPortalAuthority(requestUri);
 
             // 2. Clean Absolute Path, remove duplicate slashes, and normalize language prefix
+            //
+            // المسار يُؤخذ من الملف كما خزّنه شيربوينت لا كما طلبه الزائر.
+            //
+            // شيربوينت يخدم أي حالة أحرف بـ 200، وكان الـ canonical يردّ الحالة
+            // المطلوبة كما هي، فكل صيغة تُعلن نفسها أصلاً:
+            //     /ar/Pages/Home.aspx  ->  canonical = /ar/Pages/Home.aspx
+            //     /ar/pages/home.aspx  ->  canonical = /ar/pages/home.aspx
+            // فتُفهرَس الصفحة مرتين بمحتوى واحد. رصد Semrush ذلك على Home.aspx
+            // و Speech.aspx و PNUinNumbers.aspx.
+            //
+            // ServerRelativeUrl يحمل الحالة المخزَّنة الواحدة، فتنهار كل الصيغ إلى
+            // canonical واحد. وهذا لا يعيد عطل ToLowerInvariant القديم: الحالة
+            // المستعملة هي حالة شيربوينت الأصلية لا حالة مفروضة.
             string cleanPath = requestUri.AbsolutePath;
+            try
+            {
+                if (SPContext.Current != null &&
+                    SPContext.Current.File != null &&
+                    !string.IsNullOrEmpty(SPContext.Current.File.ServerRelativeUrl))
+                {
+                    cleanPath = SPContext.Current.File.ServerRelativeUrl;
+                }
+            }
+            catch
+            {
+                // لا سياق ملف (صفحة تطبيق أو خطأ): يبقى مسار الطلب كما هو.
+            }
+
             if (string.IsNullOrEmpty(cleanPath) || cleanPath.Equals("/", StringComparison.OrdinalIgnoreCase))
             {
                 cleanPath = "/ar/Pages/home.aspx";
@@ -443,11 +622,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             }
             else
             {
-                ArabicUrl = standardAuthority + "/ar/Pages/home.aspx";
-                EnglishUrl = standardAuthority + "/en/Pages/home.aspx";
+                // مسار بلا بادئة لغة معروفة: لا يوجد مقابل لغوي يمكن إثباته.
+                // توجيه ar و en و x-default إلى الصفحة الرئيسية يترك الـ canonical
+                // خارج العنقود وبلا وسم مرجعي ذاتي - وهو بعينه صنف الخطأ الذي
+                // عالجناه في ملاحظات Semrush. الصواب: canonical وحده بلا hreflang.
+                ArabicUrl = null;
+                EnglishUrl = null;
             }
 
-            DefaultUrl = ArabicUrl;
+            DefaultUrl = ArabicUrl ?? CanonicalUrl;
         }
 
         /// <summary>
@@ -560,6 +743,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             {
                 string encodedDesc = HttpUtility.HtmlAttributeEncode(PageDescription);
                 string encodedTitle = HttpUtility.HtmlAttributeEncode(PageTitle);
+                string ogImageTag = string.Empty;
+                string dynamicImage = HttpContext.Current != null ? HttpContext.Current.Items["PNU_OgImage"] as string : null;
+                if (!string.IsNullOrEmpty(dynamicImage))
+                {
+                    string encodedImg = HttpUtility.HtmlAttributeEncode(dynamicImage);
+                    ogImageTag = string.Format("\r\n<meta property=\"og:image\" content=\"{0}\" />\r\n<meta name=\"twitter:image\" content=\"{0}\" />", encodedImg);
+                }
+
                 litSeoTags.Text = string.Format(
                     "<!-- Security Headers -->\r\n" +
                     "<meta http-equiv=\"X-Content-Type-Options\" content=\"nosniff\" />\r\n" +
@@ -571,13 +762,15 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                     "<meta property=\"og:title\" content=\"{2}\" />\r\n" +
                     "<meta name=\"twitter:title\" content=\"{2}\" />\r\n" +
                     "<meta property=\"og:url\" content=\"{0}\" />\r\n" +
+                    "{4}" +
                     "<!-- Canonical Tag (Self-Referencing Official URL) -->\r\n" +
                     "<link rel=\"canonical\" href=\"{0}\" />\r\n" +
                     "{3}",
                     CanonicalUrl,
                     encodedDesc,
                     encodedTitle,
-                    BuildHreflangBlock()
+                    BuildHreflangBlock(),
+                    ogImageTag
                 );
             }
         }
@@ -589,6 +782,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         /// </summary>
         private string BuildHreflangBlock()
         {
+            // لا عنقود لغوي بلا طرفين. المسار الذي لا يحمل بادئة لغة معروفة يُكتفى فيه
+            // بالـ canonical وحده؛ وسم x-default وحيداً بلا ar ولا en عنقود ناقص لا صحيح.
+            if (string.IsNullOrEmpty(ArabicUrl) && string.IsNullOrEmpty(EnglishUrl))
+            {
+                return string.Empty;
+            }
+
             bool isEnglishPage = !string.IsNullOrEmpty(EnglishUrl) &&
                                  string.Equals(EnglishUrl, CanonicalUrl, StringComparison.Ordinal);
 

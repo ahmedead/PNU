@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -73,27 +73,29 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                                     <Value Type='Boolean'>1</Value>
                                                  </Eq>
                                               </And>
-                                           </Where>";
+                                           </Where>
+                                           <OrderBy>
+                                              <FieldRef Name='ItemOrder' Ascending='TRUE' />
+                                              <FieldRef Name='Title' Ascending='TRUE' />
+                                           </OrderBy>";
 
                             // Fetch all items matching the query
                             SPListItemCollection collitem = list.GetItems(query);
 
                             if (collitem != null)
                             {
-                                // Pagination logic
-                                int pageSize = 6; // Number of items per page
-                                int totalItems = collitem.Count;
-                                int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-                                
                                 // Map items to your custom class
                                 List<EServicesList> eserviceList = SPFactory.MapListItemsToClass<EServicesList>(collitem);
+
+                                // Sort in-memory by ItemOrder
+                                eserviceList = eserviceList
+                                    .OrderBy(s => s.OrderValue)
+                                    .ThenBy(s => s.ARServiceName)
+                                    .ToList();
 
                                 // Bind data to the repeater
                                 rptAllData.DataSource = eserviceList;
                                 rptAllData.DataBind();
-
-
                             }
                         }
                     }

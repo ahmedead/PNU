@@ -57,9 +57,18 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
 
             if (!_authorized)
             {
-                litDenied.Text = IsArabic
-                    ? "ليس لديك صلاحية إدارة الهيكل التنظيمي."
-                    : "You are not authorized to manage the org structure.";
+                if (!ContentAdm.IsAuthenticated())
+                {
+                    litDenied.Text = IsArabic
+                        ? "يجب تسجيل الدخول أولاً لإدارة الهيكل التنظيمي. <a href=\"javascript:void(0)\" onclick=\"openAdminLoginPopup(); return false;\" class=\"btn btn-sm btn-primary ms-2 me-2\">تسجيل الدخول / Login</a>"
+                        : "You must log in to manage the org structure. <a href=\"javascript:void(0)\" onclick=\"openAdminLoginPopup(); return false;\" class=\"btn btn-sm btn-primary ms-2 me-2\">Login</a>";
+                }
+                else
+                {
+                    litDenied.Text = IsArabic
+                        ? "ليس لديك صلاحية إدارة الهيكل التنظيمي."
+                        : "You are not authorized to manage the org structure.";
+                }
                 return;
             }
 
@@ -72,7 +81,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
         // ---------------------------------------------------------------
         private bool IsAuthorized()
         {
-            return ContentAdm.IsAdmin();
+            return ContentAdm.EnsureAdminOrPromptLogin(Page);
         }
 
         private void BindGrid()

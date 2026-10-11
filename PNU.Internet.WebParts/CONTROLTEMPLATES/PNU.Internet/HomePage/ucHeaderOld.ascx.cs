@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Services;
+using System.IdentityModel.Services;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.ApplicationPages.Calendar.Exchange;
 using Microsoft.SharePoint.Client;
@@ -17,7 +17,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using Microsoft.IdentityModel.Web;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage
 {

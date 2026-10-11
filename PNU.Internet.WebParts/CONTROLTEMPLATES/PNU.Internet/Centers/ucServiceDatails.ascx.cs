@@ -16,6 +16,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Centers
         {
             try
             {
+                // OutputCache fix for QueryString parameters
+                Response.Cache.SetNoServerCaching();
+                Response.Cache.VaryByParams["ServiceId"] = true;
                 if (Page.Request.QueryString["ServiceId"] == null)
                     return;
                 GetData();

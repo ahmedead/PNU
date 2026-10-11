@@ -1,11 +1,11 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="asp" Namespace="System.Web.UI" Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 <%@ Import Namespace="Microsoft.SharePoint" %> 
 <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucAllDigitalMedia.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.MediaCenter.ucAllDigitalMedia" %>
+<%@ Control Language="C#" AutoEventWireup="true" EnableViewState="false" CodeBehind="ucAllDigitalMedia.ascx.cs" Inherits="PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign.MediaCenter.ucAllDigitalMedia" %>
 
 <%@ Import Namespace="PNU.Internet.WebParts" %>
 
@@ -16,7 +16,7 @@
 
         <%-- Search + filter bar --%>
         <dga-search-input>
-            <div class="d-flex gap-3 mb-4" role="search" aria-label="ابحث في الوسائط الرقمية">
+            <div class="d-flex gap-3 mb-4" role="search" aria-label='<%# SPFactory.GetLocalizedTitle("ابحث في الوسائط الرقمية", "Search digital media") %>'>
                 <div class="form-control-container has-icon">
                     <span class="d-inline-flex fs-6 form-input-icon text-body-secondary">
                         <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
@@ -24,36 +24,36 @@
                     <input type="search" id="mediaSearchInput" autocomplete="off" class="form-control"
                         placeholder='<%# SPFactory.GetLocalizedTitle("ابحث في الوسائط الرقمية", "Search digital media") %>' value="" />
                 </div>
-                <button type="button" class="btn btn-primary" id="btnMediaSearch" aria-label="بحث">بحث</button>
+                <button type="button" class="btn btn-primary" id="btnMediaSearch" aria-label='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>'><%# SPFactory.GetLocalizedTitle("بحث", "Search") %></button>
                 <dga-filter-dropdown class="flex-shrink-0">
                     <div class="dropdown flex-shrink-0">
                         <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
                             data-bs-auto-close="outside" class="btn btn-dark gap-1" id="mediaFilterToggle">
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-filter" aria-hidden="true"></i></span>
-                            <span>تصفية</span>
+                            <span><%# SPFactory.GetLocalizedTitle("تصفية", "Filter") %></span>
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-arrow-down-01" aria-hidden="true"></i></span>
                         </button>
                         <div class="dropdown-menu p-2" style="width: 20rem;">
                             <div class="m-1">
 
                                 <%-- ===== Media Type filter section ===== --%>
-                                <p class="fw-semibold mb-2">نوع الوسيط</p>
+                                <p class="fw-semibold mb-2"><%# SPFactory.GetLocalizedTitle("نوع الوسيط", "Media Type") %></p>
                                 <div class="form-control-container has-icon">
                                     <span class="d-inline-flex fs-6 form-input-icon text-body-secondary">
                                         <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
                                     </span>
                                     <input type="text" autocomplete="off" class="form-control"
-                                           id="mediaTypeBoxSearch" placeholder="بحث" />
+                                           id="mediaTypeBoxSearch" placeholder='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>' />
                                 </div>
                                 <div class="d-flex flex-column gap-2 mt-4 px-2 py-2 overflow-auto"
                                      style="max-height: 12.5rem;" id="mediaTypeBox">
-                                    <div class="form-check filter-row" data-label="صورة">
+                                    <div class="form-check filter-row" data-label='<%# SPFactory.GetLocalizedTitle("صورة", "Image") %>'>
                                         <input type="checkbox" class="form-check-input media-type-filter" id="media-filter-image" data-type="image" />
-                                        <label class="form-check-label" for="media-filter-image">صورة</label>
+                                        <label class="form-check-label" for="media-filter-image"><%# SPFactory.GetLocalizedTitle("صورة", "Image") %></label>
                                     </div>
-                                    <div class="form-check filter-row" data-label="فيديو">
+                                    <div class="form-check filter-row" data-label='<%# SPFactory.GetLocalizedTitle("فيديو", "Video") %>'>
                                         <input type="checkbox" class="form-check-input media-type-filter" id="media-filter-video" data-type="video" />
-                                        <label class="form-check-label" for="media-filter-video">فيديو</label>
+                                        <label class="form-check-label" for="media-filter-video"><%# SPFactory.GetLocalizedTitle("فيديو", "Video") %></label>
                                     </div>
                                 </div>
 
@@ -68,7 +68,7 @@
                                             <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
                                         </span>
                                         <input type="text" autocomplete="off" class="form-control"
-                                               id="mediaFacultyBoxSearch" placeholder="بحث" />
+                                               id="mediaFacultyBoxSearch" placeholder='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>' />
                                     </div>
                                     <div class="d-flex flex-column gap-2 mt-4 px-2 py-2 overflow-auto"
                                          style="max-height: 12.5rem;" id="mediaFacultyBox">
@@ -91,8 +91,8 @@
                                 <hr />
 
                                 <div class="d-flex justify-content-between align-content-stretch align-items-stretch gap-2">
-                                    <button type="button" class="btn btn-primary" id="btnApplyMediaFilter">تطبيق الاختيارات</button>
-                                    <button type="button" class="btn btn-secondary" id="btnResetMediaFilter">إعادة تعيين</button>
+                                    <button type="button" class="btn btn-primary" id="btnApplyMediaFilter"><%# SPFactory.GetLocalizedTitle("تطبيق الاختيارات", "Apply filters") %></button>
+                                    <button type="button" class="btn btn-secondary" id="btnResetMediaFilter"><%# SPFactory.GetLocalizedTitle("إعادة تعيين", "Reset") %></button>
                                 </div>
                             </div>
                         </div>
@@ -139,13 +139,13 @@
                                             <button class="btn btn-primary video-preview-trigger" type="button"
                                                 data-bs-toggle="modal" data-bs-target="#videoPreviewModal"
                                                 data-video-title='<%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %>'
-                                                data-video-src='<%# Eval("VideoURL") %>'>عرض</button>
+                                                data-video-src='<%# Eval("VideoURL") %>'><%# SPFactory.GetLocalizedTitle("عرض", "View") %></button>
                                         </asp:PlaceHolder>
                                         <asp:PlaceHolder runat="server" Visible='<%# !(bool)Eval("IsVideo") %>'>
                                             <button class="btn btn-primary media-preview-trigger" type="button"
                                                 data-bs-toggle="modal" data-bs-target="#mediaPreviewModal"
                                                 data-media-title='<%# SPFactory.GetLocalizedTitle(Eval("Title"), Eval("Title_EN")) %>'
-                                                data-media-src='<%# Eval("AttachmentURL") %>'>عرض</button>
+                                                data-media-src='<%# Eval("AttachmentURL") %>'><%# SPFactory.GetLocalizedTitle("عرض", "View") %></button>
                                         </asp:PlaceHolder>
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
         <%-- Pagination --%>
         <dga-paginator>
             <div class="mt-5 p-2 d-flex justify-content-center pagination-container">
-                <nav aria-label="قائمة التنقل في الصفحات">
+                <nav aria-label='<%# SPFactory.GetLocalizedTitle("قائمة التنقل في الصفحات", "Pagination Navigation") %>'>
                     <ul class="pagination"></ul>
                 </nav>
             </div>
@@ -172,8 +172,8 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header p-3">
-                    <h3 class="modal-title h5 m-0 p-0" id="mediaPreviewModalTitle">الوسائط الرقمية</h3>
-                    <button type="button" class="btn btn-secondary icon-btn" data-bs-dismiss="modal" aria-label="إغلاق">
+                    <h3 class="modal-title h5 m-0 p-0" id="mediaPreviewModalTitle"><%# SPFactory.GetLocalizedTitle("الوسائط الرقمية", "Digital Media") %></h3>
+                    <button type="button" class="btn btn-secondary icon-btn" data-bs-dismiss="modal" aria-label='<%# SPFactory.GetLocalizedTitle("إغلاق", "Close") %>'>
                         <span class="d-inline-flex fs-5">
                             <i class="hgi hgi-stroke hgi-cancel-01" aria-hidden="true"></i>
                         </span>
@@ -191,8 +191,8 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header p-3">
-                    <h3 class="modal-title h5 m-0 p-0" id="videoPreviewModalTitle">فيديو</h3>
-                    <button type="button" class="btn btn-secondary icon-btn" data-bs-dismiss="modal" aria-label="إغلاق">
+                    <h3 class="modal-title h5 m-0 p-0" id="videoPreviewModalTitle"><%# SPFactory.GetLocalizedTitle("فيديو", "Video") %></h3>
+                    <button type="button" class="btn btn-secondary icon-btn" data-bs-dismiss="modal" aria-label='<%# SPFactory.GetLocalizedTitle("إغلاق", "Close") %>'>
                         <span class="d-inline-flex fs-5">
                             <i class="hgi hgi-stroke hgi-cancel-01" aria-hidden="true"></i>
                         </span>
@@ -200,7 +200,7 @@
                 </div>
                 <div class="modal-body px-3 py-0 pb-3">
                     <div class="ratio ratio-16x9 overflow-hidden rounded-3 bg-dark">
-                        <iframe id="videoPreviewFrame" title="فيديو" src="" loading="lazy"
+                        <iframe id="videoPreviewFrame" title='<%# SPFactory.GetLocalizedTitle("فيديو", "Video") %>' src="" loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     </div>

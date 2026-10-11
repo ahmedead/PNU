@@ -24,10 +24,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign
         {
             SPSecurity.RunWithElevatedPrivileges(delegate ()
             {
-                using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+                using (SPSite site = new SPSite(SPContext.Current.Site.ID))
                 {
-                    using (SPWeb web = site.OpenWeb())
+                    using (SPWeb web = FAQListInitializer.OpenTargetWeb(site, "/ar/FAQs/"))
                     {
+                        if (web == null || !web.Exists) return;
+
                         var initializer = new FAQListInitializer();
                         initializer.EnsureLists(web);
 
@@ -109,7 +111,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign
             {
                 var a = items[i];
                 string type = (a.ItemType ?? "").ToLowerInvariant();
-                string content = a.ContentTextAr ?? string.Empty;
+                string content = a.DisplayContentText;
 
                 if (type == FAQAnswerTypes.Bullet)
                 {

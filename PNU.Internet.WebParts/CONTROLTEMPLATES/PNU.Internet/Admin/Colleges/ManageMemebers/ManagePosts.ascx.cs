@@ -64,6 +64,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.Colleges.Man
         public string email { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            // OutputCache fix for QueryString parameters
+            Response.Cache.SetNoServerCaching();
+            Response.Cache.VaryByParams["email"] = true;
+            Response.Cache.VaryByParams["IsAdmin"] = true;
             if (!IsPostBack)
             {
                 if (!IsCollegeMemebers())
