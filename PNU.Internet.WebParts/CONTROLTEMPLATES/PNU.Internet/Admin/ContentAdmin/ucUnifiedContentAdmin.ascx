@@ -106,6 +106,7 @@
                             AutoPostBack="true" OnSelectedIndexChanged="ddlLayoutSelector_SelectedIndexChanged">
                             <asp:ListItem Text="قالب 1: مساحة العمل الجانبية (Sidebar Workspace)" Value="SidebarWorkspace" />
                             <asp:ListItem Text="قالب 2: شبكة البطاقات (Cards Dashboard)" Value="CardsDashboard" />
+                            <asp:ListItem Text="قالب 3: قائمة منسدلة (Dropdown)" Value="DropdownWorkspace" />
                         </asp:DropDownList>
                     </div>
                     <div class="col-12 col-md-3 text-md-end">
@@ -233,6 +234,45 @@
                 </div>
             </asp:PlaceHolder>
 
+        </asp:PlaceHolder>
+
+        <!-- ====================================================================== -->
+        <!-- TEMPLATE 3: Dropdown Workspace (pick the content to edit from a list)   -->
+        <!-- ====================================================================== -->
+        <asp:PlaceHolder ID="phTemplateDropdown" runat="server" Visible="false">
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-body p-3">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-12 col-lg-6">
+                            <label class="form-label fw-bold mb-1" for="<%= ddlModules.ClientID %>">
+                                <i class="bi bi-ui-checks-grid me-1"></i> المحتوى المراد تعديله:
+                            </label>
+                            <asp:DropDownList ID="ddlModules" runat="server" CssClass="form-select"
+                                AutoPostBack="true" OnSelectedIndexChanged="ddlModules_SelectedIndexChanged" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="small text-muted">
+                                <asp:Literal ID="ltrDropdownDescription" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 bg-white">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0 fw-bold text-success">
+                            <asp:Literal ID="ltrDropdownTitle" runat="server" />
+                        </h5>
+                        <small class="text-muted"><asp:Literal ID="ltrDropdownCategory" runat="server" /></small>
+                    </div>
+                    <asp:Label ID="lblDropdownTargetBadge" runat="server" CssClass="pnu-target-badge" />
+                </div>
+                <div class="card-body p-3 p-md-4">
+                    <asp:PlaceHolder ID="phControlHost_Dropdown" runat="server" />
+                </div>
+            </div>
         </asp:PlaceHolder>
 
     </asp:PlaceHolder>

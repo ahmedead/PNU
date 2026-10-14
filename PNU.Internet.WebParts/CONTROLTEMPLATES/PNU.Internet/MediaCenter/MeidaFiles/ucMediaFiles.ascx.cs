@@ -83,7 +83,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.MeidaF
                     {
 
                         string filePath = "";
-                        if (item.Attachments != null || item.Attachments.Count > 0)
+                        if (item.Attachments != null && item.Attachments.Count > 0)
                         {
                             SPAttachmentCollection attachments = item.Attachments;
 
@@ -159,7 +159,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.MeidaF
                     foreach (SPListItem item in CollITems)
                     {
                         string filePath = "";
-                        if (item.Attachments != null || item.Attachments.Count > 0)
+                        if (item.Attachments != null && item.Attachments.Count > 0)
                         {
                             SPAttachmentCollection attachments = item.Attachments;
 
@@ -194,7 +194,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.MeidaF
                     pdsData.CurrentPageIndex = 0;
                 if (pdsData.PageCount > 1)
                 {
-                    Repeater1.Visible = true;
+                    Repeater2.Visible = true;
                     ArrayList alPages = new ArrayList();
                     for (int i = 1; i <= pdsData.PageCount; i++)
                         alPages.Add((i).ToString());

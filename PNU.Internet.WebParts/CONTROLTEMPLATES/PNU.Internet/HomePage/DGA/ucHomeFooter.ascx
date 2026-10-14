@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -147,12 +147,12 @@
           <div class="col-12 col-lg-3">
             <h3 class="text-white mb-0 pb-2 d-lg-block d-none h6"
               style="border-bottom:1px solid rgba(255,255,255,.3)">
-              <%= IsArabic  ? " نظرة عامة" : "Overview" %></h3>
+              <%= Text(OverviewTitle) %></h3>
             <button aria-controls="footerNav1" aria-expanded="false"
               class="btn btn-on-color-link collapsed d-lg-none has-rotatable-icon justify-content-between px-0 rounded-0 w-100 border-top-0 border-start-0 border-end-0"
               data-bs-target="#footerNav1" data-bs-toggle="collapse"
               style="border-bottom:1px solid rgba(255,255,255,.3)" type="button">
-              <span class="mb-0 h6"><%= IsArabic  ? " نظرة عامة" : "Overview" %>  </span>
+              <span class="mb-0 h6"><%= Text(OverviewTitle) %></span>
               <span class="d-inline-flex fs-5">
                 <i class="hgi hgi-stroke hgi-arrow-down-01 rotatable-icon rotation-transition"
                   aria-hidden="true"></i>
@@ -160,58 +160,29 @@
             </button>
             <div class="collapse d-lg-block" id="footerNav1" data-bs-parent="#footerNavContainer">
               <div class="d-flex flex-column gap-2 mt-2">
-                <a href="/<%= IsArabic  ? "ar" : "en" %>/FAQs/Pages/default.aspx" target="_self" class="text-white small"><%= IsArabic  ? "الأسئلة الشائعة" : "FAQs" %></a>
-                <a href="https://techcare.pnu.edu.sa/" target="_blank" rel="noopener noreferrer"
-                  class="text-white small external-link">
-                  <%= IsArabic  ? " تيك كير لتقنية المعلومات" : "Tech Care for for Information Technology " %> 
-                  </a>
-                <a href="https://www.kaauh.edu.sa/" target="_blank" rel="noopener noreferrer"
-                  class="text-white small external-link">
-                  <%= IsArabic  ? " المستشفى الجامعي" : "kaauh Hosptial" %> 
-                  </a>
-                <%--<a href="https://nourahprize.pnu.edu.sa/" target="_blank" rel="nofollow noopener noreferrer"
-                  class="text-white small external-link">
-                  <%= IsArabic  ? " جائزة الأميرة نورة" : "Nourah Prize" %> 
-                  </a>--%>
-                <a href="https://tawasulnourah.pnu.edu.sa/" target="_blank" rel="noopener noreferrer"
-                  class="text-white small external-link">
-                    <%= IsArabic  ? " تواصل نورة" : "Tawasul with Nourah" %>                  
-                </a>
-                <a href="https://eservice.pnu.edu.sa/" target="_blank" rel="noopener noreferrer"
-                  class="text-white small external-link">
-                  <%= IsArabic  ? " بوابة الخدمات الإلكترونية" : "e-services portal" %>
-                  
-                </a>
-                <%--<a href="https://graduates.pnu.edu.sa/ar/Pages/default.aspx" target="_blank"
-                  rel="noopener noreferrer" class="text-white small external-link">
-                    <%= IsArabic  ? " منصة الخريجات" : "Graduates platform" %>
-                </a>--%>
-
-                  <a href="/<%= IsArabic  ? "ar" : "en" %>/AboutUniversity/Pages/Support.aspx" target="_blank" rel="noopener noreferrer"
-  class="text-white small ">
-  <%= IsArabic  ? "المساعدة والدعم" : "Help and Support" %>
-  
-</a>
-
-                                    <a href="/<%= IsArabic  ? "ar" : "en" %>/Pages/ContactUsForm.aspx" target="_blank" rel="noopener noreferrer"
-  class="text-white small">
-  <%= IsArabic  ? "تواصل معنا" : "Contact Us" %>
-  
-</a>
+                <asp:Repeater ID="rptOverviewLinks" runat="server">
+                  <ItemTemplate>
+                    <a href='<%# Href(((FooterLink)Container.DataItem).GetDisplayUrl(IsArabic)) %>'
+                       target='<%# (bool)Eval("OpenInNewTab") ? "_blank" : "_self" %>'
+                       rel='<%# (bool)Eval("OpenInNewTab") ? "noopener noreferrer" : "" %>'
+                       class='<%# "text-white small" + ((bool)Eval("OpenInNewTab") ? " external-link" : "") %>'>
+                      <%# Server.HtmlEncode(((FooterLink)Container.DataItem).GetDisplayTitle(IsArabic)) %>
+                    </a>
+                  </ItemTemplate>
+                </asp:Repeater>
               </div>
             </div>
           </div>
           <div class="col-12 col-lg-3">
             <h3 class="text-white mb-0 pb-2 d-lg-block d-none h6"
               style="border-bottom:1px solid rgba(255,255,255,.3)">
-                <%= IsArabic  ? " فرصك في نورة" : "Your opportunities in Noura" %>
-
-              </h3>
+                <%= Text(OpportunitiesTitle) %>
+            </h3>
             <button aria-controls="footerNav2" aria-expanded="false"
               class="btn btn-on-color-link collapsed d-lg-none has-rotatable-icon justify-content-between px-0 rounded-0 w-100 border-top-0 border-start-0 border-end-0"
               data-bs-target="#footerNav2" data-bs-toggle="collapse"
               style="border-bottom:1px solid rgba(255,255,255,.3)" type="button">
-              <span class="mb-0 h6"><%= IsArabic  ? " فرصك في نورة" : "Your opportunities in Noura" %></span>
+              <span class="mb-0 h6"><%= Text(OpportunitiesTitle) %></span>
               <span class="d-inline-flex fs-5">
                 <i class="hgi hgi-stroke hgi-arrow-down-01 rotatable-icon rotation-transition"
                   aria-hidden="true"></i>
@@ -219,31 +190,29 @@
             </button>
             <div class="collapse d-lg-block" id="footerNav2" data-bs-parent="#footerNavContainer">
               <div class="d-flex flex-column gap-2 mt-2">
-                  <a href="/<%= IsArabic  ? "ar" : "en" %>/AboutUniversity/Pages/Careers.aspx" target="_self"
-  class="text-white small"> <%= IsArabic  ? " التوظيف" : "Recruitment" %> </a>
-
-                <a href="/<%= IsArabic  ? "ar" : "en" %>/NourahOpportunities/Pages/Invest-in-noura.aspx" target="_self"
-                  class="text-white small"> <%= IsArabic  ? " استثمر في نورة" : "Invest in Noura" %> </a>
-                <a href="/<%= IsArabic  ? "ar" : "en" %>/NourahOpportunities/Pages/التدريب.aspx" target="_self"
-                  class="text-white small"><%= IsArabic  ? "التدريب" : "Training" %></a>
-                <a href="https://norahattaa.pnu.edu.sa/ar/Pages/default.aspx" target="_blank"
-                  rel="nofollow noopener noreferrer" class="text-white small external-link">
-                  <%= IsArabic  ? " التطوع" : "Volunteering" %>
-                </a>
+                <asp:Repeater ID="rptOpportunitiesLinks" runat="server">
+                  <ItemTemplate>
+                    <a href='<%# Href(((FooterLink)Container.DataItem).GetDisplayUrl(IsArabic)) %>'
+                       target='<%# (bool)Eval("OpenInNewTab") ? "_blank" : "_self" %>'
+                       rel='<%# (bool)Eval("OpenInNewTab") ? "noopener noreferrer" : "" %>'
+                       class='<%# "text-white small" + ((bool)Eval("OpenInNewTab") ? " external-link" : "") %>'>
+                      <%# Server.HtmlEncode(((FooterLink)Container.DataItem).GetDisplayTitle(IsArabic)) %>
+                    </a>
+                  </ItemTemplate>
+                </asp:Repeater>
               </div>
             </div>
             <div class="mt-4">
               <h3 class="text-white mb-0 pb-2 d-lg-block d-none h6"
                 style="border-bottom:1px solid rgba(255,255,255,.3)">
-                <%= IsArabic  ?  " الحياة الجامعية" : "University life" %>
+                <%= Text(UniversityLifeTitle) %>
               </h3>
               <button aria-controls="footerNav5" aria-expanded="false"
                 class="btn btn-on-color-link collapsed d-lg-none has-rotatable-icon justify-content-between px-0 rounded-0 w-100 border-top-0 border-start-0 border-end-0"
                 data-bs-target="#footerNav5" data-bs-toggle="collapse"
                 style="border-bottom:1px solid rgba(255,255,255,.3)" type="button">
                 <span class="mb-0 h6">
-                  <%= IsArabic  ? " الحياة الجامعية" : "University life" %>
-                  
+                  <%= Text(UniversityLifeTitle) %>
                 </span>
                 <span class="d-inline-flex fs-5">
                   <i class="hgi hgi-stroke hgi-arrow-down-01 rotatable-icon rotation-transition"
@@ -252,15 +221,16 @@
               </button>
               <div class="collapse d-lg-block" id="footerNav5" data-bs-parent="#footerNavContainer">
                 <div class="d-flex flex-column gap-2 mt-2">
-                  <a href="/<%= IsArabic  ? "ar" : "en" %>/UniversityLife/Pages/VirtualTour.aspx" target="_self"
-                    class="text-white small">
-                    <%= IsArabic  ? "جولة افتراضية 360" : "360 virtual tour" %>
-                    
-                  </a>
-                  <a href="/<%= IsArabic  ? "ar" : "en" %>/UniversityLife/Pages/UniversityFacilities.aspx" target="_self"
-                    class="text-white small">
-                    <%= IsArabic  ? " مرافق الجامعة" : "University Facilities" %>
-                  </a>
+                  <asp:Repeater ID="rptUniversityLifeLinks" runat="server">
+                    <ItemTemplate>
+                      <a href='<%# Href(((FooterLink)Container.DataItem).GetDisplayUrl(IsArabic)) %>'
+                         target='<%# (bool)Eval("OpenInNewTab") ? "_blank" : "_self" %>'
+                         rel='<%# (bool)Eval("OpenInNewTab") ? "noopener noreferrer" : "" %>'
+                         class='<%# "text-white small" + ((bool)Eval("OpenInNewTab") ? " external-link" : "") %>'>
+                        <%# Server.HtmlEncode(((FooterLink)Container.DataItem).GetDisplayTitle(IsArabic)) %>
+                      </a>
+                    </ItemTemplate>
+                  </asp:Repeater>
                 </div>
               </div>
             </div>
@@ -269,12 +239,12 @@
           <div class="col-12 col-lg-3">
             <h3 class="text-white mb-0 pb-2 d-lg-block d-none h6"
               style="border-bottom:1px solid rgba(255,255,255,.3)">
-              <%= RelatedLinksTitle %></h3>
+              <%= Text(RelatedLinksTitle) %></h3>
             <button aria-controls="footerNav4" aria-expanded="false"
               class="btn btn-on-color-link collapsed d-lg-none has-rotatable-icon justify-content-between px-0 rounded-0 w-100 border-top-0 border-start-0 border-end-0"
               data-bs-target="#footerNav4" data-bs-toggle="collapse"
               style="border-bottom:1px solid rgba(255,255,255,.3)" type="button">
-              <span class="mb-0 h6"><%= RelatedLinksTitle %></span>
+              <span class="mb-0 h6"><%= Text(RelatedLinksTitle) %></span>
               <span class="d-inline-flex fs-5">
                 <i class="hgi hgi-stroke hgi-arrow-down-01 rotatable-icon rotation-transition"
                   aria-hidden="true"></i>
@@ -285,10 +255,12 @@
 
                   <asp:Repeater ID="rptUsefulLinks" runat="server">
                     <ItemTemplate>
-                      <a href='<%# Eval("Url") %>'
+                      <a href='<%# Href(((FooterLink)Container.DataItem).GetDisplayUrl(IsArabic)) %>'
                          target='<%# (bool)Eval("OpenInNewTab") ? "_blank" : "_self" %>'
-                         rel="noopener noreferrer"
-                         class="text-white small external-link"><%# Server.HtmlEncode(IsArabic ? (string)Eval("TitleAr") : (string)Eval("TitleEn")) %></a>
+                         rel='<%# (bool)Eval("OpenInNewTab") ? "noopener noreferrer" : "" %>'
+                         class='<%# "text-white small" + ((bool)Eval("OpenInNewTab") ? " external-link" : "") %>'>
+                         <%# Server.HtmlEncode(((FooterLink)Container.DataItem).GetDisplayTitle(IsArabic)) %>
+                      </a>
                     </ItemTemplate>
                   </asp:Repeater>
 
@@ -312,11 +284,14 @@
                     </a>
                   </div>
                 </asp:PlaceHolder>
-				<div class="mt-2 text-ltr">
-                    <a href="tel:+966-11-8220000" id="ctl00_ucHomeFooter_lnkPhone" class="text-white fw-bold">
-                      00966-11-8220011
+
+                <asp:PlaceHolder ID="phPhoneIntl" runat="server" Visible="false">
+                  <div class="mt-2 text-ltr">
+                    <a id="lnkPhoneIntl" runat="server" class="text-white fw-bold">
+                      <asp:Literal ID="litPhoneIntl" runat="server" />
                     </a>
                   </div>
+                </asp:PlaceHolder>
 
                 <asp:PlaceHolder ID="phEmail" runat="server" Visible="false">
                   <div class="mt-2 text-ltr">
@@ -340,11 +315,11 @@
 
                       <%-- CASE 1: item has NO children -> plain icon button with URL --%>
                       <asp:PlaceHolder runat="server" Visible='<%# !(bool)Eval("HasChildren") %>'>
-                        <a href='<%# Eval("Url") %>' target="_blank" rel="noopener noreferrer"
+                        <a href='<%# Href(Eval("Url")) %>' target="_blank" rel="noopener noreferrer"
                           class="btn btn-outline-on-color-secondary icon-btn"
                           aria-label='<%# Server.HtmlEncode(IsArabic ? (string)Eval("AriaLabelAr") : (string)Eval("AriaLabelEn")) %>'>
                           <span class="d-inline-flex fs-6">
-                            <i class='<%# Eval("IconClass") %>' aria-hidden="true"></i>
+                            <i class='<%# Attr(Eval("IconClass")) %>' aria-hidden="true"></i>
                           </span>
                         </a>
                       </asp:PlaceHolder>
@@ -356,14 +331,14 @@
                                   data-bs-toggle="dropdown" aria-expanded="false"
                                   aria-label='<%# Server.HtmlEncode(IsArabic ? (string)Eval("AriaLabelAr") : (string)Eval("AriaLabelEn")) %>'>
                             <span class="d-inline-flex fs-6">
-                              <i class='<%# Eval("IconClass") %>' aria-hidden="true"></i>
+                              <i class='<%# Attr(Eval("IconClass")) %>' aria-hidden="true"></i>
                             </span>
                           </button>
                           <ul class="dropdown-menu py-0">
                             <asp:Repeater ID="rptSocialChildren" runat="server" DataSource='<%# Eval("Children") %>'>
                               <ItemTemplate>
                                 <li>
-                                  <a class="dropdown-item" href='<%# Eval("Url") %>' target="_blank" rel="noopener noreferrer">
+                                  <a class="dropdown-item" href='<%# Href(Eval("Url")) %>' target="_blank" rel="noopener noreferrer">
                                     <%# Server.HtmlEncode(IsArabic ? (string)Eval("AriaLabelAr") : (string)Eval("AriaLabelEn")) %>
                                   </a>
                                 </li>
@@ -392,7 +367,7 @@
                     
                   <asp:Repeater ID="rptDownLinks" runat="server">
                     <ItemTemplate>
-                      <a href='<%# IsArabic ? (string)Eval("UrlAr") : (string)Eval("UrlEn") %>'
+                      <a href='<%# Href(IsArabic ? (string)Eval("UrlAr") : (string)Eval("UrlEn")) %>'
                          target='<%# (bool)Eval("OpenInNewTab") ? "_blank" : "_self" %>'
                          rel="noopener noreferrer"
                          class="text-white small text-center">
@@ -403,18 +378,18 @@
 
                   </div>
                   <p class="text-white small text-center fw-semibold mb-3 mt-4 text-lg-start">
-                    <%= CopyrightText %>
+                    <%= Text(CopyrightText) %>
                   </p>
 
                     <p class="text-white small text-center fw-lighter text-lg-start mb-0">
-                      <%= IsArabic ? " - تم تطويره وصيانته بواسطة إدارة التحول الرقمي" : " - Developed and maintained by the Digital Transformation Department" %>
+                      <%= Text(DevelopedByText) %>
                     </p>
 
 
                 </div>
                 <div class="d-flex align-self-stretch gap-3 justify-content-lg-between justify-content-center align-items-end">
 
-                    <a href="https://sdaia.gov.sa/ar/default.aspx" target="_blank" rel="noopener noreferrer"><svg width="125"
+                    <a href="<%= Href(SdaiaUrl) %>" target="_blank" rel="noopener noreferrer"><svg width="125"
                         height="42" viewBox="0 0 125 42" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M122.115 41.9943V24.2544H118.417V41.9943H122.115ZM125 4.49241V1.21215C123.022 1.26959 121.082 1.78662 119.35 2.76323L114.915 5.2737V0H111.318V5.26795L106.884 2.75749C105.151 1.78088 103.218 1.26385 101.233 1.2064V4.48666C102.55 4.54411 103.835 4.89454 104.988 5.5437L110.455 8.63439L104.988 11.7251C103.835 12.3742 102.55 12.7247 101.233 12.7821V16.0624C103.211 16.0049 105.151 15.4879 106.884 14.5113L111.318 12.0008V15.62C111.318 17.3262 110.644 18.998 109.328 20.2101L109.296 20.2388L104.597 24.5244C102.43 26.5006 101.233 29.1317 101.233 31.9294V41.9828H104.837V35.4682H111.318V41.9828H114.915V12.0123L119.35 14.5228C121.076 15.4994 123.016 16.0164 125 16.0739V12.7936C123.684 12.7362 122.398 12.3857 121.246 11.7366L115.778 8.64588L121.246 5.55519C122.398 4.90603 123.684 4.54986 125 4.49815V4.49241ZM111.312 32.1994H104.83V31.9467C104.83 30.0279 105.649 28.224 107.136 26.8625L111.312 23.0538V32.1994ZM117.68 20.3595L120.194 22.6516L122.707 20.3595L120.194 18.0673L117.68 20.3595Z"
@@ -541,7 +516,7 @@
                           fill="white" />
                       </svg>
                     </a>
-                    <a href="https://www.vision2030.gov.sa/" target="_blank" rel="noopener noreferrer">
+                    <a href="<%= Href(VisionUrl) %>" target="_blank" rel="noopener noreferrer">
                     <svg height="42" viewBox="0 0 373 250" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M223.58 4.52002H219.39V8.70002H223.58V4.52002Z" fill="white"></path>
                       <path d="M310.67 56.49H306.48V60.67H310.67V56.49Z" fill="white"></path>
@@ -693,7 +668,7 @@
                       <path d="M357.04 231.64H354.25L346.72 248.85H349.8L351.56 244.72H359.66L361.4 248.85H364.58L357.04 231.64ZM352.66 242.07L355.6 235.23L358.56 242.07H352.66Z" fill="white"></path>
                     </svg>
                   </a>
-                    <a href="/ar">
+                    <a href="<%= Href(PnuHomeUrl) %>">
                       <svg xmlns="http://www.w3.org/2000/svg" class="text-white" height="42" viewBox="0 0 1104 377"
                         fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd"

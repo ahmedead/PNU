@@ -253,5 +253,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phControlHost_Cards;
+
+        protected global::System.Web.UI.WebControls.PlaceHolder phTemplateDropdown;
+        protected global::System.Web.UI.WebControls.DropDownList ddlModules;
+        protected global::System.Web.UI.WebControls.Literal ltrDropdownDescription;
+        protected global::System.Web.UI.WebControls.Literal ltrDropdownTitle;
+        protected global::System.Web.UI.WebControls.Literal ltrDropdownCategory;
+        protected global::System.Web.UI.WebControls.Label lblDropdownTargetBadge;
+        protected global::System.Web.UI.WebControls.PlaceHolder phControlHost_Dropdown;
     }
 }

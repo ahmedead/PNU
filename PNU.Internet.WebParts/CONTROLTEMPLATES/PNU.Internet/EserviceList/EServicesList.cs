@@ -14,7 +14,36 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         public string ENServiceName { get; set; } = "";
         public string Active { get; set; } = "";
         public string URL { get; set; } = "";
+        public string URL_EN { get; set; } = "";
         public string ServiceURL { get; set; } = "";
+
+        /// <summary>
+        /// Returns URL_EN on an English web (same rule as the page labels: Web.Language != 1025)
+        /// when it is not empty; otherwise falls back to URL.
+        /// </summary>
+        public string DisplayURL
+        {
+            get
+            {
+                bool isEn = false;
+                try
+                {
+                    // Substring checks on the URL ("/en") also matched paths such as /environment
+                    if (Microsoft.SharePoint.SPContext.Current != null && Microsoft.SharePoint.SPContext.Current.Web != null)
+                    {
+                        isEn = Microsoft.SharePoint.SPContext.Current.Web.Language != 1025;
+                    }
+                }
+                catch { }
+
+                if (isEn && !string.IsNullOrWhiteSpace(URL_EN))
+                {
+                    return URL_EN.Trim();
+                }
+
+                return URL ?? "";
+            }
+        }
         public string Desc { get; set; } = "";
         public string TargetGroup { get; set; } = "";
         public string DP_TargetGroup { get; set; } = "";

@@ -4,41 +4,36 @@ using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.FacultyMember
 using PNU.Internet.WebParts.Layouts.PNU.Internet;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Policy;
-using System.Threading.Tasks;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Net.Http.Formatting;
-using iTextSharp.text;
-using System.Net.Security;
-using System.Web.Services;
-using System.Threading;
-using System.Web;
-using System.Web.UI.HtmlControls;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 {
     public partial class ucViewFacultyMembers : UserControl
     {
+        private const string UniversityNameAr = "جامعة الأميرة نورة بنت عبدالرحمن";
+        private const string UniversityNameEn = "Princess Nourah bint Abdulrahman University";
+
+        /// <summary>
+        /// قيمة ?view= كما وردت، مقصوصة الأطراف. فارغة إن غاب المعامل -
+        /// بدل Request.QueryString["view"].ToString() التي ترمي NullReferenceException.
+        /// </summary>
+        private string ViewEmail
+        {
+            get { return (Request.QueryString["view"] ?? string.Empty).Trim(); }
+        }
+
         protected bool IsCollegeMemebers()
         {
             bool IsMemeber = false;
             try
             {
-                if (SPContext.Current.Web.CurrentUser == null)
+                SPUser user = SPContext.Current.Web.CurrentUser;
+                if (user == null || string.IsNullOrEmpty(user.Email))
                     return false;
 
-
-                if (SPContext.Current.Web.CurrentUser.Email == null || SPContext.Current.Web.CurrentUser.Email == "")
-                {
-                    return false;
-                }
-                var userEmail = SPContext.Current.Web.CurrentUser.Email;
+                var userEmail = user.Email;
                 SPSecurity.RunWithElevatedPrivileges(delegate () {
                     using (SPSite site = new SPSite(SPContext.Current.Site.ID))
                     {
@@ -48,25 +43,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                             SPQuery query = new SPQuery();
                             query.Query = "<Where>" +
                                                 "<Eq>" +
-                                                    "<FieldRef Name='EMAIL_ADDRESS'/><Value Type='Text'>" + userEmail.ToLower().Trim() + "</Value>" +
+                                                    "<FieldRef Name='EMAIL_ADDRESS'/><Value Type='Text'>" + System.Security.SecurityElement.Escape(userEmail.ToLower().Trim()) + "</Value>" +
                                                 "</Eq>" +
                                                 "</Where>";
+                            query.RowLimit = 1;
 
                             SPListItemCollection collection = list.GetItems(query);
-                            if (collection == null || collection.Count == 0)
-                                return;
-                            SPListItem Item = collection[0];
-                            if (Item == null)
-                                return;
-
-
-                            IsMemeber = true;
-
-
+                            IsMemeber = collection != null && collection.Count > 0;
                         }
                     }
                 });
-
 
                 return IsMemeber;
             }
@@ -76,85 +62,6 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                 return false;
             }
         }
-
-
-
-        //protected void Page_Load(object sender, EventArgs e)
-        //{
-        //    if (!IsPostBack)
-        //    {
-        //        if (!IsCollegeMemebers())
-        //        {
-        //            divEdit.Visible = false;
-        //        }
-
-        //        // Load data synchronously
-        //        LoadData();
-
-        //        // Load tab functionalities asynchronously using threads
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(LoadCollegeTabFunctions));
-        //    }
-        //}
-
-
-
-        //private void LoadCollegeTabFunctions(object state)
-        //{
-        //    try
-        //    {
-        //        string email = (string)state;
-
-        //        // Call each tab function asynchronously
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(WrappedCollege2TabClick), email);
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(WrappedCollege3TabClick), email);
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(WrappedCollege4TabClick), email);
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(WrappedCollege5TabClick), email);
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(WrappedCollege6TabClick), email);
-        //        ThreadPool.QueueUserWorkItem(new WaitCallback(WrappedCollege7TabClick), email);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle exceptions
-        //        //Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
-        //    }
-        //}
-
-        //// Wrapper methods for tab click event handlers
-        //private void WrappedCollege2TabClick(object state)
-        //{
-        //    string email = (string)state;
-        //    college2tab_Click(null, null);
-        //}
-
-        //private void WrappedCollege3TabClick(object state)
-        //{
-        //    string email = (string)state;
-        //    college3tab_Click(null, null);
-        //}
-
-        //private void WrappedCollege4TabClick(object state)
-        //{
-        //    string email = (string)state;
-        //    college4tab_Click(null, null);
-        //}
-
-        //private void WrappedCollege5TabClick(object state)
-        //{
-        //    string email = (string)state;
-        //    college5tab_Click(null, null);
-        //}
-
-        //private void WrappedCollege6TabClick(object state)
-        //{
-        //    string email = (string)state;
-        //    college6tab_Click(null, null);
-        //}
-
-        //private void WrappedCollege7TabClick(object state)
-        //{
-        //    string email = (string)state;
-        //    college7tab_Click(null, null);
-        //}
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -170,183 +77,100 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                         divEdit.Visible = false;
                     }
 
-                    // Load data synchronously
                     LoadData();
 
-                    // Load tab functionalities asynchronously using tasks
-                    Task.Run(() => LoadCollegeTabFunctions());
+                    // تبويب المقررات محمَّل سلفاً: ucMemberCourses يربط بياناته في Page_Load
+                    // الخاص به، فلا داعي لإعادة إرسال الصفحة كلها عند النقر عليه.
+                    // بقية التبويبات (Google Scholar والمكتبة والتغريدات و ORCID) تُحمَّل
+                    // عند الطلب عبر onserverclick، فتبقى قابلة للإرسال.
+                    //
+                    // كان هنا Task.Run(LoadCollegeTabFunctions) يعيد ربط المقررات على خيط
+                    // خلفي ثم يضع "return false" على كل التبويبات. على ذلك الخيط لا يوجد
+                    // HttpContext ولا SPContext، وهو يسابق عرض الصفحة: في الصفحة الحيّة
+                    // كان يخسر السباق دائماً فلم يظهر أثره إلا كاستعلام مقررات مكرَّر،
+                    // ولو ربحه لعطّل التحميل عند الطلب للتبويبات الأربعة.
+                    college22tab.Attributes["onclick"] = "return false;";
                 }
             }
-
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
-
-
         }
-
-        private void LoadCollegeTabFunctions()
-        {
-            try
-            {
-                string email = Request.QueryString["view"].ToString();
-
-                ucMemberCourses ucMemberCoursesl = FindControl("ucMemberCourses") as ucMemberCourses;
-
-                //ucGoogleScolar ucGoogleScolar = FindControl("ucGoogleScolar") as ucGoogleScolar;
-
-
-                //ucMemberLibrary ucMemberLibrary = FindControl("ucMemberLibrary") as ucMemberLibrary;
-
-
-
-
-                //ucMemberTweets ucMemberTweets = FindControl("ucMemberTweets") as ucMemberTweets;
-
-
-                //ucORCIDData ucORCIDData = FindControl("ucORCIDData") as ucORCIDData;
-
-
-
-                // Create tasks for each tab function and run them in parallel
-                Task[] tabTasks = new Task[]
-                {
-                        Task.Run(() => ucMemberCoursesl.BindData())
-                        //,
-                        //Task.Run(() => ucGoogleScolar.BindDataIntoRepeater(email)),
-                        //Task.Run(() => ucMemberLibrary.BindDataIntoRepeater(email)),
-                        ////Task.Run(() => ucMemberAds.BindDataIntoRepeater(email)),
-                        //Task.Run(() => ucMemberTweets.BindDataIntoRepeater()),
-                        //Task.Run(() => ucORCIDData.BindDataIntoRepeater(email))
-                };
-
-                // Wait for all tasks to complete
-                Task.WaitAll(tabTasks);
-
-
-                college22tab.Attributes["onclick"] = "return false;";
-                college33tab.Attributes["onclick"] = "return false;";
-                college44tab.Attributes["onclick"] = "return false;";
-                //college55tab.Attributes["onclick"] = "return false;";
-                college66tab.Attributes["onclick"] = "return false;";
-                college77tab.Attributes["onclick"] = "return false;";
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "LoadCollegeTabFunctions", ex.Message);
-            }
-        }
-
-        //protected void Page_Load(object sender, EventArgs e)
-        //{
-        //    if (!IsPostBack)
-        //    {
-        //        if (!IsCollegeMemebers())
-        //        {
-        //            divEdit.Visible = false;
-
-        //        }
-
-        //        LoadData();
-        //    }
-
-
-
-        //}
-
-
-
-
 
         private void LoadData()
         {
             try
             {
-                string email = Request.QueryString["view"].ToString();
+                string email = ViewEmail;
 
-                email.ToLower().Trim();
-                clsCollMembersListName _FacultyMember = busclsFacultyMembers.GetFacultyMemberByEmail(email);
+                clsCollMembersListName _FacultyMember;
+                bool lookupSucceeded = busclsFacultyMembers.TryGetFacultyMemberByEmail(email, out _FacultyMember);
 
-                List<AllDataCollMembersListName> _AllMainData = new List<AllDataCollMembersListName>();
-
-                //List<lstCourses> _AllCourses = busclsCourses.GetCoursesByEmail(email);
+                if (_FacultyMember == null)
+                {
+                    // بلا ?view= أو ببريد غير مسجَّل: لا يوجد عضو يُعرض. كانت الصفحة
+                    // تردّ 200 قابلة للفهرسة وبـ canonical يشير إليها، فيصير كل
+                    // ?view=<أي نص> صفحةً مستقلة فارغة (soft 404) في أعين محركات البحث.
+                    // فشل البحث نفسه (استثناء) لا يُعامَل كغياب: 404 هنا قد يُسقط من
+                    // الفهرس صفحات أعضاء حقيقيين بسبب عطل عابر.
+                    if (lookupSucceeded)
+                    {
+                        SetNotFound();
+                    }
+                    return;
+                }
 
                 SPSecurity.RunWithElevatedPrivileges(delegate () {
 
-                    if (_FacultyMember != null)
+                    AllDataCollMembersListName Data = SPFactory.MapClassToClass<AllDataCollMembersListName>(_FacultyMember);
 
-                    {
-                        AllDataCollMembersListName Data = new AllDataCollMembersListName();
-                        Data = SPFactory.MapClassToClass<AllDataCollMembersListName>(_FacultyMember);
+                    // عدّادات التبويبات المحمَّلة عند الطلب - تُعرض صفراً حتى يُفتح التبويب
+                    Data.CountAnnounssements = "0";
+                    Data.CountGoogle = "0";
+                    Data.CountORCID = "0";
+                    Data.CountTweets = "0";
 
-
-                        //ucMemberResume ucMemberResumel = FindControl("ucMemberResume") as ucMemberResume;
-
-                        //if (ucMemberResumel != null)
-                        //{
-                        //    ucMemberResumel.GetData(email);
-                        //}
-
-                        //ucMemberLibrary ucMemberLibraryl = FindControl("ucMemberLibrary") as ucMemberLibrary;
-
-                        //if (ucMemberLibraryl != null)
-                        //{
-                        //    ucMemberLibraryl.BindDataIntoRepeater(email);
-                        //}
-
-                        //ucMemberAds ucMemberAds1 = FindControl("ucMemberAds") as ucMemberAds;
-
-                        //if (ucMemberAds1 != null)
-                        //{
-                        //    Data.CountAnnounssements = ucMemberAds1.BindDataIntoRepeater(email);
-                        //    ucMemberAds1.email = email;
-                        //}
-
-
-                        //ucORCIDData ucORCIDData = FindControl("ucORCIDData") as ucORCIDData;
-
-                        //if (ucORCIDData != null)
-                        //{
-                        //    Data.CountORCID = ucORCIDData.BindDataIntoRepeater(email.Trim().ToLower());
-                        //}
-
-                        //ucGoogleScolar ucGoogleScolar = FindControl("ucGoogleScolar") as ucGoogleScolar;
-
-                        //if (ucGoogleScolar != null)
-                        //{
-                        //    Data.CountGoogle = ucGoogleScolar.BindDataIntoRepeater(email.Trim().ToLower());
-                        //}
-
-                        //ucMemberTweets ucMemberTweets = FindControl("ucMemberTweets") as ucMemberTweets;
-
-                        //if (ucMemberTweets != null)
-                        //{
-                        //    Data.CountTweets = ucMemberTweets.BindDataIntoRepeater();
-                        //}
-
-                        Data.CountAnnounssements = "0";
-                        Data.CountGoogle = "0";
-                        Data.CountORCID = "0";
-                        Data.CountTweets = "0";
-
-                        _AllMainData.Add(Data);
-                        rptMainData.DataSource = _AllMainData;
-                        rptMainData.DataBind();
-
-                        // SEO Fix: Near Duplicates (#21), Dynamic Title (#12), Meta Description (#13), Canonicals (#8)
-                        ApplyMemberSeoMetadata(_FacultyMember, email);
-                    }
-
+                    rptMainData.DataSource = new List<AllDataCollMembersListName> { Data };
+                    rptMainData.DataBind();
                 });
 
+                // SEO Fix: Near Duplicates (#21), Dynamic Title (#12), Meta Description (#13), Canonicals (#8)
+                ApplyMemberSeoMetadata(_FacultyMember, email);
             }
-
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
             }
+        }
+
+        /// <summary>
+        /// 404 حقيقي للزائر ولمحركات البحث. TrySkipIisCustomErrors يمنع IIS من استبدال
+        /// الاستجابة بصفحة خطأه، فتبقى صفحة الموقع المعتادة مع رمز 404.
+        /// </summary>
+        private void SetNotFound()
+        {
+            Response.StatusCode = 404;
+            Response.StatusDescription = "Not Found";
+            Response.TrySkipIisCustomErrors = true;
+        }
+
+        /// <summary>
+        /// اللغة من مقطع المسار الأول - التعريف نفسه في SEO.ascx.cs (IsCurrentRequestEnglish)،
+        /// فيتّفق وصف الصفحة مع وسوم hreflang التي تُصدرها.
+        /// </summary>
+        private bool IsEnglishRequest()
+        {
+            string path = Request.Url.AbsolutePath;
+            return path.StartsWith("/en/", StringComparison.OrdinalIgnoreCase)
+                || path.Equals("/en", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string Pick(bool english, string ar, string en)
+        {
+            if (english && !string.IsNullOrWhiteSpace(en)) return en.Trim();
+            if (!string.IsNullOrWhiteSpace(ar)) return ar.Trim();
+            return (en ?? string.Empty).Trim();
         }
 
         private void ApplyMemberSeoMetadata(clsCollMembersListName member, string email)
@@ -356,79 +180,67 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                 if (this.Page == null || member == null)
                     return;
 
-                string memberName = SPFactory.GetLocalizedTitle(member.FULL_NAME, member.ENGLISH_NAME);
+                // الصفحة الإنجليزية كانت تأخذ قالباً عربياً بقيم إنجليزية داخله، مثل:
+                //     "الصفحة الأكاديمية والإنتاج العلمي لـ Noura Mostafa Mohamed ..."
+                // الحقول الإنجليزية (*_EN) موجودة، فيُبنى كل نص بلغة الصفحة.
+                bool english = IsEnglishRequest();
+
+                string memberName = Pick(english, member.FULL_NAME, member.ENGLISH_NAME);
                 if (string.IsNullOrEmpty(memberName))
-                    memberName = member.FULL_NAME ?? member.ENGLISH_NAME ?? "عضو هيئة التدريس";
+                    memberName = english ? "Faculty member" : "عضو هيئة التدريس";
 
-                string profession = member.PROFESSION ?? "";
-                string section = member.SECTION ?? "";
-                string college = member.COLLEGE ?? "";
-                string spec = member.SPECIALIZATION ?? "";
-                string minor = member.SPECIAL_CPECIALIZATION ?? "";
-                string qual = member.QUALIFICATION_NAME ?? "";
+                string profession = Pick(english, member.PROFESSION, member.PROFESSION_EN);
+                string section = Pick(english, member.SECTION, member.SECTION_EN);
+                string college = Pick(english, member.COLLEGE, member.COLLEGE_EN);
+                string spec = Pick(english, member.SPECIALIZATION, member.SPECIALIZATION_EN);
+                string minor = Pick(english, member.SPECIAL_CPECIALIZATION, member.SPECIAL_CPECIALIZATION_EN);
+                string qual = Pick(english, member.QUALIFICATION_NAME, member.QUALIFICATION_NAME_EN);
+                string universityName = english ? UniversityNameEn : UniversityNameAr;
 
-                // 1. Dynamic Page Title (Updates SharePoint PlaceHolderPageTitle so HTML <title> is modified)
-                string fullTitle = string.Format("{0} - {1}{2} | جامعة الأميرة نورة بنت عبدالرحمن",
-                    memberName,
-                    profession,
-                    (!string.IsNullOrEmpty(college) ? " (" + college + ")" : "")).Trim();
+                // 1. عنوان الصفحة: الاسم - الرتبة (الكلية) | الجامعة
+                // JoinNonEmpty يُسقط الفارغ؛ كان الوصل المباشر يُنتج "الاسم -  (الكلية)"
+                // حين تغيب الرتبة.
+                string headline = Publics.JoinNonEmpty(" - ", memberName, profession);
+                if (!string.IsNullOrEmpty(college)) headline += " (" + college + ")";
+                SetSharePointPageTitle(headline + " | " + universityName);
 
-                SetSharePointPageTitle(fullTitle);
+                // 2. الوصف: الرتبة والمؤهل والقسم والكلية والتخصص
+                List<string> details = new List<string>();
+                if (!string.IsNullOrEmpty(profession)) details.Add(profession);
+                if (!string.IsNullOrEmpty(qual)) details.Add(qual);
+                if (!string.IsNullOrEmpty(section)) details.Add((english ? "Department of " : "قسم ") + section);
+                if (!string.IsNullOrEmpty(college)) details.Add(college);
+                if (!string.IsNullOrEmpty(spec)) details.Add((english ? "specialization: " : "تخصص ") + spec);
+                if (!string.IsNullOrEmpty(minor)) details.Add((english ? "sub-specialization: " : "التخصص الدقيق: ") + minor);
 
+                string detailsStr = details.Count > 0
+                    ? " (" + string.Join(english ? ", " : "، ", details) + ")"
+                    : "";
+                string desc = english
+                    ? string.Format("Academic profile and research of {0}{1} at {2}. Courses, publications and academic contact.", memberName, detailsStr, universityName)
+                    : string.Format("الصفحة الأكاديمية والإنتاج العلمي لـ {0}{1} بجامعة الأميرة نورة بنت عبدالرحمن. المقررات الدراسية، الأبحاث المنشورة، والتواصل الأكاديمي.", memberName, detailsStr);
+
+                // ١٦٠ حرفاً لا ٢٥٠: ما بعدها يُقتطع في نتائج البحث فلا يُقرأ.
+                if (desc.Length > 160) desc = desc.Substring(0, 159).TrimEnd() + "…";
+
+                // ملاحظة على ما كان هنا (سبب ١٬١٠٦ صفحة بوصف مكرَّر):
+                // كان هذا الضابط يحذف أي canonical أو description موجود ثم يضيف نسخته،
+                // بحلقة لا تجد شيئاً أبداً لأن SEO.ascx تكتب وسومها نصاً خاماً، فيبقى
+                // الوسمان معاً. الصواب ألّا يتنازع ضابطان على نفس الوسم: يُنشَر المحتوى
+                // في HttpContext.Items وتتولّى SEO.ascx الإصدار وحدها.
+                HttpContext.Current.Items["PNU_BrowserDescription"] = desc;
+
+                // واسم العضو ليبني SEO.ascx منه og:title و twitter:title.
+                HttpContext.Current.Items["PNU_BrowserTitle"] = memberName;
+
+                // 3. Schema.org Person JSON-LD
                 if (this.Page.Header != null)
                 {
-                    // ملاحظة على ما كان هنا (سبب ١٬١٠٦ صفحة بوصف مكرَّر):
-                    //
-                    // كان هذا الضابط يحذف أي canonical أو description موجود ثم يضيف
-                    // نسخته، بحلقة تبحث عن HtmlLink / HtmlMeta بين أبناء Page.Header.
-                    // الحلقة لا تجد شيئاً أبداً: SEO.ascx لا تُصدر كائنات تحكّم، بل
-                    // تكتب وسومها نصاً خاماً داخل litSeoTags (LiteralControl)، فيفشل
-                    // التحويل as HtmlMeta ويبقى الوسمان معاً. والنتيجة على الصفحة الحيّة
-                    // وسما description ووسما canonical — يقرأ Semrush أولهما، وهو
-                    // الوصف العام الذي لا يحمل اسم عضو هيئة التدريس.
-                    //
-                    // وحتى لو نجح الحذف لما نفع: هذا الضابط يعمل في Page_Load بينما
-                    // SEO.ascx تُصدر وسومها في OnPreRender، أي بعده.
-                    //
-                    // الصواب ألّا يتنازع ضابطان على نفس الوسم: يُنشَر المحتوى في
-                    // HttpContext.Items وتتولّى SEO.ascx الإصدار وحدها. الـ canonical
-                    // الذي تبنيه صحيح أصلاً ويحفظ معامل view (ليس ضمن IgnoredQueryKeys)،
-                    // فلا حاجة لنسخة ثانية هنا.
-
-                    // العنوان القانوني ما زال محسوباً هنا: كتلة JSON-LD أدناه تستخدمه
-                    // في خاصية url، ويجب أن يطابق canonical الذي تُصدره SEO.ascx.
-                    string rawUrl = Request.Url.GetLeftPart(UriPartial.Path);
-                    string cleanCanonicalUrl = string.Format("{0}?view={1}", rawUrl, HttpUtility.UrlEncode(email.ToLower().Trim()));
-
-                    // 3. وصف أكاديمي مميّز لكل عضو (الرتبة والمؤهل والقسم والتخصص)
-                    List<string> details = new List<string>();
-                    if (!string.IsNullOrEmpty(profession)) details.Add(profession);
-                    if (!string.IsNullOrEmpty(qual)) details.Add(qual);
-                    if (!string.IsNullOrEmpty(section)) details.Add("قسم " + section);
-                    if (!string.IsNullOrEmpty(college)) details.Add(college);
-                    if (!string.IsNullOrEmpty(spec)) details.Add("تخصص " + spec);
-                    if (!string.IsNullOrEmpty(minor)) details.Add("التخصص الدقيق: " + minor);
-
-                    string detailsStr = details.Count > 0 ? " (" + string.Join("، ", details) + ")" : "";
-                    string desc = string.Format("الصفحة الأكاديمية والإنتاج العلمي لـ {0}{1} بجامعة الأميرة نورة بنت عبدالرحمن. المقررات الدراسية، الأبحاث المنشورة، والتواصل الأكاديمي.",
-                        memberName, detailsStr);
-
-                    // ١٦٠ حرفاً لا ٢٥٠: ما بعدها يُقتطع في نتائج البحث فلا يُقرأ.
-                    if (desc.Length > 160) desc = desc.Substring(0, 159).TrimEnd() + "…";
-
-                    // يُنشَر ليلتقطه SEO.ascx ويُصدره مرة واحدة — بدل إضافة وسم ثانٍ هنا.
-                    HttpContext.Current.Items["PNU_BrowserDescription"] = desc;
-
-                    // واسم العضو ليبني SEO.ascx منه og:title و twitter:title.
-                    // بدونه كان يسقط إلى عنوان الصفحة القالبية فينتج
-                    // "Faculties - Faculties - - - Princess Nourah" وما شابهه.
-                    HttpContext.Current.Items["PNU_BrowserTitle"] = memberName;
-
-                    // 4. Schema.org Person JSON-LD
                     string safeName = HttpUtility.JavaScriptStringEncode(memberName);
                     string safeProf = HttpUtility.JavaScriptStringEncode(profession);
-                    string safeColl = HttpUtility.JavaScriptStringEncode(college);
                     string safeEmail = HttpUtility.JavaScriptStringEncode(member.EMAIL_ADDRESS ?? email);
+                    string safeOrg = HttpUtility.JavaScriptStringEncode(Publics.JoinNonEmpty(" - ", universityName, college));
+                    string safeUrl = HttpUtility.JavaScriptStringEncode(BuildCanonicalUrl());
 
                     string jsonLd = string.Format(@"
 <script type=""application/ld+json"">
@@ -440,11 +252,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
   ""email"": ""{2}"",
   ""worksFor"": {{
     ""@type"": ""CollegeOrUniversity"",
-    ""name"": ""جامعة الأميرة نورة بنت عبدالرحمن - {3}""
+    ""name"": ""{3}""
   }},
   ""url"": ""{4}""
 }}
-</script>", safeName, safeProf, safeEmail, safeColl, cleanCanonicalUrl);
+</script>", safeName, safeProf, safeEmail, safeOrg, safeUrl);
 
                     this.Page.Header.Controls.Add(new LiteralControl(jsonLd));
                 }
@@ -453,6 +265,35 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "ApplyMemberSeoMetadata", ex.Message);
             }
+        }
+
+        /// <summary>
+        /// url في JSON-LD يجب أن يطابق canonical الذي تُصدره SEO.ascx حرفاً بحرف،
+        /// فيُبنى بقواعدها نفسها:
+        ///   - https + نطاق مجموعة المواقع (لا Request.Url الذي قد يكون http خلف موازن الحمل)
+        ///   - مسار الملف كما خزّنه شيربوينت (ServerRelativeUrl) لا كما طلبه الزائر
+        ///   - قيمة view كما وردت، مرمَّزة بـ SEO.EncodeQueryComponent ("@" حرفياً)
+        /// الصيغة السابقة (Request.Url + بريد بأحرف صغيرة) كانت تختلف عنه في الحالة والنطاق.
+        /// </summary>
+        private string BuildCanonicalUrl()
+        {
+            string authority = "https://" + Request.Url.Authority;
+            string path = Request.Url.AbsolutePath;
+            try
+            {
+                if (SPContext.Current != null)
+                {
+                    if (SPContext.Current.Site != null && !string.IsNullOrEmpty(SPContext.Current.Site.Url))
+                        authority = "https://" + new Uri(SPContext.Current.Site.Url).Authority;
+                    if (SPContext.Current.File != null && !string.IsNullOrEmpty(SPContext.Current.File.ServerRelativeUrl))
+                        path = SPContext.Current.File.ServerRelativeUrl;
+                }
+            }
+            catch { }
+
+            string view = Request.QueryString["view"] ?? string.Empty;
+            return authority + path + "?view=" +
+                   global::PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA.SEO.EncodeQueryComponent(view);
         }
 
         private void SetSharePointPageTitle(string fullTitle)
@@ -496,148 +337,100 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
             return null;
         }
 
+        // ------------------------------------------------------------------
+        // التبويبات المحمَّلة عند الطلب: كل نقرة تُرسل الصفحة فيربط التبويب بياناته
+        // ثم يُعطَّل إرساله ("return false") لأن بياناته صارت محفوظة في ViewState.
+        // ------------------------------------------------------------------
+
         protected void college2tab_Click(object sender, EventArgs e)
         {
             try
             {
-                string email = Request.QueryString["view"].ToString();
                 ucMemberCourses ucMemberCoursesl = FindControl("ucMemberCourses") as ucMemberCourses;
-
                 if (ucMemberCoursesl != null)
                 {
                     ucMemberCoursesl.BindData();
                 }
-                //college22tab.Attributes.Remove("onclick");
-
-                //college22tab.Attributes.Add("onclientclick", "return false;");
-                //college22tab.Attributes["onserverclick"] = "";
-                college22tab.Attributes["onclick"] = "return false;";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z2-tab-pane');", true);
-
+                ActivateTab(college22tab, "z2-tab-pane");
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "college2tab_Click", ex.Message);
             }
-
-
-
-
-
-
         }
 
         protected void college3tab_Click(object sender, EventArgs e)
         {
             try
             {
-                string email = Request.QueryString["view"].ToString();
                 ucGoogleScolar ucGoogleScolar = FindControl("ucGoogleScolar") as ucGoogleScolar;
-
                 if (ucGoogleScolar != null)
                 {
-                    ucGoogleScolar.BindDataIntoRepeater(email);
+                    ucGoogleScolar.BindDataIntoRepeater(ViewEmail);
                 }
-                college33tab.Attributes["onclick"] = "return false;";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z3-tab-pane');", true);
-
+                ActivateTab(college33tab, "z3-tab-pane");
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "college3tab_Click", ex.Message);
             }
-
         }
 
         protected void college4tab_Click(object sender, EventArgs e)
         {
             try
             {
-                string email = Request.QueryString["view"].ToString();
                 ucMemberLibrary ucMemberLibrary = FindControl("ucMemberLibrary") as ucMemberLibrary;
-
                 if (ucMemberLibrary != null)
                 {
-                    ucMemberLibrary.BindDataIntoRepeater(email);
+                    ucMemberLibrary.BindDataIntoRepeater(ViewEmail);
                 }
-                college44tab.Attributes["onclick"] = "return false;";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z4-tab-pane');", true);
-
+                ActivateTab(college44tab, "z4-tab-pane");
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "college4tab_Click", ex.Message);
             }
-
         }
-
-        //protected void college5tab_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        string email = Request.QueryString["view"].ToString();
-        //        ucMemberAds ucMemberAds = FindControl("ucMemberAds") as ucMemberAds;
-
-        //        if (ucMemberAds != null)
-        //        {
-        //            ucMemberAds.BindDataIntoRepeater(email);
-        //        }
-        //        college55tab.Attributes["onclick"] = "return false;";
-        //        ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z5-tab-pane');", true);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),sender.ToString(), ex.Message);
-        //    }
-
-        //}
 
         protected void college6tab_Click(object sender, EventArgs e)
         {
             try
             {
-                string email = Request.QueryString["view"].ToString();
                 ucMemberTweets ucMemberTweets = FindControl("ucMemberTweets") as ucMemberTweets;
-
                 if (ucMemberTweets != null)
                 {
                     ucMemberTweets.BindDataIntoRepeater();
                 }
-                college66tab.Attributes["onclick"] = "return false;";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z6-tab-pane');", true);
-
+                ActivateTab(college66tab, "z6-tab-pane");
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "college6tab_Click", ex.Message);
             }
-
         }
 
         protected void college7tab_Click(object sender, EventArgs e)
         {
             try
             {
-                string email = Request.QueryString["view"].ToString();
                 ucORCIDData ucORCIDData = FindControl("ucORCIDData") as ucORCIDData;
-
                 if (ucORCIDData != null)
                 {
-                    ucORCIDData.BindDataIntoRepeater(email);
+                    ucORCIDData.BindDataIntoRepeater(ViewEmail);
                 }
-                college77tab.Attributes["onclick"] = "return false;";
-
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('z7-tab-pane');", true);
+                ActivateTab(college77tab, "z7-tab-pane");
             }
             catch (Exception ex)
             {
-                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), sender.ToString(), ex.Message);
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "college7tab_Click", ex.Message);
             }
-
         }
 
+        private void ActivateTab(System.Web.UI.HtmlControls.HtmlButton tab, string paneId)
+        {
+            tab.Attributes["onclick"] = "return false;";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTab", $"activeTab('{paneId}');", true);
+        }
     }
-
-
 }

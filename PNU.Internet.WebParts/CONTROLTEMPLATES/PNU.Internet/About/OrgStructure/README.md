@@ -47,7 +47,7 @@ language instantly, and content editors change any label without a redeploy.
 | Icon | `OrgIcon` | Text |
 | Theme | `OrgTheme` | Text |
 | Text color | `OrgTextColor` | Text (CSS color / `var(--dga-primary-*)`) |
-| Link URL | `OrgLinkUrl` | Note (plain) |
+| Link URL AR/EN | `OrgLinkUrl` / `OrgLinkUrlEn` | Note (plain) |
 | Active | `OrgActive` | Boolean |
 
 ## Bilingual content

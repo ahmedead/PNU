@@ -45,6 +45,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
         /// <summary>Optional details page URL. Empty means "no details page".</summary>
         public string LinkUrl { get; set; }
 
+        /// <summary>Optional English details page URL. Empty falls back to <see cref="LinkUrl"/>.</summary>
+        public string LinkUrlEn { get; set; }
+
         public bool Active { get; set; }
 
         // ---- Geometry parsed from Selector (rect[x="..."][y="..."][width="..."][height="..."]) ----
@@ -102,6 +105,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
         public string LocalizedMeta(bool isArabic)
         {
             return isArabic ? Meta : (string.IsNullOrWhiteSpace(MetaEn) ? Meta : MetaEn);
+        }
+
+        public string LocalizedLinkUrl(bool isArabic)
+        {
+            return isArabic ? LinkUrl : (string.IsNullOrWhiteSpace(LinkUrlEn) ? LinkUrl : LinkUrlEn);
         }
     }
 }

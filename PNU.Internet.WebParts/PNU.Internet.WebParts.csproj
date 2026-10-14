@@ -145,6 +145,7 @@
     <Compile Include="CONTROLTEMPLATES\Classes\DBClasses.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\EmailUtility.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\FooterListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\Classes\SafeHtml.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\Helper.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\ContentEditorUsers.cs" />
     <Compile Include="CONTROLTEMPLATES\Classes\ImageAutomation.cs" />
@@ -1800,6 +1801,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeNoraFutureAdmin.ascx.designer.cs">
       <DependentUpon>ucHomeNoraFutureAdmin.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeFooterAdmin.ascx.cs">
+      <DependentUpon>ucHomeFooterAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeFooterAdmin.ascx.designer.cs">
+      <DependentUpon>ucHomeFooterAdmin.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomePage.ascx.cs">
       <DependentUpon>ucHomePage.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2130,6 +2138,17 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\ucMediaFiles.ascx.designer.cs">
       <DependentUpon>ucMediaFiles.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Admin\ucMediaFilesAdmin.ascx.cs">
+      <DependentUpon>ucMediaFilesAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Admin\ucMediaFilesAdmin.ascx.designer.cs">
+      <DependentUpon>ucMediaFilesAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Infrastructure\MediaFilesHelper.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Infrastructure\MediaFilesListProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Infrastructure\MediaFilesLog.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Infrastructure\MediaFilesTargetWeb.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\NewsBeta\BusinessClassess\clsNewsRequestsList.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\NewsBeta\ucAddDigitalMediaBeta.ascx.cs">
       <DependentUpon>ucAddDigitalMediaBeta.ascx</DependentUpon>
@@ -2595,6 +2614,29 @@
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucNavCards.ascx.designer.cs">
       <DependentUpon>ucNavCards.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\Admin\ucNavCardsAdmin.ascx.cs">
+      <DependentUpon>ucNavCardsAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\Admin\ucNavCardsAdmin.ascx.designer.cs">
+      <DependentUpon>ucNavCardsAdmin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\StrategyPoliciesModel.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\StrategyPoliciesProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucStrategyPoliciesRegulations.ascx.cs">
+      <DependentUpon>ucStrategyPoliciesRegulations.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucStrategyPoliciesRegulations.ascx.designer.cs">
+      <DependentUpon>ucStrategyPoliciesRegulations.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\Admin\ucStrategyPoliciesRegulationsAdmin.ascx.cs">
+      <DependentUpon>ucStrategyPoliciesRegulationsAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\Policies\Admin\ucStrategyPoliciesRegulationsAdmin.ascx.designer.cs">
+      <DependentUpon>ucStrategyPoliciesRegulationsAdmin.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Admin\ucPgAdmin.ascx.cs">
       <DependentUpon>ucPgAdmin.ascx</DependentUpon>
@@ -3551,6 +3593,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeNews.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeNoraFuture.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeNoraFutureAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\Admin\ucHomeFooterAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomePage.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeStatistics.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\HomePage\DGA\ucHomeWhy.ascx" />
@@ -3596,6 +3639,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\DigitalMedia\ucNewEditDigitalMedia.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\DigitalMedia\ucNewAddDigitalMedia.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\ucMediaFiles.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\MeidaFiles\Admin\ucMediaFilesAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\NewsBeta\ucAddDigitalMediaBeta.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\NewsBeta\ucAddNewsBeta.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\MediaCenter\NewsBeta\ucAllDigitalMediaRequestsBeta.ascx" />
@@ -3660,6 +3704,9 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\PnuEServiceHome.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PnuEServices\PnuEServicesCatalog.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucNavCards.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Policies\Admin\ucNavCardsAdmin.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Policies\ucStrategyPoliciesRegulations.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\Policies\Admin\ucStrategyPoliciesRegulationsAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Admin\ucPgAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgContentBlock.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\PostgraduateKit\Controls\ucPgDiscounts.ascx" />

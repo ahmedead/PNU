@@ -35,7 +35,7 @@
                             <a href="<%# String.Format("{0}Faculties/Pages/AllCollegesNew.aspx", SPFactory.GetSiteURL()) %>"><asp:Literal runat="server" Text="<%$ Resources: PNUres, Colleges %>" /></a>
                         </li>
                         <li class="breadcrumb-item small">
-                            <a href="<%# String.Format("FacultyMain.aspx?Source={0}", Eval("COLL_CODE")) %>">
+                            <a href="<%# CollegeHomeUrl %>">
                                 <asp:Literal runat="server" Text="<%$ Resources: PNUres, FacultyTitle %>" />
                                 <%# SPFactory.GetLocalizedTitle(Eval("COLL_DESC"), Eval("COLL_DESC_EN")) %>
                             </a>

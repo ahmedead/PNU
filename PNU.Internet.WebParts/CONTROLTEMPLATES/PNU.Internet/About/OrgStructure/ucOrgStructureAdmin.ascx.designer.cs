@@ -57,6 +57,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
 
         protected global::System.Web.UI.WebControls.TextBox txtLinkUrl;
         protected global::System.Web.UI.WebControls.Literal litLblLink;
+        protected global::System.Web.UI.WebControls.TextBox txtLinkUrlEn;
+        protected global::System.Web.UI.WebControls.Literal litLblLinkEn;
         protected global::System.Web.UI.WebControls.CheckBox chkActive;
         protected global::System.Web.UI.WebControls.Literal litLblActive;
 

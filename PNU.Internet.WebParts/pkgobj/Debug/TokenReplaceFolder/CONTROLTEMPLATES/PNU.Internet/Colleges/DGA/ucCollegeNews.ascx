@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="PNU.Internet.WebParts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bbc777e63fab09a3" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -59,7 +59,7 @@
                                     </small>
                                     <div class="d-flex flex-wrap mt-auto gap-2">
                                         <span class='<%# ((Eval("IsVideo").ToString() != "False") ? "badge badge-success" : "badge badge-info") %>'>
-                                            <%# Eval("MediaTypes") %>
+                                            <%# SPFactory.GetLocalizedTitle(Eval("MediaTypes"), Eval("MediaTypes_EN")) %>
                                         </span>
                                         <span class="badge badge-info">
                                             <%# SPFactory.GetLocalizedTitle(Eval("FacultyName"), Eval("FacultyName_EN")) %>
@@ -81,7 +81,7 @@
         <%-- Pagination --%>
         <dga-paginator>
             <div class="mt-5 p-2 d-flex justify-content-center pagination-container">
-                <nav aria-label="قائمة التنقل في الصفحات">
+                <nav aria-label='<%# SPFactory.GetLocalizedTitle("قائمة التنقل في الصفحات", "Pagination Navigation") %>'>
                     <ul class="pagination"></ul>
                 </nav>
             </div>

@@ -105,8 +105,8 @@
                         </div>
 
                         <!-- Content -->
-                        <div class="mt-5">
-                            <p><%# SPFactory.GetLocalizedTitle(Eval("MediaContent"), Eval("MediaContent_EN")) %></p>
+                        <div class="mt-5 pnu-media-content">
+                            <%# Publics.FormatRichContent(SPFactory.GetLocalizedTitle(Eval("MediaContent"), Eval("MediaContent_EN"))) %>
                         </div>
 
                         <!-- Video (YouTube / MP4) -->
@@ -187,6 +187,17 @@
         width: 100%;
         height: 100%;
         border: 0;
+    }
+
+    .pnu-media-content {
+        line-height: 1.9;
+        overflow-wrap: anywhere;
+    }
+
+    .pnu-media-content a[href] {
+        color: var(--bs-primary, #1b8354);
+        font-weight: 600;
+        text-decoration: underline;
     }
 
     .pnu-detail-article img.rounded-3 {

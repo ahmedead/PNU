@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -89,7 +89,7 @@
 
                                 <div class="d-flex gap-3 flex-wrap">
                                     <a class="btn btn-outline-secondary" href="service-details.aspx?eti=<%# DataBinder.Eval(Container.DataItem, "ID") %>"><%# SPContext.Current.Web.Language == 1025 ? "تفاصيل الخدمة" : "Service Details" %></a>
-                                    <a class="btn btn-primary" href="<%# DataBinder.Eval(Container.DataItem, "URL") %>" target="_blank" rel="noopener"><%# SPContext.Current.Web.Language == 1025 ? "انتقال إلى المنصة" : "Go to Platform" %></a>
+                                    <a class="btn btn-primary" href="<%# GetServiceUrl(Eval("URL"), Eval("URL_EN")) %>" target="_blank" rel="noopener"><%# SPContext.Current.Web.Language == 1025 ? "انتقال إلى المنصة" : "Go to Platform" %></a>
                                 </div>
                             </div>
                         </article>

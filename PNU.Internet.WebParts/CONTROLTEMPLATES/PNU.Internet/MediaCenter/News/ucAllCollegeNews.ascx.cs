@@ -20,6 +20,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
         {
             try
             {
+                // عنوان الصفحة "Home" / "الرئيسية" مكرَّر بين أخبار كل الكليات (Semrush - Duplicate title tags).
+                // SEO.ascx تبني بدلاً منه: {الكلية} - {الأخبار} - {الصفحة الرئيسية}. انظر BuildSiteChainTitle.
+                HttpContext.Current.Items["PNU_SiteChainTitle"] = true;
+
                 if (!IsPostBack)
                 {
                     string CollegeCode = "";

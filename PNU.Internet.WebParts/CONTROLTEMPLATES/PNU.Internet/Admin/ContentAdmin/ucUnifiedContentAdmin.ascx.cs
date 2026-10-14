@@ -12,7 +12,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
     public enum AdminTemplateLayout
     {
         SidebarWorkspace = 1,
-        CardsDashboard = 2
+        CardsDashboard = 2,
+        DropdownWorkspace = 3
     }
 
     public partial class ucUnifiedContentAdmin : UserControl
@@ -229,6 +230,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
             {
                 BindWebsDropdown();
                 BindLayoutSelector();
+                // Bound once: rebinding on postback would reset the posted selection before
+                // ddlModules_SelectedIndexChanged runs. Items survive postbacks in ViewState.
+                BindModulesDropdown();
             }
 
             BindModulesNavigation();
@@ -328,9 +332,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
 
         private void MountActiveChildControl()
         {
-            PlaceHolder targetHost = (CurrentLayout == AdminTemplateLayout.SidebarWorkspace)
-                ? phControlHost_Sidebar
-                : phControlHost_Cards;
+            PlaceHolder targetHost;
+            switch (CurrentLayout)
+            {
+                case AdminTemplateLayout.CardsDashboard: targetHost = phControlHost_Cards; break;
+                case AdminTemplateLayout.DropdownWorkspace: targetHost = phControlHost_Dropdown; break;
+                default: targetHost = phControlHost_Sidebar; break;
+            }
 
             if (targetHost == null) return;
             targetHost.Controls.Clear();
@@ -404,10 +412,32 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
             rptCards.DataBind();
         }
 
+        /// <summary>
+        /// One entry per registered module, grouped by category ("Category — Title").
+        /// </summary>
+        private void BindModulesDropdown()
+        {
+            ddlModules.Items.Clear();
+
+            var modules = AdminModuleRegistry.GetModules(EffectiveAdminWebUrl)
+                .OrderBy(m => m.Category ?? string.Empty)   // stable: keeps registry order inside a category
+                .ToList();
+
+            foreach (var m in modules)
+            {
+                string text = string.IsNullOrEmpty(m.Category) ? m.TitleAr : m.Category + " — " + m.TitleAr;
+                ddlModules.Items.Add(new ListItem(text, m.Key));
+            }
+
+            ListItem active = ddlModules.Items.FindByValue(ActiveModuleKey ?? string.Empty);
+            if (active != null) ddlModules.SelectedValue = active.Value;
+        }
+
         private void RenderTemplateView()
         {
             phTemplateSidebar.Visible = (CurrentLayout == AdminTemplateLayout.SidebarWorkspace);
             phTemplateCards.Visible = (CurrentLayout == AdminTemplateLayout.CardsDashboard);
+            phTemplateDropdown.Visible = (CurrentLayout == AdminTemplateLayout.DropdownWorkspace);
 
             var modules = AdminModuleRegistry.GetModules(EffectiveAdminWebUrl);
             var module = modules.FirstOrDefault(m => m.Key == ActiveModuleKey) ?? modules.FirstOrDefault();
@@ -420,6 +450,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                 ltrActiveTitle.Text = title;
                 ltrActiveCategory.Text = category;
                 lblTargetWebBadge.Text = "الموقع: " + webUrl;
+            }
+            else if (CurrentLayout == AdminTemplateLayout.DropdownWorkspace)
+            {
+                ltrDropdownTitle.Text = title;
+                ltrDropdownCategory.Text = category;
+                ltrDropdownDescription.Text = module != null ? Server.HtmlEncode(module.Description ?? string.Empty) : string.Empty;
+                lblDropdownTargetBadge.Text = "الموقع: " + webUrl;
             }
             else
             {
@@ -478,6 +515,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                 string key = e.CommandArgument.ToString();
                 NavigateToState(key, CurrentLayout, false, ddlTargetWeb.SelectedValue);
             }
+        }
+
+        protected void ddlModules_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = ddlModules.SelectedValue;
+            if (string.IsNullOrEmpty(key)) return;
+
+            // Navigate (GET) like the sidebar does, so the chosen admin control is mounted
+            // fresh in OnInit with its own ViewState.
+            NavigateToState(key, AdminTemplateLayout.DropdownWorkspace, false, ddlTargetWeb.SelectedValue);
         }
 
         protected void rptCards_ItemCommand(object source, RepeaterCommandEventArgs e)

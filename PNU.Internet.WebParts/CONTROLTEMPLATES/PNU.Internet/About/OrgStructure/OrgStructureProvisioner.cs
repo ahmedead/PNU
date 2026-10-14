@@ -29,6 +29,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
         public const string F_Theme = "OrgTheme";
         public const string F_TextColor = "OrgTextColor";
         public const string F_LinkUrl = "OrgLinkUrl";
+        public const string F_LinkUrlEn = "OrgLinkUrlEn";
         public const string F_Active = "OrgActive";
 
         /// <summary>
@@ -92,7 +93,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                 EnsureField(list, F_Theme, SPFieldType.Text, "Theme");
                 EnsureField(list, F_TextColor, SPFieldType.Text, "Text Color");
                 // Link stored as plain text Note (URLs can exceed 255 chars / avoid Hyperlink field limits).
-                EnsureField(list, F_LinkUrl, SPFieldType.Note, "Link URL");
+                EnsureField(list, F_LinkUrl, SPFieldType.Note, "Link URL (AR)");
+                EnsureField(list, F_LinkUrlEn, SPFieldType.Note, "Link URL (EN)");
                 EnsureField(list, F_Active, SPFieldType.Boolean, "Active");
 
                 list.Update();
@@ -174,6 +176,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                 item[F_Theme] = u.Theme;
                 item[F_TextColor] = u.TextColor;
                 item[F_LinkUrl] = u.LinkUrl;
+                item[F_LinkUrlEn] = u.LinkUrlEn;
                 item[F_Active] = u.Active;
                 item.Update();
             }

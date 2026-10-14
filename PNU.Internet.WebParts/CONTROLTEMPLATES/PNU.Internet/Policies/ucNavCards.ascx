@@ -11,18 +11,18 @@
                         <article class="card nav-card h-100">
                             <div class="card-body">
                                 <div class="icon-container">
-                                    <i class='<%# Eval("Icon") %> fs-3' aria-hidden="true"></i>
+                                    <i class='<%# Attr(Eval("Icon")) %> fs-3' aria-hidden="true"></i>
                                 </div>
                                 <div>
-                                    <h3 class="card-title"><%# Eval("Title") %></h3>
+                                    <h3 class="card-title"><%# Text(Eval("DisplayTitle")) %></h3>
                                 </div>
                                 <div class="d-flex justify-content-end mt-auto">
                                     <a class="btn btn-secondary stretched-link"
-                                       href='<%# Eval("Url") %>'
-                                       target='<%# Eval("Target") %>'
-                                       rel='<%# Eval("Rel") %>'
-                                       aria-label='<%# Eval("AriaLabel") %>'>
-                                        <%# Eval("ButtonText") %>
+                                       href='<%# Href(Eval("DisplayUrl")) %>'
+                                       target='<%# Target(Eval("Target")) %>'
+                                       rel='<%# Attr(Eval("Rel")) %>'
+                                       aria-label='<%# Attr(Eval("AriaLabel")) %>'>
+                                        <%# Text(Eval("DisplayButtonText")) %>
                                     </a>
                                 </div>
                             </div>

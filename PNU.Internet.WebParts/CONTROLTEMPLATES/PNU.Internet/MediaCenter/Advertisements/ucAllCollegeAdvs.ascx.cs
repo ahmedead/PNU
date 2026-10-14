@@ -23,6 +23,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.Advert
         {
             try
             {
+                // عنوان الصفحة "Home" / "الرئيسية" مكرَّر بين إعلانات كل الكليات (Semrush - Duplicate title tags).
+                // SEO.ascx تبني بدلاً منه: {الكلية} - {الإعلانات} - {الصفحة الرئيسية}. انظر BuildSiteChainTitle.
+                HttpContext.Current.Items["PNU_SiteChainTitle"] = true;
+
                 if (!Page.IsPostBack)
                 {
                     BindNews();

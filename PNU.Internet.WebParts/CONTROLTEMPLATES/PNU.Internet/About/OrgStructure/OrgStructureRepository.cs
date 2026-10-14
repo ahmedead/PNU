@@ -147,6 +147,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                         item[OrgStructureProvisioner.F_Theme] = u.Theme ?? string.Empty;
                         item[OrgStructureProvisioner.F_TextColor] = u.TextColor ?? string.Empty;
                         item[OrgStructureProvisioner.F_LinkUrl] = u.LinkUrl ?? string.Empty;
+                        item[OrgStructureProvisioner.F_LinkUrlEn] = u.LinkUrlEn ?? string.Empty;
                         item[OrgStructureProvisioner.F_Active] = u.Active;
                         item.Update();
                     }
@@ -210,6 +211,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                 Theme = SafeString(item, OrgStructureProvisioner.F_Theme),
                 TextColor = SafeString(item, OrgStructureProvisioner.F_TextColor),
                 LinkUrl = SafeString(item, OrgStructureProvisioner.F_LinkUrl),
+                LinkUrlEn = SafeString(item, OrgStructureProvisioner.F_LinkUrlEn),
                 Active = SafeBool(item, OrgStructureProvisioner.F_Active)
             };
         }

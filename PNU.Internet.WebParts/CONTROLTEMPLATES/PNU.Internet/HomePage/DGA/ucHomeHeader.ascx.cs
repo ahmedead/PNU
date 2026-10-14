@@ -303,6 +303,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                             menuList.Add(menu1);
                                         }
 
+                                        // القائمة الجوّالة تُبنى من _Level1 مباشرةً لا من menuList، فلم تمرّ
+                                        // روابطها على RootMenuUrl: بقي "ProgramDetails.aspx?ProgramCode=AD-BA-PRDE"
+                                        // نسبياً في نسخة الجوّال وحدها، فيُحَل من /AD/Announcements/Pages/ إلى 404
+                                        // (Semrush 2026-10-12: ١٣٠ رابطاً معطوباً). التجذير هنا يوحّد النسختين.
+                                        foreach (var l1 in _Level1)
+                                        {
+                                            l1.URL = RootMenuUrl(l1.URL, Pweb);
+                                            if (l1.LVL2 == null) continue;
+                                            foreach (var l2 in l1.LVL2)
+                                            {
+                                                l2.URL = RootMenuUrl(l2.URL, Pweb);
+                                                if (l2.LVL3 == null) continue;
+                                                foreach (var l3 in l2.LVL3)
+                                                {
+                                                    l3.URL = RootMenuUrl(l3.URL, Pweb);
+                                                }
+                                            }
+                                        }
+
                                         // Render desktop + mobile using the new DGA design
                                         Get_MenuHTML_NewDesign(menuList);
                                         Get_MenuHTML(_Level1);
@@ -461,41 +480,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         /// </summary>
         private static bool CounterpartExists(string kind, string serverRelativeUrl)
         {
-            string cacheKey = "PNU_LangSwitch::" + kind + "::" + serverRelativeUrl.ToLowerInvariant();
-            object cached = HttpRuntime.Cache[cacheKey];
-            if (cached is bool) return (bool)cached;
-
-            bool exists = true; // fail-open
-            try
-            {
-                if (SPContext.Current != null && SPContext.Current.Site != null)
-                {
-                    if (kind == "web")
-                    {
-                        // OpenWeb(url) بلا requireExactUrl يعيد موقعاً Exists=false للمسار المفقود؛
-                        // صيغة requireExactUrl=true ترمي استثناءً فيبتلعه fail-open ويُعلَن المفقود موجوداً.
-                        using (SPWeb w = SPContext.Current.Site.OpenWeb(serverRelativeUrl.TrimEnd('/')))
-                        {
-                            exists = w != null && w.Exists;
-                        }
-                    }
-                    else
-                    {
-                        SPFile file = SPContext.Current.Site.RootWeb.GetFile(serverRelativeUrl);
-                        exists = file != null && file.Exists;
-                    }
-                }
-            }
-            catch
-            {
-                exists = true;
-            }
-
-            HttpRuntime.Cache.Insert(
-                cacheKey, exists, null,
-                DateTime.UtcNow.AddHours(6), System.Web.Caching.Cache.NoSlidingExpiration);
-
-            return exists;
+            // الفحص مرفوع الصلاحية ويشترط النشر - انظر SEO.CounterpartIsPublic.
+            // كان يجري بهوية الزائر، فإن كان المقابل محمياً أعاد شيربوينت الصفحة كلها 401.
+            return SEO.CounterpartIsPublic(kind, serverRelativeUrl);
         }
 
         public string GetDynamicURL1(string URL)

@@ -117,7 +117,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                     string title = u.LocalizedTitle(ar) ?? string.Empty;
                     string desc = u.LocalizedDescription(ar) ?? string.Empty;
                     string badge = u.LocalizedBadge(ar) ?? string.Empty;
-                    bool hasLink = !string.IsNullOrWhiteSpace(u.LinkUrl);
+                    string link = (u.LocalizedLinkUrl(ar) ?? string.Empty).Trim();
+                    bool hasLink = link.Length > 0;
                     string icon = (u.Icon ?? string.Empty).Trim();
 
                     vms.Add(new OrgLabelVM
@@ -128,7 +129,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                         Desc = Enc(desc),
                         Icon = Enc(icon),
                         IconClass = string.IsNullOrEmpty(icon) ? string.Empty : "hgi hgi-stroke " + Enc(icon),
-                        Href = hasLink ? Enc(u.LinkUrl) : string.Empty,
+                        Href = hasLink ? Enc(link) : string.Empty,
                         HasLink = hasLink ? "true" : "false",
                         LinkClass = hasLink ? "has-link" : string.Empty,
                         AriaLabel = Enc(title + sep + badge + (string.IsNullOrEmpty(desc) ? "" : ". " + desc))

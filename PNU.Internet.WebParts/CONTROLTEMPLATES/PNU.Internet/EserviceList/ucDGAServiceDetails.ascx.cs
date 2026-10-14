@@ -1,4 +1,4 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -166,9 +166,14 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             //lnkEServices.HRef = langPrefix + "/Pages/Eservice.aspx";
             lnkEServices.InnerText = GetRes("res_EServices", "الخدمات الإلكترونية", "E-Services");
 
-            // Start service button (href already databound from URL field)
+            // Start service button (href already databound from URL field, override with DisplayURL if bilingual URL is present)
             HtmlAnchor lnkStart = (HtmlAnchor)e.Item.FindControl("lnkStart");
             lnkStart.InnerText = GetRes("res_StartService", "بدء الخدمة", "Start Service");
+            EServicesList svc = e.Item.DataItem as EServicesList;
+            if (svc != null && !string.IsNullOrEmpty(svc.DisplayURL))
+            {
+                lnkStart.HRef = svc.DisplayURL;
+            }
 
             // SLA + tabs
             SetLiteral(e, "litSla", GetRes("res_SLA", "اتفاقية مستوى الخدمة", "Service Level Agreement"));

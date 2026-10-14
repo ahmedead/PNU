@@ -494,6 +494,69 @@ namespace PNU.Internet.WebParts
             }
         }
 
+        // tags allowed to pass through FormatRichContent; anything else is stripped (its text is kept)
+        private static readonly HashSet<string> _allowedContentTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "a", "br", "p", "div", "span", "strong", "b", "em", "i", "u", "ul", "ol", "li", "h3", "h4", "h5", "h6"
+        };
+
+        /// <summary>
+        /// Prepares list content (e.g. MediaContent) for rendering as HTML.
+        /// Handles plain-text fields that contain typed HTML (e.g. &lt;a href="..."&gt;اضغط هنا&lt;/a&gt;),
+        /// whether stored raw or HTML-encoded, keeps line breaks, and strips unsafe tags/attributes.
+        /// </summary>
+        public static string FormatRichContent(object content)
+        {
+            try
+            {
+                string html = content == null ? "" : content.ToString();
+                if (string.IsNullOrWhiteSpace(html)) return string.Empty;
+
+                // HTML typed into a rich-text field is stored encoded (&lt;a ...&gt;) - decode it back
+                if (System.Text.RegularExpressions.Regex.IsMatch(html, @"&lt;\s*/?\s*[a-zA-Z]"))
+                    html = HttpUtility.HtmlDecode(html);
+
+                // plain-text field: keep the editor's line breaks
+                bool hasBlockMarkup = System.Text.RegularExpressions.Regex.IsMatch(html, @"<\s*(p|div|br|ul|ol|li)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+                // drop script/style blocks entirely (content included)
+                html = System.Text.RegularExpressions.Regex.Replace(html, @"<\s*(script|style|iframe|object|embed)\b[^>]*>.*?<\s*/\s*\1\s*>", "",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Singleline);
+
+                // rebuild every tag: keep allowed tags only, and only safe attributes on links
+                html = System.Text.RegularExpressions.Regex.Replace(html, @"<\s*(/?)\s*([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>", m =>
+                {
+                    string closing = m.Groups[1].Value;
+                    string tag = m.Groups[2].Value.ToLowerInvariant();
+                    if (!_allowedContentTags.Contains(tag)) return "";
+                    if (closing == "/") return "</" + tag + ">";
+                    if (tag == "br") return "<br />";
+                    if (tag != "a") return "<" + tag + ">";
+
+                    var href = System.Text.RegularExpressions.Regex.Match(m.Groups[3].Value,
+                        @"href\s*=\s*(?:[""“”']([^""“”']*)[""“”']|([^\s>]+))",
+                        System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    string url = href.Success ? HttpUtility.HtmlDecode(href.Groups[1].Success ? href.Groups[1].Value : href.Groups[2].Value).Trim() : "";
+                    if (!System.Text.RegularExpressions.Regex.IsMatch(url, @"^(https?:|mailto:|tel:|/|#)", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                        return "<a>";
+
+                    bool external = url.StartsWith("http", StringComparison.OrdinalIgnoreCase);
+                    return "<a href=\"" + HttpUtility.HtmlAttributeEncode(url) + "\"" +
+                           (external ? " target=\"_blank\" rel=\"noopener noreferrer\"" : "") + ">";
+                });
+
+                if (!hasBlockMarkup)
+                    html = System.Text.RegularExpressions.Regex.Replace(html.Trim(), @"\r\n|\r|\n", "<br />");
+
+                return html;
+            }
+            catch (Exception ex)
+            {
+                Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "Publics.FormatRichContent", ex.Message);
+                return HttpUtility.HtmlEncode(content == null ? "" : content.ToString());
+            }
+        }
+
         // =====================================================================
         //  أدوات الوصف التعريفي (meta description) المشتركة بين ضوابط التفاصيل
         //

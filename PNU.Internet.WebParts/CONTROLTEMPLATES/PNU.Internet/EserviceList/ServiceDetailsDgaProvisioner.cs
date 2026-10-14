@@ -1,16 +1,24 @@
-﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
 {
     public static class ServiceDetailsDgaProvisioner
     {
+        // The service details page is public and calls EnsureAll on every view.
+        // Run the checks once per process per site, and only write when something changed.
+        private static readonly HashSet<string> _provisionedSites = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private static readonly object _lock = new object();
+
         public static void EnsureAll(string siteUrl)
         {
+            if (string.IsNullOrEmpty(siteUrl)) return;
+            lock (_lock)
+            {
+                if (_provisionedSites.Contains(siteUrl)) return;
+            }
+
             SPSecurity.RunWithElevatedPrivileges(delegate ()
             {
                 using (SPSite site = new SPSite(siteUrl))
@@ -29,6 +37,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                     }
                 }
             });
+
+            lock (_lock)
+            {
+                _provisionedSites.Add(siteUrl);
+            }
         }
 
         // ------------------------------------------------------------
@@ -39,29 +52,34 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             SPList list = web.Lists.TryGetList("EservicesList");
             if (list == null) return;
 
+            bool changed = false;
+
             // Steps tab (rich text)
-            AddRichNoteField(list, "Steps", "Steps (AR)");
-            AddRichNoteField(list, "Steps_EN", "Steps (EN)");
+            changed |= AddRichNoteField(list, "Steps", "Steps (AR)");
+            changed |= AddRichNoteField(list, "Steps_EN", "Steps (EN)");
 
             // Required documents tab (rich text)
-            AddRichNoteField(list, "RequiredDocs", "Required Documents (AR)");
-            AddRichNoteField(list, "RequiredDocs_EN", "Required Documents (EN)");
+            changed |= AddRichNoteField(list, "RequiredDocs", "Required Documents (AR)");
+            changed |= AddRichNoteField(list, "RequiredDocs_EN", "Required Documents (EN)");
 
             // Side card — language + cost
-            AddTextField(list, "ServiceLanguage", "Service Language (AR)");
-            AddTextField(list, "ServiceLanguage_EN", "Service Language (EN)");
-            AddTextField(list, "ServiceCost", "Service Cost (AR)");
-            AddTextField(list, "ServiceCost_EN", "Service Cost (EN)");
+            changed |= AddTextField(list, "ServiceLanguage", "Service Language (AR)");
+            changed |= AddTextField(list, "ServiceLanguage_EN", "Service Language (EN)");
+            changed |= AddTextField(list, "ServiceCost", "Service Cost (AR)");
+            changed |= AddTextField(list, "ServiceCost_EN", "Service Cost (EN)");
 
             // Header badges (hidden automatically when empty)
-            AddTextField(list, "Badge1", "Badge 1 (AR)");
-            AddTextField(list, "Badge1_EN", "Badge 1 (EN)");
-            AddTextField(list, "Badge2", "Badge 2 (AR)");
-            AddTextField(list, "Badge2_EN", "Badge 2 (EN)");
-            AddTextField(list, "Badge3", "Badge 3 (AR)");
-            AddTextField(list, "Badge3_EN", "Badge 3 (EN)");
+            changed |= AddTextField(list, "Badge1", "Badge 1 (AR)");
+            changed |= AddTextField(list, "Badge1_EN", "Badge 1 (EN)");
+            changed |= AddTextField(list, "Badge2", "Badge 2 (AR)");
+            changed |= AddTextField(list, "Badge2_EN", "Badge 2 (EN)");
+            changed |= AddTextField(list, "Badge3", "Badge 3 (AR)");
+            changed |= AddTextField(list, "Badge3_EN", "Badge 3 (EN)");
 
-            list.Update();
+            // English URL
+            changed |= AddPlainNoteField(list, "URL_EN", "URL (EN)");
+
+            if (changed) list.Update();
 
             AddFieldsToDefaultView(list, new[]
             {
@@ -71,7 +89,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                 "ServiceCost", "ServiceCost_EN",
                 "Badge1", "Badge1_EN",
                 "Badge2", "Badge2_EN",
-                "Badge3", "Badge3_EN"
+                "Badge3", "Badge3_EN",
+                "URL_EN"
             });
         }
 
@@ -80,17 +99,19 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         // ------------------------------------------------------------
         private static void EnsurePageRatingsList(SPWeb web)
         {
+            bool changed = false;
             SPList list = web.Lists.TryGetList("PageRatings");
             if (list == null)
             {
                 Guid id = web.Lists.Add("PageRatings", "Page rating feedback (DGA)", SPListTemplateType.GenericList);
                 list = web.Lists[id];
+                changed = true;
             }
 
-            AddTextField(list, "PageUrl", "Page Url", indexed: true);
-            AddNumberField(list, "RatingValue", "Rating Value", 1, 5);
-            AddPlainNoteField(list, "Comment", "Comment");
-            list.Update();
+            changed |= AddTextField(list, "PageUrl", "Page Url", indexed: true);
+            changed |= AddNumberField(list, "RatingValue", "Rating Value", 1, 5);
+            changed |= AddPlainNoteField(list, "Comment", "Comment");
+            if (changed) list.Update();
 
             AddFieldsToDefaultView(list, new[] { "PageUrl", "RatingValue", "Comment" });
         }
@@ -100,84 +121,86 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         // ------------------------------------------------------------
         private static void EnsurePageSurveysList(SPWeb web)
         {
+            bool changed = false;
             SPList list = web.Lists.TryGetList("PageSurveys");
             if (list == null)
             {
                 Guid id = web.Lists.Add("PageSurveys", "Page helpfulness survey (DGA)", SPListTemplateType.GenericList);
                 list = web.Lists[id];
+                changed = true;
             }
 
-            AddTextField(list, "PageUrl", "Page Url", indexed: true);
-            AddBooleanField(list, "IsHelpful", "Is Helpful");
-            AddPlainNoteField(list, "Reasons", "Reasons");
-            AddPlainNoteField(list, "Comment", "Comment");
-            AddTextField(list, "Gender", "Gender");
-            list.Update();
+            changed |= AddTextField(list, "PageUrl", "Page Url", indexed: true);
+            changed |= AddBooleanField(list, "IsHelpful", "Is Helpful");
+            changed |= AddPlainNoteField(list, "Reasons", "Reasons");
+            changed |= AddPlainNoteField(list, "Comment", "Comment");
+            changed |= AddTextField(list, "Gender", "Gender");
+            if (changed) list.Update();
 
             AddFieldsToDefaultView(list, new[] { "PageUrl", "IsHelpful", "Reasons", "Comment", "Gender" });
         }
 
         // ============================================================
-        // Field helpers (all guarded by ContainsField)
+        // Field helpers (all guarded by ContainsField; return true when a field was added)
         // ============================================================
-        private static void AddTextField(SPList list, string internalName, string displayName, bool indexed = false)
+        private static bool AddTextField(SPList list, string internalName, string displayName, bool indexed = false)
         {
-            if (!list.Fields.ContainsField(internalName))
-            {
-                list.Fields.Add(internalName, SPFieldType.Text, false);
-                SPField f = list.Fields.GetFieldByInternalName(internalName);
-                f.Title = displayName;
-                if (indexed) f.Indexed = true;
-                f.Update();
-            }
+            if (list.Fields.ContainsField(internalName)) return false;
+
+            list.Fields.Add(internalName, SPFieldType.Text, false);
+            SPField f = list.Fields.GetFieldByInternalName(internalName);
+            f.Title = displayName;
+            if (indexed) f.Indexed = true;
+            f.Update();
+            return true;
         }
 
-        private static void AddRichNoteField(SPList list, string internalName, string displayName)
+        private static bool AddRichNoteField(SPList list, string internalName, string displayName)
         {
-            if (!list.Fields.ContainsField(internalName))
-            {
-                list.Fields.Add(internalName, SPFieldType.Note, false);
-                SPFieldMultiLineText f = (SPFieldMultiLineText)list.Fields.GetFieldByInternalName(internalName);
-                f.Title = displayName;
-                f.RichText = true;
-                f.RichTextMode = SPRichTextMode.FullHtml;
-                f.Update();
-            }
+            if (list.Fields.ContainsField(internalName)) return false;
+
+            list.Fields.Add(internalName, SPFieldType.Note, false);
+            SPFieldMultiLineText f = (SPFieldMultiLineText)list.Fields.GetFieldByInternalName(internalName);
+            f.Title = displayName;
+            f.RichText = true;
+            f.RichTextMode = SPRichTextMode.FullHtml;
+            f.Update();
+            return true;
         }
 
-        private static void AddPlainNoteField(SPList list, string internalName, string displayName)
+        private static bool AddPlainNoteField(SPList list, string internalName, string displayName)
         {
-            if (!list.Fields.ContainsField(internalName))
-            {
-                list.Fields.Add(internalName, SPFieldType.Note, false);
-                SPField f = list.Fields.GetFieldByInternalName(internalName);
-                f.Title = displayName;
-                f.Update();
-            }
+            if (list.Fields.ContainsField(internalName)) return false;
+
+            list.Fields.Add(internalName, SPFieldType.Note, false);
+            SPField f = list.Fields.GetFieldByInternalName(internalName);
+            f.Title = displayName;
+            f.Update();
+            return true;
         }
 
-        private static void AddNumberField(SPList list, string internalName, string displayName, double min, double max)
+        private static bool AddNumberField(SPList list, string internalName, string displayName, double min, double max)
         {
-            if (!list.Fields.ContainsField(internalName))
-            {
-                list.Fields.Add(internalName, SPFieldType.Number, false);
-                SPFieldNumber f = (SPFieldNumber)list.Fields.GetFieldByInternalName(internalName);
-                f.Title = displayName;
-                f.MinimumValue = min;
-                f.MaximumValue = max;
-                f.Update();
-            }
+            if (list.Fields.ContainsField(internalName)) return false;
+
+            list.Fields.Add(internalName, SPFieldType.Number, false);
+            SPFieldNumber f = (SPFieldNumber)list.Fields.GetFieldByInternalName(internalName);
+            f.Title = displayName;
+            f.MinimumValue = min;
+            f.MaximumValue = max;
+            f.Update();
+            return true;
         }
 
-        private static void AddBooleanField(SPList list, string internalName, string displayName)
+        private static bool AddBooleanField(SPList list, string internalName, string displayName)
         {
-            if (!list.Fields.ContainsField(internalName))
-            {
-                list.Fields.Add(internalName, SPFieldType.Boolean, false);
-                SPField f = list.Fields.GetFieldByInternalName(internalName);
-                f.Title = displayName;
-                f.Update();
-            }
+            if (list.Fields.ContainsField(internalName)) return false;
+
+            list.Fields.Add(internalName, SPFieldType.Boolean, false);
+            SPField f = list.Fields.GetFieldByInternalName(internalName);
+            f.Title = displayName;
+            f.Update();
+            return true;
         }
 
         // ============================================================

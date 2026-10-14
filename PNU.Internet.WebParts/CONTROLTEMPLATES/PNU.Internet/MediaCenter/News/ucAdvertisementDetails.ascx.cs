@@ -237,9 +237,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.News
                     ? "Princess Nourah bint Abdulrahman University"
                     : "جامعة الأميرة نورة بنت عبد الرحمن";
 
+                // many ads share the same title: append the request id so <title> stays unique
+                string uniqueTitle = !string.IsNullOrWhiteSpace(adv.ID) ? $"{localizedTitle} - {adv.ID.Trim()}" : localizedTitle;
+
                 string fullPageTitle = !string.IsNullOrWhiteSpace(facultyName)
-                    ? $"{facultyName} - {localizedTitle} - {universityName}"
-                    : $"{localizedTitle} - {universityName}";
+                    ? $"{facultyName} - {uniqueTitle} - {universityName}"
+                    : $"{uniqueTitle} - {universityName}";
 
                 // 3. Publish to HttpContext.Current.Items for SEO.ascx and ucHomeHeader
                 HttpContext.Current.Items["PNU_BrowserTitle"] = localizedTitle;

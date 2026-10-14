@@ -97,11 +97,15 @@
                             <asp:TextBox ID="txtMetaEn" runat="server" CssClass="form-control" dir="ltr" />
                         </div>
 
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <label class="form-label"><asp:Literal ID="litLblLink" runat="server" /></label>
                             <asp:TextBox ID="txtLinkUrl" runat="server" CssClass="form-control" dir="ltr" />
                         </div>
-                        <div class="col-md-3 d-flex align-items-end">
+                        <div class="col-md-6">
+                            <label class="form-label"><asp:Literal ID="litLblLinkEn" runat="server" /></label>
+                            <asp:TextBox ID="txtLinkUrlEn" runat="server" CssClass="form-control" dir="ltr" />
+                        </div>
+                        <div class="col-md-12">
                             <div class="form-check">
                                 <asp:CheckBox ID="chkActive" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label"><asp:Literal ID="litLblActive" runat="server" /></label>

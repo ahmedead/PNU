@@ -213,6 +213,25 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
 
         public static clsCollMembersListName GetFacultyMemberByEmail(string email)
         {
+            clsCollMembersListName member;
+            TryGetFacultyMemberByEmail(email, out member);
+            return member;
+        }
+
+        /// <summary>
+        /// مثل GetFacultyMemberByEmail لكنه يفرّق بين "غير موجود" و"تعذّر البحث".
+        /// القيمة المُعادة false تعني أن البحث نفسه فشل (استثناء)؛ true مع member = null
+        /// تعني أن البريد غير مسجَّل فعلاً. صفحة العضو تُرجع 404 في الحالة الثانية فقط،
+        /// حتى لا يُسقط خطأٌ عابر صفحاتِ أعضاء حقيقيين من الفهرس.
+        ///
+        /// البريد يأتي من ?view= في رابط عام، فيُهرَّب قبل إدراجه في CAML: بدونه
+        /// تكسر قيمة مثل  x&lt;/Value&gt;...  بنية الاستعلام.
+        /// </summary>
+        public static bool TryGetFacultyMemberByEmail(string email, out clsCollMembersListName member)
+        {
+            member = null;
+            if (string.IsNullOrWhiteSpace(email)) return true;
+
             try
             {
                 email = email.ToLower().Trim();
@@ -222,11 +241,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                                  @"<Where>
                               <Eq>
                                  <FieldRef Name='EMAIL_ADDRESS' />
-                                 <Value Type='Text'>" + email + @"</Value>
+                                 <Value Type='Text'>" + System.Security.SecurityElement.Escape(email) + @"</Value>
                               </Eq>
                            </Where>");
+                query.RowLimit = 1;
 
-                SPListItemCollection objNew = null;
+                List<clsCollMembersListName> _Data = null;
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
                     using (SPSite site = new SPSite(SPContext.Current.Site.ID))
@@ -234,31 +254,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges
                         using (SPWeb web = site.OpenWeb("Admin"))
                         {
                             SPList reqList = web.Lists["CollMembersListName"];
-                            objNew = reqList.GetItems(query);
+                            SPListItemCollection objNew = reqList.GetItems(query);
 
+                            // التحويل داخل using: المجموعة تُقرأ من موقع ما زال مفتوحاً
+                            if (objNew != null && objNew.Count > 0)
+                                _Data = SPFactory.MapListItemsToClass<clsCollMembersListName>(objNew);
                         }
                     }
                 });
-                if (objNew == null)
-                    return null;
-                if (objNew.Count == 0)
-                    return null;
 
-                List<clsCollMembersListName> _Data = SPFactory.MapListItemsToClass<clsCollMembersListName>(objNew);
                 if (_Data != null && _Data.Count > 0)
-                    return _Data[0];
+                    member = _Data[0];
 
-
-
+                return true;
             }
 
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(),"busclsFacultyMembers - GetFacultyMemberByEmail", ex.Message);
             }
-            
 
-            return null;
+            return false;
 
             
 

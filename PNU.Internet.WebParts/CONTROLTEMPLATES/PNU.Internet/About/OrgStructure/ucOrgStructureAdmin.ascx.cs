@@ -163,6 +163,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
                 Theme = ddlTheme.SelectedValue,
                 TextColor = txtTextColor.Text.Trim(),
                 LinkUrl = txtLinkUrl.Text.Trim(),
+                LinkUrlEn = txtLinkUrlEn.Text.Trim(),
                 Active = chkActive.Checked
             };
 
@@ -195,6 +196,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
             SelectTheme(u.Theme);
             txtTextColor.Text = u.TextColor;
             txtLinkUrl.Text = u.LinkUrl;
+            txtLinkUrlEn.Text = u.LinkUrlEn;
             chkActive.Checked = u.Active;
 
             pnlEditor.Visible = true;
@@ -225,6 +227,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
             SelectTheme("primary");
             txtTextColor.Text = string.Empty;
             txtLinkUrl.Text = string.Empty;
+            txtLinkUrlEn.Text = string.Empty;
             chkActive.Checked = true;
         }
 
@@ -273,7 +276,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.About
             litLblBadgeEn.Text = ar ? "الوسم (إنجليزي)" : "Badge (EN)";
             litLblMeta.Text = ar ? "التصنيف (عربي)" : "Meta (AR)";
             litLblMetaEn.Text = ar ? "التصنيف (إنجليزي)" : "Meta (EN)";
-            litLblLink.Text = ar ? "رابط صفحة التفاصيل" : "Details page link";
+            litLblLink.Text = ar ? "رابط صفحة التفاصيل (عربي)" : "Details page link (AR)";
+            litLblLinkEn.Text = ar ? "رابط صفحة التفاصيل (إنجليزي)" : "Details page link (EN)";
             litLblActive.Text = ar ? "مُفعّل" : "Active";
 
             litColOrder.Text = ar ? "الترتيب" : "Order";

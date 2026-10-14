@@ -174,19 +174,19 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                 //        SideMenu.SideMenuListProvisioner.EnsureLists();
                 //    }
                 //},
-                new AdminModuleItem
-                {
-                    Key = "FacultiesContent",
-                    TitleAr = "إدارة محتوى الكليات",
-                    TitleEn = "Faculties Content",
-                    Category = "الكليات",
-                    Icon = "bi-buildings",
-                    ControlPath = "~/_controltemplates/15/PNU.Internet/Faculties/DGA/Admin/ucContentAdmin.ascx",
-                    DefaultTargetWeb = "/ar",
-                    Description = "إدارة المحتوى المخصص لصفحات الكليات والأقسام التابعة لها.",
-                    ProvisionerTypeName = "",
-                    ProvisionAction = null
-                },
+                //new AdminModuleItem
+                //{
+                //    Key = "FacultiesContent",
+                //    TitleAr = "إدارة محتوى الكليات",
+                //    TitleEn = "Faculties Content",
+                //    Category = "الكليات",
+                //    Icon = "bi-buildings",
+                //    ControlPath = "~/_controltemplates/15/PNU.Internet/Faculties/DGA/Admin/ucContentAdmin.ascx",
+                //    DefaultTargetWeb = "/ar",
+                //    Description = "إدارة المحتوى المخصص لصفحات الكليات والأقسام التابعة لها.",
+                //    ProvisionerTypeName = "",
+                //    ProvisionAction = null
+                //},
                 new AdminModuleItem
                 {
                     Key = "Herbarium",
@@ -216,19 +216,19 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                     ProvisionerTypeName = "",
                     ProvisionAction = null
                 },
-                new AdminModuleItem
-                {
-                    Key = "PresidentOffice",
-                    TitleAr = "مكتب رئيس الجامعة",
-                    TitleEn = "President Office",
-                    Category = "المحتوى الرئيسي",
-                    Icon = "bi-person-badge",
-                    ControlPath = "~/_controltemplates/15/PNU.Internet/AboutUniversity/UniversityPresidentOffice/Admin/ucUpoAdmin.ascx",
-                    DefaultTargetWeb = "/ar/AboutUniversity",
-                    Description = "إدارة محتوى وخدمات مكتب رئيس الجامعة.",
-                    ProvisionerTypeName = "",
-                    ProvisionAction = null
-                },
+                //new AdminModuleItem
+                //{
+                //    Key = "PresidentOffice",
+                //    TitleAr = "مكتب رئيس الجامعة",
+                //    TitleEn = "President Office",
+                //    Category = "المحتوى الرئيسي",
+                //    Icon = "bi-person-badge",
+                //    ControlPath = "~/_controltemplates/15/PNU.Internet/AboutUniversity/UniversityPresidentOffice/Admin/ucUpoAdmin.ascx",
+                //    DefaultTargetWeb = "/ar/AboutUniversity",
+                //    Description = "إدارة محتوى وخدمات مكتب رئيس الجامعة.",
+                //    ProvisionerTypeName = "",
+                //    ProvisionAction = null
+                //},
                 new AdminModuleItem
                 {
                     Key = "FAQ",
@@ -261,7 +261,72 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                         // ForceProvision ignores the once-per-request/process guard so the button always runs
                         HomePage.DGA.HomeNoraFutureProvisioner.ForceProvision();
                     }
+                },
+                new AdminModuleItem
+                {
+                    Key = "HomeFooter",
+                    TitleAr = "إدارة الفوتر (الصفحة الرئيسية)",
+                    TitleEn = "Home Footer Management",
+                    Category = "الصفحة الرئيسية",
+                    Icon = "bi-layout-text-window-reverse",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/HomePage/DGA/Admin/ucHomeFooterAdmin.ascx",
+                    DefaultTargetWeb = "/ar",
+                    Description = "إدارة أقسام الفوتر والروابط ومعلومات التواصل وحسابات التواصل الاجتماعي والشعارات السفلية.",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.Helpers.FooterListProvisioner",
+                    ProvisionAction = () =>
+                    {
+                        Helpers.FooterListProvisioner.ForceProvision();
+                    }
+                },
+                new AdminModuleItem
+                {
+                    Key = "PoliciesNavCards",
+                    TitleAr = "بطاقات السياسات واللوائح",
+                    TitleEn = "Policies & Regulations Cards",
+                    Category = "السياسات واللوائح",
+                    Icon = "bi-shield-check",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/Policies/Admin/ucNavCardsAdmin.ascx",
+                    DefaultTargetWeb = "/ar/SECURITYCYBER",
+                    Description = "إدارة بطاقات التنقل وروابط ملفات سياسات الجامعة وحوكمة البيانات في موقع الأمن السيبراني.",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Policies.NavCardsProvisioner",
+                    ProvisionAction = () =>
+                    {
+                        Policies.NavCardsProvisioner.ForceProvision();
+                    }
+                },
+                new AdminModuleItem
+                {
+                    Key = "StrategyPoliciesRegulations",
+                    TitleAr = "الاستراتيجيات والسياسات واللوائح",
+                    TitleEn = "Strategies, Policies & Regulations",
+                    Category = "السياسات واللوائح",
+                    Icon = "bi-journal-text",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/Policies/Admin/ucStrategyPoliciesRegulationsAdmin.ascx",
+                    DefaultTargetWeb = "/ar/SECURITYCYBER",
+                    Description = "إدارة أقسام وبطاقات الاستراتيجيات والسياسات والأنظمة واللوائح باللغتين العربية والإنجليزية.",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Policies.StrategyPoliciesProvisioner",
+                    ProvisionAction = () =>
+                    {
+                        Policies.StrategyPoliciesProvisioner.ForceProvision();
+                    }
+                },
+                new AdminModuleItem
+                {
+                    Key = "MediaFiles",
+                    TitleAr = "ملفات المركز الإعلامي",
+                    TitleEn = "Media Center Files",
+                    Category = "المركز الإعلامي",
+                    Icon = "bi-file-earmark-pdf",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/MediaCenter/MeidaFiles/Admin/ucMediaFilesAdmin.ascx",
+                    DefaultTargetWeb = "/ar/MediaCenter",
+                    Description = "إدارة الملفات الإعلامية الأسبوعية والشهرية وملفاتها المرفقة مع صلاحيات قائمة MediaFileAdminUsers.",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.MediaCenter.MeidaFiles.Infrastructure.MediaFilesListProvisioner",
+                    ProvisionAction = () =>
+                    {
+                        MediaCenter.MeidaFiles.Infrastructure.MediaFilesListProvisioner.ForceProvision();
+                    }
                 }
+
             };
         }
     }

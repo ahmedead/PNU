@@ -388,6 +388,62 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             return current;
         }
 
+        /// <summary>
+        /// عنوان من سلسلة المواقع: {الموقع الأب} - {الموقع الحالي} - {الصفحة الرئيسية}.
+        ///
+        /// المشكلة المرصودة (Semrush - Duplicate title tags): صفحة أخبار كل كلية
+        /// (/{lang}/Faculties/{X}/News/Pages/default.aspx، ضابط ucAllCollegeNews) تحمل
+        /// عنوان الصفحة الافتراضي "Home" أو "الرئيسية"، فيتطابق وسم title بين كل الكليات.
+        /// المطلوب:
+        ///     كلية علوم الحاسب والمعلومات - الأخبار - الصفحة الرئيسية
+        ///     College of Computer and Information Sciences - News - Home
+        ///
+        /// تُفعَّل فقط حين يطلبها ضابط المحتوى عبر HttpContext.Items["PNU_SiteChainTitle"] = true،
+        /// فلا يتغيّر عنوان أي صفحة أخرى. يُعاد null إن لم تتوفّر السلسلة، فيسري المنطق المعتاد.
+        /// </summary>
+        private string BuildSiteChainTitle(bool isEnglish)
+        {
+            try
+            {
+                // من جذر اللغة نزولاً: [جميع الكليات، كلية علوم الحاسب والمعلومات، الأخبار]
+                List<string> chain = Publics.BuildSeoSiteChain();
+                if (chain == null || chain.Count == 0) return null;
+
+                string current = CleanPlainText(chain[chain.Count - 1]);
+                string parent = chain.Count > 1 ? CleanPlainText(chain[chain.Count - 2]) : string.Empty;
+                string home = isEnglish ? "Home" : "الصفحة الرئيسية";
+
+                return Publics.JoinNonEmpty(" - ", parent, current, home);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// وسم title في الماسترات يعرض PlaceHolderPageTitle وحده، فتعيين Page.Title
+        /// لا يغيّره (يبقى "Home"). يُستبدل محتوى الـ placeholder - النهج نفسه في
+        /// ucSectionHome و ucViewFacultyMembers.
+        /// </summary>
+        private void SetDocumentTitle(string title)
+        {
+            if (Page == null || string.IsNullOrWhiteSpace(title)) return;
+
+            System.Web.UI.MasterPage master = Page.Master;
+            while (master != null)
+            {
+                var ph = master.FindControl("PlaceHolderPageTitle") as System.Web.UI.WebControls.ContentPlaceHolder;
+                if (ph != null)
+                {
+                    ph.Controls.Clear();
+                    ph.Controls.Add(new LiteralControl(HttpUtility.HtmlEncode(title)));
+                    return;
+                }
+                master = master.Master;
+            }
+        }
+
         private string CleanPlainText(string text)
         {
             if (string.IsNullOrEmpty(text)) return string.Empty;
@@ -442,8 +498,18 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 // Prefix with Subsite name as requested: [اسم الموقع الموجود به الصفحة] - ...
                 string prefix = (!isRootWeb && !string.IsNullOrEmpty(webTitle)) ? $"{webTitle} - " : string.Empty;
 
+                // Case 0: صفحات رئيسية لمواقع فرعية تحمل عنواناً عاماً (ucAllCollegeNews ...)
+                string siteChainTitle = HttpContext.Current.Items["PNU_SiteChainTitle"] is bool
+                                        && (bool)HttpContext.Current.Items["PNU_SiteChainTitle"]
+                    ? BuildSiteChainTitle(isEnglish)
+                    : null;
+                if (!string.IsNullOrEmpty(siteChainTitle))
+                {
+                    PageTitle = $"{siteChainTitle} - {universityName}";
+                    SetDocumentTitle(siteChainTitle);
+                }
                 // Case 1: Academic Programs (ProgramDetails.aspx)
-                if (path.IndexOf("programdetails.aspx", StringComparison.OrdinalIgnoreCase) >= 0 && request != null)
+                else if (path.IndexOf("programdetails.aspx", StringComparison.OrdinalIgnoreCase) >= 0 && request != null)
                 {
                     string progCode = request.QueryString["ProgramCode"];
                     string codeSuffix = !string.IsNullOrEmpty(progCode) ? (isEnglish ? $" (Code: {progCode.Trim()})" : $" (رمز: {progCode.Trim()})") : string.Empty;
@@ -461,7 +527,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                       !basePageTitle.Equals("تفاصيل الإعلان", StringComparison.OrdinalIgnoreCase) &&
                                       !basePageTitle.Equals("AdvertisementDetails", StringComparison.OrdinalIgnoreCase) &&
                                       !basePageTitle.Equals("تفاصيل الاعلان", StringComparison.OrdinalIgnoreCase))
-                        ? basePageTitle
+                        ? basePageTitle + (!string.IsNullOrEmpty(reqId) ? $" - {reqId.Trim()}" : string.Empty) // many ads share a title: the request id keeps <title> unique
                         : (!string.IsNullOrEmpty(reqId) ? (isEnglish ? $"Advertisement #{reqId}" : $"إعلان رقم {reqId}") : (isEnglish ? "Announcement Details" : "تفاصيل الإعلان"));
                     PageTitle = $"{prefix}{adTitle} - {universityName}";
                 }
@@ -474,9 +540,16 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                         !basePageTitle.Equals("تفاصيل الفعالية", StringComparison.OrdinalIgnoreCase) &&
                                         !basePageTitle.Equals("NewsDetails", StringComparison.OrdinalIgnoreCase) &&
                                         !basePageTitle.Equals("EventDetails", StringComparison.OrdinalIgnoreCase))
-                        ? basePageTitle
+                        ? basePageTitle + (!string.IsNullOrEmpty(reqId) ? $" - {reqId.Trim()}" : string.Empty) // like ads: the request id keeps <title> unique
                         : (!string.IsNullOrEmpty(reqId) ? (isEnglish ? $"Details #{reqId}" : $"تفاصيل رقم {reqId}") : (isEnglish ? "Details" : "التفاصيل"));
                     PageTitle = $"{prefix}{itemLabel} - {universityName}";
+
+                    // ضوابط الأخبار (ucNewsDetails و ucCollegeNewsDetails) تكتب العنوان المجرّد في
+                    // PlaceHolderPageTitle، فيظهر في وسم title دون رقم الطلب رغم تعيين Page.Title.
+                    // Semrush (2026-10-12): ~٤٥٥ عنوان خبر مكرَّر - الخبر نفسه منشور برقمين
+                    // (1104 و 1105) أو منسوخ من أخبار الكلية إلى المركز الإعلامي.
+                    // SEO.ascx تعمل في PreRenderComplete بعد تلك الضوابط، فيغلب ما تكتبه هنا.
+                    SetDocumentTitle(PageTitle);
                 }
                 // Case 4: Faculty Member Details
                 else if (path.IndexOf("facultymemberdetails", StringComparison.OrdinalIgnoreCase) >= 0 && request != null)
@@ -643,33 +716,85 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         private bool AlternateUrlExists(string absoluteUrl)
         {
             if (string.IsNullOrEmpty(absoluteUrl)) return false;
+            try
+            {
+                return CounterpartIsPublic("file", Uri.UnescapeDataString(new Uri(absoluteUrl).AbsolutePath));
+            }
+            catch
+            {
+                return true; // fail-open
+            }
+        }
 
-            string cacheKey = "PNU_SEO_AltExists::" + absoluteUrl;
+        /// <summary>
+        /// هل الملف (kind = "file") أو الموقع (kind = "web") موجود ومنشور، أي يراه الزائر المجهول؟
+        /// تستعمله SEO.ascx لوسوم hreflang و ucHomeHeader لزر تبديل اللغة.
+        ///
+        /// لماذا مرفوع الصلاحية (RunWithElevatedPrivileges):
+        /// كان الفحص يجري بهوية الزائر. حين يكون المقابل محمياً أو غير منشور - مثل
+        /// /en/Departments/DM/Pages/DataLeakReport.aspx - يلمس الزائر المجهول كائناً لا يحق
+        /// له رؤيته، فيعلّم شيربوينت الاستجابة كلها 401 (WWW-Authenticate: NTLM) حتى لو
+        /// التُقط الاستثناء. فتردّ الصفحة العربية نفسها 401.
+        /// ولأن النتيجة مخزَّنة ٦ ساعات بمفتاح لا يتضمن المستخدم، كانت زيارة واحدة بتسجيل
+        /// دخول تملأ الكاش فتعمل الصفحة للمجهول، ثم يعود العطل حين ينتهي الكاش - وهو
+        /// بالضبط السلوك المرصود على DataLeakReport.aspx.
+        ///
+        /// لماذا "منشور" لا "موجود" فقط: الفحص المرفوع يرى المسودات، والصفحة التي لا نسخة
+        /// منشورة لها تردّ 401/404 للمجهول؛ الربط إليها بـ hreflang أو بزر اللغة رابط معطوب.
+        /// MajorVersion >= 1 يعني وجود نسخة رئيسية منشورة يراها الزوّار حتى لو فوقها مسودة.
+        ///
+        /// النتيجة واحدة لكل المستخدمين فتُخزَّن ٦ ساعات بأمان. عند الفشل: افتراض الوجود.
+        /// </summary>
+        internal static bool CounterpartIsPublic(string kind, string serverRelativeUrl)
+        {
+            if (string.IsNullOrEmpty(serverRelativeUrl)) return false;
+
+            string cacheKey = "PNU_Counterpart::" + kind + "::" + serverRelativeUrl.ToLowerInvariant();
             object cached = HttpRuntime.Cache[cacheKey];
             if (cached is bool) return (bool)cached;
 
-            bool exists = true; // fail-open
+            bool isPublic = true; // fail-open
             try
             {
-                Uri uri = new Uri(absoluteUrl);
-                string serverRelative = uri.AbsolutePath;
-
                 if (SPContext.Current != null && SPContext.Current.Site != null)
                 {
-                    SPFile file = SPContext.Current.Site.RootWeb.GetFile(serverRelative);
-                    exists = file != null && file.Exists;
+                    Guid siteId = SPContext.Current.Site.ID;
+                    bool result = true;
+
+                    SPSecurity.RunWithElevatedPrivileges(delegate ()
+                    {
+                        using (SPSite site = new SPSite(siteId))
+                        {
+                            if (kind == "web")
+                            {
+                                // OpenWeb(url) بلا requireExactUrl يعيد Exists=false للمسار المفقود بدل الاستثناء
+                                using (SPWeb w = site.OpenWeb(serverRelativeUrl.TrimEnd('/')))
+                                {
+                                    result = w != null && w.Exists;
+                                }
+                            }
+                            else
+                            {
+                                SPFile file = site.RootWeb.GetFile(serverRelativeUrl);
+                                result = file != null && file.Exists &&
+                                         (file.Level == SPFileLevel.Published || file.MajorVersion >= 1);
+                            }
+                        }
+                    });
+
+                    isPublic = result;
                 }
             }
             catch
             {
-                exists = true;
+                isPublic = true;
             }
 
             HttpRuntime.Cache.Insert(
-                cacheKey, exists, null,
+                cacheKey, isPublic, null,
                 DateTime.UtcNow.AddHours(6), System.Web.Caching.Cache.NoSlidingExpiration);
 
-            return exists;
+            return isPublic;
         }
 
         private string BuildSanitizedQueryString(NameValueCollection queryParams)
@@ -686,13 +811,32 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 if (sb.Length > 0) sb.Append("&");
                 else sb.Append("?");
 
-                sb.Append(HttpUtility.UrlEncode(key));
+                sb.Append(EncodeQueryComponent(key));
                 if (val != null)
                 {
-                    sb.Append("=").Append(HttpUtility.UrlEncode(val));
+                    sb.Append("=").Append(EncodeQueryComponent(val));
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// ترميز قيمة استعلام مع إبقاء "@" حرفياً.
+        ///
+        /// المشكلة المرصودة (Semrush 2026-10-12 - Incorrect pages found in sitemap.xml، ٣١٠ صفحة):
+        /// HttpUtility.UrlEncode يرمّز "@" إلى %40، فيصير canonical صفحة عضو هيئة التدريس
+        ///     FacultyMemberDetails.aspx?view=nmmohamed%40pnu.edu.sa
+        /// بينما sitemap.xml وكل الروابط الداخلية (ucSectionMembers و ucSearchFacultyMembers)
+        /// تستعمل ?view=nmmohamed@pnu.edu.sa - فيرى Semrush كل عنوان في الخريطة "غير قانوني".
+        ///
+        /// "@" مسموح حرفياً داخل الاستعلام (RFC 3986، query = *( pchar / "/" / "?" )
+        /// و pchar يشمل "@")، فإبقاؤه يطابق الصيغة المنشورة دون أي التباس.
+        /// يجب أن يبقى مطابقاً لـ cleanCanonicalUrl في ucViewFacultyMembers (JSON-LD url).
+        /// </summary>
+        internal static string EncodeQueryComponent(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return HttpUtility.UrlEncode(value).Replace("%40", "@");
         }
 
         private string GetStandardPortalAuthority(Uri requestUri)

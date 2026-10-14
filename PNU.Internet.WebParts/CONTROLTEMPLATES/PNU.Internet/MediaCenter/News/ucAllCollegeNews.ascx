@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -19,7 +19,7 @@
 
         <%-- Search + filter bar (client-side only, no code-behind changes) --%>
         <dga-search-input>
-            <div class="d-flex gap-3 mb-4" role="search" aria-label="ابحث في الوسائط">
+            <div class="d-flex gap-3 mb-4" role="search" aria-label='<%# SPFactory.GetLocalizedTitle("ابحث في الوسائط", "Search media") %>'>
                 <div class="form-control-container has-icon">
                     <span class="d-inline-flex fs-6 form-input-icon text-body-secondary">
                         <i class="hgi hgi-stroke hgi-search-01" aria-hidden="true"></i>
@@ -27,13 +27,13 @@
                     <input type="text" id="mediaSearchInput" autocomplete="off" class="form-control"
                         placeholder='<%# SPFactory.GetLocalizedTitle("ابحث في الوسائط", "Search media") %>' value="" />
                 </div>
-                <button type="button" class="btn btn-primary" id="btnMediaSearch" aria-label="بحث">بحث</button>
+                <button type="button" class="btn btn-primary" id="btnMediaSearch" aria-label='<%# SPFactory.GetLocalizedTitle("بحث", "Search") %>'><%# SPFactory.GetLocalizedTitle("بحث", "Search") %></button>
                 <dga-filter-dropdown class="flex-shrink-0">
                     <div class="dropdown flex-shrink-0">
                         <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
                             data-bs-auto-close="outside" class="btn btn-dark gap-1" id="mediaFilterToggle">
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-filter" aria-hidden="true"></i></span>
-                            <span>تصفية</span>
+                            <span><%# SPFactory.GetLocalizedTitle("تصفية", "Filter") %></span>
                             <span class="d-inline-flex fs-5"><i class="hgi hgi-stroke hgi-arrow-down-01" aria-hidden="true"></i></span>
                         </button>
                         <div class="dropdown-menu p-2" style="width: 20rem;">
@@ -59,8 +59,8 @@
                                 </div>
                                 <hr />
                                 <div class="d-flex justify-content-between align-content-stretch align-items-stretch gap-2">
-                                    <button type="button" class="btn btn-primary" id="btnApplyMediaFilter">تطبيق الاختيارات</button>
-                                    <button type="button" class="btn btn-secondary" id="btnResetMediaFilter">إعادة تعيين</button>
+                                    <button type="button" class="btn btn-primary" id="btnApplyMediaFilter"><%# SPFactory.GetLocalizedTitle("تطبيق الاختيارات", "Apply") %></button>
+                                    <button type="button" class="btn btn-secondary" id="btnResetMediaFilter"><%# SPFactory.GetLocalizedTitle("إعادة تعيين", "Reset") %></button>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                                     </small>
                                     <div class="d-flex flex-wrap mt-auto gap-2">
                                         <span class='<%# ((Eval("IsVideo").ToString() != "False") ? "badge badge-success" : "badge badge-info") %>'>
-                                            <%# Eval("MediaTypes") %>
+                                            <%# SPFactory.GetLocalizedTitle(Eval("MediaTypes"), Eval("MediaTypes_EN")) %>
                                         </span>
                                         <span class="badge badge-info">
                                             <%# SPFactory.GetLocalizedTitle(Eval("FacultyName"), Eval("FacultyName_EN")) %>
@@ -132,7 +132,7 @@
         <%-- Pagination --%>
         <dga-paginator>
             <div class="mt-5 p-2 d-flex justify-content-center pagination-container">
-                <nav aria-label="قائمة التنقل في الصفحات">
+                <nav aria-label='<%# SPFactory.GetLocalizedTitle("قائمة التنقل في الصفحات", "Pagination Navigation") %>'>
                     <ul class="pagination"></ul>
                 </nav>
             </div>

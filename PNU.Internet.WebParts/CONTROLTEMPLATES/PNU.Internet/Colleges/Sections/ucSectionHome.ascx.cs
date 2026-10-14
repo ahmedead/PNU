@@ -14,6 +14,26 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections
 {
     public partial class ucSectionHome : UserControl
     {
+        /// <summary>
+        /// رابط الكلية في مسار التنقّل: جذر موقع الكلية (/ar/Faculties/AP/) لا FacultyMain.aspx.
+        /// كان الرابط "FacultyMain.aspx?Source={COLL_CODE}" يفترض أن لكل كلية صفحة بهذا الاسم،
+        /// والكلية التطبيقية صفحتها الرئيسية speech.aspx، فكل أقسامها تحمل رابطاً إلى 404
+        /// (Semrush 2026-10-12). الجذر يحوّله شيربوينت إلى الصفحة الترحيبية الفعلية لكل كلية.
+        /// </summary>
+        protected string CollegeHomeUrl
+        {
+            get
+            {
+                try
+                {
+                    if (SPContext.Current != null && SPContext.Current.Web != null)
+                        return SPContext.Current.Web.ServerRelativeUrl.TrimEnd('/') + "/";
+                }
+                catch { }
+                return "FacultyMain.aspx";
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
