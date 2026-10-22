@@ -111,6 +111,11 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                 {
                     SeedDefaultModules(list);
                 }
+                else
+                {
+                    // Built-in modules added to the registry after the first seed
+                    AddMissingModules(list);
+                }
 
                 lock (_lock)
                 {
@@ -198,10 +203,39 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
 
         private static void SeedDefaultModules(SPList list)
         {
-            var seedData = AdminModuleRegistry.GetDefaultBuiltInModules();
+            AddModuleRows(list, AdminModuleRegistry.GetDefaultBuiltInModules(), 10);
+        }
 
-            int order = 10;
-            foreach (var item in seedData)
+        /// <summary>
+        /// Adds the built-in modules whose ModuleKey has no row yet, after the existing rows.
+        /// A module that should be hidden is turned off with IsActive; a deleted row comes back.
+        /// </summary>
+        private static void AddMissingModules(SPList list)
+        {
+            HashSet<string> existingKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            int maxOrder = 0;
+            foreach (SPListItem row in list.Items)
+            {
+                string key = SafeString(row, "ModuleKey");
+                if (!string.IsNullOrEmpty(key)) existingKeys.Add(key);
+
+                int order;
+                if (row["ItemOrder"] != null && int.TryParse(row["ItemOrder"].ToString(), out order) && order > maxOrder)
+                    maxOrder = order;
+            }
+
+            var missing = AdminModuleRegistry.GetDefaultBuiltInModules()
+                .Where(m => !string.IsNullOrEmpty(m.Key) && !existingKeys.Contains(m.Key))
+                .ToList();
+
+            if (missing.Count > 0)
+                AddModuleRows(list, missing, maxOrder + 10);
+        }
+
+        private static void AddModuleRows(SPList list, IEnumerable<AdminModuleItem> modules, int startOrder)
+        {
+            int order = startOrder;
+            foreach (var item in modules)
             {
                 SPListItem row = list.Items.Add();
                 row["Title"] = item.TitleAr;

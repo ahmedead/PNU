@@ -60,6 +60,62 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Colleges.Sections.
             }
         }
 
+        // Programs under college code "DG" (Deanship of Graduate Studies) are hosted on a
+        // college subsite, so the breadcrumb shows and links to the current site instead.
+        private static bool IsSiteCollege(object collegeCode)
+        {
+            return string.Equals(Convert.ToString(collegeCode).Trim(), "DG", StringComparison.OrdinalIgnoreCase);
+        }
+
+        protected string GetCollegeCrumbTitle(object collegeCode, object collegeName, object collegeNameEn)
+        {
+            if (IsSiteCollege(collegeCode) && SPContext.Current != null &&
+                !string.IsNullOrWhiteSpace(SPContext.Current.Web.Title))
+            {
+                return HttpUtility.HtmlEncode(SPContext.Current.Web.Title.Trim());
+            }
+
+            string prefix = Convert.ToString(HttpContext.GetGlobalResourceObject("PNUres", "FacultyTitle"));
+            string name = SPFactory.GetLocalizedTitle(collegeName, collegeNameEn);
+            return HttpUtility.HtmlEncode((prefix + " " + name).Trim());
+        }
+
+        /// <summary>
+        /// رابط القسم في مسار التنقّل: صفحة Sections.aspx داخل موقع الكلية المالكة للبرنامج.
+        ///
+        /// كان الرابط "{الموقع}Faculties/Pages/Sections.aspx?SecCode=..." - وموقع Faculties الجذر
+        /// لا صفحة Sections فيه، فكل صفحة برنامج تحمل رابط قسم إلى 404
+        /// (Semrush 2026-10-18: ٢٨٢ رابطاً معطوباً من ٤٣٨، و ٥٨ صفحة 404).
+        /// الصفحة الصحيحة /ar/Faculties/{رمز الكلية}/Pages/Sections.aspx?SecCode=... (تردّ 200).
+        /// برامج الرمز DG مستضافة في موقع الكلية الحالي - كما في GetCollegeCrumbUrl.
+        /// </summary>
+        protected string GetDepartmentCrumbUrl(object collegeCode, object departmentCode)
+        {
+            string secCode = HttpUtility.UrlEncode(Convert.ToString(departmentCode).Trim());
+
+            if (IsSiteCollege(collegeCode) && SPContext.Current != null)
+            {
+                return SPContext.Current.Web.ServerRelativeUrl.TrimEnd('/') + "/Pages/Sections.aspx?SecCode=" + secCode;
+            }
+
+            return String.Format("{0}Faculties/{1}/Pages/Sections.aspx?SecCode={2}",
+                SPFactory.GetSiteURL(), HttpUtility.UrlEncode(Convert.ToString(collegeCode).Trim()), secCode);
+        }
+
+        protected string GetCollegeCrumbUrl(object collegeCode)
+        {
+            if (IsSiteCollege(collegeCode) && SPContext.Current != null)
+            {
+                return SPContext.Current.Web.Url.TrimEnd('/') + "/";
+            }
+
+            // جذر موقع الكلية (/ar/Faculties/AD/) يحوّله شيربوينت إلى صفحتها الرئيسية الفعلية
+            // (speech.aspx أو FacultyMain.aspx). الرابط السابق Faculties/Pages/FacultyMain.aspx?Source=AD
+            // صفحة قالب في الموقع الجذر بعنوان عام "الكليات - الصفحة الرئيسية للكلية" لكل الكليات
+            // (Semrush 2026-10-18: ٣٤ عنواناً و ٣٠ محتوى مكرراً).
+            return String.Format("{0}Faculties/{1}/", SPFactory.GetSiteURL(), HttpUtility.UrlEncode(Convert.ToString(collegeCode).Trim()));
+        }
+
         // Handles nested master pages (e.g. DGA_Internal.master under a root master)
         private ContentPlaceHolder FindPlaceHolder(System.Web.UI.MasterPage master, string id)
         {

@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -66,7 +66,7 @@
                     <%-- ============ MAIN COLUMN ============ --%>
                     <div class="col-12 col-lg-8">
                         <a id="slaLink" runat="server" class="d-flex gap-2 align-items-center text-decoration-none my-4"
-                            href='<%# Eval("ServiceAgreement") %>' target="_blank" rel="noopener">
+                            target="_blank" rel="noopener"><%-- href set in rptAllData_ItemDataBound --%>
                             <span><asp:Literal ID="litSla" runat="server"></asp:Literal></span>
                             <i class="hgi hgi-stroke hgi-link-04"></i>
                         </a>

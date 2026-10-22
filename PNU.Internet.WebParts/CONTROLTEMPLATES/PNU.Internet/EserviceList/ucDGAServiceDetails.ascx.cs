@@ -89,6 +89,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                         _serviceTitle = SPFactory.GetLocalizedTitle(eserviceList[0].ARServiceName, eserviceList[0].ENServiceName);
                         SetBrowserTitle(_serviceTitle);
 
+                        if (string.Equals(Request.QueryString["sladebug"], "1", StringComparison.Ordinal))
+                            WriteSlaDebug(web, list, collitem[0], eserviceList[0]);
+
                         rptAllData.DataSource = eserviceList;
                         rptAllData.DataBind();
                     }
@@ -118,8 +121,22 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                 HideIfEmpty(e, "req2", GetLocalized(e, "_x0052_eq2", "Req2_EN"));
                 HideIfEmpty(e, "req3", GetLocalized(e, "_x0052_eq3", "Req3_EN"));
 
-                // ---- SLA link: hide when no URL ----
-                HideIfEmpty(e, "slaLink", DataBinder.Eval(e.Item.DataItem, "ServiceAgreement") as string);
+                // ---- SLA link: bilingual link (ServiceAgreementURL_EN on EN; fallback to ServiceAgreement / ServiceAgreementURL) ----
+                string slaUrl = null;
+                EServicesList esvc = e.Item.DataItem as EServicesList;
+                if (esvc != null)
+                {
+                    slaUrl = esvc.DisplayServiceAgreement;
+                }
+                else
+                {
+                    slaUrl = (DataBinder.Eval(e.Item.DataItem, "DisplayServiceAgreement") as string)
+                        ?? (DataBinder.Eval(e.Item.DataItem, "ServiceAgreement") as string)
+                        ?? (DataBinder.Eval(e.Item.DataItem, "ServiceAgreementURL") as string);
+                }
+
+                HideIfEmpty(e, "slaLink", slaUrl);
+                SetAnchorHref(e, "slaLink", slaUrl ?? "");
 
                 // ---- User manual: hide when no URL ----
                 HideIfEmpty(e, "UserManualLink", DataBinder.Eval(e.Item.DataItem, "UserManualURL") as string);
@@ -260,6 +277,47 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// ?sladebug=1 — writes an HTML comment (view source) with what the SLA link was built from:
+        /// the web/list actually read, every ServiceAgreement* column with its raw value, and the DLL build time.
+        /// </summary>
+        private void WriteSlaDebug(SPWeb web, SPList list, SPListItem item, EServicesList svc)
+        {
+            try
+            {
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("SLA DEBUG");
+                sb.AppendLine("CurrentWeb.Language = " + SPContext.Current.Web.Language + " (IsArabic=" + IsArabic + ")");
+                sb.AppendLine("List read from = " + web.Url + " / " + list.RootFolder.ServerRelativeUrl + " (ListId " + list.ID + ")");
+                sb.AppendLine("Item ID = " + item.ID);
+
+                foreach (SPField f in list.Fields)
+                {
+                    if (f.InternalName.IndexOf("ServiceAgreement", StringComparison.OrdinalIgnoreCase) < 0
+                        && f.Title.IndexOf("Service Agreement", StringComparison.OrdinalIgnoreCase) < 0
+                        && f.Title.IndexOf("ServiceAgreement", StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+                    object raw = item[f.Id];
+                    sb.AppendLine("Field Internal='" + f.InternalName + "' Title='" + f.Title + "' Type=" + f.TypeAsString
+                        + " Value='" + (raw == null ? "<null>" : raw.ToString()) + "'");
+                }
+
+                sb.AppendLine("Mapped ServiceAgreement='" + svc.ServiceAgreement + "' ServiceAgreementURL='" + svc.ServiceAgreementURL
+                    + "' ServiceAgreementURL_EN='" + svc.ServiceAgreementURL_EN + "'");
+                sb.AppendLine("DisplayServiceAgreement='" + svc.DisplayServiceAgreement + "'");
+
+                string asmPath = typeof(EServicesList).Assembly.Location;
+                sb.AppendLine("DLL = " + asmPath + " built " + System.IO.File.GetLastWriteTime(asmPath).ToString("yyyy-MM-dd HH:mm:ss"));
+
+                // "--" would end the HTML comment early
+                Controls.Add(new LiteralControl("\n<!--\n" + HttpUtility.HtmlEncode(sb.ToString()).Replace("--", "- -") + "-->\n"));
+            }
+            catch (Exception ex)
+            {
+                Controls.Add(new LiteralControl("\n<!-- SLA DEBUG failed: " + HttpUtility.HtmlEncode(ex.Message).Replace("--", "- -") + " -->\n"));
+            }
         }
 
         private ContentPlaceHolder FindPlaceHolder(MasterPage master, string id)

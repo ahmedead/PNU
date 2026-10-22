@@ -44,6 +44,26 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             }
         }
 
+        public static void ForceProvision()
+        {
+            lock (_lock)
+            {
+                _provisionedSites.Clear();
+            }
+            if (SPContext.Current != null && SPContext.Current.Site != null)
+            {
+                EnsureAll(SPContext.Current.Site.Url);
+            }
+        }
+
+        public static void EnsureAllListsExist()
+        {
+            if (SPContext.Current != null && SPContext.Current.Site != null)
+            {
+                EnsureAll(SPContext.Current.Site.Url);
+            }
+        }
+
         // ------------------------------------------------------------
         // 1) EservicesList — new DGA columns + default view
         // ------------------------------------------------------------
@@ -79,6 +99,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
             // English URL
             changed |= AddPlainNoteField(list, "URL_EN", "URL (EN)");
 
+            // Service Agreement URL (EN) - default to PNU SLA page
+            changed |= AddTextField(list, "ServiceAgreementURL_EN", "Service Agreement URL (EN)", defaultValue: "https://pnu.edu.sa/en/Pages/SLA.aspx");
+
             if (changed) list.Update();
 
             AddFieldsToDefaultView(list, new[]
@@ -90,7 +113,8 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
                 "Badge1", "Badge1_EN",
                 "Badge2", "Badge2_EN",
                 "Badge3", "Badge3_EN",
-                "URL_EN"
+                "URL_EN",
+                "ServiceAgreementURL_EN"
             });
         }
 
@@ -143,13 +167,31 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         // ============================================================
         // Field helpers (all guarded by ContainsField; return true when a field was added)
         // ============================================================
-        private static bool AddTextField(SPList list, string internalName, string displayName, bool indexed = false)
+        private static bool AddTextField(SPList list, string internalName, string displayName, bool indexed = false, string defaultValue = null)
         {
-            if (list.Fields.ContainsField(internalName)) return false;
+            if (list.Fields.ContainsField(internalName))
+            {
+                if (!string.IsNullOrEmpty(defaultValue))
+                {
+                    try
+                    {
+                        SPField existing = list.Fields.GetFieldByInternalName(internalName);
+                        if (string.IsNullOrEmpty(existing.DefaultValue))
+                        {
+                            existing.DefaultValue = defaultValue;
+                            existing.Update();
+                        }
+                    }
+                    catch { }
+                }
+                return false;
+            }
 
             list.Fields.Add(internalName, SPFieldType.Text, false);
             SPField f = list.Fields.GetFieldByInternalName(internalName);
             f.Title = displayName;
+            if (!string.IsNullOrEmpty(defaultValue))
+                f.DefaultValue = defaultValue;
             if (indexed) f.Indexed = true;
             f.Update();
             return true;

@@ -2,6 +2,7 @@ using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.AcademicCalendar.Contr
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.CentralLibrary.Controls;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.DGANewDesign;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Faculties.DGA.Herbarium;
+using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList;
 using PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.International.Controls;
 using System;
 using System.Collections.Generic;
@@ -324,6 +325,22 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.Admin.ContentAdmin
                     ProvisionAction = () =>
                     {
                         MediaCenter.MeidaFiles.Infrastructure.MediaFilesListProvisioner.ForceProvision();
+                    }
+                },
+                new AdminModuleItem
+                {
+                    Key = "EServices",
+                    TitleAr = "إدارة الخدمات الإلكترونية",
+                    TitleEn = "E-Services Management",
+                    Category = "الخدمات والتواصل",
+                    Icon = "bi-laptop",
+                    ControlPath = "~/_controltemplates/15/PNU.Internet/EserviceList/Admin/ucEservicesAdmin.ascx",
+                    DefaultTargetWeb = "/ar",
+                    Description = "إدارة قائمة الخدمات الإلكترونية وحقولها العربية والإنجليزية والروابط واتفاقيات مستوى الخدمة (SLA).",
+                    ProvisionerTypeName = "PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList.ServiceDetailsDgaProvisioner",
+                    ProvisionAction = () =>
+                    {
+                        ServiceDetailsDgaProvisioner.ForceProvision();
                     }
                 }
 

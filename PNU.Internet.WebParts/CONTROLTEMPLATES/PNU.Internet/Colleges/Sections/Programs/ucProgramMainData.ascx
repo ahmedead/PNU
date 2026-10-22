@@ -30,18 +30,19 @@
         <ItemTemplate>
             <div class="bg-primary-25 py-5" data-aos="fade-up">
                 <div class="container">
-                    <nav aria-label="breadcrumb">
+                    <nav aria-label="breadcrumb" id="programMainDataBreadcrumb">
                         <ol class="breadcrumb mb-2">
                             <li class="breadcrumb-item small"><a href="<%# String.Format("{0}", SPFactory.GetSiteURL()) %>"><asp:Literal runat="server" Text="<%$ Resources: PNUres, HomePage %>" /></a></li>
                             <li class="breadcrumb-item small"><a href="<%# String.Format("{0}Faculties/Pages/AllCollegesNew.aspx", SPFactory.GetSiteURL()) %>"><asp:Literal runat="server" Text="<%$ Resources: PNUres, Colleges %>" /></a></li>
-                            <li class="breadcrumb-item small"><a href="<%# String.Format("{0}Faculties/Pages/FacultyMain.aspx?Source={1}", SPFactory.GetSiteURL(),Eval("CollegeCode")) %>">
-                                <asp:Literal runat="server" Text="<%$ Resources: PNUres, FacultyTitle %>" /> 
-                                <%# SPFactory.GetLocalizedTitle(Eval("CollegeName"), Eval("CollegeName_EN")) %>
+                            <li class="breadcrumb-item small"><a href="<%# GetCollegeCrumbUrl(Eval("CollegeCode")) %>">
+                                <%# GetCollegeCrumbTitle(Eval("CollegeCode"), Eval("CollegeName"), Eval("CollegeName_EN")) %>
                             </a></li>
-                            <li class="breadcrumb-item small"><a href="<%# String.Format("{0}Faculties/Pages/Sections.aspx?SecCode={1}", SPFactory.GetSiteURL(),Eval("DepartmentCode")) %>">
-                                <asp:Literal runat="server" Text="<%$ Resources: PNUres, SectionTitle %>" /> 
+                            <asp:PlaceHolder runat="server" Visible='<%# Convert.ToString(Eval("DepartmentCode")).Trim() != "0000" %>'>
+                            <li class="breadcrumb-item small"><a href="<%# GetDepartmentCrumbUrl(Eval("CollegeCode"), Eval("DepartmentCode")) %>">
+                                <asp:Literal runat="server" Text="<%$ Resources: PNUres, SectionTitle %>" />
                                 <%# SPFactory.GetLocalizedTitle(Eval("DepartmentName"), Eval("DepartmentName_EN")) %>
                             </a></li>
+                            </asp:PlaceHolder>
                             <li class="breadcrumb-item small active" aria-current="page">
                                 <span><%# SPFactory.GetLocalizedTitle(Eval("ProgramName"), Eval("ProgramName_EN")) %></span>
                             </li>
@@ -229,9 +230,18 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const secLink = document.querySelector('a[href*="SecCode=0000"]');
-        if (secLink) {
-            secLink.closest("li").style.display = "none";
+        // The page layout renders its own URL-based breadcrumb; replace it with the
+        // program breadcrumb so the page shows a single, accurate trail.
+        const ownNav = document.getElementById("programMainDataBreadcrumb");
+        const ownList = ownNav ? ownNav.querySelector("ol.breadcrumb") : null;
+        if (ownList) {
+            const pageLists = Array.prototype.filter.call(
+                document.querySelectorAll("ol.breadcrumb"),
+                function (ol) { return !ownNav.contains(ol); });
+            if (pageLists.length > 0) {
+                pageLists.forEach(function (ol) { ol.innerHTML = ownList.innerHTML; });
+                ownNav.parentNode.removeChild(ownNav);
+            }
         }
     });
 </script>

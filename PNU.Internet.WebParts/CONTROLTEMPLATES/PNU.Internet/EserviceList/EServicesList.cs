@@ -52,6 +52,43 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.EserviceList
         public string Channels { get; set; } = "";
         public string UserManualURL { get; set; } = "";
         public string ServiceAgreement { get; set; } = "";
+        public string ServiceAgreementURL { get; set; } = "";
+        public string ServiceAgreementURL_EN { get; set; } = "";
+
+        /// <summary>
+        /// Displays the ServiceAgreement in EN page (using ServiceAgreementURL_EN).
+        /// If ServiceAgreementURL_EN is empty, falls back to ServiceAgreement (or ServiceAgreementURL).
+        /// In AR page, displays ServiceAgreement (or ServiceAgreementURL).
+        /// </summary>
+        public string DisplayServiceAgreement
+        {
+            get
+            {
+                bool isEn = false;
+                try
+                {
+                    if (Microsoft.SharePoint.SPContext.Current != null && Microsoft.SharePoint.SPContext.Current.Web != null)
+                    {
+                        isEn = Microsoft.SharePoint.SPContext.Current.Web.Language != 1025;
+                    }
+                }
+                catch { }
+
+                string arUrl = !string.IsNullOrWhiteSpace(ServiceAgreement)
+                    ? ServiceAgreement.Trim()
+                    : (!string.IsNullOrWhiteSpace(ServiceAgreementURL) ? ServiceAgreementURL.Trim() : "");
+
+                if (isEn)
+                {
+                    if (!string.IsNullOrWhiteSpace(ServiceAgreementURL_EN))
+                        return ServiceAgreementURL_EN.Trim();
+
+                    return arUrl;
+                }
+
+                return arUrl;
+            }
+        }
         public string _x0052_eq1 { get; set; } = "";
         public string _x0052_eq2 { get; set; } = "";
         public string _x0052_eq3 { get; set; } = "";

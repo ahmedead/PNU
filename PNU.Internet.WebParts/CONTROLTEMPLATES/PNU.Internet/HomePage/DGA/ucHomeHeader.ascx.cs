@@ -165,6 +165,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             {
                 string MenuLevel1 = "TopMenuLevel1";
                 string MenuLevel2 = "TopMenuLevel2";
+                bool rootMenuOnly = GetLoadRootMenuOnly();
                 using (SPSite site = new SPSite(SPContext.Current.Web.Url))
                 {
                     using (SPWeb web = site.OpenWeb())
@@ -174,6 +175,13 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                         if (Parentweb.Contains(site.Url))
                         {
                             Parentweb = Parentweb.Replace(site.Url, "");
+                        }
+
+                        // LoadRootMenuOnly = True: القائمة العليا تُقرأ دائماً من جذر اللغة (/ar/ أو /en/)
+                        // بدل البحث صعوداً من الموقع الحالي عن أقرب موقع يملك TopMenuLevel1
+                        if (rootMenuOnly)
+                        {
+                            Parentweb = IsArabic ? "/ar/" : "/en/";
                         }
 
                         while (mainLlist == null)
@@ -327,6 +335,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                                         Get_MenuHTML(_Level1);
                                     }
 
+                                    // في وضع الجذر فقط لا يُصعد إلى الموقع الأب إن لم توجد القائمة
+                                    if (rootMenuOnly) break;
+
                                     Parentweb = Pweb.ParentWeb.Url + "/";
                                     if (Parentweb.Contains(site.Url))
                                     {
@@ -348,6 +359,84 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
             catch (Exception ex)
             {
                 Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), this.Page.Title, ex.Message);
+            }
+        }
+
+        private const string LoadRootMenuOnlyKey = "LoadRootMenuOnly";
+        private const string LoadRootMenuOnlyCacheKey = "PNU_Settings_LoadRootMenuOnly";
+        private static readonly object LoadRootMenuOnlyLock = new object();
+
+        /// <summary>
+        /// يقرأ المفتاح LoadRootMenuOnly من قائمة Settings في /Admin/.
+        /// إن لم يوجد العنصر يُضاف بالقيمة الافتراضية False. عند أي خطأ يُعاد false
+        /// فيبقى سلوك القائمة كما هو.
+        ///
+        /// القيمة مخزَّنة دقيقتين، والإضافة داخل قفل مع إعادة الفحص: بدونهما كانت
+        /// الطلبات المتزامنة كلها ترى القائمة خالية من المفتاح فتضيف كلٌّ منها عنصراً مكرراً.
+        /// </summary>
+        private static bool GetLoadRootMenuOnly()
+        {
+            object cached = HttpRuntime.Cache[LoadRootMenuOnlyCacheKey];
+            if (cached is bool) return (bool)cached;
+
+            lock (LoadRootMenuOnlyLock)
+            {
+                cached = HttpRuntime.Cache[LoadRootMenuOnlyCacheKey];
+                if (cached is bool) return (bool)cached;
+
+                bool result = false;
+                try
+                {
+                    string siteURL = string.Format("{0}{1}", SPContext.Current.Site.Url, "/admin");
+                    SPSecurity.RunWithElevatedPrivileges(delegate ()
+                    {
+                        using (SPSite site = new SPSite(siteURL))
+                        {
+                            using (SPWeb web = site.OpenWeb())
+                            {
+                                SPList list = web.GetList($"{siteURL}/Lists/Settings");
+                                if (list == null) return;
+
+                                SPQuery query = new SPQuery
+                                {
+                                    Query = $"<Where><Eq><FieldRef Name='Key' /><Value Type='Text'>{LoadRootMenuOnlyKey}</Value></Eq></Where>" +
+                                            "<OrderBy><FieldRef Name='ID' Ascending='TRUE' /></OrderBy>",
+                                    RowLimit = 1
+                                };
+                                SPListItemCollection items = list.GetItems(query);
+                                if (items.Count > 0)
+                                {
+                                    string value = Convert.ToString(items[0]["Value"]).Trim();
+                                    result = value.Equals("True", StringComparison.OrdinalIgnoreCase);
+                                    return;
+                                }
+
+                                bool allowUnsafe = web.AllowUnsafeUpdates;
+                                try
+                                {
+                                    web.AllowUnsafeUpdates = true;
+                                    SPListItem newItem = list.Items.Add();
+                                    if (list.Fields.ContainsField("Title")) newItem["Title"] = LoadRootMenuOnlyKey;
+                                    newItem["Key"] = LoadRootMenuOnlyKey;
+                                    newItem["Value"] = "False";
+                                    newItem.Update();
+                                }
+                                finally
+                                {
+                                    web.AllowUnsafeUpdates = allowUnsafe;
+                                }
+                            }
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Publics.WriteToLog(HttpContext.Current.Request.Url.ToString(), "ucHomeHeader.GetLoadRootMenuOnly", ex.Message);
+                }
+
+                HttpRuntime.Cache.Insert(LoadRootMenuOnlyCacheKey, result, null,
+                    DateTime.UtcNow.AddMinutes(2), System.Web.Caching.Cache.NoSlidingExpiration);
+                return result;
             }
         }
 

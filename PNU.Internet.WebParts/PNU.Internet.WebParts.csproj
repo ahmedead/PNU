@@ -1415,6 +1415,13 @@
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\EServicesList.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ESystemsFieldProvisioner.cs" />
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ServiceDetailsDgaProvisioner.cs" />
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\Admin\ucEservicesAdmin.ascx.cs">
+      <DependentUpon>ucEservicesAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\Admin\ucEservicesAdmin.ascx.designer.cs">
+      <DependentUpon>ucEservicesAdmin.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucDGAServiceDetails.ascx.cs">
       <DependentUpon>ucDGAServiceDetails.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3543,6 +3550,7 @@
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucFAQ.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\DGANewDesign\ucSiteMap.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucDGAServiceDetails.ascx" />
+    <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\Admin\ucEservicesAdmin.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucEserviceBrowOld.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucServiceDetailsOld.ascx" />
     <Content Include="CONTROLTEMPLATES\PNU.Internet\EserviceList\ucServiceDetails2.ascx" />

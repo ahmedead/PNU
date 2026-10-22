@@ -25,6 +25,9 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         private string _originalPageTitle;
         private string _lastWrittenTitle;
 
+        // نص وسم title كما كتبته SetDocumentTitle في التقييم الحالي (null إن لم تُكتب)
+        private string _documentTitle;
+
         private static readonly HashSet<string> IgnoredQueryKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
@@ -321,12 +324,107 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                         : "الموقع الرسمي لجامعة الأميرة نورة بنت عبد الرحمن في المملكة العربية السعودية، ويقدّم معلومات وخدمات الجامعة وأحدث الأخبار والإعلانات.";
                 }
 
+                // 6. صفحات التفاصيل برقم طلب (إعلانات وأخبار وفعاليات): رقم الطلب في آخر الوصف دائماً.
+                // Semrush (2026-10-15، ٧٨٢ صفحة إعلان): الوصف هو نص الإعلان، ويتكرر حين يُعاد نشر
+                // النص نفسه بأرقام مختلفة، أو حين يكون المحتوى فارغاً فعلياً - ٧٥ إعلاناً وصفها ".".
+                string detailRequestId = GetDetailRequestId(request, path);
+                if (!string.IsNullOrEmpty(detailRequestId))
+                {
+                    // اسم الموقع في أول الوصف: الإعلان نفسه يُعرض في موقع الكلية وفي المركز الإعلامي
+                    // بالرقم ذاته، فيتطابق وصفاهما إن لم يُذكر الموقع.
+                    desc = BuildDetailDescription(desc, detailRequestId, isEnglish, GetDescriptionSiteName());
+                }
+
+                // 7. صفحات القوائم المرقّمة (?page=N من 2): رقم الصفحة في آخر الوصف، كما في العنوان
+                int listPage = GetListPageNumber(request);
+                if (listPage >= 2)
+                {
+                    desc = BuildDetailDescription(desc, isEnglish ? $"Page {listPage}" : $"صفحة {listPage}", isEnglish);
+                }
+
                 PageDescription = FormatDescriptionLength(desc);
             }
             catch
             {
                 EnsureFallbackUrls();
             }
+        }
+
+        /// <summary>
+        /// رقم الطلب لصفحات التفاصيل (AdvertisementDetails و AnnouncementDetails و NewsDetails و
+        /// EventDetails)، أو null لغيرها. QueryString لا يفرّق بين RequestId و RequestID.
+        /// </summary>
+        private static string GetDetailRequestId(HttpRequest request, string lowerPath)
+        {
+            if (request == null || string.IsNullOrEmpty(lowerPath)) return null;
+
+            bool isDetailPage = lowerPath.IndexOf("advertisementdetails", StringComparison.Ordinal) >= 0 ||
+                                lowerPath.IndexOf("announcementdetails", StringComparison.Ordinal) >= 0 ||
+                                lowerPath.IndexOf("newsdetails", StringComparison.Ordinal) >= 0 ||
+                                lowerPath.IndexOf("eventdetails", StringComparison.Ordinal) >= 0;
+            if (!isDetailPage) return null;
+
+            string id = request.QueryString["RequestId"] ?? request.QueryString["ItemId"] ?? request.QueryString["ID"];
+            return string.IsNullOrWhiteSpace(id) ? null : id.Trim();
+        }
+
+        /// <summary>
+        /// وصف صفحة تفاصيل: {المحتوى أو العنوان} - {رقم الطلب}.
+        ///   - المحتوى بلا حرف ولا رقم ("." أو فارغ) يُستبدل بعنوان الصفحة.
+        ///   - يُقتطع النص قبل إضافة الرقم، فيبقى الرقم ظاهراً والوصف في حدود ١٦٠ حرفاً
+        ///     (FormatDescriptionLength تقتطع من الآخر، فلو أُضيف الرقم أولاً لسقط هو).
+        /// </summary>
+        /// <summary>
+        /// اسم الموقع لوصف صفحات التفاصيل: الكلية تحت /Faculties/{X}/، وإلا تسمية الموقع
+        /// (GetSiteLabel: "المركز الإعلامي - الأخبار" بدل "الأخبار" وحدها)، ولا شيء في جذر اللغة.
+        /// </summary>
+        private string GetDescriptionSiteName()
+        {
+            try
+            {
+                if (SPContext.Current == null || SPContext.Current.Web == null) return string.Empty;
+                string webUrl = (SPContext.Current.Web.ServerRelativeUrl ?? string.Empty).TrimEnd('/');
+                if (Regex.IsMatch(webUrl, @"^/(ar|en)(-sa|-us)?$", RegexOptions.IgnoreCase)) return string.Empty;
+
+                string webTitle = CleanPlainText(SPContext.Current.Web.Title);
+                if (Regex.IsMatch(webUrl, @"^/(ar|en)(-sa|-us)?/Faculties/[^/]+", RegexOptions.IgnoreCase))
+                    return GetOwningSiteName(webTitle, false);
+
+                return GetSiteLabel(webTitle);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string BuildDetailDescription(string desc, string requestId, bool isEnglish, string sitePrefix = null)
+        {
+            string body = NormalizeTitle(CleanPlainText(desc));
+            if (string.IsNullOrEmpty(body))
+            {
+                body = NormalizeTitle(HttpContext.Current.Items["PNU_BrowserTitle"] as string);
+                if (string.IsNullOrEmpty(body)) body = NormalizeTitle(GetSourcePageTitle());
+                if (string.IsNullOrEmpty(body)) body = isEnglish ? "Announcement" : "إعلان";
+            }
+
+            string suffix = " - " + requestId;
+            string prefix = !string.IsNullOrWhiteSpace(sitePrefix) && !body.StartsWith(sitePrefix.Trim(), StringComparison.Ordinal)
+                ? sitePrefix.Trim() + " - "
+                : string.Empty;
+
+            // الوصف يحمل الرقم أصلاً في آخره (إعادة التقييم في PreRenderComplete): لا يُكرَّر
+            if (body.EndsWith(suffix, StringComparison.Ordinal)) return prefix + body;
+
+            const int MaxLen = 160;
+            int room = MaxLen - suffix.Length - prefix.Length;
+            if (body.Length > room)
+            {
+                int cut = body.LastIndexOf(' ', room - 1);
+                body = (cut > room * 7 / 10 ? body.Substring(0, cut) : body.Substring(0, room - 1)).TrimEnd() + "…";
+            }
+
+            return prefix + body + suffix;
         }
 
         private string FormatDescriptionLength(string text)
@@ -401,6 +499,34 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         /// تُفعَّل فقط حين يطلبها ضابط المحتوى عبر HttpContext.Items["PNU_SiteChainTitle"] = true،
         /// فلا يتغيّر عنوان أي صفحة أخرى. يُعاد null إن لم تتوفّر السلسلة، فيسري المنطق المعتاد.
         /// </summary>
+        /// <summary>
+        /// اسم الموقع الذي يُعرض فيه البرنامج: الكلية لا الموقع الفرعي.
+        /// تحت /{lang}/Faculties/{X}/... الكلية هي العنصر الثاني في سلسلة المواقع
+        /// [جميع الكليات، كلية اللغات، الإعلانات]، فصفحة برنامج داخل موقع "الإعلانات"
+        /// تأخذ اسم الكلية لا "الإعلانات". خارج الكليات: عنوان الموقع الحالي.
+        /// </summary>
+        private string GetOwningSiteName(string webTitle, bool isRootWeb)
+        {
+            try
+            {
+                string webUrl = SPContext.Current != null && SPContext.Current.Web != null
+                    ? SPContext.Current.Web.ServerRelativeUrl
+                    : string.Empty;
+
+                if (Regex.IsMatch(webUrl ?? string.Empty, @"^/(ar|en)(-sa|-us)?/Faculties/[^/]+", RegexOptions.IgnoreCase))
+                {
+                    List<string> chain = Publics.BuildSeoSiteChain();
+                    if (chain != null && chain.Count >= 2)
+                    {
+                        return CleanPlainText(chain[1]);
+                    }
+                }
+            }
+            catch { }
+
+            return isRootWeb ? string.Empty : webTitle;
+        }
+
         private string BuildSiteChainTitle(bool isEnglish)
         {
             try
@@ -422,13 +548,212 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         }
 
         /// <summary>
-        /// وسم title في الماسترات يعرض PlaceHolderPageTitle وحده، فتعيين Page.Title
-        /// لا يغيّره (يبقى "Home"). يُستبدل محتوى الـ placeholder - النهج نفسه في
-        /// ucSectionHome و ucViewFacultyMembers.
+        /// أول كلمات PublishingPageContent بحد أقصى maxLen حرفاً، مقطوعة عند حدّ كلمة، أو نص فارغ.
+        /// </summary>
+        private string GetContentTitleSnippet(int maxLen)
+        {
+            try
+            {
+                SPListItem item = SPContext.Current != null ? SPContext.Current.ListItem : null;
+                if (item == null || !item.Fields.ContainsField("PublishingPageContent") || item["PublishingPageContent"] == null)
+                    return string.Empty;
+
+                // CleanPlainText يُبقي محارف عرض صفرية (​) في بداية النص - تُحذف هنا
+                string text = NormalizeTitle(CleanPlainText(item["PublishingPageContent"].ToString()).Replace("​", string.Empty));
+                if (text.Length <= maxLen) return text;
+
+                int cut = text.LastIndexOf(' ', maxLen);
+                return (cut > maxLen / 2 ? text.Substring(0, cut) : text.Substring(0, maxLen)).TrimEnd() + "…";
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private static readonly HashSet<string> GenericSiteNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "الأخبار والإعلانات", "الأخبار و الإعلانات", "الأخبار", "الإعلانات", "أخبار", "إعلانات",
+            "News", "Announcements", "Advertisements", "News and Announcements", "News & Announcements"
+        };
+
+        /// <summary>
+        /// اسم الموقع كما يظهر في بادئة العنوان.
+        ///
+        /// مواقع الأخبار والإعلانات تحمل أسماء عامة تتكرر في كل عمادة وكلية، فتتطابق العناوين:
+        ///     /ar/Deanship/studaffairs/Advertisements/  ->  "الأخبار والإعلانات - ..."
+        /// (Semrush - Duplicate title tags، 29 صفحة إعلان لعمادة شؤون الطالبات). لهذه الأسماء
+        /// يُسبَق اسم الموقع الأب: "عمادة شؤون الطالبات - الأخبار والإعلانات". غيرها يُعاد كما هو.
+        /// الأب من Publics.BuildSeoSiteChain (مخزَّنة ٦ ساعات) لا من ParentWeb في كل طلب.
+        /// </summary>
+        private string GetSiteLabel(string webTitle)
+        {
+            if (string.IsNullOrWhiteSpace(webTitle)) return string.Empty;
+            string name = webTitle.Trim();
+            if (!GenericSiteNames.Contains(name)) return name;
+
+            try
+            {
+                List<string> chain = Publics.BuildSeoSiteChain();
+                if (chain != null && chain.Count >= 2)
+                {
+                    string parent = CleanPlainText(chain[chain.Count - 2]);
+                    if (!string.IsNullOrEmpty(parent) && !GenericSiteNames.Contains(parent))
+                        return $"{parent} - {name}";
+                }
+            }
+            catch { }
+
+            return name;
+        }
+
+        // Semrush يعدّ العنوان طويلاً فوق ٧٠ حرفاً؛ ٦٥ تترك هامشاً
+        private const int MaxTitleLength = 65;
+
+        private static readonly string[] UniversityNames =
+        {
+            "جامعة الأميرة نورة بنت عبد الرحمن", "جامعة الأميرة نورة بنت عبدالرحمن",
+            "Princess Nourah bint Abdulrahman University"
+        };
+
+        /// <summary>
+        /// يُقصِّر نص وسم title إلى maxLen حرفاً دون أن يفقد ما يجعله فريداً.
+        ///
+        /// Semrush (2026-10-19): "Title element is too long" على ٤٤١٣ صفحة من ٦٤٧٢ (٦٨٪)، وهي
+        /// أثقل ما يخفض درجة صحة الموقع. العناوين تُبنى من أجزاء بينها " - "، مثل:
+        ///     المركز الإعلامي - الأخبار - {عنوان الخبر} - 1104 - جامعة الأميرة نورة بنت عبد الرحمن  (١٣٩ حرفاً)
+        /// بالترتيب، حتى يصير النص في الحد:
+        ///   ١) يُحذف اسم الجامعة (يبقى في og:title)
+        ///   ٢) تُحذف الأجزاء الوسطى العامة (الأخبار، الإعلانات ...)
+        ///   ٣) يُقتطع أطول جزء عند حدّ كلمة
+        /// الجزء الأول (الموقع - يفرّق نسخة الكلية عن المركز الإعلامي) والأخير (رقم الطلب أو الرمز
+        /// أو رقم الصفحة) لا يُمسّان، فيبقى العنوان فريداً.
+        /// </summary>
+        private static string ShortenTitle(string title, int maxLen)
+        {
+            if (string.IsNullOrWhiteSpace(title)) return title;
+            string t = Regex.Replace(title, @"\s+", " ").Trim();
+            if (t.Length <= maxLen) return t;
+
+            var parts = new List<string>();
+            foreach (string p in Regex.Split(t, @"\s+[-|]\s+"))
+            {
+                string s = p.Trim();
+                if (s.Length == 0) continue;
+                bool isUniversity = false;
+                foreach (string u in UniversityNames) { if (s.Equals(u, StringComparison.OrdinalIgnoreCase)) { isUniversity = true; break; } }
+                if (!isUniversity) parts.Add(s);
+            }
+            if (parts.Count == 0) return t.Substring(0, maxLen);
+
+            Func<int> joinedLength = () => string.Join(" - ", parts.ToArray()).Length;
+
+            for (int i = parts.Count - 2; i >= 1 && joinedLength() > maxLen; i--)
+            {
+                if (GenericSiteNames.Contains(parts[i])) parts.RemoveAt(i);
+            }
+
+            if (joinedLength() > maxLen)
+            {
+                // الجزء الأخير (رقم الطلب أو الرمز أو رقم الصفحة) هو ما يجعل العنوان فريداً، فلا يُقتطع أبداً.
+                // يُقتطع أطول جزء قبله. إن ضاق مكانه عن نص مفهوم يُحذف الجزء الأول (اسم الموقع) أولاً.
+                //
+                // الصيغة السابقة كانت تقتطع النص كله من آخره حين يضيق المكان، فسقط رمز البرنامج:
+                //     College of Health and Rehabilitation Sciences - Bachelor of Scie…
+                // لـ ١١ برنامجاً مختلفاً (Semrush 2026-10-20: عناوين مكررة على صفحات البرامج الإنجليزية).
+                const int MinReadable = 20;
+                const int MaxKeyLength = 25; // رقم طلب / رمز برنامج / "صفحة N": قصير. الجزء الأطول هو النص نفسه
+                Func<int> longestBeforeLast = () =>
+                {
+                    bool protectLast = parts.Count > 1 && parts[parts.Count - 1].Length <= MaxKeyLength;
+                    int last = protectLast ? parts.Count - 2 : parts.Count - 1, idx = 0;
+                    for (int i = 1; i <= last; i++) { if (parts[i].Length > parts[idx].Length) idx = i; }
+                    return idx;
+                };
+
+                while (parts.Count >= 3 &&
+                       maxLen - (joinedLength() - parts[longestBeforeLast()].Length) < MinReadable)
+                {
+                    parts.RemoveAt(0);
+                }
+                if (joinedLength() <= maxLen) return string.Join(" - ", parts.ToArray());
+
+                int longest = longestBeforeLast();
+                int room = maxLen - (joinedLength() - parts[longest].Length);
+                if (room >= 8)
+                {
+                    string s = parts[longest];
+                    int cut = s.LastIndexOf(' ', Math.Min(room - 1, s.Length - 1));
+                    parts[longest] = (cut > room / 2 ? s.Substring(0, cut) : s.Substring(0, room - 1)).TrimEnd() + "…";
+                }
+                else
+                {
+                    // حالة قصوى: يبقى الجزء الأخير كاملاً، ويُقتطع ما قبله
+                    string lastPart = parts[parts.Count - 1];
+                    if (parts.Count == 1 || lastPart.Length >= maxLen - 4)
+                        return (lastPart.Length > maxLen ? lastPart.Substring(0, maxLen - 1).TrimEnd() + "…" : lastPart);
+
+                    string head = string.Join(" - ", parts.GetRange(0, parts.Count - 1).ToArray());
+                    int headRoom = maxLen - lastPart.Length - 4;
+                    return head.Substring(0, Math.Min(head.Length, headRoom)).TrimEnd() + "… - " + lastPart;
+                }
+            }
+
+            return string.Join(" - ", parts.ToArray());
+        }
+
+        /// <summary>رقم الصفحة من ?page=N، أو 0 إن غاب أو لم يكن رقماً.</summary>
+        private static int GetListPageNumber(HttpRequest request)
+        {
+            int n;
+            return request != null && int.TryParse((request.QueryString["page"] ?? string.Empty).Trim(), out n) ? n : 0;
+        }
+
+        private static Control FindControlRecursive(Control root, string id)
+        {
+            if (root == null) return null;
+            if (string.Equals(root.ID, id, StringComparison.OrdinalIgnoreCase)) return root;
+            foreach (Control child in root.Controls)
+            {
+                Control found = FindControlRecursive(child, id);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// عنوان صالح أو نص فارغ: تُقصّ الفواصل المعلّقة (- و |) من الطرفين، ويُرفض ما لا
+        /// حرف ولا رقم فيه (مثل "-" أو " - - ") - وهو ما يعيده Page.Title أحياناً.
+        /// </summary>
+        private static string NormalizeTitle(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title)) return string.Empty;
+            string t = Regex.Replace(title, @"\s+", " ").Trim().Trim('-', '|', '–', ' ');
+            return Regex.IsMatch(t, @"[\p{L}\p{N}]") ? t : string.Empty;
+        }
+
+        /// <summary>
+        /// يكتب نص وسم title كاملاً.
+        ///
+        /// الماسترات تختلف في بناء الوسم: بعضها يعرض PlaceHolderPageTitle وحده (DGA_Internal)،
+        /// وبعضها يسبقه باسم الموقع (facultyWiithMenu: ProjectProperty Title - PlaceHolderPageTitle).
+        /// استبدال الـ placeholder وحده يكرّر اسم الموقع في الثانية، فيُستبدل محتوى عنصر
+        /// title نفسه (onetidTitle) متى وُجد، فيخرج النص كما بُني هنا في كل الماسترات.
+        /// إن لم يوجد العنصر يُستبدل محتوى الـ placeholder - النهج نفسه في ucSectionHome.
         /// </summary>
         private void SetDocumentTitle(string title)
         {
             if (Page == null || string.IsNullOrWhiteSpace(title)) return;
+            title = ShortenTitle(title, MaxTitleLength);
+            _documentTitle = title;
+
+            Control titleElement = FindControlRecursive(Page.Header, "onetidTitle");
+            if (titleElement != null)
+            {
+                titleElement.Controls.Clear();
+                titleElement.Controls.Add(new LiteralControl(HttpUtility.HtmlEncode(title)));
+                return;
+            }
 
             System.Web.UI.MasterPage master = Page.Master;
             while (master != null)
@@ -455,6 +780,7 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
 
         private void InitializePageTitle()
         {
+            _documentTitle = null;
             try
             {
                 HttpRequest request = HttpContext.Current != null ? HttpContext.Current.Request : null;
@@ -472,31 +798,51 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 }
 
                 // Check if webTitle is the root site name
+                // موقعا جذر اللغة (/ar و /en) عنوانهما "الرئيسية" / "Home": بادئة بهما لا تضيف معنى
+                // ("الرئيسية - الخدمات الإلكترونية" و "Home - ContactUsForm")، فيُعاملان كالجذر.
+                string currentWebUrl = SPContext.Current != null && SPContext.Current.Web != null
+                    ? (SPContext.Current.Web.ServerRelativeUrl ?? string.Empty).TrimEnd('/')
+                    : string.Empty;
+                bool isLanguageRootWeb = Regex.IsMatch(currentWebUrl, @"^/(ar|en)(-sa|-us)?$", RegexOptions.IgnoreCase);
+
                 bool isRootWeb = string.IsNullOrEmpty(webTitle) ||
+                                 isLanguageRootWeb ||
                                  webTitle.Equals("جامعة الأميرة نورة بنت عبد الرحمن", StringComparison.OrdinalIgnoreCase) ||
                                  webTitle.Equals("Princess Nourah bint Abdulrahman University", StringComparison.OrdinalIgnoreCase) ||
                                  webTitle.Equals("PNU", StringComparison.OrdinalIgnoreCase);
 
-                string dynamicTitle = HttpContext.Current.Items["PNU_BrowserTitle"] as string;
-                if (string.IsNullOrWhiteSpace(dynamicTitle) && !string.IsNullOrWhiteSpace(GetSourcePageTitle()))
+                string dynamicTitle = NormalizeTitle(HttpContext.Current.Items["PNU_BrowserTitle"] as string);
+                if (string.IsNullOrWhiteSpace(dynamicTitle))
                 {
-                    dynamicTitle = GetSourcePageTitle();
+                    // Page.Title في ماستر وسمُ title فيه ضوابط (ProjectProperty - PlaceHolderPageTitle)
+                    // لا يحمل إلا النص الحرفي بينها: " - ". كان يُؤخذ عنواناً للصفحة فيخرج
+                    // "كلية الهندسةكلية الهندسة - -" (Semrush 2026-10-15، كل صفحات facultyWiithMenu.master).
+                    // NormalizeTitle يُسقط ما لا حرف فيه فيُستعمل حقل Title للصفحة بدلاً منه.
+                    dynamicTitle = NormalizeTitle(GetSourcePageTitle());
                 }
 
                 string itemTitle = string.Empty;
                 if (SPContext.Current != null && SPContext.Current.ListItem != null && SPContext.Current.ListItem.Fields.ContainsField("Title") && SPContext.Current.ListItem["Title"] != null)
                 {
-                    itemTitle = CleanPlainText(SPContext.Current.ListItem["Title"].ToString());
+                    itemTitle = NormalizeTitle(CleanPlainText(SPContext.Current.ListItem["Title"].ToString()));
                 }
 
                 string basePageTitle = !string.IsNullOrWhiteSpace(dynamicTitle) ? dynamicTitle : itemTitle;
+                if (string.IsNullOrWhiteSpace(basePageTitle))
+                {
+                    // حقل Title فارغ: أول كلمات محتوى الصفحة أدلّ من اسم الملف ("adv22" في
+                    // /ar/Deanship/studaffairs/Advertisements/Pages/)، واسم الملف آخر الحلول.
+                    basePageTitle = GetContentTitleSnippet(70);
+                }
                 if (string.IsNullOrWhiteSpace(basePageTitle) && !string.IsNullOrEmpty(path))
                 {
                     basePageTitle = System.IO.Path.GetFileNameWithoutExtension(path);
                 }
 
                 // Prefix with Subsite name as requested: [اسم الموقع الموجود به الصفحة] - ...
-                string prefix = (!isRootWeb && !string.IsNullOrEmpty(webTitle)) ? $"{webTitle} - " : string.Empty;
+                // اسم موقع عام (الأخبار، الإعلانات ...) يُسبَق بالموقع الأب - انظر GetSiteLabel
+                string siteLabel = isRootWeb ? string.Empty : GetSiteLabel(webTitle);
+                string prefix = !string.IsNullOrEmpty(siteLabel) ? $"{siteLabel} - " : string.Empty;
 
                 // Case 0: صفحات رئيسية لمواقع فرعية تحمل عنواناً عاماً (ucAllCollegeNews ...)
                 string siteChainTitle = HttpContext.Current.Items["PNU_SiteChainTitle"] is bool
@@ -517,7 +863,17 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                         ? basePageTitle
                         : (isEnglish ? "Academic Program" : "البرنامج الأكاديمي");
 
-                    PageTitle = $"{prefix}{progName}{codeSuffix} - {universityName}";
+                    // ucProgramMainData يُعرض في أكثر من كلية للبرنامج نفسه (LN-HDIP-ENTO تحت /HS/ و /LN/)،
+                    // ويكتب اسم البرنامج المجرّد في PlaceHolderPageTitle، فيتطابق وسم title بين الكليات.
+                    // المطلوب: اسم الموقع (الكلية) قبل اسم البرنامج، والرمز بعده - الرمز يفرّق المسارات
+                    // ذات الاسم الواحد في الكلية نفسها (LN-MA-STFRRE بحثي و LN-MA-STFRTH برسالة).
+                    string programSite = GetOwningSiteName(webTitle, isRootWeb);
+                    // الرمز جزء مستقل في آخر العنوان: ShortenTitle لا تقتطع الجزء الأخير، فيبقى الرمز
+                    // ظاهراً حين يُقصَّر اسم البرنامج الطويل (والرمز هو ما يفرّق LN-MA-STFRRE عن LN-MA-STFRTH).
+                    string programTitle = Publics.JoinNonEmpty(" - ", programSite, progName, string.IsNullOrEmpty(progCode) ? null : progCode.Trim());
+
+                    PageTitle = $"{programTitle} - {universityName}";
+                    SetDocumentTitle(programTitle);
                 }
                 // Case 2: Announcements & Advertisements (AdvertisementDetails.aspx / AnnouncementDetails.aspx)
                 else if ((path.IndexOf("advertisementdetails", StringComparison.OrdinalIgnoreCase) >= 0 || path.IndexOf("announcementdetails", StringComparison.OrdinalIgnoreCase) >= 0) && request != null)
@@ -530,6 +886,12 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                         ? basePageTitle + (!string.IsNullOrEmpty(reqId) ? $" - {reqId.Trim()}" : string.Empty) // many ads share a title: the request id keeps <title> unique
                         : (!string.IsNullOrEmpty(reqId) ? (isEnglish ? $"Advertisement #{reqId}" : $"إعلان رقم {reqId}") : (isEnglish ? "Announcement Details" : "تفاصيل الإعلان"));
                     PageTitle = $"{prefix}{adTitle} - {universityName}";
+
+                    // الإعلان نفسه يُعرض في موقع إعلانات الكلية وفي المركز الإعلامي بالرقم ذاته
+                    // (RequestId=870 تحت /Faculties/SC/Announcements/ و /MediaCenter/)، وضابط الإعلان
+                    // يكتب في وسم title اسم كلية الإعلان لا الموقع الذي يعرضه، فيتطابق الوسمان
+                    // (Semrush 2026-10-15: ١٣٠ صفحة). اسم الموقع المالك يفرّقهما.
+                    SetDocumentTitle(Publics.JoinNonEmpty(" - ", GetOwningSiteName(webTitle, isRootWeb), adTitle));
                 }
                 // Case 3: News & Events
                 else if ((path.IndexOf("newsdetails", StringComparison.OrdinalIgnoreCase) >= 0 || path.IndexOf("eventdetails", StringComparison.OrdinalIgnoreCase) >= 0) && request != null)
@@ -558,22 +920,63 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                         ? basePageTitle
                         : request.QueryString["view"];
                     PageTitle = $"{prefix}{facultyName} - {universityName}";
+
+                    // ucViewFacultyMembers يكتب في وسم title "الاسم - الرتبة (القسم...) | الجامعة" فيتجاوز
+                    // ١٠٠ حرف لآلاف صفحات الأعضاء (Semrush 2026-10-19: Title element is too long على ٦٨٪ من الصفحات).
+                    // اسم العضو فريد؛ ووصف "عضو هيئة التدريس" يُبقي العنوان مختلفاً عن h1 (الاسم وحده)،
+                    // وإلا رصد Semrush "Duplicate content in h1 and title" على الصفحات نفسها.
+                    SetDocumentTitle(Publics.JoinNonEmpty(" - ", facultyName, isEnglish ? "Faculty Member" : "عضو هيئة التدريس"));
                 }
                 // Case 5: General Publishing Page
                 else
                 {
                     if (!string.IsNullOrEmpty(basePageTitle))
                     {
-                        if (!isRootWeb && !string.IsNullOrEmpty(webTitle) && !basePageTitle.Equals(webTitle, StringComparison.OrdinalIgnoreCase))
-                            PageTitle = $"{webTitle} - {basePageTitle} - {universityName}";
+                        // عنوان الصفحة يتكرر بين المواقع الفرعية ("Contact Us" و "Training" و "club" في كل كلية)،
+                        // فيُسبَق باسم الموقع: {الموقع} - {الصفحة}. لا تُضاف البادئة حين يحمل العنوان اسم الموقع
+                        // أصلاً، فلا يخرج مثل "كلية التمريض - كلية التمريض".
+                        bool addSitePrefix = !isRootWeb && !string.IsNullOrEmpty(webTitle) &&
+                                             basePageTitle.IndexOf(webTitle, StringComparison.OrdinalIgnoreCase) < 0;
+                        if (addSitePrefix)
+                        {
+                            string contentTitle = $"{siteLabel} - {basePageTitle}";
+                            PageTitle = $"{contentTitle} - {universityName}";
+
+                            // وسم title يعرض PlaceHolderPageTitle (عنوان الصفحة وحده) لا Page.Title، فيُكتب فيه.
+                            SetDocumentTitle(contentTitle);
+                        }
+                        else if (path.IndexOf("service-details", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            // صفحة الخدمة في الموقع الجذر: لا بادئة موقع، فيطابق العنوان h1 (اسم الخدمة)
+                            // حرفياً - Semrush: "Duplicate content in h1 and title" على ٢١٤ صفحة خدمة.
+                            string serviceTitle = $"{basePageTitle} - {(isEnglish ? "E-Services" : "الخدمات الإلكترونية")}";
+                            PageTitle = $"{serviceTitle} - {universityName}";
+                            SetDocumentTitle(serviceTitle);
+                        }
                         else
                             PageTitle = $"{basePageTitle} - {universityName}";
                     }
                     else
                     {
-                        PageTitle = !isRootWeb && !string.IsNullOrEmpty(webTitle)
-                            ? $"{webTitle} - {universityName}"
+                        PageTitle = !string.IsNullOrEmpty(siteLabel)
+                            ? $"{siteLabel} - {universityName}"
                             : universityName;
+                    }
+                }
+
+                // صفحات القوائم المرقّمة (?page=N): الخدمات الإلكترونية InternalEservices و ExternalEservices
+                // و Eservice تحمل العنوان نفسه في كل صفحاتها (Semrush 2026-10-18: ٣٢ عنواناً مكرراً).
+                // رقم الصفحة من الثانية فصاعداً يفرّقها؛ الصفحة 1 هي الصفحة نفسها بلا معامل (canonical بلا ?page=1).
+                int listPage = GetListPageNumber(request);
+                if (listPage >= 2)
+                {
+                    string pageLabel = isEnglish ? $"Page {listPage}" : $"صفحة {listPage}";
+                    string listTitle = !string.IsNullOrWhiteSpace(_documentTitle) ? _documentTitle : basePageTitle;
+                    if (!string.IsNullOrWhiteSpace(listTitle) && !listTitle.EndsWith(" - " + pageLabel, StringComparison.Ordinal))
+                    {
+                        listTitle = $"{listTitle} - {pageLabel}";
+                        PageTitle = $"{listTitle} - {universityName}";
+                        SetDocumentTitle(listTitle);
                     }
                 }
 
@@ -807,6 +1210,10 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 if (string.IsNullOrEmpty(key) || IgnoredQueryKeys.Contains(key))
                     continue;
 
+                // ?page=1 يعرض الصفحة نفسها بلا معامل: canonical واحد للاثنين بدل عنوانين ومحتويين مكررين
+                if (key.Equals("page", StringComparison.OrdinalIgnoreCase) && (queryParams[key] ?? string.Empty).Trim() == "1")
+                    continue;
+
                 string val = queryParams[key];
                 if (sb.Length > 0) sb.Append("&");
                 else sb.Append("?");
@@ -924,6 +1331,27 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
         /// 1. الوسم المرجعي الذاتي مطابق حرفياً للـ canonical (نفس السلسلة النصية).
         /// 2. لا يُصدَر وسم للّغة الأخرى إلا إذا كانت صفحتها موجودة فعلاً.
         /// </summary>
+        /// <summary>
+        /// هل مسار الطلب مطابق حرفياً (بالحالة) لمسار الـ canonical؟ الاستعلام لا يُقارَن.
+        /// عند تعذّر المقارنة يُفترض التطابق، فلا تُحذف وسوم hreflang صحيحة.
+        /// </summary>
+        private bool RequestPathMatchesCanonical()
+        {
+            try
+            {
+                if (HttpContext.Current == null || HttpContext.Current.Request.Url == null || string.IsNullOrEmpty(CanonicalUrl))
+                    return true;
+
+                string requested = Uri.UnescapeDataString(HttpContext.Current.Request.Url.AbsolutePath);
+                string canonical = Uri.UnescapeDataString(new Uri(CanonicalUrl).AbsolutePath);
+                return string.Equals(requested, canonical, StringComparison.Ordinal);
+            }
+            catch
+            {
+                return true;
+            }
+        }
+
         private string BuildHreflangBlock()
         {
             // لا عنقود لغوي بلا طرفين. المسار الذي لا يحمل بادئة لغة معروفة يُكتفى فيه
@@ -933,7 +1361,17 @@ namespace PNU.Internet.WebParts.CONTROLTEMPLATES.PNU.Internet.HomePage.DGA
                 return string.Empty;
             }
 
-            bool isEnglishPage = !string.IsNullOrEmpty(EnglishUrl) &&
+            // hreflang على الصفحة القانونية وحدها. شيربوينت يخدم أي حالة أحرف بـ 200، فرابط مثل
+            // /ar/Faculties/Ap/... أو /EN/SECURITYCYBER/... يعرض الصفحة نفسها، والـ canonical
+            // والـ hreflang مبنيّان بالحالة المخزَّنة (AP، en). فيحمل الرابط المتغيّر hreflang لا يشير
+            // إليه ويناقض canonical (Semrush 2026-10-18: 43 "No self-referencing hreflang"
+            // و 62 "Conflicting hreflang and rel=canonical"). على المتغيّر يكفي canonical وحده.
+            if (!RequestPathMatchesCanonical())
+            {
+                return string.Empty;
+            }
+
+            bool isEnglishPage =!string.IsNullOrEmpty(EnglishUrl) &&
                                  string.Equals(EnglishUrl, CanonicalUrl, StringComparison.Ordinal);
 
             // الصفحة الحالية موجودة بداهةً؛ نفحص المقابلة فقط.
